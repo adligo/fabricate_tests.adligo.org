@@ -9,7 +9,7 @@
         <lns:library>jacoco</lns:library>
         <lns:library>mockito</lns:library>
         <lns:library>gwt</lns:library>
-        <tns:dependency group="org.apache.commons artifact="commons-logging" version="1.2" />
+        <tns:dependency group="org.apache.commons" artifact="commons-logging" version="1.2" />
 	    <tns:dependency group="org.apache.commons" artifact="commons-codec" version="1.10" />
 	    <tns:dependency group="org.apache.commons" artifact="httpclient" version="4.3.5" />
 	    <tns:dependency group="org.apache.commons" artifact="httpcore" version="4.3.2" />
