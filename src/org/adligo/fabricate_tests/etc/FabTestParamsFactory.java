@@ -16,6 +16,7 @@ public class FabTestParamsFactory extends AbstractParamsFactory {
     nonInstrumentedPackages.add("org.adligo.tests4j.");
     nonInstrumentedPackages.add("org.adligo.tests4j_4mockito.");
     nonInstrumentedPackages.add("org.adligo.tests4j_tests.");
+    nonInstrumentedPackages.add("org.apache.");
     params.setAdditionalNonInstrumentedPackages(nonInstrumentedPackages);
     params.setCoveragePluginFactoryClass(MockitoPluginFactory.class);
     return params;

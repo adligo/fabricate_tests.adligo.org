@@ -17,6 +17,7 @@
         <lns:project>tests4j.adligo.org</lns:project>
         <lns:project>tests4j_4jacoco.adligo.org</lns:project>
         <lns:project>tests4j_4mockito.adligo.org</lns:project>
+        <lns:project>tests4j_tests.adligo.org</lns:project>
         <lns:project>fabricate.adligo.org</lns:project>
         
     </lns:dependencies>
