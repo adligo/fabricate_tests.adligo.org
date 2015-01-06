@@ -29,6 +29,7 @@ public class A_XmlIoTrials implements I_Tests4J_TrialList {
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
     trials.add(SchemaLoaderTrial.class);
+    trials.add(XmlIoPackageTrial.class);
     return trials;
   }
 

@@ -32,6 +32,7 @@ public class A_FabPkgTrials implements I_Tests4J_TrialList {
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
     trials.add(FabPackagesTrial.class);
+    trials.add(FabricateSetupTrial.class);
     trials.addAll(new A_FabEnPkgTrials().getTrials());
     trials.addAll(new A_FabI18nPkgTrials().getTrials());
     trials.addAll(new A_XmlIoTrials().getTrials());
