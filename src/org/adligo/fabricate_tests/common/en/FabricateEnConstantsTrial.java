@@ -11,7 +11,7 @@ public class FabricateEnConstantsTrial extends MockitoSourceFileTrial {
 
   @Test
   public void testConstants() {
-    FabricateEnConstants constants = new FabricateEnConstants();
+    FabricateEnConstants constants = FabricateEnConstants.INSTANCE;
     assertEquals(ProjectEnMessages.class.getName(), constants.getProjectMessages().getClass().getName());
   }
 }

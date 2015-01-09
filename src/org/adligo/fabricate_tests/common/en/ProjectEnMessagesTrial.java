@@ -6,13 +6,16 @@ import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 import org.adligo.tests4j_tests.shared.i18n.I18N_Asserter;
 
+import java.util.Collections;
+
 @SourceFileScope (sourceClass=ProjectEnMessages.class)
 public class ProjectEnMessagesTrial extends MockitoSourceFileTrial {
 
   @Test
   public void testConstants() {
     I18N_Asserter asserter = new I18N_Asserter(this);
-    ProjectEnMessages messages = new ProjectEnMessages();
+    
+    ProjectEnMessages messages = ProjectEnMessages.INSTANCE;
     asserter.assertConstant("can NOT depend on itself.", 
         messages.getCanNotDependOnIteself());
     asserter.assertConstant("does not contain a project.xml file.", 
