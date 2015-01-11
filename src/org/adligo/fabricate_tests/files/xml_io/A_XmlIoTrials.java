@@ -1,5 +1,6 @@
 package org.adligo.fabricate_tests.files.xml_io;
 
+import org.adligo.fabricate.files.xml_io.I_FabXmlFiles;
 import org.adligo.fabricate_tests.etc.FabTestParamsFactory;
 import org.adligo.tests4j.run.api.Tests4J;
 import org.adligo.tests4j.system.shared.api.I_Tests4J_TrialList;
@@ -28,8 +29,15 @@ public class A_XmlIoTrials implements I_Tests4J_TrialList {
   @Override
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
+    trials.add(I_FabXmlFilesTrial.class);
+    
+    trials.add(DevIOTrial.class);
+    trials.add(FabXmlFilesTrial.class);
     trials.add(SchemaLoaderTrial.class);
     trials.add(XmlIoPackageTrial.class);
+    
+    
+    
     return trials;
   }
 
