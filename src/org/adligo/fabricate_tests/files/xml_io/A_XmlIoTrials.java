@@ -32,6 +32,8 @@ public class A_XmlIoTrials implements I_Tests4J_TrialList {
     trials.add(I_FabXmlFilesTrial.class);
     
     trials.add(DevIOTrial.class);
+    trials.add(LibraryIOTrial.class);
+    trials.add(FabricateIOTrial.class);
     trials.add(FabXmlFilesTrial.class);
     trials.add(SchemaLoaderTrial.class);
     trials.add(XmlIoPackageTrial.class);

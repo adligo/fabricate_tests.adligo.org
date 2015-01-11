@@ -8,8 +8,10 @@
     <tns:library platform="bar">foo</tns:library>
     <tns:dependency group="com.sun.jme" artifact="cldc" version="1.1" type="jar" 
     	fileName="cldc_1.1.jar" platform="JME" extract="true">
-    	<tns:ide key="ideKey" val="ideVal">
-    		<tns:ide key="nestedIdeKey" val="nestedIdeVal"/>
+    	<tns:ide name="eclipse">
+	    	<tns:arg key="ideKey" value="ideVal">
+	    		<tns:arg key="nestedIdeKey" value="nestedIdeVal"/>
+	    	</tns:arg>
     	</tns:ide>
     </tns:dependency>
     <tns:project platform="plat">proj</tns:project>
