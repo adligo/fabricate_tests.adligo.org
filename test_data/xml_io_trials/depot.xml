@@ -1,2 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<depot xmlns="http://www.adligo.org/fabricate/xml/io_v1/depot_v1_0.xsd"/>
+<depot xmlns="http://www.adligo.org/fabricate/xml/io_v1/depot_v1_0.xsd">
+  <artifact project="hibernate_db.adligo.org" type="jar" filename="jars/hibernate_db_snapshot.jar"/>
+</depot>

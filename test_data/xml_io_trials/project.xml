@@ -1,15 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tns:fabricate_project xmlns:tns="http://www.adligo.org/fabricate/xml/io_v1/project_v1_0.xsd" 
     xmlns:lns="http://www.adligo.org/fabricate/xml/io_v1/library_v1_0.xsd" 
+    xmlns:cns="http://www.adligo.org/fabricate/xml/io_v1/common_v1_0.xsd" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+    <tns:command name="classpath2eclipse">
+    	<tns:param key="c2eKey" value="c2eVal">
+    		<cns:param key="c2eKeyNested" value="c2eValNested"/>
+    	</tns:param>
+    </tns:command>
     <tns:stages>
-        <tns:stage name="jar" />
-        <tns:stage name="build-fabricate-archives" />
+        <tns:stage name="setup" >
+        	<tns:params>
+	        	<cns:param key="setupParam" value="setupParamValue">
+	   	    	       <cns:param key="nestedSetupParam" value="nestedSetupParamValue"/>
+	   	    	</cns:param>
+   	    	</tns:params>
+   	    	<tns:task name="setupTask">
+   	    	    <cns:param key="Default-Vendor" value="Adligo Inc">
+   	    	       <cns:param key="nestKey" value="nestVal"/>
+   	    	    </cns:param>
+   	    	</tns:task>
+        </tns:stage>
     </tns:stages>
     <tns:dependencies>
-	    <lns:dependency group="org.apache.commons" artifact="commons-logging" version="1.2" />
-	    <lns:dependency group="org.apache.commons" artifact="commons-codec" version="1.10" />
-	    <lns:dependency group="org.apache.commons" artifact="httpclient" version="4.3.5" />
-	    <lns:dependency group="org.apache.commons" artifact="httpcore" version="4.3.2" />
+    	<lns:library platform="bar">foo</lns:library>
+    	<lns:dependency group="com.sun.jme" artifact="cldc" version="1.1" type="jar" 
+    		fileName="cldc_1.1.jar" platform="JME" extract="true">
+    		<lns:ide name="eclipse">
+	    		<lns:arg key="ideKey" value="ideVal">
+	    			<lns:arg key="nestedIdeKey" value="nestedIdeVal"/>
+	    		</lns:arg>
+    		</lns:ide>
+    	</lns:dependency>
+    	<lns:project platform="plat">proj</lns:project>
 	 </tns:dependencies>
  </tns:fabricate_project>

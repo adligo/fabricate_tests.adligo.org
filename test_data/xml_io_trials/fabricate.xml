@@ -9,6 +9,7 @@
     </fns:logs>
     <fns:dependencies local_repository="/foo/bar" >
         <fns:remote_repository>http://127.0.0.1/</fns:remote_repository>
+        <!--  platform would always be ignored in this context -->
         <fns:library>lib_foo</fns:library>
         <fns:dependency group="com.sun.jme" artifact="cldc" version="1.1" type="jar" 
     		fileName="cldc_1.1.jar" platform="JME" extract="true">
@@ -26,8 +27,13 @@
     </fns:command>
     <fns:project_group>
     	<fns:stages>
-    	    <fns:stage name="setup" class="com.example.Example">
-    	    	<fns:task name="setup">
+    	    <fns:stage name="setup" class="com.example.ExampleSetup" optional="true">
+    	    	<fns:params>
+	    	    	<cns:param key="setupParam" value="setupParamValue">
+	    	    	       <cns:param key="nestedSetupParam" value="nestedSetupParamValue"/>
+	    	    	</cns:param>
+    	    	</fns:params>
+    	    	<fns:task name="setupTask">
     	    	    <cns:param key="Default-Vendor" value="Adligo Inc">
     	    	       <cns:param key="nestKey" value="nestVal"/>
     	    	    </cns:param>
@@ -36,9 +42,9 @@
     	</fns:stages>    
     	<fns:projects>
     	    <fns:scm>
-    	        <fns:git hostname="git" path="/opt/git/" />
+    	        <fns:git hostname="git" path="/opt/git/" user="JimDoe"/>
     	    </fns:scm>
-    	    <fns:project name="widgets.example.com" version=""/>
+    	    <fns:project name="widgets.example.com" version="1"/>
     	</fns:projects>
     </fns:project_group>
 </fns:fabricate>

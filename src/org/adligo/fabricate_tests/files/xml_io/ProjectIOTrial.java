@@ -1,27 +1,18 @@
 package org.adligo.fabricate_tests.files.xml_io;
 
 import org.adligo.fabricate.files.xml_io.FabXmlFiles;
-import org.adligo.fabricate.files.xml_io.FabricateIO;
-import org.adligo.fabricate.xml.io_v1.common_v1_0.CommandType;
+import org.adligo.fabricate.files.xml_io.ProjectIO;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamType;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamsType;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.TaskType;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateDependencies;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateType;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.GitServerType;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.JavaType;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.ProjectGroupType;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.ProjectGroupsType;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.ProjectType;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.ProjectsType;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.ScmType;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.StageType;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.StagesAndProjectsType;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.StagesType;
+import org.adligo.fabricate.xml.io_v1.library_v1_0.DependenciesType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.DependencyType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.IdeArgumentType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.IdeType;
-import org.adligo.fabricate.xml.io_v1.library_v1_0.LibraryReferenceType;
+import org.adligo.fabricate.xml.io_v1.project_v1_0.FabricateProjectType;
+import org.adligo.fabricate.xml.io_v1.project_v1_0.ProjectCommandType;
+import org.adligo.fabricate.xml.io_v1.project_v1_0.ProjectStageType;
+import org.adligo.fabricate.xml.io_v1.project_v1_0.ProjectStagesType;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrownData;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.shared.asserts.common.MatchType;
@@ -35,38 +26,17 @@ import java.util.List;
 
 import javax.xml.bind.UnmarshalException;
 
-@SourceFileScope (sourceClass=FabricateIO.class, minCoverage=89.0)
-public class FabricateIOTrial extends MockitoSourceFileTrial {
-
+@SourceFileScope (sourceClass=ProjectIO.class, minCoverage=90.0)
+public class ProjectIOTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("boxing")
   @Test
   public void testMethod_parse_v1_0() throws Exception {
-    FabricateType fab = FabXmlFiles.INSTANCE.parseFabricate_v1_0("test_data/xml_io_trials/fabricate.xml");
-    JavaType java =fab.getJava();
-    assertEquals("256m", java.getXms());
-    assertEquals("1g", java.getXmx());
-    assertEquals(8, java.getThreads());
-    
-    FabricateDependencies deps = fab.getDependencies();
-    List<String> remotes = deps.getRemoteRepository();
-    assertContains(remotes,"http://127.0.0.1/");
-    assertEquals(1, remotes.size());
-    
-    List<LibraryReferenceType> libs = deps.getLibrary();
-    LibraryReferenceType lib = libs.get(0);
-    assertNotNull(lib);
-    assertEquals("lib_foo", lib.getValue());
-    
-    List<DependencyType> depList = deps.getDependency();
-    DependencyType dep = depList.get(0);
-    assertDependency(dep);
-    assertEquals(1, depList.size());
-    
-    List<CommandType> commands = fab.getCommand();
-    CommandType command = commands.get(0);
+    FabricateProjectType project = FabXmlFiles.INSTANCE.parseProject_v1_0("test_data/xml_io_trials/project.xml");
+    assertNotNull(project);
+    List<ProjectCommandType> commands = project.getCommand();
+    ProjectCommandType command = commands.get(0);
     assertNotNull(command);
-    assertEquals("com.example.Classpath2Eclipse",command.getClazz());
     assertEquals("classpath2eclipse",command.getName());
     
     List<ParamType> params = command.getParam();
@@ -85,15 +55,12 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
     
     assertEquals(1, commands.size());
     
-    StagesAndProjectsType stagesAndProjs = fab.getProjectGroup();
-    assertNotNull(stagesAndProjs);
-    StagesType stages = stagesAndProjs.getStages();
-    List<StageType> stageList = stages.getStage();
-    StageType stage = stageList.get(0);
+    ProjectStagesType stages = project.getStages();
+    List<ProjectStageType> stageList = stages.getStage();
+    ProjectStageType stage = stageList.get(0);
+    
     assertNotNull(stage);
     assertEquals("setup", stage.getName());
-    assertEquals("com.example.ExampleSetup", stage.getClazz());
-    assertTrue(stage.isOptional());
     
     ParamsType paramsType = stage.getParams();
     params =  paramsType.getParam();
@@ -124,21 +91,12 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
     assertEquals("nestVal", param.getValue());
     assertEquals(1, params.size());
     assertEquals(1, tasks.size());
+    assertEquals(1, stageList.size());
     
-    ProjectsType projects = stagesAndProjs.getProjects();
-    ScmType scm = projects.getScm();
-    GitServerType server = scm.getGit();
-    assertEquals("git",server.getHostname());
-    assertEquals("/opt/git/",server.getPath());
-    assertEquals("JimDoe",server.getUser());
-    
-    List<ProjectType> projectsList = projects.getProject();
-    ProjectType project = projectsList.get(0);
-    assertEquals("widgets.example.com", project.getName());
-    assertEquals("1", project.getVersion());
-  }
-
-  private void assertDependency(DependencyType dep) {
+    DependenciesType deps = project.getDependencies();
+    assertNotNull(deps);
+    List<DependencyType> depsList =  deps.getDependency();
+    DependencyType dep = depsList.get(0);
     assertNotNull(dep);
     assertEquals("cldc", dep.getArtifact());
     assertEquals("cldc_1.1.jar", dep.getFileName());
@@ -161,46 +119,12 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
   }
   
   @Test
-  public void testMethod_parse_v1_0Groups() throws Exception {
-    FabricateType fab = FabXmlFiles.INSTANCE.parseFabricate_v1_0("test_data/xml_io_trials/fabricateGroups.xml");
-    ProjectGroupsType groups = fab.getGroups();
-    List<ProjectGroupType> pgts = groups.getProjectGroup();
-    ProjectGroupType pgt = pgts.get(0);
-    assertNotNull(pgt);
-    ScmType scm = pgt.getScm();
-    assertNotNull(scm);
-    GitServerType gst = scm.getGit();
-    assertEquals("git",gst.getHostname());
-    assertEquals("/opt/git/",gst.getPath());
-    assertEquals("JohnDoe",gst.getUser());
-    
-    ProjectType proj = pgt.getProject();
-    assertEquals("project_group.example.com",proj.getName());
-    assertEquals("1",proj.getVersion());
-    
-    pgt = pgts.get(1);
-    assertNotNull(pgt);
-    scm = pgt.getScm();
-    assertNotNull(scm);
-    gst = scm.getGit();
-    assertEquals("git",gst.getHostname());
-    assertEquals("/opt/git/",gst.getPath());
-    assertEquals("JaneDoe",gst.getUser());
-    
-    proj = pgt.getProject();
-    assertEquals("other_project_group.example.com",proj.getName());
-    assertEquals("2",proj.getVersion());
-    
-    
-  }
-  
-  @Test
   public void testMethod_parse_v1_0_bad_content() {
     assertThrown(new ExpectedThrownData(IOException.class, MatchType.ANY), new I_Thrower() {
       
       @Override
       public void run() throws Throwable {
-        FabXmlFiles.INSTANCE.parseFabricate_v1_0("test_data/xml_io_trials/dev.xml");
+        FabXmlFiles.INSTANCE.parseProject_v1_0("test_data/xml_io_trials/dev.xml");
       }
     });
   }
@@ -219,7 +143,7 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
       
       @Override
       public void run() throws Throwable {
-        FabXmlFiles.INSTANCE.parseFabricate_v1_0(badFileName);
+        FabXmlFiles.INSTANCE.parseProject_v1_0(badFileName);
       }
     });
   }
