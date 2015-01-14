@@ -3,7 +3,7 @@ package org.adligo.fabricate_tests.files.xml_io;
 import org.adligo.fabricate.files.xml_io.DevIO;
 import org.adligo.fabricate.files.xml_io.FabXmlFiles;
 import org.adligo.fabricate.xml.io_v1.dev_v1_0.FabricateDevType;
-import org.adligo.tests4j.shared.asserts.common.ExpectedThrownData;
+import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.shared.asserts.common.MatchType;
 import org.adligo.tests4j.system.shared.trials.AfterTrial;
@@ -38,7 +38,7 @@ public class DevIOTrial extends MockitoSourceFileTrial {
   
   @Test
   public void testMethod_parse_v1_0_bad_content() {
-    assertThrown(new ExpectedThrownData(IOException.class, MatchType.ANY), new I_Thrower() {
+    assertThrown(new ExpectedThrowable(IOException.class, MatchType.ANY), new I_Thrower() {
       
       @Override
       public void run() throws Throwable {
@@ -55,9 +55,9 @@ public class DevIOTrial extends MockitoSourceFileTrial {
       badFile = "/dev/nul";
     } 
     final String badFileName = badFile;
-    assertThrown(new ExpectedThrownData(IOException.class, MatchType.ANY,
-        new ExpectedThrownData(UnmarshalException.class, MatchType.ANY,
-        new ExpectedThrownData(FileNotFoundException.class, MatchType.ANY))), new I_Thrower() {
+    assertThrown(new ExpectedThrowable(IOException.class, MatchType.ANY,
+        new ExpectedThrowable(UnmarshalException.class, MatchType.ANY,
+        new ExpectedThrowable(FileNotFoundException.class, MatchType.ANY))), new I_Thrower() {
       
       @Override
       public void run() throws Throwable {
@@ -80,7 +80,7 @@ public class DevIOTrial extends MockitoSourceFileTrial {
   public void testMethod_write_v1_0_null_file_name() {
     final FabricateDevType dev = new FabricateDevType();
     dev.setProjectGroup("temp.example.com");
-    assertThrown(new ExpectedThrownData(NullPointerException.class), new I_Thrower() {
+    assertThrown(new ExpectedThrowable(NullPointerException.class), new I_Thrower() {
       
       @Override
       public void run() throws Throwable {
@@ -94,8 +94,8 @@ public class DevIOTrial extends MockitoSourceFileTrial {
   public void testMethod_write_v1_0_bad_file() {
     final FabricateDevType dev = new FabricateDevType();
     dev.setProjectGroup("temp.example.com");
-    assertThrown(new ExpectedThrownData(IOException.class,
-        new ExpectedThrownData(JAXBException.class)), new I_Thrower() {
+    assertThrown(new ExpectedThrowable(IOException.class,
+        new ExpectedThrowable(JAXBException.class)), new I_Thrower() {
       
       @Override
       public void run() throws Throwable {

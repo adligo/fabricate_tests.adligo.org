@@ -28,6 +28,7 @@ public class A_FabEnPkgTrials implements I_Tests4J_TrialList {
   @Override
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
+    trials.add(FileEnMessagesTrial.class);
     trials.add(ProjectEnMessagesTrial.class);
     trials.add(FabricateEnConstantsTrial.class);
     return trials;

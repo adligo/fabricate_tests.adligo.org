@@ -30,6 +30,7 @@ public class A_FabI18nPkgTrials implements I_Tests4J_TrialList {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
     trials.add(I_ProjectMessagesTrial.class);
     trials.add(I_FabricateConstantsTrial.class);
+    trials.add(I_FileMessagesTrial.class);
     return trials;
   }
 

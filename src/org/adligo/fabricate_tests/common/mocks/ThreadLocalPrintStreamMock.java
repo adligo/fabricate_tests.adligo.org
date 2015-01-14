@@ -6,6 +6,10 @@ import java.io.PrintStream;
 
 public class ThreadLocalPrintStreamMock extends ThreadLocalPrintStream {
 
+  /**
+   * @param threadPrintStream Note for some reason this doesn't work with a 
+   * Mockito mock, so use a real PrintStream perhaps wrapping a ByteArrayOuptutStream.
+   */
   public static void set(PrintStream threadPrintStream) {
     setProtected(threadPrintStream);
   }

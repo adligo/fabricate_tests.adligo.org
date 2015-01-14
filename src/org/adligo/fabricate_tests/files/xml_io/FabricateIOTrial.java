@@ -22,7 +22,7 @@ import org.adligo.fabricate.xml.io_v1.library_v1_0.DependencyType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.IdeArgumentType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.IdeType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.LibraryReferenceType;
-import org.adligo.tests4j.shared.asserts.common.ExpectedThrownData;
+import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.shared.asserts.common.MatchType;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
@@ -196,7 +196,7 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
   
   @Test
   public void testMethod_parse_v1_0_bad_content() {
-    assertThrown(new ExpectedThrownData(IOException.class, MatchType.ANY), new I_Thrower() {
+    assertThrown(new ExpectedThrowable(IOException.class, MatchType.ANY), new I_Thrower() {
       
       @Override
       public void run() throws Throwable {
@@ -213,9 +213,9 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
       badFile = "/dev/nul";
     } 
     final String badFileName = badFile;
-    assertThrown(new ExpectedThrownData(IOException.class, MatchType.ANY,
-        new ExpectedThrownData(UnmarshalException.class, MatchType.ANY,
-        new ExpectedThrownData(FileNotFoundException.class, MatchType.ANY))), new I_Thrower() {
+    assertThrown(new ExpectedThrowable(IOException.class, MatchType.ANY,
+        new ExpectedThrowable(UnmarshalException.class, MatchType.ANY,
+        new ExpectedThrowable(FileNotFoundException.class, MatchType.ANY))), new I_Thrower() {
       
       @Override
       public void run() throws Throwable {

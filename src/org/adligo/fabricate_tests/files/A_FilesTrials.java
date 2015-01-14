@@ -1,6 +1,5 @@
 package org.adligo.fabricate_tests.files;
 
-import org.adligo.fabricate.files.I_FabFiles;
 import org.adligo.fabricate_tests.etc.FabTestParamsFactory;
 import org.adligo.fabricate_tests.files.xml_io.A_XmlIoTrials;
 import org.adligo.tests4j.run.api.Tests4J;
@@ -32,6 +31,8 @@ public class A_FilesTrials implements I_Tests4J_TrialList {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
     trials.addAll(new A_XmlIoTrials().getTrials());
     trials.add(I_FabFilesTrial.class);
+    trials.add(I_FileMatcherTrial.class);
+    trials.add(PatternFileMatcherTrial.class);
     
     return trials;
   }

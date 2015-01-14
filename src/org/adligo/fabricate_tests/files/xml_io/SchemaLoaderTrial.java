@@ -1,7 +1,7 @@
 package org.adligo.fabricate_tests.files.xml_io;
 
 import org.adligo.fabricate.files.xml_io.SchemaLoader;
-import org.adligo.tests4j.shared.asserts.common.ExpectedThrownData;
+import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.shared.asserts.reference.CircularDependencies;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
@@ -77,7 +77,7 @@ public class SchemaLoaderTrial extends MockitoSourceFileTrial {
     assertEquals(SchemaLoader.COMMON_NS_V1_0, in.getPublicId());
     in = schemaLoader.resolveResource("http://www.w3.org/2001/XMLSchema", SchemaLoader.COMMON_NS_V1_0, "", "", "");
     assertEquals(SchemaLoader.COMMON_NS_V1_0, in.getPublicId());
-    assertThrown(new ExpectedThrownData(new IllegalArgumentException(SchemaLoader.UNKNOWN_NAMESPACE_URI + "foo.bar")), 
+    assertThrown(new ExpectedThrowable(new IllegalArgumentException(SchemaLoader.UNKNOWN_NAMESPACE_URI + "foo.bar")), 
         new I_Thrower() {
           
           @Override
