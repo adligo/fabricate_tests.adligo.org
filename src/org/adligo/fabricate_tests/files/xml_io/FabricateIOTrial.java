@@ -1,6 +1,6 @@
 package org.adligo.fabricate_tests.files.xml_io;
 
-import org.adligo.fabricate.files.xml_io.FabXmlFiles;
+import org.adligo.fabricate.files.xml_io.FabXmlFileIO;
 import org.adligo.fabricate.files.xml_io.FabricateIO;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.CommandType;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamType;
@@ -42,7 +42,7 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
   @SuppressWarnings("boxing")
   @Test
   public void testMethod_parse_v1_0() throws Exception {
-    FabricateType fab = FabXmlFiles.INSTANCE.parseFabricate_v1_0("test_data/xml_io_trials/fabricate.xml");
+    FabricateType fab = FabXmlFileIO.INSTANCE.parseFabricate_v1_0("test_data/xml_io_trials/fabricate.xml");
     JavaType java =fab.getJava();
     assertEquals("256m", java.getXms());
     assertEquals("1g", java.getXmx());
@@ -162,7 +162,7 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
   
   @Test
   public void testMethod_parse_v1_0Groups() throws Exception {
-    FabricateType fab = FabXmlFiles.INSTANCE.parseFabricate_v1_0("test_data/xml_io_trials/fabricateGroups.xml");
+    FabricateType fab = FabXmlFileIO.INSTANCE.parseFabricate_v1_0("test_data/xml_io_trials/fabricateGroups.xml");
     ProjectGroupsType groups = fab.getGroups();
     List<ProjectGroupType> pgts = groups.getProjectGroup();
     ProjectGroupType pgt = pgts.get(0);
@@ -200,7 +200,7 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
       
       @Override
       public void run() throws Throwable {
-        FabXmlFiles.INSTANCE.parseFabricate_v1_0("test_data/xml_io_trials/dev.xml");
+        FabXmlFileIO.INSTANCE.parseFabricate_v1_0("test_data/xml_io_trials/dev.xml");
       }
     });
   }
@@ -219,7 +219,7 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
       
       @Override
       public void run() throws Throwable {
-        FabXmlFiles.INSTANCE.parseFabricate_v1_0(badFileName);
+        FabXmlFileIO.INSTANCE.parseFabricate_v1_0(badFileName);
       }
     });
   }

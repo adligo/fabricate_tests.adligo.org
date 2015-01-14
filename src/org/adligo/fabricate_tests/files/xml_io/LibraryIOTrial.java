@@ -1,6 +1,6 @@
 package org.adligo.fabricate_tests.files.xml_io;
 
-import org.adligo.fabricate.files.xml_io.FabXmlFiles;
+import org.adligo.fabricate.files.xml_io.FabXmlFileIO;
 import org.adligo.fabricate.files.xml_io.LibraryIO;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.DependenciesType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.DependencyType;
@@ -26,7 +26,7 @@ public class LibraryIOTrial extends MockitoSourceFileTrial {
 
   @Test
   public void testMethod_parse_v1_0() throws Exception {
-    LibraryType lib = FabXmlFiles.INSTANCE.parseLibrary_v1_0("test_data/xml_io_trials/lib.xml");
+    LibraryType lib = FabXmlFileIO.INSTANCE.parseLibrary_v1_0("test_data/xml_io_trials/lib.xml");
     assertNotNull(lib);
     DependenciesType deps = lib.getDependencies();
     assertNotNull(deps);
@@ -59,7 +59,7 @@ public class LibraryIOTrial extends MockitoSourceFileTrial {
       
       @Override
       public void run() throws Throwable {
-        FabXmlFiles.INSTANCE.parseLibrary_v1_0("test_data/xml_io_trials/dev.xml");
+        FabXmlFileIO.INSTANCE.parseLibrary_v1_0("test_data/xml_io_trials/dev.xml");
       }
     });
   }
@@ -78,7 +78,7 @@ public class LibraryIOTrial extends MockitoSourceFileTrial {
       
       @Override
       public void run() throws Throwable {
-        FabXmlFiles.INSTANCE.parseLibrary_v1_0(badFileName);
+        FabXmlFileIO.INSTANCE.parseLibrary_v1_0(badFileName);
       }
     });
   }

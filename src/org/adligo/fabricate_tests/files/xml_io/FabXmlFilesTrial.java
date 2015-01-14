@@ -1,6 +1,6 @@
 package org.adligo.fabricate_tests.files.xml_io;
 
-import org.adligo.fabricate.files.xml_io.FabXmlFiles;
+import org.adligo.fabricate.files.xml_io.FabXmlFileIO;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
@@ -12,7 +12,7 @@ import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
  * @author scott
  *
  */
-@SourceFileScope (sourceClass=FabXmlFiles.class,minCoverage=0.0)
+@SourceFileScope (sourceClass=FabXmlFileIO.class,minCoverage=0.0)
 public class FabXmlFilesTrial extends MockitoSourceFileTrial {
 
 }

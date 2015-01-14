@@ -1,9 +1,5 @@
-package org.adligo.fabricate_tests.common;
+package org.adligo.fabricate_tests.common.log;
 
-import org.adligo.fabricate_tests.common.en.A_FabEnPkgTrials;
-import org.adligo.fabricate_tests.common.i18n.A_FabI18nPkgTrials;
-import org.adligo.fabricate_tests.common.log.A_LogPkgTrials;
-import org.adligo.fabricate_tests.common.log.ThreadLocalPrintStreamTrial;
 import org.adligo.fabricate_tests.etc.FabTestParamsFactory;
 import org.adligo.tests4j.run.api.Tests4J;
 import org.adligo.tests4j.system.shared.api.I_Tests4J_TrialList;
@@ -13,13 +9,13 @@ import org.adligo.tests4j.system.shared.trials.I_Trial;
 import java.util.ArrayList;
 import java.util.List;
 
-public class A_CommonPkgTrials implements I_Tests4J_TrialList {
+public class A_LogPkgTrials implements I_Tests4J_TrialList {
 	
 	public static void main(String [] args) {
 		try {
 			Tests4J_Params params = new FabTestParamsFactory().create();
 			
-			A_CommonPkgTrials me = new A_CommonPkgTrials();
+			A_LogPkgTrials me = new A_LogPkgTrials();
 			params.addTrials(me);
 			
 			Tests4J.run(params);
@@ -32,10 +28,9 @@ public class A_CommonPkgTrials implements I_Tests4J_TrialList {
   @Override
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
-    
-    trials.addAll(new A_FabEnPkgTrials().getTrials());
-    trials.addAll(new A_FabI18nPkgTrials().getTrials());
-    trials.addAll(new A_LogPkgTrials().getTrials());
+    trials.add(I_FabLogTrial.class);
+    trials.add(ThreadLocalPrintStreamTrial.class);
+    trials.add(FabLogTrial.class);
     return trials;
   }
 

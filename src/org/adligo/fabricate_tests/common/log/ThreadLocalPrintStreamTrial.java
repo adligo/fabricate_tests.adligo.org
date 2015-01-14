@@ -1,6 +1,6 @@
-package org.adligo.fabricate_tests.common;
+package org.adligo.fabricate_tests.common.log;
 
-import org.adligo.fabricate.common.ThreadLocalPrintStream;
+import org.adligo.fabricate.common.log.ThreadLocalPrintStream;
 import org.adligo.fabricate_tests.common.mocks.ThreadLocalPrintStreamMock;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;

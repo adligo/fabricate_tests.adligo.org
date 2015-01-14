@@ -1,6 +1,6 @@
 package org.adligo.fabricate_tests.files.xml_io;
 
-import org.adligo.fabricate.files.xml_io.FabXmlFiles;
+import org.adligo.fabricate.files.xml_io.FabXmlFileIO;
 import org.adligo.fabricate.files.xml_io.ProjectIO;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamType;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamsType;
@@ -32,7 +32,7 @@ public class ProjectIOTrial extends MockitoSourceFileTrial {
   @SuppressWarnings("boxing")
   @Test
   public void testMethod_parse_v1_0() throws Exception {
-    FabricateProjectType project = FabXmlFiles.INSTANCE.parseProject_v1_0("test_data/xml_io_trials/project.xml");
+    FabricateProjectType project = FabXmlFileIO.INSTANCE.parseProject_v1_0("test_data/xml_io_trials/project.xml");
     assertNotNull(project);
     List<ProjectCommandType> commands = project.getCommand();
     ProjectCommandType command = commands.get(0);
@@ -124,7 +124,7 @@ public class ProjectIOTrial extends MockitoSourceFileTrial {
       
       @Override
       public void run() throws Throwable {
-        FabXmlFiles.INSTANCE.parseProject_v1_0("test_data/xml_io_trials/dev.xml");
+        FabXmlFileIO.INSTANCE.parseProject_v1_0("test_data/xml_io_trials/dev.xml");
       }
     });
   }
@@ -143,7 +143,7 @@ public class ProjectIOTrial extends MockitoSourceFileTrial {
       
       @Override
       public void run() throws Throwable {
-        FabXmlFiles.INSTANCE.parseProject_v1_0(badFileName);
+        FabXmlFileIO.INSTANCE.parseProject_v1_0(badFileName);
       }
     });
   }

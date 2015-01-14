@@ -1,9 +1,9 @@
 package org.adligo.fabricate_tests.files;
 
-import org.adligo.fabricate.common.I_FabContext;
 import org.adligo.fabricate.common.en.FabricateEnConstants;
 import org.adligo.fabricate.common.en.FileEnMessages;
 import org.adligo.fabricate.common.i18n.I_FabricateConstants;
+import org.adligo.fabricate.common.log.I_FabLog;
 import org.adligo.fabricate.files.I_FileMatcher;
 import org.adligo.fabricate.files.PatternFileMatcher;
 import org.adligo.fabricate_tests.common.mocks.ThreadLocalPrintStreamMock;
@@ -12,6 +12,7 @@ import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.system.shared.trials.AfterTrial;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
+import org.adligo.tests4j_4mockito.MockMethod;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
 import java.io.ByteArrayOutputStream;
@@ -20,23 +21,21 @@ import java.io.PrintStream;
 
 @SourceFileScope (sourceClass=I_FileMatcher.class)
 public class PatternFileMatcherTrial extends MockitoSourceFileTrial {
-  private I_FabContext ctxMock;
+  private I_FabLog logMock;
+  private MockMethod<Void> printlnMock = new MockMethod<Void>();
+  
   private I_FabricateConstants constantsMock;
-  private ByteArrayOutputStream prints;
-  private PrintStream printMock;
   
   @Override
   public void beforeTests() {
-    ctxMock = mock(I_FabContext.class);
+    logMock = mock(I_FabLog.class);
+    doAnswer(printlnMock).when(logMock).println(any());
+    
     constantsMock = mock(I_FabricateConstants.class);
     when(constantsMock.getFileMessages()).thenReturn(FileEnMessages.INSTANCE);
     
     when(constantsMock.getLineSeperator()).thenReturn("\n");
-    when(ctxMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    
-    prints = new ByteArrayOutputStream();
-    printMock = new PrintStream(prints);
-    ThreadLocalPrintStreamMock.set(printMock);
+    when(logMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     
   }
   
@@ -52,7 +51,7 @@ public class PatternFileMatcherTrial extends MockitoSourceFileTrial {
           @SuppressWarnings("unused")
           @Override
           public void run() throws Throwable {
-            new PatternFileMatcher(ctxMock, "b*ar", false);
+            new PatternFileMatcher(logMock, "b*ar", false);
           }
         });
     assertThrown(new ExpectedThrowable(new IllegalArgumentException(
@@ -61,31 +60,30 @@ public class PatternFileMatcherTrial extends MockitoSourceFileTrial {
           @SuppressWarnings("unused")
           @Override
           public void run() throws Throwable {
-            new PatternFileMatcher(ctxMock, "foo/b*ar", false);
+            new PatternFileMatcher(logMock, "foo/b*ar", false);
           }
         });
   }
   
   @Test
   public void testConstructor() {
-    PatternFileMatcher matcher = new PatternFileMatcher(ctxMock, "", false);
+    PatternFileMatcher matcher = new PatternFileMatcher(logMock, "", false);
     assertTrue(matcher.isMatch("bar.txt"));
     
   }
   
   @Test
   public void testConstructorWithIncludes() {
-    PatternFileMatcher matcher = new PatternFileMatcher(ctxMock, "", true);
+    PatternFileMatcher matcher = new PatternFileMatcher(logMock, "", true);
     assertFalse(matcher.isMatch("bar.txt"));
   }
   
   @SuppressWarnings("boxing")
   @Test
   public void testConstructorLogMatch() {
-    ThreadLocalPrintStreamMock.set(printMock);
-    when(ctxMock.isLogEnabled(PatternFileMatcher.class)).thenReturn(true);
+    when(logMock.isLogEnabled(PatternFileMatcher.class)).thenReturn(true);
     
-    PatternFileMatcher matcher = new PatternFileMatcher(ctxMock, "", true);
+    PatternFileMatcher matcher = new PatternFileMatcher(logMock, "", true);
     assertFalse(matcher.isMatch("bar.txt"));
     File file = new File(".");
     String absPath = file.getAbsolutePath();
@@ -95,13 +93,13 @@ public class PatternFileMatcherTrial extends MockitoSourceFileTrial {
     }
     assertEquals(FileEnMessages.INSTANCE.getTheFollowingFile() + "\n" +
         absPath + "bar.txt\n" + 
-        FileEnMessages.INSTANCE.getDidNotMatchedTheFollowingPattren() + "\n\n"
-        , prints.toString());
+        FileEnMessages.INSTANCE.getDidNotMatchedTheFollowingPattren() + "\n"
+        , printlnMock.getArg(0));
   }
   
   @Test
   public void testConstructorLogNoMatch() {
-    PatternFileMatcher matcher = new PatternFileMatcher(ctxMock, "", true);
+    PatternFileMatcher matcher = new PatternFileMatcher(logMock, "", true);
     assertFalse(matcher.isMatch("bar.txt"));
   }
 }

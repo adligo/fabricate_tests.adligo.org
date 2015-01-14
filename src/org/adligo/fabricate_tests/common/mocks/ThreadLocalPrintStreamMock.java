@@ -1,6 +1,6 @@
 package org.adligo.fabricate_tests.common.mocks;
 
-import org.adligo.fabricate.common.ThreadLocalPrintStream;
+import org.adligo.fabricate.common.log.ThreadLocalPrintStream;
 
 import java.io.PrintStream;
 

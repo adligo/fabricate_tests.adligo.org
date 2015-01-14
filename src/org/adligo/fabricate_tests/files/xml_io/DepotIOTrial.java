@@ -1,7 +1,7 @@
 package org.adligo.fabricate_tests.files.xml_io;
 
 import org.adligo.fabricate.files.xml_io.DepotIO;
-import org.adligo.fabricate.files.xml_io.FabXmlFiles;
+import org.adligo.fabricate.files.xml_io.FabXmlFileIO;
 import org.adligo.fabricate.xml.io_v1.depot_v1_0.ArtifactType;
 import org.adligo.fabricate.xml.io_v1.depot_v1_0.DepotType;
 import org.adligo.fabricate.xml.io_v1.dev_v1_0.FabricateDevType;
@@ -35,7 +35,7 @@ public class DepotIOTrial extends MockitoSourceFileTrial {
   @SuppressWarnings("boxing")
   @Test
   public void testMethod_parse_v1_0() throws Exception {
-    DepotType depot = FabXmlFiles.INSTANCE.parseDepot_v1_0("test_data/xml_io_trials/depot.xml");
+    DepotType depot = FabXmlFileIO.INSTANCE.parseDepot_v1_0("test_data/xml_io_trials/depot.xml");
     assertNotNull(depot);
     List<ArtifactType> artifacts = depot.getArtifact();
     ArtifactType artifact = artifacts.get(0);
@@ -52,7 +52,7 @@ public class DepotIOTrial extends MockitoSourceFileTrial {
       
       @Override
       public void run() throws Throwable {
-        FabXmlFiles.INSTANCE.parseDepot_v1_0("test_data/xml_io_trials/lib.xml");
+        FabXmlFileIO.INSTANCE.parseDepot_v1_0("test_data/xml_io_trials/lib.xml");
       }
     });
   }
@@ -71,7 +71,7 @@ public class DepotIOTrial extends MockitoSourceFileTrial {
       
       @Override
       public void run() throws Throwable {
-        FabXmlFiles.INSTANCE.parseDepot_v1_0(badFileName);
+        FabXmlFileIO.INSTANCE.parseDepot_v1_0(badFileName);
       }
     });
   }
@@ -86,8 +86,8 @@ public class DepotIOTrial extends MockitoSourceFileTrial {
     art.setProject("project");
     art.setType("type");
     artifacts.add(art);
-    FabXmlFiles.INSTANCE.writeDepot_v1_0("test_data/xml_io_trials/depot_io_trial_temp/depot.xml",depot);
-    depot = FabXmlFiles.INSTANCE.parseDepot_v1_0("test_data/xml_io_trials/depot_io_trial_temp/depot.xml");
+    FabXmlFileIO.INSTANCE.writeDepot_v1_0("test_data/xml_io_trials/depot_io_trial_temp/depot.xml",depot);
+    depot = FabXmlFileIO.INSTANCE.parseDepot_v1_0("test_data/xml_io_trials/depot_io_trial_temp/depot.xml");
     assertNotNull(depot);
     artifacts = depot.getArtifact();
     art = artifacts.get(0);
@@ -104,7 +104,7 @@ public class DepotIOTrial extends MockitoSourceFileTrial {
       
       @Override
       public void run() throws Throwable {
-        FabXmlFiles.INSTANCE.writeDepot_v1_0(null,depot);
+        FabXmlFileIO.INSTANCE.writeDepot_v1_0(null,depot);
       }
     });
     
@@ -119,7 +119,7 @@ public class DepotIOTrial extends MockitoSourceFileTrial {
       
       @Override
       public void run() throws Throwable {
-        FabXmlFiles.INSTANCE.writeDepot_v1_0("test_data/xml_io_trials/temp/na/dev.xml",depot);
+        FabXmlFileIO.INSTANCE.writeDepot_v1_0("test_data/xml_io_trials/temp/na/dev.xml",depot);
       }
     });
   }
