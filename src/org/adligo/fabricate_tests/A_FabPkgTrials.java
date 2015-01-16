@@ -30,11 +30,13 @@ public class A_FabPkgTrials implements I_Tests4J_TrialList {
   @Override
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
-    trials.add(FabPackagesTrial.class);
-    trials.add(FabricateSetupTrial.class);
-    
     trials.addAll(new A_CommonPkgTrials().getTrials());
     trials.addAll(new A_FilesTrials().getTrials());
+    
+    trials.add(FabPackagesTrial.class);
+    //trials.add(FabricateSetupTrial.class);
+    
+    
     return trials;
   }
 

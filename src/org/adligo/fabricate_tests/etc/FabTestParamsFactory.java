@@ -20,6 +20,7 @@ public class FabTestParamsFactory extends AbstractParamsFactory {
     Tests4J_Params params = new Tests4J_Params();
     List<String> nonInstrumentedPackages = new ArrayList<String>();
     nonInstrumentedPackages.add("org.apache.");
+    
     nonInstrumentedPackages.add("org.adligo.fabricate.xml.io_v1.common_v1_0.");
     nonInstrumentedPackages.add("org.adligo.fabricate.xml.io_v1.depot_v1_0.");
     nonInstrumentedPackages.add("org.adligo.fabricate.xml.io_v1.dev_v1_0.");
@@ -27,6 +28,7 @@ public class FabTestParamsFactory extends AbstractParamsFactory {
     nonInstrumentedPackages.add("org.adligo.fabricate.xml.io_v1.library_v1_0.");
     nonInstrumentedPackages.add("org.adligo.fabricate.xml.io_v1.project_v1_0.");
     nonInstrumentedPackages.add("org.adligo.fabricate.xml.io_v1.result_v1_0.");
+   
     params.setAdditionalNonInstrumentedPackages(nonInstrumentedPackages);
     
     //params.setCoveragePluginFactoryClass(MockitoPluginFactory.class);
@@ -38,7 +40,7 @@ public class FabTestParamsFactory extends AbstractParamsFactory {
     //params.setLogState(TrialInstrumenter.class, true);
     //params.setLogState(Recorder.class, true);
     //params.setLogState(CallJacocoInit.class, true);
-    //params.setLogState(MultiProbeDataStore.class, true);
+    params.setLogState(TrialInstrumenter.class, true);
     return params;
   }
 

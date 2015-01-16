@@ -2,14 +2,15 @@ package org.adligo.fabricate_tests.files;
 
 import org.adligo.fabricate.common.log.I_FabLog;
 import org.adligo.fabricate.files.FabFileIO;
-import org.adligo.fabricate.files.I_FabFileIO;
+import org.adligo.tests4j.shared.asserts.reference.CircularDependencies;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
 import java.io.File;
 
-@SourceFileScope (sourceClass=I_FabFileIO.class)
+@SourceFileScope (sourceClass=FabFileIO.class,
+  minCoverage=72.0,allowedCircularDependencies=CircularDependencies.AllowInnerOuterClasses)
 public class FabFilesTrial extends MockitoSourceFileTrial {
 
   @Test
