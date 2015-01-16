@@ -4,7 +4,7 @@ import org.adligo.fabricate.files.xml_io.FabXmlFileIO;
 import org.adligo.fabricate.files.xml_io.ProjectIO;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamType;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamsType;
-import org.adligo.fabricate.xml.io_v1.common_v1_0.TaskType;
+import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.TaskType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.DependenciesType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.DependencyType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.IdeArgumentType;
@@ -13,6 +13,7 @@ import org.adligo.fabricate.xml.io_v1.project_v1_0.FabricateProjectType;
 import org.adligo.fabricate.xml.io_v1.project_v1_0.ProjectCommandType;
 import org.adligo.fabricate.xml.io_v1.project_v1_0.ProjectStageType;
 import org.adligo.fabricate.xml.io_v1.project_v1_0.ProjectStagesType;
+import org.adligo.fabricate.xml.io_v1.project_v1_0.ProjectTaskType;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.shared.asserts.common.MatchType;
@@ -34,6 +35,20 @@ public class ProjectIOTrial extends MockitoSourceFileTrial {
   public void testMethod_parse_v1_0() throws Exception {
     FabricateProjectType project = FabXmlFileIO.INSTANCE.parseProject_v1_0("test_data/xml_io_trials/project.xml");
     assertNotNull(project);
+    
+    ParamsType attributes =project.getAttributes();
+    List<ParamType> attributesList = attributes.getParam();
+    ParamType attribute = attributesList.get(0);
+    assertEquals("srcDirs",attribute.getKey());
+    assertEquals("src,src2", attribute.getValue());
+    assertEquals(1, attributesList.size());
+    
+    attributesList = attribute.getParam();
+    attribute = attributesList.get(0);
+    assertEquals("c2eKeyNested",attribute.getKey());
+    assertEquals("c2eValNested", attribute.getValue());
+    assertEquals(1, attributesList.size());
+    
     List<ProjectCommandType> commands = project.getCommand();
     ProjectCommandType command = commands.get(0);
     assertNotNull(command);
@@ -75,11 +90,12 @@ public class ProjectIOTrial extends MockitoSourceFileTrial {
     assertEquals("nestedSetupParamValue", param.getValue());
     assertEquals(1, params.size());
     
-    List<TaskType> tasks = stage.getTask();
-    TaskType task = tasks.get(0);
+    List<ProjectTaskType> tasks = stage.getTask();
+    ProjectTaskType task = tasks.get(0);
     assertEquals("setupTask" ,task.getName());
     
-    params = task.getParam();
+    ParamsType taskParams = task.getParams();
+    params = taskParams.getParam();
     param = params.get(0);
     assertEquals("Default-Vendor", param.getKey());
     assertEquals("Adligo Inc", param.getValue());

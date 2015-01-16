@@ -32,7 +32,8 @@ public class A_CommonPkgTrials implements I_Tests4J_TrialList {
   @Override
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
-    
+    // can't test yet circular dependency
+    //trials.add(FabricateXmlDiscoveryTrial.class);
     trials.addAll(new A_FabEnPkgTrials().getTrials());
     trials.addAll(new A_FabI18nPkgTrials().getTrials());
     trials.addAll(new A_LogPkgTrials().getTrials());

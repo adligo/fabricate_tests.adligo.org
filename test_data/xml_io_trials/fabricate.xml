@@ -21,9 +21,11 @@
 	    </fns:dependency>
     </fns:dependencies>
     <fns:command name="classpath2eclipse" class="com.example.Classpath2Eclipse">
-    	<cns:param key="c2eKey" value="c2eVal">
-    		<cns:param key="c2eKeyNested" value="c2eValNested"/>
-    	</cns:param>
+    	<cns:params>
+	    	<cns:param key="c2eKey" value="c2eVal">
+	    		<cns:param key="c2eKeyNested" value="c2eValNested"/>
+	    	</cns:param>
+    	</cns:params>
     </fns:command>
     <fns:project_group>
     	<fns:stages>
@@ -33,16 +35,18 @@
 	    	    	       <cns:param key="nestedSetupParam" value="nestedSetupParamValue"/>
 	    	    	</cns:param>
     	    	</fns:params>
-    	    	<fns:task name="setupTask">
-    	    	    <cns:param key="Default-Vendor" value="Adligo Inc">
-    	    	       <cns:param key="nestKey" value="nestVal"/>
-    	    	    </cns:param>
+    	    	<fns:task name="setupTask" class="foo" optional="true">
+    	    		<fns:params>
+	    	    	    <cns:param key="Default-Vendor" value="Adligo Inc">
+	    	    	       <cns:param key="nestKey" value="nestVal"/>
+	    	    	    </cns:param>
+    	    	    </fns:params>
     	    	</fns:task>  
     	    </fns:stage>
     	</fns:stages>    
     	<fns:projects>
     	    <fns:scm>
-    	        <fns:git hostname="git" path="/opt/git/" user="JimDoe"/>
+    	        <fns:git hostname="git" path="/opt/git/" user="JimDoe" />
     	    </fns:scm>
     	    <fns:project name="widgets.example.com" version="1"/>
     	</fns:projects>

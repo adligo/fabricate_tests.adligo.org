@@ -3,6 +3,11 @@
     xmlns:lns="http://www.adligo.org/fabricate/xml/io_v1/library_v1_0.xsd" 
     xmlns:cns="http://www.adligo.org/fabricate/xml/io_v1/common_v1_0.xsd" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+    <tns:attributes>
+    	<cns:param key="srcDirs" value="src,src2">
+    		<cns:param key="c2eKeyNested" value="c2eValNested"/>
+    	</cns:param>
+    </tns:attributes>
     <tns:command name="classpath2eclipse">
     	<tns:param key="c2eKey" value="c2eVal">
     		<cns:param key="c2eKeyNested" value="c2eValNested"/>
@@ -16,9 +21,11 @@
 	   	    	</cns:param>
    	    	</tns:params>
    	    	<tns:task name="setupTask">
-   	    	    <cns:param key="Default-Vendor" value="Adligo Inc">
-   	    	       <cns:param key="nestKey" value="nestVal"/>
-   	    	    </cns:param>
+   	    		<tns:params>
+	   	    	    <cns:param key="Default-Vendor" value="Adligo Inc">
+	   	    	       <cns:param key="nestKey" value="nestVal"/>
+	   	    	    </cns:param>
+   	    	    </tns:params>
    	    	</tns:task>
         </tns:stage>
     </tns:stages>

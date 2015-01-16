@@ -7,13 +7,13 @@
     <fns:groups>
     	<fns:project_group>
     		<fns:scm>
-    	        <fns:git hostname="git" path="/opt/git/" user="JohnDoe"/>
+    	        <fns:git hostname="git" path="/opt/git/" user="JohnDoe" protocol="https"/>
     	    </fns:scm>
     	    <fns:project name="project_group.example.com" version="1"/>
     	</fns:project_group>
     	<fns:project_group>
     		<fns:scm>
-    	        <fns:git hostname="git" path="/opt/git/" user="JaneDoe"/>
+    	        <fns:git hostname="git" path="/opt/git/" user="JaneDoe" protocol="https"/>
     	    </fns:scm>
     	    <fns:project name="other_project_group.example.com" version="2"/>
     	</fns:project_group>

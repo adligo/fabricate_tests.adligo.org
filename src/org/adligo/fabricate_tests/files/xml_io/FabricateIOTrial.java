@@ -5,7 +5,6 @@ import org.adligo.fabricate.files.xml_io.FabricateIO;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.CommandType;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamType;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamsType;
-import org.adligo.fabricate.xml.io_v1.common_v1_0.TaskType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateDependencies;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.GitServerType;
@@ -18,6 +17,7 @@ import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.ScmType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.StageType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.StagesAndProjectsType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.StagesType;
+import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.TaskType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.DependencyType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.IdeArgumentType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.IdeType;
@@ -69,7 +69,8 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
     assertEquals("com.example.Classpath2Eclipse",command.getClazz());
     assertEquals("classpath2eclipse",command.getName());
     
-    List<ParamType> params = command.getParam();
+    ParamsType cmdParams = command.getParams();
+    List<ParamType> params = cmdParams.getParam();
     ParamType param = params.get(0);
     assertNotNull(param);
     assertEquals("c2eKey",param.getKey());
@@ -111,8 +112,11 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
     List<TaskType> tasks = stage.getTask();
     TaskType task = tasks.get(0);
     assertEquals("setupTask" ,task.getName());
+    assertEquals("foo", task.getClazz());
+    assertTrue(task.isOptional());
     
-    params = task.getParam();
+    ParamsType taskParams = task.getParams();
+    params = taskParams.getParam();
     param = params.get(0);
     assertEquals("Default-Vendor", param.getKey());
     assertEquals("Adligo Inc", param.getValue());
@@ -173,6 +177,7 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
     assertEquals("git",gst.getHostname());
     assertEquals("/opt/git/",gst.getPath());
     assertEquals("JohnDoe",gst.getUser());
+    assertEquals("https", gst.getProtocol());
     
     ProjectType proj = pgt.getProject();
     assertEquals("project_group.example.com",proj.getName());
