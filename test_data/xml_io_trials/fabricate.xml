@@ -20,22 +20,36 @@
 	    	</lns:ide>
 	    </fns:dependency>
     </fns:dependencies>
+    <fns:trait name="prepare" class="com.example.DefaultPrepare">
+    	<fns:params>
+   	    	<cns:param key="prepareParam" value="prepareParamValue">
+   	    	       <cns:param key="nestedPrepareParam" value="nestedPrepareParamValue"/>
+   	    	</cns:param>
+  	     </fns:params>
+    </fns:trait>
     <fns:command name="classpath2eclipse" class="com.example.Classpath2Eclipse">
-    	<cns:params>
+    	<fns:params>
 	    	<cns:param key="c2eKey" value="c2eVal">
 	    		<cns:param key="c2eKeyNested" value="c2eValNested"/>
 	    	</cns:param>
-    	</cns:params>
+    	</fns:params>
+    	<fns:task name="classpath2eclipseTask" class="classpath2eclipseTask" >
+	    	<fns:params>
+ 	    	    <cns:param key="Default-Vendor" value="Adligo Inc">
+ 	    	       <cns:param key="nestKey" value="nestVal"/>
+ 	    	    </cns:param>
+	    	</fns:params>
+	    </fns:task>  
     </fns:command>
     <fns:project_group>
     	<fns:stages>
-    	    <fns:stage name="setup" class="com.example.ExampleSetup" optional="true">
+    	    <fns:stage name="build" class="com.example.ExampleBuild" optional="true">
     	    	<fns:params>
-	    	    	<cns:param key="setupParam" value="setupParamValue">
-	    	    	       <cns:param key="nestedSetupParam" value="nestedSetupParamValue"/>
+	    	    	<cns:param key="buildParam" value="buildParamValue">
+	    	    	       <cns:param key="nestedBuildParam" value="nestedBuildParamValue"/>
 	    	    	</cns:param>
     	    	</fns:params>
-    	    	<fns:task name="setupTask" class="foo" optional="true">
+    	    	<fns:task name="buildTask" class="foo" optional="true">
     	    		<fns:params>
 	    	    	    <cns:param key="Default-Vendor" value="Adligo Inc">
 	    	    	       <cns:param key="nestKey" value="nestVal"/>

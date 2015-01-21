@@ -1,18 +1,18 @@
-package org.adligo.fabricate_tests.files;
+package org.adligo.fabricate_tests.common.files;
 
 import org.adligo.fabricate.common.en.FabricateEnConstants;
 import org.adligo.fabricate.common.en.FileEnMessages;
+import org.adligo.fabricate.common.files.I_FabFileIO;
+import org.adligo.fabricate.common.files.PatternFileMatcher;
 import org.adligo.fabricate.common.i18n.I_FabricateConstants;
 import org.adligo.fabricate.common.log.I_FabLog;
-import org.adligo.fabricate.files.I_FabFileIO;
-import org.adligo.fabricate.files.PatternFileMatcher;
+import org.adligo.fabricate.common.system.I_FabSystem;
 import org.adligo.fabricate_tests.common.mocks.ThreadLocalPrintStreamMock;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.system.shared.trials.AfterTrial;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
-import org.adligo.tests4j_4mockito.ArgMap;
 import org.adligo.tests4j_4mockito.I_ReturnFactory;
 import org.adligo.tests4j_4mockito.MockMethod;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
@@ -21,8 +21,9 @@ import java.io.File;
 
 @SourceFileScope (sourceClass=PatternFileMatcher.class,minCoverage=87.0)
 public class PatternFileMatcherTrial extends MockitoSourceFileTrial {
-  private I_FabLog logMock;
+  private I_FabSystem sysMock_;
   private I_FabFileIO filesMock;
+  private I_FabLog log_;
   private MockMethod<Void> printlnMock;
   private MockMethod<File> instanceMethod;
   
@@ -31,8 +32,11 @@ public class PatternFileMatcherTrial extends MockitoSourceFileTrial {
   @Override
   public void beforeTests() {
     printlnMock = new MockMethod<Void>();
-    logMock = mock(I_FabLog.class);
-    doAnswer(printlnMock).when(logMock).println(any());
+    sysMock_ = mock(I_FabSystem.class);
+    log_ = mock(I_FabLog.class);
+    doAnswer(printlnMock).when(log_).println(any());
+    when(sysMock_.getLog()).thenReturn(log_);
+    
     filesMock = mock(I_FabFileIO.class);
     setupPaths("/");
     
@@ -42,7 +46,7 @@ public class PatternFileMatcherTrial extends MockitoSourceFileTrial {
     when(constantsMock.getFileMessages()).thenReturn(FileEnMessages.INSTANCE);
     
     when(constantsMock.getLineSeperator()).thenReturn("\n");
-    when(logMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock_.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     
   }
 
@@ -78,7 +82,7 @@ public class PatternFileMatcherTrial extends MockitoSourceFileTrial {
           @SuppressWarnings("unused")
           @Override
           public void run() throws Throwable {
-            new PatternFileMatcher(filesMock, logMock, null, false);
+            new PatternFileMatcher(filesMock, sysMock_, null, false);
           }
         });
     assertThrown(new ExpectedThrowable(new IllegalArgumentException(
@@ -87,7 +91,7 @@ public class PatternFileMatcherTrial extends MockitoSourceFileTrial {
           @SuppressWarnings("unused")
           @Override
           public void run() throws Throwable {
-            new PatternFileMatcher(filesMock, logMock, "\t", false);
+            new PatternFileMatcher(filesMock, sysMock_, "\t", false);
           }
         });
     assertThrown(new ExpectedThrowable(new IllegalArgumentException(
@@ -96,7 +100,7 @@ public class PatternFileMatcherTrial extends MockitoSourceFileTrial {
           @SuppressWarnings("unused")
           @Override
           public void run() throws Throwable {
-            new PatternFileMatcher(filesMock, logMock, "b*ar.txt", false);
+            new PatternFileMatcher(filesMock, sysMock_, "b*ar.txt", false);
           }
         });
     assertThrown(new ExpectedThrowable(new IllegalArgumentException(
@@ -105,7 +109,7 @@ public class PatternFileMatcherTrial extends MockitoSourceFileTrial {
           @SuppressWarnings("unused")
           @Override
           public void run() throws Throwable {
-            new PatternFileMatcher(filesMock, logMock, "foo/b*ar.txt", false);
+            new PatternFileMatcher(filesMock, sysMock_, "foo/b*ar.txt", false);
           }
         });
     assertThrown(new ExpectedThrowable(new IllegalArgumentException(
@@ -114,36 +118,36 @@ public class PatternFileMatcherTrial extends MockitoSourceFileTrial {
           @SuppressWarnings("unused")
           @Override
           public void run() throws Throwable {
-            new PatternFileMatcher(filesMock, logMock, "foo/*/bar/bar.txt", false);
+            new PatternFileMatcher(filesMock, sysMock_, "foo/*/bar/bar.txt", false);
           }
         });
   }
   
   @Test
   public void testConstructorWithExcludes() {
-    PatternFileMatcher matcher = new PatternFileMatcher(filesMock, logMock, "bar1.txt", false);
+    PatternFileMatcher matcher = new PatternFileMatcher(filesMock, sysMock_, "bar1.txt", false);
    
 
     assertTrue(matcher.isMatch("bar1.txt"));
     assertFalse(matcher.isMatch("bar.txt"));
     
-    matcher = new PatternFileMatcher(filesMock, logMock, "*.txt", false);
+    matcher = new PatternFileMatcher(filesMock, sysMock_, "*.txt", false);
     assertTrue(matcher.isMatch("bar.txt"));
     assertFalse(matcher.isMatch("foo/bar.txt"));
     assertFalse(matcher.isMatch("foo/bar/bar.txt"));
     
-    matcher = new PatternFileMatcher(filesMock, logMock, "*/bar.txt", false);
+    matcher = new PatternFileMatcher(filesMock, sysMock_, "*/bar.txt", false);
     assertTrue(matcher.isMatch("bar.txt"));
     assertTrue(matcher.isMatch("foo/bar.txt"));
     assertTrue(matcher.isMatch("foo/bar/bar.txt"));
     
-    matcher = new PatternFileMatcher(filesMock, logMock, "bar*/bar.txt", false);
+    matcher = new PatternFileMatcher(filesMock, sysMock_, "bar*/bar.txt", false);
     assertTrue(matcher.isMatch("bar/bar.txt"));
     assertTrue(matcher.isMatch("bar3/bar.txt"));
     assertFalse(matcher.isMatch("foo/bar.txt"));
     assertFalse(matcher.isMatch("foo/bar/bar.txt"));
     
-    matcher = new PatternFileMatcher(filesMock, logMock, "foo/*/bar*", false);
+    matcher = new PatternFileMatcher(filesMock, sysMock_, "foo/*/bar*", false);
     assertFalse(matcher.isMatch("bar/bar.txt"));
     assertFalse(matcher.isMatch("bar3/bar.txt"));
     assertTrue(matcher.isMatch("foo/bar.txt"));
@@ -154,28 +158,28 @@ public class PatternFileMatcherTrial extends MockitoSourceFileTrial {
   @Test
   public void testConstructorWithExcludesOnWindows() {
     setupPaths("\\");
-    PatternFileMatcher matcher = new PatternFileMatcher(filesMock, logMock, "bar1.txt", false);
+    PatternFileMatcher matcher = new PatternFileMatcher(filesMock, sysMock_, "bar1.txt", false);
    
     assertTrue(matcher.isMatch("bar1.txt"));
     assertFalse(matcher.isMatch("bar.txt"));
     
-    matcher = new PatternFileMatcher(filesMock, logMock, "*.txt", false);
+    matcher = new PatternFileMatcher(filesMock, sysMock_, "*.txt", false);
     assertTrue(matcher.isMatch("bar.txt"));
     assertFalse(matcher.isMatch("foo\\bar.txt"));
     assertFalse(matcher.isMatch("foo\\bar\\bar.txt"));
     
-    matcher = new PatternFileMatcher(filesMock, logMock, "*/bar.txt", false);
+    matcher = new PatternFileMatcher(filesMock, sysMock_, "*/bar.txt", false);
     assertTrue(matcher.isMatch("bar.txt"));
     assertTrue(matcher.isMatch("foo\\bar.txt"));
     assertTrue(matcher.isMatch("foo\\bar\\bar.txt"));
     
-    matcher = new PatternFileMatcher(filesMock, logMock, "bar*/bar.txt", false);
+    matcher = new PatternFileMatcher(filesMock, sysMock_, "bar*/bar.txt", false);
     assertTrue(matcher.isMatch("bar\\bar.txt"));
     assertTrue(matcher.isMatch("bar3\\bar.txt"));
     assertFalse(matcher.isMatch("foo\\bar.txt"));
     assertFalse(matcher.isMatch("foo\\bar\\bar.txt"));
     
-    matcher = new PatternFileMatcher(filesMock, logMock, "foo/*/bar*", false);
+    matcher = new PatternFileMatcher(filesMock, sysMock_, "foo/*/bar*", false);
     assertFalse(matcher.isMatch("bar\\bar.txt"));
     assertFalse(matcher.isMatch("bar3\\bar.txt"));
     assertTrue(matcher.isMatch("foo\\bar.txt"));
@@ -185,29 +189,29 @@ public class PatternFileMatcherTrial extends MockitoSourceFileTrial {
   
   @Test
   public void testConstructorWithIncludes() {
-    PatternFileMatcher matcher = new PatternFileMatcher(filesMock, logMock, "bar.txt", true);
+    PatternFileMatcher matcher = new PatternFileMatcher(filesMock, sysMock_, "bar.txt", true);
     assertTrue(matcher.isMatch("bar.txt"));
     assertFalse(matcher.isMatch("bar1.txt"));
     
-    matcher = new PatternFileMatcher(filesMock, logMock, "*.txt", true);
+    matcher = new PatternFileMatcher(filesMock, sysMock_, "*.txt", true);
     assertTrue(matcher.isMatch("bar.txt"));
     //not included because file is in a sub directory
     assertFalse(matcher.isMatch("foo/bar.txt"));
     assertFalse(matcher.isMatch("foo/bar/bar.txt"));
     
-    matcher = new PatternFileMatcher(filesMock, logMock, "*/bar.txt", true);
+    matcher = new PatternFileMatcher(filesMock, sysMock_, "*/bar.txt", true);
     assertTrue(matcher.isMatch("bar.txt"));
     assertTrue(matcher.isMatch("foo/bar.txt"));
     assertTrue(matcher.isMatch("foo/bar/bar.txt"));
     
-    matcher = new PatternFileMatcher(filesMock, logMock, "bar*/bar.txt", true);
+    matcher = new PatternFileMatcher(filesMock, sysMock_, "bar*/bar.txt", true);
     assertTrue(matcher.isMatch("bar/bar.txt"));
     assertTrue(matcher.isMatch("bar3/bar.txt"));
     //not included becaus of directory
     assertFalse(matcher.isMatch("foo/bar.txt"));
     assertFalse(matcher.isMatch("foo/bar/bar.txt"));
     
-    matcher = new PatternFileMatcher(filesMock, logMock, "foo/*/bar*", true);
+    matcher = new PatternFileMatcher(filesMock, sysMock_, "foo/*/bar*", true);
     assertFalse(matcher.isMatch("bar/bar.txt"));
     assertFalse(matcher.isMatch("bar3/bar.txt"));
     assertTrue(matcher.isMatch("foo/bar.txt"));
@@ -218,29 +222,29 @@ public class PatternFileMatcherTrial extends MockitoSourceFileTrial {
   @Test
   public void testConstructorWithIncludesOnWindows() {
     setupPaths("\\");
-    PatternFileMatcher matcher = new PatternFileMatcher(filesMock, logMock, "bar.txt", true);
+    PatternFileMatcher matcher = new PatternFileMatcher(filesMock, sysMock_, "bar.txt", true);
     assertTrue(matcher.isMatch("bar.txt"));
     assertFalse(matcher.isMatch("bar1.txt"));
     
-    matcher = new PatternFileMatcher(filesMock, logMock, "*.txt", true);
+    matcher = new PatternFileMatcher(filesMock, sysMock_, "*.txt", true);
     assertTrue(matcher.isMatch("bar.txt"));
     //not included because file is in a sub directory
     assertFalse(matcher.isMatch("foo\\bar.txt"));
     assertFalse(matcher.isMatch("foo\\bar\\bar.txt"));
     
-    matcher = new PatternFileMatcher(filesMock, logMock, "*/bar.txt", true);
+    matcher = new PatternFileMatcher(filesMock, sysMock_, "*/bar.txt", true);
     assertTrue(matcher.isMatch("bar.txt"));
     assertTrue(matcher.isMatch("foo\\bar.txt"));
     assertTrue(matcher.isMatch("foo\\bar\\bar.txt"));
     
-    matcher = new PatternFileMatcher(filesMock, logMock, "bar*/bar.txt", true);
+    matcher = new PatternFileMatcher(filesMock, sysMock_, "bar*/bar.txt", true);
     assertTrue(matcher.isMatch("bar\\bar.txt"));
     assertTrue(matcher.isMatch("bar3\\bar.txt"));
     //not included becaus of directory
     assertFalse(matcher.isMatch("foo\\bar.txt"));
     assertFalse(matcher.isMatch("foo\\bar\\bar.txt"));
     
-    matcher = new PatternFileMatcher(filesMock, logMock, "foo/*/bar*", true);
+    matcher = new PatternFileMatcher(filesMock, sysMock_, "foo/*/bar*", true);
     assertFalse(matcher.isMatch("bar\\bar.txt"));
     assertFalse(matcher.isMatch("bar3\\bar.txt"));
     assertTrue(matcher.isMatch("foo\\bar.txt"));
@@ -250,9 +254,9 @@ public class PatternFileMatcherTrial extends MockitoSourceFileTrial {
   @SuppressWarnings("boxing")
   @Test
   public void testConstructorLogMatch() {
-    when(logMock.isLogEnabled(PatternFileMatcher.class)).thenReturn(true);
+    when(log_.isLogEnabled(PatternFileMatcher.class)).thenReturn(true);
     
-    PatternFileMatcher matcher = new PatternFileMatcher(filesMock,logMock, "bar.txt", true);
+    PatternFileMatcher matcher = new PatternFileMatcher(filesMock,sysMock_, "bar.txt", true);
     assertTrue(matcher.isMatch("bar.txt"));
    
     FileEnMessages messages = FileEnMessages.INSTANCE;
@@ -265,9 +269,9 @@ public class PatternFileMatcherTrial extends MockitoSourceFileTrial {
   @SuppressWarnings("boxing")
   @Test
   public void testConstructorLogNoMatch() {
-    when(logMock.isLogEnabled(PatternFileMatcher.class)).thenReturn(true);
+    when(log_.isLogEnabled(PatternFileMatcher.class)).thenReturn(true);
     
-    PatternFileMatcher matcher = new PatternFileMatcher(filesMock,logMock, "bar.txt", false);
+    PatternFileMatcher matcher = new PatternFileMatcher(filesMock,sysMock_, "bar.txt", false);
     assertFalse(matcher.isMatch("bar2.txt"));
     
     FileEnMessages messages = FileEnMessages.INSTANCE;

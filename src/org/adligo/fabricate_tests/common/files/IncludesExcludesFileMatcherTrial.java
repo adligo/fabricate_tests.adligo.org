@@ -1,13 +1,14 @@
-package org.adligo.fabricate_tests.files;
+package org.adligo.fabricate_tests.common.files;
 
 import org.adligo.fabricate.common.en.FabricateEnConstants;
 import org.adligo.fabricate.common.en.FileEnMessages;
+import org.adligo.fabricate.common.files.I_FabFileIO;
+import org.adligo.fabricate.common.files.I_FileMatcher;
+import org.adligo.fabricate.common.files.IncludesExcludesFileMatcher;
+import org.adligo.fabricate.common.files.PatternFileMatcher;
 import org.adligo.fabricate.common.i18n.I_FabricateConstants;
 import org.adligo.fabricate.common.log.I_FabLog;
-import org.adligo.fabricate.files.I_FabFileIO;
-import org.adligo.fabricate.files.I_FileMatcher;
-import org.adligo.fabricate.files.PatternFileMatcher;
-import org.adligo.fabricate.files.IncludesExcludesFileMatcher;
+import org.adligo.fabricate.common.system.I_FabSystem;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.I_ReturnFactory;
@@ -20,7 +21,9 @@ import java.util.Collections;
 
 @SourceFileScope (sourceClass=I_FileMatcher.class)
 public class IncludesExcludesFileMatcherTrial extends MockitoSourceFileTrial {
-  private I_FabLog logMock;
+  private I_FabSystem sysMock_;
+  
+  private I_FabLog logMock_;
   private I_FabFileIO filesMock;
   private MockMethod<Void> printlnMock;
   private MockMethod<File> instanceMethod;
@@ -30,8 +33,11 @@ public class IncludesExcludesFileMatcherTrial extends MockitoSourceFileTrial {
   @Override
   public void beforeTests() {
     printlnMock = new MockMethod<Void>();
-    logMock = mock(I_FabLog.class);
-    doAnswer(printlnMock).when(logMock).println(any());
+    sysMock_ = mock(I_FabSystem.class);
+    logMock_ = mock(I_FabLog.class);
+    doAnswer(printlnMock).when(logMock_).println(any());
+    when(sysMock_.getLog()).thenReturn(logMock_);
+    
     filesMock = mock(I_FabFileIO.class);
     setupPaths("/");
     
@@ -41,7 +47,7 @@ public class IncludesExcludesFileMatcherTrial extends MockitoSourceFileTrial {
     when(constantsMock.getFileMessages()).thenReturn(FileEnMessages.INSTANCE);
     
     when(constantsMock.getLineSeperator()).thenReturn("\n");
-    when(logMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock_.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     
   }
 
@@ -68,16 +74,16 @@ public class IncludesExcludesFileMatcherTrial extends MockitoSourceFileTrial {
   public void testConstructor() {
     IncludesExcludesFileMatcher matcher = new IncludesExcludesFileMatcher(null, null);
     assertFalse(matcher.isMatch("hey.txt"));
-    I_FileMatcher excludeFile = new PatternFileMatcher(filesMock, logMock, "foo.txt", false);
+    I_FileMatcher excludeFile = new PatternFileMatcher(filesMock, sysMock_, "foo.txt", false);
     matcher = new IncludesExcludesFileMatcher(null, Collections.singletonList(excludeFile));
     assertFalse(matcher.isMatch("foo.txt"));
     
-    I_FileMatcher includesFile = new PatternFileMatcher(filesMock, logMock, "*.txt", true);
+    I_FileMatcher includesFile = new PatternFileMatcher(filesMock, sysMock_, "*.txt", true);
     matcher = new IncludesExcludesFileMatcher(Collections.singletonList(includesFile), 
         Collections.singletonList(excludeFile));
     assertFalse(matcher.isMatch("foo.txt"));
     
-    includesFile = new PatternFileMatcher(filesMock, logMock, "*foo.txt", true);
+    includesFile = new PatternFileMatcher(filesMock, sysMock_, "*foo.txt", true);
     matcher = new IncludesExcludesFileMatcher(Collections.singletonList(includesFile), 
         Collections.singletonList(excludeFile));
     assertFalse(matcher.isMatch("foo.txt"));

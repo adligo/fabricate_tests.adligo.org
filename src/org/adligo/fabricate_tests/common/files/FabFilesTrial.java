@@ -1,7 +1,7 @@
-package org.adligo.fabricate_tests.files;
+package org.adligo.fabricate_tests.common.files;
 
+import org.adligo.fabricate.common.files.FabFileIO;
 import org.adligo.fabricate.common.log.I_FabLog;
-import org.adligo.fabricate.files.FabFileIO;
 import org.adligo.tests4j.shared.asserts.reference.CircularDependencies;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
@@ -15,7 +15,8 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
 
   @Test
   public void testIO() throws Exception {
-    FabFileIO fabFiles = FabFileIO.INSTANCE;
+    I_FabLog logMock = mock(I_FabLog.class);
+    FabFileIO fabFiles = new FabFileIO(logMock);
     String separator = File.separator;
     
     if (fabFiles.exists("test_data" + separator + "file_trials" + separator + "fab_files_trial")) {
@@ -61,8 +62,5 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
     assertFalse(fabFiles.exists("test_data" + separator + "file_trials" + 
         separator + "fab_files_trial" + separator + "temp2"));
     
-    I_FabLog log = mock(I_FabLog.class);
-    fabFiles.setLog(log);
-    assertSame(log, fabFiles.getLog());
   }
 }

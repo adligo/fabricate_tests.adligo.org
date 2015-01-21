@@ -1,6 +1,6 @@
-package org.adligo.fabricate_tests.files.xml_io;
+package org.adligo.fabricate_tests.common.files.xml_io;
 
-import org.adligo.fabricate.files.xml_io.SchemaLoader;
+import org.adligo.fabricate.common.files.xml_io.SchemaLoader;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.shared.asserts.reference.CircularDependencies;

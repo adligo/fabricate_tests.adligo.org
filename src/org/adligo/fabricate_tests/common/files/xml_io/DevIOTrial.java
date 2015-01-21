@@ -1,7 +1,7 @@
-package org.adligo.fabricate_tests.files.xml_io;
+package org.adligo.fabricate_tests.common.files.xml_io;
 
-import org.adligo.fabricate.files.xml_io.DevIO;
-import org.adligo.fabricate.files.xml_io.FabXmlFileIO;
+import org.adligo.fabricate.common.files.xml_io.DevIO;
+import org.adligo.fabricate.common.files.xml_io.FabXmlFileIO;
 import org.adligo.fabricate.xml.io_v1.dev_v1_0.FabricateDevType;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
@@ -31,7 +31,7 @@ public class DevIOTrial extends MockitoSourceFileTrial {
   
   @Test
   public void testMethod_parse_v1_0() throws Exception {
-    FabricateDevType dev = FabXmlFileIO.INSTANCE.parseDev_v1_0("test_data/xml_io_trials/dev.xml");
+    FabricateDevType dev = new FabXmlFileIO().parseDev_v1_0("test_data/xml_io_trials/dev.xml");
     assertNotNull(dev);
     assertEquals("some_project_group.example.com", dev.getProjectGroup());
   }
@@ -42,7 +42,7 @@ public class DevIOTrial extends MockitoSourceFileTrial {
       
       @Override
       public void run() throws Throwable {
-        FabXmlFileIO.INSTANCE.parseDev_v1_0("test_data/xml_io_trials/lib.xml");
+        new FabXmlFileIO().parseDev_v1_0("test_data/xml_io_trials/lib.xml");
       }
     });
   }
@@ -61,7 +61,7 @@ public class DevIOTrial extends MockitoSourceFileTrial {
       
       @Override
       public void run() throws Throwable {
-        FabXmlFileIO.INSTANCE.parseDev_v1_0(badFileName);
+        new FabXmlFileIO().parseDev_v1_0(badFileName);
       }
     });
   }
@@ -70,8 +70,8 @@ public class DevIOTrial extends MockitoSourceFileTrial {
   public void testMethod_write_v1_0() throws Exception {
     FabricateDevType dev = new FabricateDevType();
     dev.setProjectGroup("temp.example.com");
-    FabXmlFileIO.INSTANCE.writeDev_v1_0("test_data/xml_io_trials/dev_io_trial_temp/dev.xml",dev);
-    dev = FabXmlFileIO.INSTANCE.parseDev_v1_0("test_data/xml_io_trials/dev_io_trial_temp/dev.xml");
+    new FabXmlFileIO().writeDev_v1_0("test_data/xml_io_trials/dev_io_trial_temp/dev.xml",dev);
+    dev = new FabXmlFileIO().parseDev_v1_0("test_data/xml_io_trials/dev_io_trial_temp/dev.xml");
     assertNotNull(dev);
     assertEquals("temp.example.com", dev.getProjectGroup());
   }
@@ -84,7 +84,7 @@ public class DevIOTrial extends MockitoSourceFileTrial {
       
       @Override
       public void run() throws Throwable {
-        FabXmlFileIO.INSTANCE.writeDev_v1_0(null,dev);
+        new FabXmlFileIO().writeDev_v1_0(null,dev);
       }
     });
     
@@ -99,7 +99,7 @@ public class DevIOTrial extends MockitoSourceFileTrial {
       
       @Override
       public void run() throws Throwable {
-        FabXmlFileIO.INSTANCE.writeDev_v1_0("test_data/xml_io_trials/dev_io_trial_temp/na/dev.xml",dev);
+        new FabXmlFileIO().writeDev_v1_0("test_data/xml_io_trials/dev_io_trial_temp/na/dev.xml",dev);
       }
     });
   }

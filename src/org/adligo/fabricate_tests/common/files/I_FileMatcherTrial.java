@@ -1,6 +1,6 @@
-package org.adligo.fabricate_tests.files;
+package org.adligo.fabricate_tests.common.files;
 
-import org.adligo.fabricate.files.I_FileMatcher;
+import org.adligo.fabricate.common.files.I_FileMatcher;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 

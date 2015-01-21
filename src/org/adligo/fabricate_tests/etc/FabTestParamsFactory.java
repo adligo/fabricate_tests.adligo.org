@@ -1,14 +1,9 @@
 package org.adligo.fabricate_tests.etc;
 
-import org.adligo.tests4j.run.helpers.Tests4J_NotificationManager;
 import org.adligo.tests4j.system.shared.api.AbstractParamsFactory;
-import org.adligo.tests4j.system.shared.api.Tests4J_CoveragePluginParams;
 import org.adligo.tests4j.system.shared.api.Tests4J_Params;
-import org.adligo.tests4j_4jacoco.plugin.Recorder;
 import org.adligo.tests4j_4jacoco.plugin.factories.Tests4J_4MockitoPluginFactory;
-import org.adligo.tests4j_4jacoco.plugin.instrumentation.ClassAndDependenciesInstrumenter;
 import org.adligo.tests4j_4jacoco.plugin.instrumentation.TrialInstrumenter;
-import org.adligo.tests4j_4jacoco.plugin.instrumentation.common.CallJacocoInit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +15,8 @@ public class FabTestParamsFactory extends AbstractParamsFactory {
     Tests4J_Params params = new Tests4J_Params();
     List<String> nonInstrumentedPackages = new ArrayList<String>();
     nonInstrumentedPackages.add("org.apache.");
-    
+    //somewhere in here I am using a System class loader
+    //in stead of a current class loader, not sure where
     nonInstrumentedPackages.add("org.adligo.fabricate.xml.io_v1.common_v1_0.");
     nonInstrumentedPackages.add("org.adligo.fabricate.xml.io_v1.depot_v1_0.");
     nonInstrumentedPackages.add("org.adligo.fabricate.xml.io_v1.dev_v1_0.");

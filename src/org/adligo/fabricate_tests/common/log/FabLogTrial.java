@@ -1,6 +1,5 @@
 package org.adligo.fabricate_tests.common.log;
 
-import org.adligo.fabricate.common.en.FabricateEnConstants;
 import org.adligo.fabricate.common.log.FabLog;
 import org.adligo.fabricate.common.log.ThreadLocalPrintStream;
 import org.adligo.fabricate_tests.common.mocks.ThreadLocalPrintStreamMock;
@@ -30,32 +29,19 @@ public class FabLogTrial extends MockitoSourceFileTrial {
   public static void afterTrial() {
     ThreadLocalPrintStreamMock.revert();
   }
+
   
-  @SuppressWarnings("unused")
-  @Test
-  public void testConstructorExceptions() {
-    assertThrown(new ExpectedThrowable(NullPointerException.class), new I_Thrower() {
-      
-      @Override
-      public void run() throws Throwable {
-        new FabLog(null, null);
-      }
-    });
-  }
-  
-  @SuppressWarnings("unused")
+  @SuppressWarnings("boxing")
   @Test
   public void testConstructorLogSettingsAndConstants() {
-    FabLog log = new FabLog(FabricateEnConstants.INSTANCE, null);
+    FabLog log = new FabLog(null);
     assertFalse(log.isLogEnabled(FabLogTrial.class));
-    assertSame(FabricateEnConstants.INSTANCE, log.getConstants());
     
-    log = new FabLog(FabricateEnConstants.INSTANCE, Collections.singletonMap(
+    log = new FabLog(Collections.singletonMap(
         FabLogTrial.class.getName(), true));
     assertTrue(log.isLogEnabled(FabLogTrial.class));
   }
   
-  @SuppressWarnings("unused")
   @Test
   public void testMethodOrderLine() {
     String message = FabLog.orderLine(true, "a", " " , "b");
@@ -64,18 +50,16 @@ public class FabLogTrial extends MockitoSourceFileTrial {
     assertEquals("b a", message);
   }
   
-  @SuppressWarnings("unused")
   @Test
   public void testMethodPrintLn() {
-    FabLog log = new FabLog(FabricateEnConstants.INSTANCE, null);
+    FabLog log = new FabLog(null);
     log.println("line");
     assertEquals("line\n", baos_.toString());
   }
   
-  @SuppressWarnings("unused")
   @Test
   public void testMethodPrintTrace() {
-    FabLog log = new FabLog(FabricateEnConstants.INSTANCE, null);
+    FabLog log = new FabLog(null);
     Exception e = new Exception("exc");
     e.setStackTrace(new StackTraceElement[] {});
     

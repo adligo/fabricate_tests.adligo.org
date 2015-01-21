@@ -1,6 +1,6 @@
-package org.adligo.fabricate_tests.files.xml_io;
+package org.adligo.fabricate_tests.common.files.xml_io;
 
-import org.adligo.fabricate.files.xml_io.I_FabXmlFileIO;
+import org.adligo.fabricate.common.files.xml_io.I_FabXmlFileIO;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
