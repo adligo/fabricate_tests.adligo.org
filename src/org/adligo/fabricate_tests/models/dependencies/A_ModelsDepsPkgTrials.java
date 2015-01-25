@@ -1,9 +1,6 @@
-package org.adligo.fabricate_tests;
+package org.adligo.fabricate_tests.models.dependencies;
 
-import org.adligo.fabricate_tests.common.A_CommonPkgTrials;
-import org.adligo.fabricate_tests.common.files.A_FilesTrials;
 import org.adligo.fabricate_tests.etc.FabTestParamsFactory;
-import org.adligo.fabricate_tests.models.A_ModelsPkgTrials;
 import org.adligo.tests4j.run.api.Tests4J;
 import org.adligo.tests4j.system.shared.api.I_Tests4J_TrialList;
 import org.adligo.tests4j.system.shared.api.Tests4J_Params;
@@ -12,13 +9,13 @@ import org.adligo.tests4j.system.shared.trials.I_Trial;
 import java.util.ArrayList;
 import java.util.List;
 
-public class A_FabPkgTrials implements I_Tests4J_TrialList {
+public class A_ModelsDepsPkgTrials implements I_Tests4J_TrialList {
 	
 	public static void main(String [] args) {
 		try {
 			Tests4J_Params params = new FabTestParamsFactory().create();
 			
-			A_FabPkgTrials me = new A_FabPkgTrials();
+			A_ModelsDepsPkgTrials me = new A_ModelsDepsPkgTrials();
 			params.addTrials(me);
 			
 			Tests4J.run(params);
@@ -31,13 +28,21 @@ public class A_FabPkgTrials implements I_Tests4J_TrialList {
   @Override
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
-    trials.addAll(new A_CommonPkgTrials().getTrials());
-    trials.addAll(new A_FilesTrials().getTrials());
-    trials.addAll(new A_ModelsPkgTrials().getTrials());
-    trials.add(FabPackagesTrial.class);
-    //trials.add(FabricateSetupTrial.class);
+    trials.add(I_IdeTrial.class);
+    trials.add(IdeMutantTrial.class);
+    trials.add(IdeTrial.class);
     
+    trials.add(I_DependencyTrial.class);
+    trials.add(DependencyMutantTrial.class);
+    trials.add(DependencyTrial.class);
     
+    trials.add(I_ProjectDependencyTrial.class);
+    trials.add(ProjectDependencyMutantTrial.class);
+    trials.add(ProjectDependencyTrial.class);
+    
+    trials.add(I_LibraryDependencyTrial.class);
+    trials.add(LibraryDependencyMutantTrial.class);
+    trials.add(LibraryDependencyTrial.class);
     return trials;
   }
 

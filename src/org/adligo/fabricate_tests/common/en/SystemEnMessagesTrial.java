@@ -1,13 +1,12 @@
 package org.adligo.fabricate_tests.common.en;
 
-import org.adligo.fabricate.common.en.ProjectEnMessages;
 import org.adligo.fabricate.common.en.SystemEnMessages;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 import org.adligo.tests4j_tests.shared.i18n.I18N_Asserter;
 
-@SourceFileScope (sourceClass=ProjectEnMessages.class)
+@SourceFileScope (sourceClass=SystemEnMessages.class)
 public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
 
   @Test
