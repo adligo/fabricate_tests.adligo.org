@@ -30,6 +30,7 @@ public class A_SystemTrials implements I_Tests4J_TrialList {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
     trials.add(FabSystemTrial.class);
     trials.add(FabricateXmlDiscoveryTrial.class);
+    trials.add(CommandLineArgsTrial.class);
     return trials;
   }
 

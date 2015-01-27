@@ -1,6 +1,6 @@
 package org.adligo.fabricate_tests;
 
-import org.adligo.fabricate.FabricateSetup;
+import org.adligo.fabricate.FabricateArgsSetup;
 import org.adligo.fabricate.common.en.FabricateEnConstants;
 import org.adligo.fabricate.common.files.I_FabFileIO;
 import org.adligo.fabricate.common.files.xml_io.I_FabXmlFileIO;
@@ -22,8 +22,8 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-@SourceFileScope (sourceClass=FabricateSetup.class, minCoverage=4.0)
-public class FabricateSetupTrial extends MockitoSourceFileTrial {
+@SourceFileScope (sourceClass=FabricateArgsSetup.class, minCoverage=4.0)
+public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
   private ByteArrayOutputStream baos_;
   private FabSystem sysMock_;
   private I_FabFileIO fileMock_;
@@ -44,8 +44,8 @@ public class FabricateSetupTrial extends MockitoSourceFileTrial {
     when(sysMock_.getFileIO()).thenReturn(fileMock_);
     when(sysMock_.getXmlFileIO()).thenReturn(xmlIoMock_);
     javaCallsMock_ = mock(JavaCalls.class);
-    FabricateSetup.setJAVA_CALLS(javaCallsMock_);
-    assertSame(javaCallsMock_, FabricateSetup.getJAVA_CALLS());
+    FabricateArgsSetup.setJAVA_CALLS(javaCallsMock_);
+    assertSame(javaCallsMock_, FabricateArgsSetup.getJAVA_CALLS());
     
     manifestParserMock_ = mock(ManifestParser.class);
     
@@ -65,7 +65,7 @@ public class FabricateSetupTrial extends MockitoSourceFileTrial {
     
     String [] nada = new String[]{"args"};
     
-    FabricateSetup setup = new FabricateSetup(nada,sysMock_, manifestParserMock_);
+    FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setDebugMock_.count());
     assertFalse((Boolean) setDebugMock_.getArg(0));
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
@@ -88,7 +88,7 @@ public class FabricateSetupTrial extends MockitoSourceFileTrial {
         new IOException());
     String [] nada = new String[]{"args"};
     
-    FabricateSetup setup = new FabricateSetup(nada,sysMock_, manifestParserMock_);
+    FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setDebugMock_.count());
     assertFalse((Boolean) setDebugMock_.getArg(0));
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
@@ -100,7 +100,7 @@ public class FabricateSetupTrial extends MockitoSourceFileTrial {
         lines.getLine(1));
     assertEquals("someHome", lines.getLine(2));
     assertEquals("java.io.IOException", lines.getLine(3));
-    assertEquals("\tat org.adligo.fabricate.FabricateSetup.doArgs(FabricateSetup.java:126)", 
+    assertEquals("\tat org.adligo.fabricate.FabricateArgsSetup.<init>(FabricateArgsSetup.java:84)", 
         lines.getLine(4));
   }
   
@@ -115,7 +115,7 @@ public class FabricateSetupTrial extends MockitoSourceFileTrial {
     when(javaCallsMock_.getJavaMajorVersion("1.6.0_03")).thenReturn(1.6);
     String [] nada = new String[]{"args"};
     
-    FabricateSetup setup = new FabricateSetup(nada,sysMock_, manifestParserMock_);
+    FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setDebugMock_.count());
     assertFalse((Boolean) setDebugMock_.getArg(0));
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
@@ -139,7 +139,7 @@ public class FabricateSetupTrial extends MockitoSourceFileTrial {
     when(sysMock_.getenv("FABRICATE_HOME")).thenReturn("fabHome");
     String [] nada = new String[]{"args"};
     
-    FabricateSetup setup = new FabricateSetup(nada,sysMock_, manifestParserMock_);
+    FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setDebugMock_.count());
     assertFalse((Boolean) setDebugMock_.getArg(0));
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
@@ -170,7 +170,7 @@ public class FabricateSetupTrial extends MockitoSourceFileTrial {
     
     when(fileMock_.list(any(), any())).thenThrow(new IOException());
     
-    FabricateSetup setup = new FabricateSetup(nada,sysMock_,manifestParserMock_);
+    FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_,manifestParserMock_);
     assertEquals(1, setDebugMock_.count());
     assertFalse((Boolean) setDebugMock_.getArg(0));
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
@@ -186,7 +186,7 @@ public class FabricateSetupTrial extends MockitoSourceFileTrial {
     assertEquals("httpclient-4.3.5.jar", lines.getLine(5));
     assertEquals("httpcore-4.3.2.jar", lines.getLine(6));
     assertEquals("java.io.IOException", lines.getLine(7));
-    assertEquals("\tat org.adligo.fabricate.FabricateSetup.locateFabricateJarAndVerifyFabricateHomeJars(FabricateSetup.java:208)", lines.getLine(8));
+    assertEquals("\tat org.adligo.fabricate.FabricateArgsSetup.locateFabricateJarAndVerifyFabricateHomeJars(FabricateArgsSetup.java:161)", lines.getLine(8));
   }
   
   @SuppressWarnings("boxing")
@@ -216,7 +216,7 @@ public class FabricateSetupTrial extends MockitoSourceFileTrial {
     });
     when(fileMock_.instance(any())).then(fileInstanceMock);
     
-    FabricateSetup setup = new FabricateSetup(nada,sysMock_, manifestParserMock_);
+    FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setDebugMock_.count());
     assertFalse((Boolean) setDebugMock_.getArg(0));
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
@@ -241,7 +241,7 @@ public class FabricateSetupTrial extends MockitoSourceFileTrial {
     when(sysMock_.getenv("FABRICATE_HOME")).thenReturn(null);
     String [] nada = new String[]{"args"};
     
-    FabricateSetup setup = new FabricateSetup(nada,sysMock_, manifestParserMock_);
+    FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setDebugMock_.count());
     assertFalse((Boolean) setDebugMock_.getArg(0));
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
@@ -280,7 +280,7 @@ public class FabricateSetupTrial extends MockitoSourceFileTrial {
     });
     when(fileMock_.instance(any())).then(fileInstanceMock);
     
-    FabricateSetup setup = new FabricateSetup(nada,sysMock_, manifestParserMock_);
+    FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setDebugMock_.count());
     assertFalse((Boolean) setDebugMock_.getArg(0));
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
@@ -324,7 +324,7 @@ public class FabricateSetupTrial extends MockitoSourceFileTrial {
     });
     when(fileMock_.instance(any())).then(fileInstanceMock);
     
-    FabricateSetup setup = new FabricateSetup(nada,sysMock_, manifestParserMock_);
+    FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setDebugMock_.count());
     assertFalse((Boolean) setDebugMock_.getArg(0));
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
@@ -368,7 +368,7 @@ public class FabricateSetupTrial extends MockitoSourceFileTrial {
     });
     when(fileMock_.instance(any())).then(fileInstanceMock);
     
-    FabricateSetup setup = new FabricateSetup(nada,sysMock_, manifestParserMock_);
+    FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setDebugMock_.count());
     assertFalse((Boolean) setDebugMock_.getArg(0));
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
@@ -431,7 +431,7 @@ public class FabricateSetupTrial extends MockitoSourceFileTrial {
     when(manifestParserMock_.get(ManifestParser.IMPLEMENTATION_VERSION)
         ).thenReturn("1/1/1001");
     
-    FabricateSetup setup = new FabricateSetup(nada,sysMock_, manifestParserMock_);
+    FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setDebugMock_.count());
     assertFalse((Boolean) setDebugMock_.getArg(0));
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
@@ -478,7 +478,7 @@ public class FabricateSetupTrial extends MockitoSourceFileTrial {
     when(manifestParserMock_.get(ManifestParser.IMPLEMENTATION_VERSION)
         ).thenReturn("1/1/1001");
     
-    FabricateSetup setup = new FabricateSetup(nada,sysMock_, manifestParserMock_);
+    FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setDebugMock_.count());
     assertFalse((Boolean) setDebugMock_.getArg(0));
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
