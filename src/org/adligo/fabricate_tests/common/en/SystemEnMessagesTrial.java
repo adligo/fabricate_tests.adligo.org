@@ -20,8 +20,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getClaVersionShort());
     asserter.assertConstant("Compiled on <X/>.", 
         messages.getCompiledOnX());
-    asserter.assertConstant("Exception: Expected $JAVA_HOME to have version <X/> but is <Y/>.", 
-        messages.getExceptionExpectedJavaHomVersionXbutIsY());
+    asserter.assertConstant("Exception: There was a problem executing java with the following $JAVA_HOME;", 
+        messages.getExceptionExecutingJavaWithTheFollowingJavaHome());
     asserter.assertConstant("Exception: Fabricate requires Java 1.7 or greater.", 
         messages.getExceptionFabricateRequiresJava1_7OrGreater());
     asserter.assertConstant("Exception: Java version parameter expected.", 
@@ -38,6 +38,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getFabricateByAdligo());
     asserter.assertConstant("Fabrication failed!", 
         messages.getFabricationFailed());
+    asserter.assertConstant("The following Fabricate Home should have only these jars;", 
+        messages.getTheFollowingFabricateHomeLibShouldHaveOnlyTheseJars());
     asserter.assertConstant("Version <X/>.", 
         messages.getVersionX());
     asserter.assertConstantsMatchMethods(SystemEnMessages.class);

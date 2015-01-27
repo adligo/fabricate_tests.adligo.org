@@ -23,6 +23,9 @@ public class FabSystemTrial extends MockitoSourceFileTrial {
     assertGreaterThanOrEquals(ft, now);
     assertTrue(ft -1000 < now);
     
+    assertNull(fabSystem.getenv("nullvoid"));
+    assertEquals(System.lineSeparator(), fabSystem.lineSeperator());
+    
     assertEquals(Locale.getDefault().getLanguage(), fabSystem.getDefaultLanguage());
     assertEquals(Locale.getDefault().getCountry(), fabSystem.getDefaultCountry());
     
