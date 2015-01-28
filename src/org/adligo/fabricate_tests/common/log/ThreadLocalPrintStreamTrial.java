@@ -1,7 +1,6 @@
 package org.adligo.fabricate_tests.common.log;
 
 import org.adligo.fabricate.common.log.ThreadLocalPrintStream;
-import org.adligo.fabricate_tests.common.mocks.ThreadLocalPrintStreamMock;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
@@ -22,7 +21,7 @@ public class ThreadLocalPrintStreamTrial extends MockitoSourceFileTrial {
     PrintStream printStream = new PrintStream(baos);
     
     ThreadLocalPrintStreamMock.set(printStream);
-    ThreadLocalPrintStream.println("hey");
+    ThreadLocalPrintStreamMock.printlnP("hey");
     String result = new String( baos.toByteArray());
     assertEquals("hey", result.substring(0, 3));
     baos.reset();
@@ -30,7 +29,7 @@ public class ThreadLocalPrintStreamTrial extends MockitoSourceFileTrial {
     Exception x = new Exception("hmm");
     StackTraceElement e = new StackTraceElement("hmm", "method", "file", 1);
     x.setStackTrace(new StackTraceElement[] {e});
-    ThreadLocalPrintStream.printTrace(x);
+    ThreadLocalPrintStreamMock.printTraceP(x);
     result = new String( baos.toByteArray());
     assertEquals("java.lang.Exception: hmm" + System.lineSeparator() +
        "\tat hmm.method(file:1)" + System.lineSeparator(), result.substring(0, result.length()));
@@ -40,7 +39,7 @@ public class ThreadLocalPrintStreamTrial extends MockitoSourceFileTrial {
     x1.setStackTrace(new StackTraceElement[] {e1});
     x1.initCause(x);
     baos.reset();
-    ThreadLocalPrintStream.printTrace(x1);
+    ThreadLocalPrintStreamMock.printTraceP(x1);
     result = new String( baos.toByteArray());
     
     assertEquals("java.lang.Exception: hmm1" + System.lineSeparator() +

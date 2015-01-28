@@ -9,6 +9,7 @@ import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
+import java.util.Collections;
 import java.util.Locale;
 
 @SourceFileScope (sourceClass=FabSystem.class, minCoverage=71.0)
@@ -36,5 +37,15 @@ public class FabSystemTrial extends MockitoSourceFileTrial {
     fabSystem.setLog(log);
     assertNotSame(log, fabSystem.getLog());
     assertSame(log, ((DeferredLog) fabSystem.getLog()).getDelegate());
+    
+    fabSystem.setArgs(Collections.singletonMap("k", "v"));
+    assertEquals("v", fabSystem.getArgValue("k"));
+    assertNull(fabSystem.getArgValue("v"));
+    assertTrue(fabSystem.hasArg("k"));
+    assertFalse(fabSystem.hasArg("v"));
+    assertEquals(" k=v", fabSystem.toScriptArgs());
+    
+    fabSystem.setArgs(Collections.singletonMap("k",null));
+    assertEquals(" k", fabSystem.toScriptArgs());
   }
 }

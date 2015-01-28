@@ -7,7 +7,7 @@ import org.adligo.fabricate.common.files.PatternFileMatcher;
 import org.adligo.fabricate.common.i18n.I_FabricateConstants;
 import org.adligo.fabricate.common.log.I_FabLog;
 import org.adligo.fabricate.common.system.I_FabSystem;
-import org.adligo.fabricate_tests.common.mocks.ThreadLocalPrintStreamMock;
+import org.adligo.fabricate_tests.common.log.ThreadLocalPrintStreamMock;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.system.shared.trials.AfterTrial;

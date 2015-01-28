@@ -2,7 +2,6 @@ package org.adligo.fabricate_tests.common.log;
 
 import org.adligo.fabricate.common.log.FabLog;
 import org.adligo.fabricate.common.log.ThreadLocalPrintStream;
-import org.adligo.fabricate_tests.common.mocks.ThreadLocalPrintStreamMock;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.system.shared.trials.AfterTrial;

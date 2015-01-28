@@ -1,16 +1,15 @@
 package org.adligo.fabricate_tests.common.system;
 
 import org.adligo.fabricate.common.en.FileEnMessages;
-import org.adligo.fabricate.common.files.FabFileIO;
 import org.adligo.fabricate.common.files.I_FabFileIO;
-import org.adligo.fabricate.common.files.xml_io.FabXmlFileIO;
 import org.adligo.fabricate.common.files.xml_io.I_FabXmlFileIO;
 import org.adligo.fabricate.common.i18n.I_FabricateConstants;
+import org.adligo.fabricate.common.log.FabLog;
 import org.adligo.fabricate.common.system.CommandLineArgs;
 import org.adligo.fabricate.common.system.FabricateXmlDiscovery;
 import org.adligo.fabricate.common.system.I_FabSystem;
 import org.adligo.fabricate.xml.io_v1.dev_v1_0.FabricateDevType;
-import org.adligo.fabricate_tests.common.mocks.ThreadLocalPrintStreamMock;
+import org.adligo.fabricate_tests.common.log.ThreadLocalPrintStreamMock;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.I_ReturnFactory;
@@ -21,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Collections;
 
 @SourceFileScope (sourceClass=FabricateXmlDiscovery.class,minCoverage=92.0)
 public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
@@ -41,6 +41,7 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     baos_ = new ByteArrayOutputStream();
     PrintStream printStream = new PrintStream(baos_);
     ThreadLocalPrintStreamMock.set(printStream);
+    
     filesMock_ = mock(I_FabFileIO.class);
     setupPaths("/");
     
@@ -70,6 +71,8 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     sysMock_ = mock(I_FabSystem.class);
     when(sysMock_.getFileIO()).thenReturn(filesMock_);
     when(sysMock_.getXmlFileIO()).thenReturn(xmlFilesMock_);
+    FabLog log = new FabLog(Collections.emptyMap(), false);
+    when(sysMock_.getLog()).thenReturn(log);
   }
 
   public void setupPaths(String nameSeparator) {
@@ -429,13 +432,13 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     assertTrue(disc.isDevParseException());
     assertEquals("",baos_.toString());
     
-    when(sysMock_.isDebug()).thenReturn(true);
+    FabLog log = new FabLog(Collections.emptyMap(), true);
+    when(sysMock_.getLog()).thenReturn(log);
     disc = new FabricateXmlDiscovery(sysMock_);
     assertTrue(disc.isDevParseException());
     String output = baos_.toString();
-    assertTrue(output.indexOf(CommandLineArgs.MESSAGE) == 0);
-    assertTrue(output.indexOf("java.io.IOException") >= 7);
-    assertTrue(output.indexOf("catchup") >= 17);
+    assertTrue(output.indexOf("java.io.IOException") == 0);
+    assertTrue(output.indexOf("catchup") >= 7);
   }
   
   @SuppressWarnings({"boxing"})
@@ -464,18 +467,17 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     when(xmlFilesMock_.parseDev_v1_0("C:\\somewhere\\projects\\dev.xml")).thenThrow(new IOException("catchup"));
     
     when(projectFileMock.exists()).thenReturn(true);
-    
     //run
     FabricateXmlDiscovery disc = new FabricateXmlDiscovery(sysMock_);
     assertTrue(disc.isDevParseException());
     assertEquals("",baos_.toString());
     
-    when(sysMock_.isDebug()).thenReturn(true);
+    FabLog log = new FabLog(Collections.emptyMap(), true);
+    when(sysMock_.getLog()).thenReturn(log);
     disc = new FabricateXmlDiscovery(sysMock_);
     assertTrue(disc.isDevParseException());
     String output = baos_.toString();
-    assertTrue(output.indexOf(CommandLineArgs.MESSAGE) == 0);
-    assertTrue(output.indexOf("java.io.IOException") >= 7);
-    assertTrue(output.indexOf("catchup") >= 17);
+    assertTrue(output.indexOf("java.io.IOException") == 0);
+    assertTrue(output.indexOf("catchup") >= 7);
   }
 }

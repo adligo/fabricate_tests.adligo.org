@@ -1,4 +1,4 @@
-package org.adligo.fabricate_tests.common.mocks;
+package org.adligo.fabricate_tests.common.log;
 
 import org.adligo.fabricate.common.log.ThreadLocalPrintStream;
 
@@ -22,5 +22,13 @@ public class ThreadLocalPrintStreamMock extends ThreadLocalPrintStream {
    */
   public static void revert() {
     revertProtected();
+  }
+  
+  public static void printlnP(String p) {
+    ThreadLocalPrintStream.println(p);
+  }
+  
+  public static void printTraceP(Throwable t) {
+    ThreadLocalPrintStream.printTrace(t);
   }
 }
