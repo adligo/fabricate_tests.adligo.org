@@ -34,9 +34,11 @@
     	<lns:dependency group="com.sun.jme" artifact="cldc" version="1.1" type="jar" 
     		fileName="cldc_1.1.jar" platform="JME" extract="true">
     		<lns:ide name="eclipse">
-	    		<lns:arg key="ideKey" value="ideVal">
-	    			<lns:arg key="nestedIdeKey" value="nestedIdeVal"/>
-	    		</lns:arg>
+	    		<lns:args>
+			    	<cns:param key="ideKey" value="ideVal">
+			    		<cns:param key="nestedIdeKey" value="nestedIdeVal"/>
+			    	</cns:param>
+		    	</lns:args>
     		</lns:ide>
     	</lns:dependency>
     	<lns:project platform="plat">proj</lns:project>

@@ -14,10 +14,6 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     I18N_Asserter asserter = new I18N_Asserter(this);
     
     SystemEnMessages messages = SystemEnMessages.INSTANCE;
-    asserter.assertConstant("--version", 
-        messages.getClaVersion());
-    asserter.assertConstant("-v", 
-        messages.getClaVersionShort());
     asserter.assertConstant("Compiled on <X/>.", 
         messages.getCompiledOnX());
     asserter.assertConstant("Exception: There was a problem executing java with the following $JAVA_HOME;", 

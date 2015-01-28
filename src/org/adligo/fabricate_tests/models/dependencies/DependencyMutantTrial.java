@@ -1,9 +1,17 @@
 package org.adligo.fabricate_tests.models.dependencies;
 
+import org.adligo.fabricate.models.common.I_Parameter;
+import org.adligo.fabricate.models.common.ParameterMutant;
+import org.adligo.fabricate.models.dependencies.Dependency;
 import org.adligo.fabricate.models.dependencies.DependencyMutant;
+import org.adligo.fabricate.models.dependencies.I_Dependency;
 import org.adligo.fabricate.models.dependencies.I_Ide;
 import org.adligo.fabricate.models.dependencies.Ide;
 import org.adligo.fabricate.models.dependencies.IdeMutant;
+import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamsType;
+import org.adligo.fabricate.xml.io_v1.library_v1_0.DependencyType;
+import org.adligo.fabricate.xml.io_v1.library_v1_0.IdeType;
+import org.adligo.fabricate_tests.models.common.ParameterMutantTrial;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
@@ -16,14 +24,21 @@ import java.util.List;
 @SourceFileScope (sourceClass=DependencyMutant.class, minCoverage=80.0)
 public class DependencyMutantTrial extends MockitoSourceFileTrial {
 
+  @SuppressWarnings("unused")
   @Test
   public void testConstructorExceptions() {
     assertThrown(new ExpectedThrowable(NullPointerException.class), new I_Thrower() {
       
-      @SuppressWarnings("unused")
       @Override
       public void run() throws Throwable {
-        new DependencyMutant(null);
+        new DependencyMutant((I_Dependency) null);
+      }
+    });
+    assertThrown(new ExpectedThrowable(NullPointerException.class), new I_Thrower() {
+      
+      @Override
+      public void run() throws Throwable {
+        new DependencyMutant((DependencyType) null);
       }
     });
   }
@@ -86,4 +101,196 @@ public class DependencyMutantTrial extends MockitoSourceFileTrial {
     assertEquals("sn", ide1.getName());
   }
   
+  @SuppressWarnings("boxing")
+  @Test
+  public void testMethodCovertAndCreateDepTypeListAndDepType() {
+    List<DependencyType> types = getDependencies();
+    
+    List<I_Dependency> result = DependencyMutant.convert(types);
+    I_Dependency depA = result.get(0);
+    assertEquals("artifactA", depA.getArtifact());
+    assertFalse(depA.isExtract());
+    assertEquals("fileNameA", depA.getFileName());
+    assertEquals("groupA", depA.getGroup());
+    assertEquals("platformA", depA.getPlatform());
+    assertEquals("typeA", depA.getType());
+    assertEquals("versionA", depA.getVersion());
+    assertEquals(DependencyMutant.class.getName(), depA.getClass().getName());
+    
+    I_Dependency depB = result.get(1);
+    assertEquals("artifactB", depB.getArtifact());
+    assertTrue(depB.isExtract());
+    assertEquals("fileNameB", depB.getFileName());
+    assertEquals("groupB", depB.getGroup());
+    assertEquals("platformB", depB.getPlatform());
+    assertEquals("typeB", depB.getType());
+    assertEquals("versionB", depB.getVersion());
+    assertEquals(DependencyMutant.class.getName(), depB.getClass().getName());
+    
+    List<I_Ide> ides =  depA.getChildren();
+    I_Ide ide1 = ides.get(0);
+    assertEquals("ideA", ide1.getName());
+    assertEquals(IdeMutant.class.getName(), ide1.getClass().getName());
+    
+    I_Ide ide2 = ides.get(1);
+    assertEquals("ideB", ide2.getName());
+    assertEquals(IdeMutant.class.getName(), ide2.getClass().getName());
+    assertEquals(0, ide2.size());
+    
+    List<I_Parameter> out = ide1.getChildren();
+    ParameterMutantTrial.assertConvertedParams(out, this);
+    
+    
+    out = ParameterMutant.convert((ParamsType) null);
+    assertNotNull(out);
+  }
+
+  public static List<DependencyType> getDependencies() {
+    DependencyType type = new DependencyType();
+    type.setArtifact("artifactA");
+    type.setExtract(false);
+    type.setFileName("fileNameA");
+    type.setGroup("groupA");
+    type.setPlatform("platformA");
+    type.setType("typeA");
+    type.setVersion("versionA");
+    
+    DependencyType typeB = new DependencyType();
+    typeB.setArtifact("artifactB");
+    typeB.setExtract(true);
+    typeB.setFileName("fileNameB");
+    typeB.setGroup("groupB");
+    typeB.setPlatform("platformB");
+    typeB.setType("typeB");
+    typeB.setVersion("versionB");
+    
+    IdeType itA = new IdeType();
+    itA.setName("ideA");
+    
+    
+    itA.setArgs(ParameterMutantTrial.createParams());
+    
+    IdeType itB = new IdeType();
+    itB.setName("ideB");
+    
+    List<IdeType> its = new ArrayList<IdeType>();
+    its.add(itA);
+    its.add(itB);
+    type.getIde().add(itA);
+    type.getIde().add(itB);
+    
+    List<DependencyType> types = new ArrayList<DependencyType>();
+    types.add(type);
+    types.add(typeB);
+    return types;
+  }
+  
+  @SuppressWarnings("boxing")
+  @Test
+  public void testMethodsEqualsHashCode() {
+    DependencyMutant dm = new DependencyMutant();
+    
+    
+    DependencyMutant dmA = new DependencyMutant();
+    dmA.setArtifact("artifact");
+    
+    DependencyMutant dmB = new DependencyMutant();
+    dmB.setArtifact("artifact");
+    dmB.setFileName("fileName");
+    
+    DependencyMutant dmC = new DependencyMutant();
+    dmC.setArtifact("artifact");
+    dmC.setFileName("fileName");
+    dmC.setGroup("group");
+    
+    DependencyMutant dmD = new DependencyMutant();
+    dmD.setArtifact("artifact");
+    dmD.setFileName("fileName");
+    dmD.setGroup("group");
+    dmD.setType("type");
+    
+    DependencyMutant dmE = new DependencyMutant();
+    dmE.setArtifact("artifact");
+    dmE.setFileName("fileName");
+    dmE.setGroup("group");
+    dmE.setType("type");
+    dmE.setVersion("version");
+    
+    DependencyMutant dmF = new DependencyMutant();
+    dmF.setArtifact("artifactA");
+    dmF.setFileName("fileName");
+    dmF.setGroup("group");
+    dmF.setType("type");
+    dmF.setVersion("version");
+    
+    DependencyMutant dmG = new DependencyMutant();
+    dmG.setArtifact("artifactA");
+    dmG.setFileName("fileNameA");
+    dmG.setGroup("group");
+    dmG.setType("type");
+    dmG.setVersion("version");
+    
+    DependencyMutant dmH = new DependencyMutant();
+    dmH.setArtifact("artifactA");
+    dmH.setFileName("fileNameA");
+    dmH.setGroup("groupA");
+    dmH.setType("type");
+    dmH.setVersion("version");
+    
+    DependencyMutant dmI = new DependencyMutant();
+    dmI.setArtifact("artifactA");
+    dmI.setFileName("fileNameA");
+    dmI.setGroup("groupA");
+    dmI.setType("typeA");
+    dmI.setVersion("version");
+    
+    DependencyMutant dmJ = new DependencyMutant();
+    dmJ.setArtifact("artifactA");
+    dmJ.setFileName("fileNameA");
+    dmJ.setGroup("groupA");
+    dmJ.setType("typeA");
+    dmJ.setVersion("versionA");
+    
+    assertEquals(dm, dm);
+    assertEquals(dm.hashCode(), dm.hashCode());
+    
+    assertNotEquals(dm, dmA);
+    assertNotEquals(dm.hashCode(), dmA.hashCode());
+    
+    assertNotEquals(dm, dmA);
+    assertNotEquals(dm.hashCode(), dmA.hashCode());
+    
+    assertNotEquals(dm, dmB);
+    assertNotEquals(dm.hashCode(), dmB.hashCode());
+    
+    assertNotEquals(dm, dmC);
+    assertNotEquals(dm.hashCode(), dmC.hashCode());
+    
+    assertNotEquals(dm, dmD);
+    assertNotEquals(dm.hashCode(), dmD.hashCode());
+    
+    assertNotEquals(dm, dmE);
+    assertNotEquals(dm.hashCode(), dmE.hashCode());
+    
+    //done with null compares
+    assertEquals(dmE, new DependencyMutant(dmE));
+    assertEquals(dmE.hashCode(), new DependencyMutant(dmE).hashCode());
+    assertEquals(dmE, new Dependency(dmE));
+    assertEquals(dmE.hashCode(), new Dependency(dmE).hashCode());
+    
+    assertNotEquals(dmE, dmF);
+    assertNotEquals(dmE.hashCode(), dmF.hashCode());
+    
+    assertNotEquals(dmE, dmG);
+    assertNotEquals(dmE.hashCode(), dmG.hashCode());
+    
+    assertNotEquals(dmE, dmH);
+    assertNotEquals(dmE.hashCode(), dmH.hashCode());
+    
+    assertNotEquals(dmE, dmI);
+    assertNotEquals(dmE.hashCode(), dmI.hashCode());
+    
+    assertNotEquals(dmE, dmJ);
+    assertNotEquals(dmE.hashCode(), dmJ.hashCode());
+  }
 }

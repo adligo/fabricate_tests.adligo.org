@@ -2,6 +2,8 @@ package org.adligo.fabricate_tests.common.files.xml_io;
 
 import org.adligo.fabricate.common.files.xml_io.FabXmlFileIO;
 import org.adligo.fabricate.common.files.xml_io.LibraryIO;
+import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamType;
+import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamsType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.DependenciesType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.DependencyType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.IdeArgumentType;
@@ -43,12 +45,13 @@ public class LibraryIOTrial extends MockitoSourceFileTrial {
     IdeType ide = ides.get(0);
     assertNotNull(ide);
     assertEquals("eclipse", ide.getName());
-    List<IdeArgumentType> args = ide.getArg();
-    IdeArgumentType arg = args.get(0);
+    ParamsType args = ide.getArgs();
+    List<ParamType> argList = args.getParam();
+    ParamType arg = argList.get(0);
     assertEquals("ideKey", arg.getKey());
     assertEquals("ideVal", arg.getValue());
-    args = arg.getArg();
-    arg = args.get(0);
+    argList = arg.getParam();
+    arg = argList.get(0);
     assertEquals("nestedIdeKey", arg.getKey());
     assertEquals("nestedIdeVal", arg.getValue());
   }

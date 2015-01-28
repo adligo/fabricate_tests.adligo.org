@@ -34,11 +34,11 @@ public class FabLogTrial extends MockitoSourceFileTrial {
   @SuppressWarnings("boxing")
   @Test
   public void testConstructorLogSettingsAndConstants() {
-    FabLog log = new FabLog(null);
+    FabLog log = new FabLog(null, false);
     assertFalse(log.isLogEnabled(FabLogTrial.class));
     
     log = new FabLog(Collections.singletonMap(
-        FabLogTrial.class.getName(), true));
+        FabLogTrial.class.getName(), true), false);
     assertTrue(log.isLogEnabled(FabLogTrial.class));
   }
   
@@ -52,14 +52,14 @@ public class FabLogTrial extends MockitoSourceFileTrial {
   
   @Test
   public void testMethodPrintLn() {
-    FabLog log = new FabLog(null);
+    FabLog log = new FabLog(null, false);
     log.println("line");
     assertEquals("line\n", baos_.toString());
   }
   
   @Test
   public void testMethodPrintTrace() {
-    FabLog log = new FabLog(null);
+    FabLog log = new FabLog(null, false);
     Exception e = new Exception("exc");
     e.setStackTrace(new StackTraceElement[] {});
     

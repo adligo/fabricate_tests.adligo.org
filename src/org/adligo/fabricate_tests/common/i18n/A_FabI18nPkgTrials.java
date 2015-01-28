@@ -28,11 +28,12 @@ public class A_FabI18nPkgTrials implements I_Tests4J_TrialList {
   @Override
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
-    
+    trials.add(I_CommandLineConstantsTrial.class);
     trials.add(I_FabricateConstantsTrial.class);
     trials.add(I_FileMessagesTrial.class);
     trials.add(I_GitMessagesTrial.class);
     trials.add(I_ProjectMessagesTrial.class);
+    trials.add(I_SystemMessagesTrial.class);
     return trials;
   }
 

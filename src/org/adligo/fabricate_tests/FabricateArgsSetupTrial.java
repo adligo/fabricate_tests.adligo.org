@@ -100,7 +100,7 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
         lines.getLine(1));
     assertEquals("someHome", lines.getLine(2));
     assertEquals("java.io.IOException", lines.getLine(3));
-    assertEquals("\tat org.adligo.fabricate.FabricateArgsSetup.<init>(FabricateArgsSetup.java:84)", 
+    assertEquals("\tat org.adligo.fabricate.FabricateArgsSetup.<init>(FabricateArgsSetup.java:97)", 
         lines.getLine(4));
   }
   
@@ -186,7 +186,7 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     assertEquals("httpclient-4.3.5.jar", lines.getLine(5));
     assertEquals("httpcore-4.3.2.jar", lines.getLine(6));
     assertEquals("java.io.IOException", lines.getLine(7));
-    assertEquals("\tat org.adligo.fabricate.FabricateArgsSetup.locateFabricateJarAndVerifyFabricateHomeJars(FabricateArgsSetup.java:161)", lines.getLine(8));
+    assertEquals("\tat org.adligo.fabricate.FabricateArgsSetup.locateFabricateJarAndVerifyFabricateHomeJars(FabricateArgsSetup.java:170)", lines.getLine(8));
   }
   
   @SuppressWarnings("boxing")
@@ -395,7 +395,7 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     when(javaCallsMock_.getJavaVersion(eq("someHome"), any())).thenReturn("1.7.0_03");
     when(javaCallsMock_.getJavaMajorVersion("1.7.0_03")).thenReturn(1.7);
     when(sysMock_.getenv("FABRICATE_HOME")).thenReturn("fabHome");
-    String [] nada = new String[]{"args","-vrd"};
+    String [] nada = new String[]{"args","-vl"};
     
     List<String> names = new ArrayList<String>();
     names.add("fabricate_snapshot.jar");
@@ -433,7 +433,7 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     
     FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setDebugMock_.count());
-    assertFalse((Boolean) setDebugMock_.getArg(0));
+    assertTrue((Boolean) setDebugMock_.getArg(0));
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
     
     assertEquals(1, manifestReader.count());
@@ -456,7 +456,7 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     when(javaCallsMock_.getJavaVersion(eq("someHome"), any())).thenReturn("1.7.0_03");
     when(javaCallsMock_.getJavaMajorVersion("1.7.0_03")).thenReturn(1.7);
     when(sysMock_.getenv("FABRICATE_HOME")).thenReturn("fabHome");
-    String [] nada = new String[]{"args","-rd"};
+    String [] nada = new String[]{"-rd"};
     
     List<String> names = new ArrayList<String>();
     names.add("fabricate_snapshot.jar");
@@ -485,7 +485,7 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     
     String result = baos_.toString();
     TextLines lines = new TextLines(result);
-    assertEquals("start=0 java=1.7.0_03", lines.getLine(0));
+    assertEquals("start=0 java=1.7.0_03 -d -r", lines.getLine(0));
     assertEquals(1, lines.getLines());
   }
 }

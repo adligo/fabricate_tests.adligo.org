@@ -1,5 +1,6 @@
 package org.adligo.fabricate_tests.common.en;
 
+import org.adligo.fabricate.common.en.CommandLineEnConstants;
 import org.adligo.fabricate.common.en.FabricateEnConstants;
 import org.adligo.fabricate.common.en.FileEnMessages;
 import org.adligo.fabricate.common.en.GitEnMessages;
@@ -18,6 +19,7 @@ public class FabricateEnConstantsTrial extends MockitoSourceFileTrial {
     assertEquals("en", constants.getLanguage());
     assertEquals("US", constants.getCountry());
     assertEquals(System.lineSeparator() ,constants.getLineSeperator());
+    assertEquals(CommandLineEnConstants.class.getName(), constants.getCommandLineConstants().getClass().getName());
     assertEquals(GitEnMessages.class.getName(), constants.getGitMessages().getClass().getName());
     assertEquals(FileEnMessages.class.getName(), constants.getFileMessages().getClass().getName());
     assertEquals(ProjectEnMessages.class.getName(), constants.getProjectMessages().getClass().getName());
