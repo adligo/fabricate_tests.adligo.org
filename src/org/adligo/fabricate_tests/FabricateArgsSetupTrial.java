@@ -7,8 +7,8 @@ import org.adligo.fabricate.common.files.xml_io.I_FabXmlFileIO;
 import org.adligo.fabricate.common.log.DeferredLog;
 import org.adligo.fabricate.common.log.DelayedLog;
 import org.adligo.fabricate.common.system.FabSystem;
-import org.adligo.fabricate.external.JavaCalls;
-import org.adligo.fabricate.external.ManifestParser;
+import org.adligo.fabricate.java.JavaCalls;
+import org.adligo.fabricate.java.ManifestParser;
 import org.adligo.fabricate_tests.common.log.ThreadLocalPrintStreamMock;
 import org.adligo.tests4j.shared.asserts.line_text.TextLines;
 import org.adligo.tests4j.shared.output.DelegatingLog;
@@ -111,7 +111,7 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
         lines.getLine(1));
     assertEquals("someHome", lines.getLine(2));
     assertEquals("java.io.IOException", lines.getLine(3));
-    assertEquals("\tat org.adligo.fabricate.FabricateArgsSetup.<init>(FabricateArgsSetup.java:75)", 
+    assertEquals("\tat org.adligo.fabricate.FabricateArgsSetup.<init>(FabricateArgsSetup.java:77)", 
         lines.getLine(4));
   }
   
@@ -200,7 +200,7 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     assertEquals("httpclient-4.3.5.jar", lines.getLine(5));
     assertEquals("httpcore-4.3.2.jar", lines.getLine(6));
     assertEquals("java.io.IOException", lines.getLine(7));
-    assertEquals("\tat org.adligo.fabricate.FabricateArgsSetup.locateFabricateJarAndVerifyFabricateHomeJars(FabricateArgsSetup.java:152)", lines.getLine(8));
+    assertEquals("\tat org.adligo.fabricate.FabricateArgsSetup.locateFabricateJarAndVerifyFabricateHomeJars(FabricateArgsSetup.java:154)", lines.getLine(8));
   }
   
   @SuppressWarnings("boxing")

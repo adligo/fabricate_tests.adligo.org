@@ -13,7 +13,7 @@ import org.w3c.dom.ls.LSResourceResolver;
 import javax.xml.validation.Schema;
 import javax.xml.validation.Validator;
 
-@SourceFileScope (sourceClass=SchemaLoader.class, minCoverage=88.0, allowedCircularDependencies=CircularDependencies.AllowInPackage)
+@SourceFileScope (sourceClass=SchemaLoader.class, minCoverage=84.0, allowedCircularDependencies=CircularDependencies.AllowInPackage)
 public class SchemaLoaderTrial extends MockitoSourceFileTrial {
 
   @Test
