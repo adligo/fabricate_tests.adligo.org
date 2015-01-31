@@ -27,12 +27,16 @@ public class FileEnMessagesTrial extends MockitoSourceFileTrial {
     asserter.assertConstant("matched the following pattern;", 
         messages.getMatchedTheFollowingPattern());
     
+    asserter.assertConstant("Submitting a Http GET to the following url returned a invalid status code <X/>;", 
+        messages.getSubmittingAHttpGetToTheFollowingUrlReturnedAnInvalidStatusCodeX());
     asserter.assertConstant("The following file;", 
         messages.getTheFollowingFile());
     asserter.assertConstant("The wildcard character (*) is not allowed in the middle of a file matching pattern file name.", 
         messages.getTheWildCardCharacterIsNotAllowedInMiddleFileName());
     asserter.assertConstant("The wildcard character (*) is not allowed at the left or middle of a file matching pattern directory path.", 
         messages.getTheWildCardCharacterIsNotAllowedAtTheLeftOrMiddleDirectoryPath());
+    asserter.assertConstant("There was a problem creating the following file;", 
+        messages.getThereWasAProblemCreatingTheFollowingFile());
     asserter.assertConstantsMatchMethods(FileEnMessages.class);
   }
 }
