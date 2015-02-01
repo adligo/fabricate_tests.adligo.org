@@ -25,13 +25,15 @@ public class A_FilesTrials implements I_Tests4J_TrialList {
 		}
 	}
 
-
   @Override
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
     trials.addAll(new A_XmlIoTrials().getTrials());
     trials.add(I_FabFilesTrial.class);
     trials.add(I_FileMatcherTrial.class);
+    trials.add(I_IOCloseTrackerTrial.class);
+    
+    trials.add(DefaultIOCloseTrackerTrial.class);
     trials.add(PatternFileMatcherTrial.class);
     trials.add(IncludesExcludesFileMatcherTrial.class);
     trials.add(FabFilesTrial.class);

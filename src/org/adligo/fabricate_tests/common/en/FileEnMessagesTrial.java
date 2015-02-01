@@ -35,6 +35,9 @@ public class FileEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getTheWildCardCharacterIsNotAllowedInMiddleFileName());
     asserter.assertConstant("The wildcard character (*) is not allowed at the left or middle of a file matching pattern directory path.", 
         messages.getTheWildCardCharacterIsNotAllowedAtTheLeftOrMiddleDirectoryPath());
+    
+    asserter.assertConstant("There was a problem creating the following directory;", 
+        messages.getThereWasAProblemCreatingTheFollowingDirectory());
     asserter.assertConstant("There was a problem creating the following file;", 
         messages.getThereWasAProblemCreatingTheFollowingFile());
     asserter.assertConstantsMatchMethods(FileEnMessages.class);

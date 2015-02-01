@@ -1,1 +1,1 @@
-This is just a file for testing FabFiles;
+This is just a file for testing reading files;

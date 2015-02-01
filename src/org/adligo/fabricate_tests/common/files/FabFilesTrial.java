@@ -5,6 +5,7 @@ import org.adligo.fabricate.common.files.FabFileIO;
 import org.adligo.fabricate.common.files.PatternFileMatcher;
 import org.adligo.fabricate.common.log.I_FabLog;
 import org.adligo.fabricate.common.log.I_FabLogSystem;
+import org.adligo.fabricate.common.system.FabSystem;
 import org.adligo.tests4j.run.common.FileUtils;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
@@ -28,14 +29,21 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.WritableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Enumeration;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Vector;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 @SourceFileScope (sourceClass=FabFileIO.class,
-  minCoverage=72.0,allowedCircularDependencies=CircularDependencies.AllowInnerOuterClasses)
+  minCoverage=91.0,allowedCircularDependencies=CircularDependencies.AllowInnerOuterClasses)
 public class FabFilesTrial extends MockitoSourceFileTrial {
 
   @AfterTrial
@@ -44,20 +52,111 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
         "test_data" + File.separator + "file_trials" + File.separator +
         "fab_files_trial" + File.separator + 
         "bar.txt";
-    try {
-      Files.delete(new File(path).toPath());
-    } catch (NoSuchFileException x) {
-      //do nothing
-    }
+    deleteFile(path);
     String pathFubar = FileUtils.getRunDir() + 
         "test_data" + File.separator + "file_trials" + File.separator +
         "fab_files_trial" + File.separator + 
         "fubar.txt";
+    deleteFile(pathFubar);
+    String pathUnzip = FileUtils.getRunDir() + 
+        "test_data" + File.separator + "file_trials" + File.separator +
+        "fab_files_trial_extract";
     try {
-      Files.delete(new File(pathFubar).toPath());
+      File file = new File(pathUnzip);
+      if (file.exists()) {
+        FabFileIO fabfileIO = new FabFileIO(new FabSystem());
+        fabfileIO.removeRecursive(pathUnzip);
+      }
     } catch (NoSuchFileException x) {
       //do nothing
     }
+    String pathUnzipExes = FileUtils.getRunDir() + 
+        "test_data" + File.separator + "file_trials" + File.separator +
+        "fab_files_trial_unzip_exceptions_extract";
+    try {
+      File file = new File(pathUnzipExes);
+      if (file.exists()) {
+        FabFileIO fabfileIO = new FabFileIO(new FabSystem());
+        fabfileIO.removeRecursive(pathUnzipExes);
+      }
+    } catch (NoSuchFileException x) {
+      //do nothing
+    }
+    String download = FileUtils.getRunDir() + "test_data" + File.separator +
+        "file_trials" + File.separator + "index.html";
+    deleteFile(download);
+  }
+
+  public static void deleteFile(String pathFubar) throws IOException {
+    try {
+      File file = new File(pathFubar);
+      if (file.exists()) {
+        Files.delete(file.toPath());
+      }
+    } catch (NoSuchFileException x) {
+      //do nothing
+    }
+  }
+  
+  public MockMethod<Integer> newReadMethod() {
+    MockMethod<Integer> readMethod = new MockMethod<Integer>(new I_ReturnFactory<Integer>() {
+      int counter = 0;
+      @SuppressWarnings("boxing")
+      @Override
+      public Integer create(Object[] keys) {
+        byte [] bytes = (byte []) keys[0];
+        bytes[0] = (byte) counter++;
+        if (counter >= 2) {
+          return -1;
+        }
+        return 1;
+      }
+      
+    }, false);
+    return readMethod;
+  }  
+  
+  @Test
+  public void testMethodCalculateMd5() throws Exception {
+    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    
+    FabFileIO fabFiles = new FabFileIO(sysMock);
+    String path = FileUtils.getRunDir() + 
+        "test_data" + File.separator + "file_trials" + File.separator +
+        "foo.txt";
+    String md5 = fabFiles.calculateMd5(path);
+    
+    assertEquals("681cb6d93ebdc5936641d213ff361179",md5);
+  }
+
+  @Test
+  public void testMethodCalculateMd5PassthroughExceptions() throws Exception {
+    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    
+    FabFileIO fabFiles = new FabFileIO(sysMock);
+    String path = FileUtils.getRunDir() + 
+        "test_data" + File.separator + "file_trials" + File.separator +
+        "notADir" + File.separator + "foo.txt";
+    File abs = new File(path);
+    //test passthrough IOException
+    assertThrown(new ExpectedThrowable(new NoSuchFileException(abs.getAbsolutePath())),
+        new I_Thrower() {
+          
+          @Override
+          public void run() throws Throwable {
+            fabFiles.calculateMd5(path);
+          }
+        });
   }
   
   @SuppressWarnings("boxing")
@@ -75,10 +174,72 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
     Closeable closeable = mock(Closeable.class);
     MockMethod<Void> closeMethod = new MockMethod<Void>();
     doAnswer(closeMethod).when(closeable).close();
-    fabFiles.close(closeable);
+    //check a null parameter
+    assertNull(fabFiles.close(null));
+    //check a regular close
+    assertNull(fabFiles.close(closeable));
     assertEquals(1, closeMethod.count());
   }
   
+  @SuppressWarnings({"boxing"})
+  @Test
+  public void testMethodCloseIOPair() throws Exception {
+    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    
+    FabFileIO fabFiles = new FabFileIO(sysMock);
+    
+    ByteBuffer buffer = ByteBuffer.allocate(10);
+    ReadableByteChannel in = mock(ReadableByteChannel.class);
+    MockMethod<Void> closeInMethod = new MockMethod<Void>();
+    doAnswer(closeInMethod).when(in).close();
+    WritableByteChannel out = mock(WritableByteChannel.class);
+    MockMethod<Void> closeOutMethod = new MockMethod<Void>();
+    doAnswer(closeOutMethod).when(out).close();
+    
+    IOCloseTrackerStub tracker = new IOCloseTrackerStub();
+    
+    
+    //test both null
+    fabFiles.closeIOPair(null, null, tracker);
+    
+    fabFiles.closeIOPair(in, null, tracker);
+    assertEquals(1, closeInMethod.count());
+    assertEquals(0, closeOutMethod.count());
+    
+    fabFiles.closeIOPair(null, out, tracker);
+    assertEquals(1, closeInMethod.count());
+    assertEquals(1, closeOutMethod.count());
+    
+    fabFiles.closeIOPair(null, out, tracker);
+    assertEquals(1, closeInMethod.count());
+    assertEquals(2, closeOutMethod.count());
+    
+    when(in.read(buffer)).thenReturn(-1);
+    doThrow(new IOException("close inex.")).when(in).close();
+    
+    fabFiles.closeIOPair(in, out, tracker);
+    assertEquals(3, closeOutMethod.count());
+    assertEquals(1, tracker.size());
+    IOException ex = tracker.get(0);
+    assertEquals("close inex.", ex.getMessage());
+    
+    reset(in);
+    when(in.read(buffer)).thenReturn(-1);
+    doAnswer(closeInMethod).when(in).close();
+    doThrow(new IOException("close outex.")).when(out).close();
+    
+    tracker = new IOCloseTrackerStub();
+    fabFiles.closeIOPair(in, out, tracker);
+    assertEquals(2, closeInMethod.count());
+    assertEquals(1, tracker.size());
+    ex = tracker.get(0);
+    assertEquals("close outex.", ex.getMessage());
+  }
   
   @Test
   public void testMethodCloseExceptions() throws Exception {
@@ -94,7 +255,9 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
     Closeable closeable = mock(Closeable.class);
     doThrow(new IOException("ioe")).when(closeable).close();
     //shouldn't throw a exception.
-    fabFiles.close(closeable);
+    IOException closeException = fabFiles.close(closeable);
+    assertNotNull(closeException);
+    assertEquals("ioe", closeException.getMessage());
   }
   @Test
   public void testMethodCreateExceptions() throws Exception {
@@ -148,6 +311,89 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
         });
   } 
     
+  @Test
+  public void testMethodReadBytesException() throws Exception {
+    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    
+    FabFileIO fabFiles = new FabFileIO(sysMock);
+    String path = FileUtils.getRunDir() + 
+        "test_data" + File.separator + "file_trials" + File.separator +
+        "notADir" + File.separator + "foo.txt";
+    File abs = new File(path);
+    assertThrown(new ExpectedThrowable(new NoSuchFileException(abs.getAbsolutePath())),
+        new I_Thrower() {
+          
+          @Override
+          public void run() throws Throwable {
+            fabFiles.readAllBytes(path);
+          }
+        });
+  }
+  
+  @Test
+  public void testMethodReadFile() throws Exception {
+    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    
+    FabFileIO fabFiles = new FabFileIO(sysMock);
+    String path = FileUtils.getRunDir() + 
+        "test_data" + File.separator + "file_trials" + File.separator +
+        "foo.txt";
+    String fileContent = fabFiles.readFile(path);
+    
+    assertEquals("This is just a file for testing reading files;" + System.lineSeparator(),
+        fileContent);
+  }
+  
+  @Test
+  public void testMethodDecodeExceptions() throws Exception {
+    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    
+    FabFileIO fabFiles = new FabFileIO(sysMock);
+    String path = FileUtils.getRunDir() + 
+        "test_data" + File.separator + "file_trials" + File.separator +
+        "notADir" + File.separator + "foo.txt";
+    File abs = new File(path);
+    //test passthrough IOException
+    assertThrown(new ExpectedThrowable(new NoSuchFileException(abs.getAbsolutePath())),
+        new I_Thrower() {
+          
+          @Override
+          public void run() throws Throwable {
+            fabFiles.decode(path,"MD5");
+          }
+        });
+    
+    
+    String goodPath = FileUtils.getRunDir() + 
+        "test_data" + File.separator + "file_trials" + File.separator +
+        "foo.txt";
+    //test passthrough IOException
+    assertThrown(new ExpectedThrowable(IOException.class,
+        new ExpectedThrowable(new NoSuchAlgorithmException("234lkj2lk4jMD5 MessageDigest not available"))),
+        new I_Thrower() {
+          
+          @Override
+          public void run() throws Throwable {
+            fabFiles.decode(goodPath,"234lkj2lk4jMD5");
+          }
+        });
+  }
+  
   @SuppressWarnings("boxing")
   @Test
   public void testMethodDownloadExceptions() throws Exception {
@@ -231,15 +477,18 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("boxing")
   @Test
-  public void testMethodDownloadSuccess() throws Exception {
+  public void testMethodDownload() throws Exception {
     I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
-    CloseableHttpClient httpClient = mock(CloseableHttpClient.class);
-    FabFileIO fabFiles = new FabFileIO(sysMock, httpClient);
-    MockMethod<CloseableHttpResponse> executeMethod = new MockMethod<CloseableHttpResponse>();
+    FabFileIO fabFiles = new FabFileIO(sysMock);
     
-    //fabFiles.downloadFile("http://example.com/foo", "/somewhere/newfile");
+    String to = FileUtils.getRunDir() + "test_data" + File.separator +
+          "file_trials" + File.separator + "index.html";
+    fabFiles.downloadFile("http://adligo.com/index.html", to);
+    
+    String content = fabFiles.readFile(to);
+    assertTrue(content.contains("Adligo"));
   }  
   
   @Test
@@ -316,6 +565,95 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   }
   
   @Test
+  public void testMethodUnzip() throws Exception {
+    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    
+    FabFileIO fabFiles = new FabFileIO(sysMock);
+    
+    String in = FileUtils.getRunDir() + "test_data" + 
+        File.separator + "file_trials" + File.separator + 
+        "xml.zip";
+    String out = FileUtils.getRunDir() + "test_data" + 
+        File.separator + "file_trials" + File.separator +
+        "fab_files_trial_extract";
+    fabFiles.unzip(in,out);
+    
+    assertEquals("a3a6455469a62e90b72bfec43c3f6282",fabFiles.calculateMd5(out + File.separator + "xml" +
+        File.separator + "depot.xml"));
+    String devFile = out + File.separator + "xml" +
+        File.separator + "dev.xml";
+    assertEquals("8855bce1e158291df5d40892e6188d4b",fabFiles.calculateMd5(devFile));
+    String devContent = fabFiles.readFile(devFile);
+    assertUniform("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" + 
+        "<dev xmlns=\"http://www.adligo.org/fabricate/xml/io_v1/dev_v1_0.xsd\" "
+      + "project_group=\"some_project_group.example.com\"/>", devContent);
+    assertEquals("d3985417a6b745a096ca441c909f1420",fabFiles.calculateMd5(out + File.separator + "xml" +
+        File.separator + "fabricate.xml"));
+    assertEquals("d8ba1d428b0f5b034438c738d12c0dff",fabFiles.calculateMd5(out + File.separator + "xml" +
+        File.separator + "fabricateGroups.xml"));
+  }
+  
+  @SuppressWarnings("boxing")
+  @Test
+  public void testMethodUnzipExceptions() throws Exception {
+    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    
+    FabFileIO fabFiles = new FabFileIO(sysMock);
+    
+    String out = FileUtils.getRunDir() + "test_data" + 
+        File.separator + "file_trials" + File.separator + 
+        "fab_files_trial_unzip_exceptions_extract";
+    //pass through exception from write(no directory)
+    ZipFile zf = mock(ZipFile.class);
+    Vector<ZipEntry> vze = new Vector<ZipEntry>();
+    vze.addElement(new ZipEntry("xml/"));
+    ZipEntry ze = new ZipEntry("xml/dev.xml");
+    vze.addElement(ze);
+    when(zf.getInputStream(ze)).thenThrow(new IOException("ioe"));
+    
+    Enumeration<? extends ZipEntry> entries = vze.elements(); 
+    MockMethod<Enumeration<? extends ZipEntry>> entriesMethod = new
+          MockMethod<Enumeration<? extends ZipEntry>>(entries, true);
+    
+    when(zf.entries()).then(entriesMethod);
+    IOCloseTrackerStub closeTracker = new IOCloseTrackerStub();
+    assertThrown(new ExpectedThrowable(new IOException("ioe")),
+        new I_Thrower() {
+          
+          @Override
+          public void run() throws Throwable {
+            fabFiles.extractZipFile(out, zf, closeTracker);
+          }
+        });
+    
+    //io close ZipFile close exception
+    reset(zf);
+    entries = vze.elements(); 
+    entriesMethod = new
+          MockMethod<Enumeration<? extends ZipEntry>>(entries, true);
+    when(zf.entries()).then(entriesMethod);
+    when(zf.getInputStream(ze)).thenReturn(new ByteArrayInputStream(
+        new String("baos").getBytes()));
+    doThrow(new IOException("cioe.")).when(zf).close();
+    
+    fabFiles.extractZipFile(out, zf, closeTracker);
+    assertEquals(1, closeTracker.size());
+    IOException coie = closeTracker.get(0);
+    assertEquals("cioe.", coie.getMessage());
+    
+  }
+  
+  @Test
   public void testMethodWriteFile() throws Exception {
     I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
@@ -332,9 +670,6 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
         "fab_files_trial" + File.separator + 
         "bar.txt";
     File file = new File(path);
-    if (!file.createNewFile()) {
-      System.out.println("Failure to create " + file.getAbsolutePath());
-    }
     FileOutputStream fos = new FileOutputStream(file);
     
     fabFiles.writeFile( in, fos,3);
@@ -342,9 +677,22 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
     String fileContent = fabFiles.readFile(path);
     assertEquals("fileContentString" + System.lineSeparator(), fileContent);
     
+    Files.delete(new File(path).toPath());
+    
+    in = new ByteArrayInputStream(new String("fileContentString" +
+        System.lineSeparator()).getBytes());
+    fos = new FileOutputStream(file);
+    fabFiles.writeFile(in, fos);
+    
+    fileContent = fabFiles.readFile(path);
+    assertEquals("fileContentString" + System.lineSeparator(), fileContent);
+    
+    Files.delete(new File(path).toPath());
   }
   
-  @SuppressWarnings("resource")
+ 
+
+  @SuppressWarnings({"resource", "boxing"})
   @Test
   public void testMethodWriteFileExceptions() throws Exception {
     I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
@@ -358,6 +706,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
     InputStream in = mock(InputStream.class);
     FileOutputStream fos = mock(FileOutputStream.class);
     
+    //test propagation of exception out of method
     doThrow(new IOException("readex.")).when(in).read(any(byte[].class), anyInt(), anyInt());
     assertThrown(new ExpectedThrowable(new IOException("readex.")), 
         new I_Thrower() {
@@ -378,26 +727,96 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
     FileChannel fileChanel = new FileOutputStream(new File(pathFubar)).getChannel();
     when(fos.getChannel()).thenReturn(fileChanel);
     
-    doThrow(new IOException()).when(in).close();
-    doThrow(new IOException()).when(fos).close();
-    fabFiles.writeFile( in, fos, 1);
+    doThrow(new IOException("in")).when(in).close();
+    doThrow(new IOException("out")).when(fos).close();
+    IOCloseTrackerStub tracker = new IOCloseTrackerStub();
+    //in this case the 'in' exception, is thrown twice
+    // once from the close of the Channel, once from the close of
+    // the input stream itself.  I really don't like the javadoc;
+    // http://docs.oracle.com/javase/7/docs/api/java/nio/channels/Channel.html#close()
+    // It should specify that implementations Must call close on delegate instances,
+    // since it seems to do this in this case, but doesn't mention it
+    // in the javadoc, so you can't rely on it always doing it.
+    fabFiles.writeFileWithCloseTracker(in, fos, 1, tracker);
+    assertEquals(3, tracker.size());
+    IOException inE = tracker.get(0);
+    assertEquals("in", inE.getMessage());
+    inE = tracker.get(1);
+    assertEquals("in", inE.getMessage());
+    IOException outE = tracker.get(2);
+    assertEquals("out", outE.getMessage());
   }
-
-  public MockMethod<Integer> newReadMethod() {
-    MockMethod<Integer> readMethod = new MockMethod<Integer>(new I_ReturnFactory<Integer>() {
-      int counter = 0;
-      @SuppressWarnings("boxing")
-      @Override
-      public Integer create(Object[] keys) {
-        byte [] bytes = (byte []) keys[0];
-        bytes[0] = (byte) counter++;
-        if (counter >= 2) {
-          return -1;
-        }
-        return 1;
-      }
-      
-    }, false);
-    return readMethod;
-  }  
+  
+  @SuppressWarnings({ "boxing"})
+  @Test
+  public void testMethodWriteFileWithBufferExceptions() throws Exception {
+    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    
+    FabFileIO fabFiles = new FabFileIO(sysMock);
+    
+    ByteBuffer buffer = ByteBuffer.allocate(10);
+    ReadableByteChannel in = mock(ReadableByteChannel.class);
+    MockMethod<Void> closeInMethod = new MockMethod<Void>();
+    doAnswer(closeInMethod).when(in).close();
+    WritableByteChannel out = mock(WritableByteChannel.class);
+    MockMethod<Void> closeOutMethod = new MockMethod<Void>();
+    doAnswer(closeOutMethod).when(out).close();
+    
+    IOCloseTrackerStub tracker = new IOCloseTrackerStub();
+    doThrow(new IOException("readex.")).when(in).read(buffer);
+    assertThrown(new ExpectedThrowable(new IOException("readex.")),
+        new I_Thrower() {
+          
+          @Override
+          public void run() throws Throwable {
+            fabFiles.writeFileWithBuffers(buffer, in, out, tracker);
+          }
+        });
+    assertEquals(1, closeInMethod.count());
+    assertEquals(1, closeOutMethod.count());
+    assertEquals(0, tracker.size());
+    
+    reset(in);
+    doAnswer(closeInMethod).when(in).close();
+    doThrow(new IOException("writeex.")).when(out).write(buffer);
+    assertThrown(new ExpectedThrowable(new IOException("writeex.")),
+        new I_Thrower() {
+          
+          @Override
+          public void run() throws Throwable {
+            fabFiles.writeFileWithBuffers(buffer, in, out, tracker);
+          }
+        });
+    assertEquals(2, closeInMethod.count());
+    assertEquals(2, closeOutMethod.count());
+    assertEquals(0, tracker.size());
+    
+    reset(in);
+    when(in.read(buffer)).thenReturn(-1);
+    doThrow(new IOException("close inex.")).when(in).close();
+    
+    fabFiles.writeFileWithBuffers(buffer, in, out, tracker);
+    assertEquals(3, closeOutMethod.count());
+    assertEquals(1, tracker.size());
+    IOException ex = tracker.get(0);
+    assertEquals("close inex.", ex.getMessage());
+    
+    
+    reset(in);
+    when(in.read(buffer)).thenReturn(-1);
+    doAnswer(closeInMethod).when(in).close();
+    doThrow(new IOException("close outex.")).when(out).close();
+    
+    IOCloseTrackerStub tracker2 = new IOCloseTrackerStub();
+    fabFiles.writeFileWithBuffers(buffer, in, out, tracker2);
+    assertEquals(3, closeInMethod.count());
+    assertEquals(1, tracker2.size());
+    ex = tracker2.get(0);
+    assertEquals("close outex.", ex.getMessage());
+  }
 }
