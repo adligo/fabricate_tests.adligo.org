@@ -5,13 +5,13 @@ import org.adligo.fabricate.common.en.FabricateEnConstants;
 import org.adligo.fabricate.common.files.I_FabFileIO;
 import org.adligo.fabricate.common.files.xml_io.I_FabXmlFileIO;
 import org.adligo.fabricate.common.log.DeferredLog;
-import org.adligo.fabricate.common.log.DelayedLog;
+import org.adligo.fabricate.common.log.FabLog;
+import org.adligo.fabricate.common.log.I_FabLog;
 import org.adligo.fabricate.common.system.FabSystem;
 import org.adligo.fabricate.java.JavaCalls;
 import org.adligo.fabricate.java.ManifestParser;
 import org.adligo.fabricate_tests.common.log.ThreadLocalPrintStreamMock;
 import org.adligo.tests4j.shared.asserts.line_text.TextLines;
-import org.adligo.tests4j.shared.output.DelegatingLog;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.I_ReturnFactory;
@@ -51,7 +51,7 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     javaCallsMock_ = mock(JavaCalls.class);
     FabricateArgsSetup.setJAVA_CALLS(javaCallsMock_);
     assertSame(javaCallsMock_, FabricateArgsSetup.getJAVA_CALLS());
-    DelayedLog log = new DelayedLog(Collections.emptyMap(), false);
+    I_FabLog log = new FabLog(Collections.emptyMap(), false);
     DeferredLog dl = new DeferredLog();
     dl.setDelegate(log);
     when(sysMock_.getLog()).thenReturn(dl);
@@ -76,14 +76,14 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     
     FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setLogMock_.count());
-    DelayedLog log = (DelayedLog) setLogMock_.getArg(0);
+    I_FabLog log = (I_FabLog) setLogMock_.getArg(0);
     assertFalse(log.hasAllLogsEnabled());
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
     
     String result = baos_.toString();
-    assertEquals("END" + System.lineSeparator() +
-        "Exception: No $JAVA_HOME environment variable set." + 
-        System.lineSeparator(), result);
+    assertEquals(
+        "Exception: No $JAVA_HOME environment variable set." + System.lineSeparator() + 
+        "LASTLINE END" + System.lineSeparator(), result);
     
   }
   
@@ -100,19 +100,20 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     
     FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setLogMock_.count());
-    DelayedLog log = (DelayedLog) setLogMock_.getArg(0);
+    I_FabLog log = (I_FabLog) setLogMock_.getArg(0);
     assertFalse(log.hasAllLogsEnabled());
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
     
     String result = baos_.toString();
     TextLines lines = new TextLines(result);
-    assertEquals("END", lines.getLine(0));
+    
     assertEquals("Exception: There was a problem executing java with the following $JAVA_HOME;",
-        lines.getLine(1));
-    assertEquals("someHome", lines.getLine(2));
-    assertEquals("java.io.IOException", lines.getLine(3));
-    assertEquals("\tat org.adligo.fabricate.FabricateArgsSetup.<init>(FabricateArgsSetup.java:77)", 
-        lines.getLine(4));
+        lines.getLine(0));
+    assertEquals("someHome", lines.getLine(1));
+    assertEquals("java.io.IOException", lines.getLine(2));
+    assertEquals("\tat org.adligo.fabricate.FabricateArgsSetup.<init>(FabricateArgsSetup.java:75)", 
+        lines.getLine(3));
+    assertEquals("LASTLINE END", lines.getLine(lines.getLines() - 1));
   }
   
   @SuppressWarnings("boxing")
@@ -128,15 +129,16 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     
     FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setLogMock_.count());
-    DelayedLog log = (DelayedLog) setLogMock_.getArg(0);
+    I_FabLog log = (I_FabLog) setLogMock_.getArg(0);
     assertFalse(log.hasAllLogsEnabled());
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
     
     String result = baos_.toString();
     TextLines lines = new TextLines(result);
-    assertEquals("END", lines.getLine(0));
+    
     assertEquals("Exception: Fabricate requires Java 1.7 or greater.",
-        lines.getLine(1));
+        lines.getLine(0));
+    assertEquals("LASTLINE END", lines.getLine(1));
   }
   
   @SuppressWarnings("boxing")
@@ -153,20 +155,21 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     
     FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setLogMock_.count());
-    DelayedLog log = (DelayedLog) setLogMock_.getArg(0);
+    I_FabLog log = (I_FabLog) setLogMock_.getArg(0);
     assertFalse(log.hasAllLogsEnabled());
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
     
     String result = baos_.toString();
     TextLines lines = new TextLines(result);
-    assertEquals("END", lines.getLine(0));
+    
     assertEquals("The following Fabricate Home should have only these jars;",
-        lines.getLine(1));
-    assertEquals("fabHome", lines.getLine(2));
-    assertEquals("commons-logging-1.2.jar", lines.getLine(3));
-    assertEquals("fabricate_*.jar", lines.getLine(4));
-    assertEquals("httpclient-4.3.5.jar", lines.getLine(5));
-    assertEquals("httpcore-4.3.2.jar", lines.getLine(6));
+        lines.getLine(0));
+    assertEquals("fabHome", lines.getLine(1));
+    assertEquals("commons-logging-1.2.jar", lines.getLine(2));
+    assertEquals("fabricate_*.jar", lines.getLine(3));
+    assertEquals("httpclient-4.3.5.jar", lines.getLine(4));
+    assertEquals("httpcore-4.3.2.jar", lines.getLine(5));
+    assertEquals("LASTLINE END", lines.getLine(6));
   }
   
   @SuppressWarnings("boxing")
@@ -185,22 +188,23 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     
     FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_,manifestParserMock_);
     assertEquals(1, setLogMock_.count());
-    DelayedLog log = (DelayedLog) setLogMock_.getArg(0);
+    I_FabLog log = (I_FabLog) setLogMock_.getArg(0);
     assertFalse(log.hasAllLogsEnabled());
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
     
     String result = baos_.toString();
     TextLines lines = new TextLines(result);
-    assertEquals("END", lines.getLine(0));
+    
     assertEquals("The following Fabricate Home should have only these jars;",
-        lines.getLine(1));
-    assertEquals("fabHome", lines.getLine(2));
-    assertEquals("commons-logging-1.2.jar", lines.getLine(3));
-    assertEquals("fabricate_*.jar", lines.getLine(4));
-    assertEquals("httpclient-4.3.5.jar", lines.getLine(5));
-    assertEquals("httpcore-4.3.2.jar", lines.getLine(6));
-    assertEquals("java.io.IOException", lines.getLine(7));
-    assertEquals("\tat org.adligo.fabricate.FabricateArgsSetup.locateFabricateJarAndVerifyFabricateHomeJars(FabricateArgsSetup.java:154)", lines.getLine(8));
+        lines.getLine(0));
+    assertEquals("fabHome", lines.getLine(1));
+    assertEquals("commons-logging-1.2.jar", lines.getLine(2));
+    assertEquals("fabricate_*.jar", lines.getLine(3));
+    assertEquals("httpclient-4.3.5.jar", lines.getLine(4));
+    assertEquals("httpcore-4.3.2.jar", lines.getLine(5));
+    assertEquals("java.io.IOException", lines.getLine(6));
+    assertEquals("\tat org.adligo.fabricate.FabricateArgsSetup.locateFabricateJarAndVerifyFabricateHomeJars(FabricateArgsSetup.java:151)", lines.getLine(7));
+    assertEquals("LASTLINE END", lines.getLine(lines.getLines() - 1));
   }
   
   @SuppressWarnings("boxing")
@@ -232,16 +236,17 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     
     FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setLogMock_.count());
-    DelayedLog log = (DelayedLog) setLogMock_.getArg(0);
+    I_FabLog log = (I_FabLog) setLogMock_.getArg(0);
     assertFalse(log.hasAllLogsEnabled());
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
     
     String result = baos_.toString();
     TextLines lines = new TextLines(result);
-    assertEquals("END", lines.getLine(0));
+    
     assertEquals("Exception: No fabricate_*.jar in $FABRICATE_HOME/lib for the following $FABRICATE_HOME;",
-        lines.getLine(1));
-    assertEquals("fabHome", lines.getLine(2));
+        lines.getLine(0));
+    assertEquals("fabHome", lines.getLine(1));
+    assertEquals("LASTLINE END", lines.getLine(2));
   }
   
   @SuppressWarnings("boxing")
@@ -258,15 +263,16 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     
     FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setLogMock_.count());
-    DelayedLog log = (DelayedLog) setLogMock_.getArg(0);
+    I_FabLog log = (I_FabLog) setLogMock_.getArg(0);
     assertTrue(log.hasAllLogsEnabled());
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
     
     String result = baos_.toString();
     TextLines lines = new TextLines(result);
-    assertEquals("END", lines.getLine(0));
+    
     assertEquals("Exception: No $FABRICATE_HOME environment variable set.",
-        lines.getLine(1));
+        lines.getLine(0));
+    assertEquals("LASTLINE END", lines.getLine(1));
   }
   
   @SuppressWarnings("boxing")
@@ -298,20 +304,21 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     
     FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setLogMock_.count());
-    DelayedLog log = (DelayedLog) setLogMock_.getArg(0);
+    I_FabLog log = (I_FabLog) setLogMock_.getArg(0);
     assertTrue(log.hasAllLogsEnabled());
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
     
     String result = baos_.toString();
     TextLines lines = new TextLines(result);
-    assertEquals("END", lines.getLine(0));
+    
     assertEquals("The following Fabricate Home should have only these jars;",
-        lines.getLine(1));
-    assertEquals("fabHome", lines.getLine(2));
-    assertEquals("commons-logging-1.2.jar", lines.getLine(3));
-    assertEquals("fabricate_*.jar", lines.getLine(4));
-    assertEquals("httpclient-4.3.5.jar", lines.getLine(5));
-    assertEquals("httpcore-4.3.2.jar", lines.getLine(6));
+        lines.getLine(0));
+    assertEquals("fabHome", lines.getLine(1));
+    assertEquals("commons-logging-1.2.jar", lines.getLine(2));
+    assertEquals("fabricate_*.jar", lines.getLine(3));
+    assertEquals("httpclient-4.3.5.jar", lines.getLine(4));
+    assertEquals("httpcore-4.3.2.jar", lines.getLine(5));
+    assertEquals("LASTLINE END", lines.getLine(6));
   }
   
   @SuppressWarnings("boxing")
@@ -343,20 +350,21 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     
     FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setLogMock_.count());
-    DelayedLog log = (DelayedLog) setLogMock_.getArg(0);
+    I_FabLog log = (I_FabLog) setLogMock_.getArg(0);
     assertFalse(log.hasAllLogsEnabled());
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
     
     String result = baos_.toString();
     TextLines lines = new TextLines(result);
-    assertEquals("END", lines.getLine(0));
+    
     assertEquals("The following Fabricate Home should have only these jars;",
-        lines.getLine(1));
-    assertEquals("fabHome", lines.getLine(2));
-    assertEquals("commons-logging-1.2.jar", lines.getLine(3));
-    assertEquals("fabricate_*.jar", lines.getLine(4));
-    assertEquals("httpclient-4.3.5.jar", lines.getLine(5));
-    assertEquals("httpcore-4.3.2.jar", lines.getLine(6));
+        lines.getLine(0));
+    assertEquals("fabHome", lines.getLine(1));
+    assertEquals("commons-logging-1.2.jar", lines.getLine(2));
+    assertEquals("fabricate_*.jar", lines.getLine(3));
+    assertEquals("httpclient-4.3.5.jar", lines.getLine(4));
+    assertEquals("httpcore-4.3.2.jar", lines.getLine(5));
+    assertEquals("LASTLINE END", lines.getLine(6));
   }
   
   @SuppressWarnings("boxing")
@@ -388,20 +396,21 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     
     FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setLogMock_.count());
-    DelayedLog log = (DelayedLog) setLogMock_.getArg(0);
+    I_FabLog log = (I_FabLog) setLogMock_.getArg(0);
     assertFalse(log.hasAllLogsEnabled());
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
     
     String result = baos_.toString();
     TextLines lines = new TextLines(result);
-    assertEquals("END", lines.getLine(0));
+    
     assertEquals("The following Fabricate Home should have only these jars;",
-        lines.getLine(1));
-    assertEquals("fabHome", lines.getLine(2));
-    assertEquals("commons-logging-1.2.jar", lines.getLine(3));
-    assertEquals("fabricate_*.jar", lines.getLine(4));
-    assertEquals("httpclient-4.3.5.jar", lines.getLine(5));
-    assertEquals("httpcore-4.3.2.jar", lines.getLine(6));
+        lines.getLine(0));
+    assertEquals("fabHome", lines.getLine(1));
+    assertEquals("commons-logging-1.2.jar", lines.getLine(2));
+    assertEquals("fabricate_*.jar", lines.getLine(3));
+    assertEquals("httpclient-4.3.5.jar", lines.getLine(4));
+    assertEquals("httpcore-4.3.2.jar", lines.getLine(5));
+    assertEquals("LASTLINE END", lines.getLine(6));
   }
   
   @SuppressWarnings("boxing")
@@ -453,7 +462,7 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     
     FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setLogMock_.count());
-    DelayedLog log = (DelayedLog) setLogMock_.getArg(0);
+    I_FabLog log = (I_FabLog) setLogMock_.getArg(0);
     assertTrue(log.hasAllLogsEnabled());
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
     
@@ -462,9 +471,10 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     
     String result = baos_.toString();
     TextLines lines = new TextLines(result);
-    assertEquals("END", lines.getLine(0));
-    assertEquals("Version snapshot.", lines.getLine(1));
-    assertEquals("Compiled on 1/1/1001.", lines.getLine(2));
+    
+    assertEquals("Version snapshot.", lines.getLine(0));
+    assertEquals("Compiled on 1/1/1001.", lines.getLine(1));
+    assertEquals("LASTLINE END", lines.getLine(2));
   }
   
   @SuppressWarnings("boxing")
@@ -502,13 +512,13 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     
     FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setLogMock_.count());
-    DelayedLog log = (DelayedLog) setLogMock_.getArg(0);
+    I_FabLog log = (I_FabLog) setLogMock_.getArg(0);
     assertFalse(log.hasAllLogsEnabled());
     assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
     
     String result = baos_.toString();
     TextLines lines = new TextLines(result);
-    assertEquals("start=0 java=1.7.0_03 -d -r", lines.getLine(0));
+    assertEquals("LASTLINE start=0 java=1.7.0_03 -d -r", lines.getLine(0));
     assertEquals(1, lines.getLines());
   }
 }

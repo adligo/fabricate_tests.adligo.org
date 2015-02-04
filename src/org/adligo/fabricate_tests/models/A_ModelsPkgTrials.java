@@ -3,6 +3,7 @@ package org.adligo.fabricate_tests.models;
 import org.adligo.fabricate_tests.etc.FabTestParamsFactory;
 import org.adligo.fabricate_tests.models.common.A_ModelsCommonPkgTrials;
 import org.adligo.fabricate_tests.models.dependencies.A_ModelsDepsPkgTrials;
+import org.adligo.fabricate_tests.models.fabricate.A_ModelsFabricatePkgTrials;
 import org.adligo.tests4j.run.api.Tests4J;
 import org.adligo.tests4j.system.shared.api.I_Tests4J_TrialList;
 import org.adligo.tests4j.system.shared.api.Tests4J_Params;
@@ -32,8 +33,7 @@ public class A_ModelsPkgTrials implements I_Tests4J_TrialList {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
     trials.addAll(new A_ModelsCommonPkgTrials().getTrials());
     trials.addAll(new A_ModelsDepsPkgTrials().getTrials());
+    trials.addAll(new A_ModelsFabricatePkgTrials().getTrials());
     return trials;
   }
-
-
 }

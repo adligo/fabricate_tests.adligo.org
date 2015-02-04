@@ -13,6 +13,8 @@ public class CommandLineEnConstantsTrial extends MockitoSourceFileTrial {
   public void testConstants() {
     CommandLineEnConstants messages = CommandLineEnConstants.INSTANCE;
     assertEquals("cmd", messages.getCommand());
+    assertEquals("-c", messages.getConfirmRepositoryIntegrity(true));
+    assertEquals("--confirm-repository-integrity", messages.getConfirmRepositoryIntegrity(false));
     assertEquals("-d", messages.getDevelopment(true));
     assertEquals("--development", messages.getDevelopment(false));
     assertEquals("-l", messages.getLog(true));
@@ -24,6 +26,7 @@ public class CommandLineEnConstantsTrial extends MockitoSourceFileTrial {
     assertEquals("-v", messages.getVersion(true));
     assertEquals("--version", messages.getVersion(false));
     
+    assertEquals("-c", messages.getAlias("--confirm-repository-integrity"));
     assertEquals("-d", messages.getAlias("--development"));
     assertEquals("-l", messages.getAlias("--log-verbosely"));
     assertEquals("-r", messages.getAlias("--rebuild-dependents"));

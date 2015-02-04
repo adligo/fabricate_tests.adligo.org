@@ -18,6 +18,7 @@ public class FabricateEnConstantsTrial extends MockitoSourceFileTrial {
     FabricateEnConstants constants = FabricateEnConstants.INSTANCE;
     assertEquals("en", constants.getLanguage());
     assertEquals("US", constants.getCountry());
+    assertEquals("extract", constants.getExtractDirName());
     assertEquals(System.lineSeparator() ,constants.getLineSeperator());
     assertEquals(CommandLineEnConstants.class.getName(), constants.getCommandLineConstants().getClass().getName());
     assertEquals(GitEnMessages.class.getName(), constants.getGitMessages().getClass().getName());

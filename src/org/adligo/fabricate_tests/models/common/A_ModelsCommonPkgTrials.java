@@ -28,7 +28,9 @@ public class A_ModelsCommonPkgTrials implements I_Tests4J_TrialList {
   @Override
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
+    trials.add(FabricateDefaultsTrial.class);
     trials.add(I_ParameterTrial.class);
+    
     trials.add(ParameterMutantTrial.class);
     trials.add(ParameterTrial.class);
     return trials;
