@@ -30,6 +30,7 @@ public class A_RepositoryPkgTrials implements I_Tests4J_TrialList {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
     trials.add(I_RepositoryPathBuilderTrial.class);
     trials.add(DefaultRepositoryPathBuilderTrial.class);
+    trials.add(DependencyManagerTrial.class);
     
     return trials;
   }

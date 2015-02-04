@@ -1,7 +1,6 @@
 package org.adligo.fabricate_tests.common.en;
 
 import org.adligo.fabricate.common.en.FileEnMessages;
-import org.adligo.fabricate.common.en.ProjectEnMessages;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
@@ -19,6 +18,7 @@ public class FileEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getDidNotMatchedTheFollowingPattren());
     asserter.assertConstant("Excludes: ", 
         messages.getExcludes());
+
     asserter.assertConstant("Includes: ", 
         messages.getIncludes());
     asserter.assertConstant("File matching patterns may not be empty.", 
@@ -40,6 +40,8 @@ public class FileEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getThereWasAProblemCreatingTheFollowingDirectory());
     asserter.assertConstant("There was a problem creating the following file;", 
         messages.getThereWasAProblemCreatingTheFollowingFile());
+    asserter.assertConstant("There was a problem deleting the following file;", 
+        messages.getThereWasAProblemDeletingTheFollowingFile());
     asserter.assertConstantsMatchMethods(FileEnMessages.class);
   }
 }

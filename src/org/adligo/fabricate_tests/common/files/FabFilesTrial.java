@@ -65,7 +65,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
       File file = new File(pathUnzip);
       if (file.exists()) {
         FabFileIO fabfileIO = new FabFileIO(new FabSystem());
-        fabfileIO.removeRecursive(pathUnzip);
+        fabfileIO.deleteRecursive(pathUnzip);
       }
     } catch (NoSuchFileException x) {
       //do nothing
@@ -77,7 +77,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
       File file = new File(pathUnzipExes);
       if (file.exists()) {
         FabFileIO fabfileIO = new FabFileIO(new FabSystem());
-        fabfileIO.removeRecursive(pathUnzipExes);
+        fabfileIO.deleteRecursive(pathUnzipExes);
       }
     } catch (NoSuchFileException x) {
       //do nothing
@@ -310,7 +310,49 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
           }
         });
   } 
+
+  @SuppressWarnings("boxing")
+  @Test
+  public void testMethodNewZipFile() throws Exception {
+    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
     
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    CloseableHttpClient httpClient = mock(CloseableHttpClient.class);
+    FabFileIO fabFiles = new FabFileIO(sysMock, httpClient);
+    
+    final String notAFile = FileUtils.getRunDir() + "test_data" + File.separator +
+          "fab_files_trial" + File.separator + "notADir" + File.separator +
+          "foo.txt";
+    
+    assertThrown(new ExpectedThrowable(new FileNotFoundException(notAFile + " (No such file or directory)")), 
+        new I_Thrower() {
+          
+          @Override
+          public void run() throws Throwable {
+            fabFiles.newZipFile(notAFile);
+          }
+        });
+  } 
+  
+  @Test
+  public void testMethodNewZipFileExceptions() throws Exception {
+    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    CloseableHttpClient httpClient = mock(CloseableHttpClient.class);
+    FabFileIO fabFiles = new FabFileIO(sysMock, httpClient);
+    
+    final String zfName = FileUtils.getRunDir() + "test_data" + File.separator +
+        "file_trials" + File.separator + "xml.zip";
+    ZipFile zf = fabFiles.newZipFile(zfName);
+    assertEquals(zfName, zf.getName());
+  } 
   @Test
   public void testMethodReadBytesException() throws Exception {
     I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
@@ -477,6 +519,104 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("boxing")
   @Test
+  public void testMethodDelete() throws Exception {
+    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    FabFileIO fabFiles = new FabFileIO(sysMock);
+    
+    String to = FileUtils.getRunDir() + "test_data" + File.separator +
+        "file_trials" + File.separator + "toDelete.txt";
+    fabFiles.writeFile(new ByteArrayInputStream("abc".getBytes()), 
+        new FileOutputStream(to));
+    assertTrue(fabFiles.exists(to));
+    fabFiles.delete(to);
+    assertFalse(fabFiles.exists(to));
+  }  
+  
+  
+  @SuppressWarnings("boxing")
+  @Test
+  public void testMethodDeleteException() throws Exception {
+    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    FabFileIO fabFiles = new FabFileIO(sysMock);
+    
+    String to = FileUtils.getRunDir() + "test_data" + File.separator +
+        "file_trials" + File.separator + "toDeleteNotAFile.txt";
+    assertThrown(new ExpectedThrowable(new IOException("There was a problem deleting the following file;" + 
+          System.lineSeparator() + new File(to).getAbsolutePath())),
+        new I_Thrower() {
+
+          @Override
+          public void run() throws Throwable {
+            fabFiles.delete(to);
+          }
+    });
+    
+  }  
+  
+  @SuppressWarnings("boxing")
+  @Test
+  public void testMethodDeleteRecursive() throws Exception {
+    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    FabFileIO fabFiles = new FabFileIO(sysMock);
+    
+    String to = FileUtils.getRunDir() + "test_data" + File.separator +
+        "file_trials" + File.separator + "toDelete";
+    fabFiles.mkdirs(to);
+    assertTrue(fabFiles.exists(to));
+    
+    String toTo = FileUtils.getRunDir() + "test_data" + File.separator +
+        "file_trials" + File.separator + "toDelete" + File.separator + "child";
+    fabFiles.mkdirs(toTo);
+    assertTrue(fabFiles.exists(toTo));
+    
+    String toToBar = FileUtils.getRunDir() + "test_data" + File.separator +
+        "file_trials" + File.separator + "toDelete" + File.separator + "child" +
+        File.separator + "bar.txt";
+    fabFiles.writeFile(new ByteArrayInputStream("abc".getBytes()), 
+        new FileOutputStream(toToBar));
+    assertTrue(fabFiles.exists(toToBar));
+    
+    assertTrue(fabFiles.exists(toTo));
+    fabFiles.deleteRecursive(to);
+    assertFalse(fabFiles.exists(toTo));
+    assertFalse(fabFiles.exists(to));
+  }  
+  
+  
+  @SuppressWarnings("boxing")
+  @Test
+  public void testMethodDeleteRecursiveException() throws Exception {
+    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    FabFileIO fabFiles = new FabFileIO(sysMock);
+    
+    String to = FileUtils.getRunDir() + "test_data" + File.separator +
+        "file_trials" + File.separator + "toDeleteNotAFile.txt";
+    assertThrown(new ExpectedThrowable(new NoSuchFileException(
+        new File(to).getAbsolutePath())),
+        new I_Thrower() {
+
+          @Override
+          public void run() throws Throwable {
+            fabFiles.deleteRecursive(to);
+          }
+    });
+    
+  }  
+  
+  @SuppressWarnings("boxing")
+  @Test
   public void testMethodDownload() throws Exception {
     I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
     I_FabLog logMock = mock(I_FabLog.class);
@@ -500,7 +640,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
     String separator = File.separator;
     
     if (fabFiles.exists("test_data" + separator + "file_trials" + separator + "fab_files_trial")) {
-      fabFiles.removeRecursive("test_data" + separator + "file_trials" + separator + "fab_files_trial");
+      fabFiles.deleteRecursive("test_data" + separator + "file_trials" + separator + "fab_files_trial");
     }
     assertFalse(fabFiles.exists("test_data" + separator + "file_trials" + 
           separator + "fab_files_trial"));
@@ -535,7 +675,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
     assertTrue(fabFiles.exists("test_data" + separator + "file_trials" + 
         separator + "fab_files_trial" + separator + "temp2" + separator + "temp3"));
   
-    fabFiles.removeRecursive("test_data" + separator + "file_trials" + 
+    fabFiles.deleteRecursive("test_data" + separator + "file_trials" + 
         separator + "fab_files_trial" + separator + "temp2");
     assertFalse(fabFiles.exists("test_data" + separator + "file_trials" + 
         separator + "fab_files_trial" + separator + "temp2" + separator + "temp3"));
@@ -690,6 +830,34 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
     Files.delete(new File(path).toPath());
   }
   
+  @Test
+  public void testMethodVerifyZip() throws Exception {
+    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    
+    FabFileIO fabFiles = new FabFileIO(sysMock);
+    
+    String in = FileUtils.getRunDir() + "test_data" + 
+        File.separator + "file_trials" + File.separator + 
+        "xml.zip";
+    String out = FileUtils.getRunDir() + "test_data" + 
+        File.separator + "file_trials" + File.separator +
+        "fab_files_trial_extract";
+    fabFiles.unzip(in,out);
+    
+    assertFalse(fabFiles.verifyZipFileExtract(out + File.separator + "notADir", 
+        new ZipFile(in)));
+    assertTrue(fabFiles.verifyZipFileExtract(out, new ZipFile(in)));
+    
+    String devFile = out + File.separator + "xml" +
+        File.separator + "dev.xml";
+    fabFiles.delete(devFile);
+    assertFalse(fabFiles.verifyZipFileExtract(out, new ZipFile(in)));
+  }
  
 
   @SuppressWarnings({"resource", "boxing"})
