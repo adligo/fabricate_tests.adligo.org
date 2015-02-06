@@ -7,7 +7,7 @@
     <fns:logs>
         <fns:log class="org.adligo.fabricate.external.RepositoryDownloader" setting="true"/>
     </fns:logs>
-    <fns:dependencies local_repository="/foo/bar" >
+    <fns:dependencies>
         <fns:remote_repository>http://127.0.0.1/</fns:remote_repository>
         <!--  platform would always be ignored in this context -->
         <fns:library>lib_foo</fns:library>

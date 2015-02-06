@@ -7,8 +7,9 @@ import org.adligo.fabricate.common.system.I_FabSystem;
 import org.adligo.fabricate.models.dependencies.DependencyMutant;
 import org.adligo.fabricate.repository.DefaultRepositoryPathBuilder;
 import org.adligo.fabricate.repository.DependencyManager;
+import org.adligo.fabricate.repository.I_DependencyManager;
+import org.adligo.fabricate.repository.I_RepositoryFactory;
 import org.adligo.fabricate.repository.I_RepositoryPathBuilder;
-import org.adligo.fabricate.repository.I_RepositoryPathBuilderFactory;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.I_ReturnFactory;
@@ -26,7 +27,7 @@ public class DependencyManagerTrial extends MockitoSourceFileTrial {
   private I_FabSystem sysMock_;
   private I_FabFileIO filesMock_;
   private I_FabLog logMock_;
-  private I_RepositoryPathBuilderFactory pathBuilderFactoryMock_;
+  private I_RepositoryFactory pathBuilderFactoryMock_;
   private MockMethod<Void> printlnMethod_;
   private MockMethod<Void> printTraceMethod_;
   
@@ -41,7 +42,7 @@ public class DependencyManagerTrial extends MockitoSourceFileTrial {
     filesMock_ = mock(I_FabFileIO.class);
     when(sysMock_.getFileIO()).thenReturn(filesMock_);
     
-    pathBuilderFactoryMock_ = mock(I_RepositoryPathBuilderFactory.class);
+    pathBuilderFactoryMock_ = mock(I_RepositoryFactory.class);
     when(pathBuilderFactoryMock_.create(any())).then(
         new MockMethod<I_RepositoryPathBuilder>(
         new I_ReturnFactory<I_RepositoryPathBuilder>() {
@@ -63,10 +64,10 @@ public class DependencyManagerTrial extends MockitoSourceFileTrial {
   public void testMethodManageSimple()  throws IOException {
    
     
-    DependencyManager dm = new DependencyManager(sysMock_, 
+    I_DependencyManager dm = new DependencyManager(sysMock_, 
         Collections.singletonList("http://example.com/"), 
         new DefaultRepositoryPathBuilder("C:\\foo\\", "\\"));
-    dm.setPathBuilderFactory(pathBuilderFactoryMock_);
+    dm.setFactory(pathBuilderFactoryMock_);
     
     DependencyMutant dep = new DependencyMutant();
     dep.setGroup("group");
@@ -115,8 +116,12 @@ public class DependencyManagerTrial extends MockitoSourceFileTrial {
     
     assertEquals("C:\\foo\\group\\artifact-321.jar", 
         existsMethod.getArg(0));
-    assertEquals("C:\\foo\\group\\artifact-321.jar.md5", 
+    assertEquals("C:\\foo\\group", 
         existsMethod.getArg(1));
+    assertEquals("C:\\foo\\group", 
+        existsMethod.getArg(2));
+    assertEquals("C:\\foo\\group\\artifact-321.jar.md5", 
+        existsMethod.getArg(3));
     
     assertEquals("The download from the following url;" + System.lineSeparator() +
         "http://example.com/group/artifact/321/artifact-321.jar.md5" + System.lineSeparator() +
@@ -131,9 +136,13 @@ public class DependencyManagerTrial extends MockitoSourceFileTrial {
     assertEquals("C:\\foo\\group\\artifact-321.jar", downloadFileMethod.getArgs(1)[1]);
     assertEquals(2, downloadFileMethod.count());
     
-    assertEquals("C:\\foo\\group\\artifact-321.jar", 
+    assertEquals("C:\\foo\\group", 
         existsMethod.getArg(2));
-    assertEquals(3, existsMethod.count());
+    assertEquals("C:\\foo\\group\\artifact-321.jar.md5", 
+        existsMethod.getArg(3));
+    assertEquals("C:\\foo\\group\\artifact-321.jar", 
+        existsMethod.getArg(4));
+    assertEquals(5, existsMethod.count());
     
     assertEquals("The download from the following url;" + System.lineSeparator() +
         "http://example.com/group/artifact/321/artifact-321.jar" + System.lineSeparator() +

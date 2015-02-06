@@ -11,13 +11,13 @@ import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
-@SourceFileScope (sourceClass=JavaSettings.class)
-public class JavaSettingsTrial extends MockitoSourceFileTrial {
+@SourceFileScope (sourceClass=JavaSettingsMutant.class, minCoverage=97.0)
+public class JavaSettingsMutantTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("boxing")
   @Test
   public void testConstructorDefaults() {
-    JavaSettings js = new JavaSettings((JavaType) null);
+    JavaSettingsMutant js = new JavaSettingsMutant((JavaType) null);
     assertEquals(FabricateDefaults.JAVA_XMS_DEFAULT, js.getXms());
     assertEquals(FabricateDefaults.JAVA_XMX_DEFAULT, js.getXmx());
     assertEquals(FabricateDefaults.JAVA_THREADS, js.getThreads());
@@ -28,10 +28,9 @@ public class JavaSettingsTrial extends MockitoSourceFileTrial {
   public void testConstructorExceptions() {
     assertThrown(new ExpectedThrowable(NullPointerException.class),
         new I_Thrower() {
-          
           @Override
           public void run() throws Throwable {
-            new JavaSettings((I_JavaSettings) null);
+            new JavaSettingsMutant((I_JavaSettings) null);
           }
         }); 
   }
@@ -43,15 +42,26 @@ public class JavaSettingsTrial extends MockitoSourceFileTrial {
     jt.setThreads(3);
     jt.setXms("12m");
     jt.setXmx("13m");
-    
-    JavaSettings js = new JavaSettings(jt);
+    JavaSettingsMutant js = new JavaSettingsMutant(jt);
     assertEquals("12m", js.getXms());
     assertEquals("13m", js.getXmx());
     assertEquals(3, js.getThreads());
     
-    js = new JavaSettings(new JavaSettingsMutant(jt));
+    js = new JavaSettingsMutant(new JavaSettings(jt));
     assertEquals("12m", js.getXms());
     assertEquals("13m", js.getXmx());
     assertEquals(3, js.getThreads());
+  }
+  
+  @SuppressWarnings("boxing")
+  @Test
+  public void testMethodsGetsAndSets() {
+    JavaSettingsMutant jt = new JavaSettingsMutant();
+    jt.setThreads(3);
+    jt.setXms("12m");
+    jt.setXmx("13m");
+    assertEquals(3, jt.getThreads());
+    assertEquals("12m", jt.getXms());
+    assertEquals("13m", jt.getXmx());
   }
 }

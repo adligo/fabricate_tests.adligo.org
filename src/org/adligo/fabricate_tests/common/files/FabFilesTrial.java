@@ -2,9 +2,9 @@ package org.adligo.fabricate_tests.common.files;
 
 import org.adligo.fabricate.common.en.FabricateEnConstants;
 import org.adligo.fabricate.common.files.FabFileIO;
+import org.adligo.fabricate.common.files.I_FabFilesSystem;
 import org.adligo.fabricate.common.files.PatternFileMatcher;
 import org.adligo.fabricate.common.log.I_FabLog;
-import org.adligo.fabricate.common.log.I_FabLogSystem;
 import org.adligo.fabricate.common.system.FabSystem;
 import org.adligo.tests4j.run.common.FileUtils;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
@@ -21,6 +21,7 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 
 import java.io.ByteArrayInputStream;
 import java.io.Closeable;
@@ -118,7 +119,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   
   @Test
   public void testMethodCalculateMd5() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
     
@@ -136,7 +137,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
 
   @Test
   public void testMethodCalculateMd5PassthroughExceptions() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
     
@@ -159,10 +160,84 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
         });
   }
   
+  
+  @SuppressWarnings("boxing")
+  @Test
+  public void testMethodCheck() throws Exception {
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    FabFileIO fabFiles = new FabFileIO(sysMock);
+    
+    doReturn(HttpClients.createDefault()).when(sysMock).newHttpClient();
+    int status = fabFiles.check("http://adligo.org/index.html");
+    assertEquals(200, status);
+  } 
+  
+  @SuppressWarnings("boxing")
+  @Test
+  public void testMethodCheckExceptions() throws Exception {
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
+    when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    CloseableHttpClient httpClient = mock(CloseableHttpClient.class);
+    MockMethod<Void> closeClientMethod = new MockMethod<Void>();
+    doReturn(httpClient).when(sysMock).newHttpClient();
+    doAnswer(closeClientMethod).when(httpClient).close();
+    FabFileIO fabFiles = new FabFileIO(sysMock);
+    when(httpClient.execute(any())).thenThrow(new IOException("abc"));
+    
+    assertThrown(new ExpectedThrowable(new IOException("abc")), 
+        new I_Thrower() {
+          
+          @Override
+          public void run() throws Throwable {
+            fabFiles.check("http://example.com/foo");
+          }
+        });
+    assertEquals(1, closeClientMethod.count());
+    
+    reset(httpClient);
+    closeClientMethod = new MockMethod<Void>();
+    doReturn(httpClient).when(sysMock).newHttpClient();
+    doAnswer(closeClientMethod).when(httpClient).close();
+    when(httpClient.execute(any())).thenThrow(new ClientProtocolException("abc"));
+    assertThrown(new ExpectedThrowable(IOException.class,
+        new ExpectedThrowable(new ClientProtocolException("abc"))), 
+        new I_Thrower() {
+          
+          @Override
+          public void run() throws Throwable {
+            fabFiles.check("http://example.com/foo");
+          }
+        });
+    assertEquals(1, closeClientMethod.count());
+    
+    reset(httpClient);
+    closeClientMethod = new MockMethod<Void>();
+    doReturn(httpClient).when(sysMock).newHttpClient();
+    doAnswer(closeClientMethod).when(httpClient).close();
+    
+    CloseableHttpResponse resp = mock(CloseableHttpResponse.class);
+    MockMethod<Void> closeMethod = new MockMethod<Void>();
+    doAnswer(closeMethod).when(resp).close();
+    StatusLine status = mock(StatusLine.class);
+    when(status.getStatusCode()).thenReturn(300);
+    when(resp.getStatusLine()).thenReturn(status);
+    MockMethod<CloseableHttpResponse> executeMethod = new MockMethod<CloseableHttpResponse>(resp, true);
+    when(httpClient.execute(any())).then(executeMethod);
+    assertEquals(300, fabFiles.check("http://example.com/foo"));
+    assertEquals(1, closeMethod.count());
+    assertEquals(1, closeClientMethod.count());
+  }  
+  
   @SuppressWarnings("boxing")
   @Test
   public void testMethodClose() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
     
@@ -184,7 +259,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   @SuppressWarnings({"boxing"})
   @Test
   public void testMethodCloseIOPair() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
     
@@ -243,7 +318,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   
   @Test
   public void testMethodCloseExceptions() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
     
@@ -261,7 +336,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   }
   @Test
   public void testMethodCreateExceptions() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     I_FabLog logMock = mock(I_FabLog.class);
@@ -288,14 +363,13 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   @SuppressWarnings("boxing")
   @Test
   public void testMethodNewFileOutputStreamExceptions() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
-    CloseableHttpClient httpClient = mock(CloseableHttpClient.class);
-    FabFileIO fabFiles = new FabFileIO(sysMock, httpClient);
+    FabFileIO fabFiles = new FabFileIO(sysMock);
     
     final String notAFile = FileUtils.getRunDir() + "test_data" + File.separator +
           "fab_files_trial" + File.separator + "notADir" + File.separator +
@@ -314,14 +388,14 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   @SuppressWarnings("boxing")
   @Test
   public void testMethodNewZipFile() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
-    CloseableHttpClient httpClient = mock(CloseableHttpClient.class);
-    FabFileIO fabFiles = new FabFileIO(sysMock, httpClient);
+    
+    FabFileIO fabFiles = new FabFileIO(sysMock);
     
     final String notAFile = FileUtils.getRunDir() + "test_data" + File.separator +
           "fab_files_trial" + File.separator + "notADir" + File.separator +
@@ -335,18 +409,18 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
             fabFiles.newZipFile(notAFile);
           }
         });
+    
   } 
   
   @Test
   public void testMethodNewZipFileExceptions() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
-    CloseableHttpClient httpClient = mock(CloseableHttpClient.class);
-    FabFileIO fabFiles = new FabFileIO(sysMock, httpClient);
+    FabFileIO fabFiles = new FabFileIO(sysMock);
     
     final String zfName = FileUtils.getRunDir() + "test_data" + File.separator +
         "file_trials" + File.separator + "xml.zip";
@@ -355,7 +429,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   } 
   @Test
   public void testMethodReadBytesException() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
     
@@ -379,7 +453,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   
   @Test
   public void testMethodReadFile() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
     
@@ -398,7 +472,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   
   @Test
   public void testMethodDecodeExceptions() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
     
@@ -436,91 +510,11 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
         });
   }
   
-  @SuppressWarnings("boxing")
-  @Test
-  public void testMethodDownloadExceptions() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
-    when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
-    
-    I_FabLog logMock = mock(I_FabLog.class);
-    when(sysMock.getLog()).thenReturn(logMock);
-    CloseableHttpClient httpClient = mock(CloseableHttpClient.class);
-    FabFileIO fabFiles = new FabFileIO(sysMock, httpClient);
-    
-    
-    when(httpClient.execute(any())).thenThrow(new IOException("abc"));
-    assertThrown(new ExpectedThrowable(new IOException("abc")), 
-        new I_Thrower() {
-          
-          @Override
-          public void run() throws Throwable {
-            fabFiles.downloadFile("http://example.com/foo", "/somewhere/newfile");
-          }
-        });
-    
-    reset(httpClient);
-    when(httpClient.execute(any())).thenThrow(new ClientProtocolException("abc"));
-    assertThrown(new ExpectedThrowable(IOException.class,
-        new ExpectedThrowable(new ClientProtocolException("abc"))), 
-        new I_Thrower() {
-          
-          @Override
-          public void run() throws Throwable {
-            fabFiles.downloadFile("http://example.com/foo", "/somewhere/newfile");
-          }
-        });
-    
-    reset(httpClient);
-    CloseableHttpResponse resp = mock(CloseableHttpResponse.class);
-    StatusLine status = mock(StatusLine.class);
-    when(status.getStatusCode()).thenReturn(300);
-    when(resp.getStatusLine()).thenReturn(status);
-    MockMethod<CloseableHttpResponse> executeMethod = new MockMethod<CloseableHttpResponse>(resp, true);
-    when(httpClient.execute(any())).then(executeMethod);
-    assertThrown(new ExpectedThrowable(new IOException(
-        "Submitting a Http GET to the following url returned a invalid status code 300;" + System.lineSeparator() +
-        "http://example.com/foo")), 
-        new I_Thrower() {
-          
-          @Override
-          public void run() throws Throwable {
-            fabFiles.downloadFile("http://example.com/foo", "/somewhere/newfile");
-          }
-        });
-    
-    when(status.getStatusCode()).thenReturn(200);
-    //This is a intentionally bad file name
-    final String badFile = FileUtils.getRunDir() + "test_data" + 
-        File.separator + "notADir" + File.separator + "out.txt";
-    
-    HttpEntity entity = mock(HttpEntity.class);
-    when(resp.getEntity()).thenReturn(entity);
-    InputStream is = mock(InputStream.class);
-    when(entity.getContent()).thenReturn(is);
-    
-    //note I tried stubbing this with spy in mockito, which didn't seem
-    // to work.
-    String fileMessage = badFile + " (No such file or directory)";
-    String message = "java.io.FileNotFoundException: " + fileMessage;
-    assertThrown(new ExpectedThrowable(new IOException(message),
-        new ExpectedThrowable(new FileNotFoundException(fileMessage))), 
-        new I_Thrower() {
-          
-          @Override
-          public void run() throws Throwable {
-            fabFiles.downloadFile("http://example.com/foo", badFile);
-          }
-        });
-    
-    
-    
-  }  
   
   @SuppressWarnings("boxing")
   @Test
   public void testMethodDelete() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
     FabFileIO fabFiles = new FabFileIO(sysMock);
@@ -538,7 +532,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   @SuppressWarnings("boxing")
   @Test
   public void testMethodDeleteException() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
@@ -562,7 +556,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   @SuppressWarnings("boxing")
   @Test
   public void testMethodDeleteRecursive() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
     FabFileIO fabFiles = new FabFileIO(sysMock);
@@ -594,7 +588,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   @SuppressWarnings("boxing")
   @Test
   public void testMethodDeleteRecursiveException() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
@@ -615,13 +609,14 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
     
   }  
   
-  @SuppressWarnings("boxing")
   @Test
   public void testMethodDownload() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
     FabFileIO fabFiles = new FabFileIO(sysMock);
+    
+    doReturn(HttpClients.createDefault()).when(sysMock).newHttpClient();
     
     String to = FileUtils.getRunDir() + "test_data" + File.separator +
           "file_trials" + File.separator + "index.html";
@@ -631,9 +626,107 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
     assertTrue(content.contains("Adligo"));
   }  
   
+
+  @SuppressWarnings("boxing")
+  @Test
+  public void testMethodDownloadExceptions() throws Exception {
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
+    when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    CloseableHttpClient httpClient = mock(CloseableHttpClient.class);
+    MockMethod<Void> closeClientMethod = new MockMethod<Void>();
+    doReturn(httpClient).when(sysMock).newHttpClient();
+    doAnswer(closeClientMethod).when(httpClient).close();
+    
+    FabFileIO fabFiles = new FabFileIO(sysMock);
+    
+    
+    when(httpClient.execute(any())).thenThrow(new IOException("abc"));
+    assertThrown(new ExpectedThrowable(new IOException("abc")), 
+        new I_Thrower() {
+          
+          @Override
+          public void run() throws Throwable {
+            fabFiles.downloadFile("http://example.com/foo", "/somewhere/newfile");
+          }
+        });
+    assertEquals(1, closeClientMethod.count());
+    
+    reset(httpClient);
+    closeClientMethod = new MockMethod<Void>();
+    doReturn(httpClient).when(sysMock).newHttpClient();
+    doAnswer(closeClientMethod).when(httpClient).close();
+    when(httpClient.execute(any())).thenThrow(new ClientProtocolException("abc"));
+    assertThrown(new ExpectedThrowable(IOException.class,
+        new ExpectedThrowable(new ClientProtocolException("abc"))), 
+        new I_Thrower() {
+          
+          @Override
+          public void run() throws Throwable {
+            fabFiles.downloadFile("http://example.com/foo", "/somewhere/newfile");
+          }
+        });
+    assertEquals(1, closeClientMethod.count());
+    
+    reset(httpClient);
+    closeClientMethod = new MockMethod<Void>();
+    doReturn(httpClient).when(sysMock).newHttpClient();
+    doAnswer(closeClientMethod).when(httpClient).close();
+    
+    CloseableHttpResponse resp = mock(CloseableHttpResponse.class);
+    MockMethod<Void> closeMethod = new MockMethod<Void>();
+    doAnswer(closeMethod).when(resp).close();
+    StatusLine status = mock(StatusLine.class);
+    when(status.getStatusCode()).thenReturn(300);
+    when(resp.getStatusLine()).thenReturn(status);
+    MockMethod<CloseableHttpResponse> executeMethod = new MockMethod<CloseableHttpResponse>(resp, true);
+    when(httpClient.execute(any())).then(executeMethod);
+    assertThrown(new ExpectedThrowable(new IOException(
+        "Submitting a Http GET to the following url returned a invalid status code 300;" + System.lineSeparator() +
+        "http://example.com/foo")), 
+        new I_Thrower() {
+          
+          @Override
+          public void run() throws Throwable {
+            fabFiles.downloadFile("http://example.com/foo", "/somewhere/newfile");
+          }
+        });
+    assertEquals(1, closeClientMethod.count());
+    assertEquals(1, closeMethod.count());
+    
+    when(status.getStatusCode()).thenReturn(200);
+    //This is a intentionally bad file name
+    final String badFile = FileUtils.getRunDir() + "test_data" + 
+        File.separator + "notADir" + File.separator + "out.txt";
+    
+    HttpEntity entity = mock(HttpEntity.class);
+    when(resp.getEntity()).thenReturn(entity);
+    InputStream is = mock(InputStream.class);
+    when(entity.getContent()).thenReturn(is);
+    
+    //note I tried stubbing this with spy in mockito, which didn't seem
+    // to work.
+    String fileMessage = badFile + " (No such file or directory)";
+    String message = "java.io.FileNotFoundException: " + fileMessage;
+    assertThrown(new ExpectedThrowable(new IOException(message),
+        new ExpectedThrowable(new FileNotFoundException(fileMessage))), 
+        new I_Thrower() {
+          
+          @Override
+          public void run() throws Throwable {
+            fabFiles.downloadFile("http://example.com/foo", badFile);
+          }
+        });
+    assertEquals(2, closeClientMethod.count());
+    assertEquals(2, closeMethod.count());
+  }  
+  
   @Test
   public void testMethodsLocalIO() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
     FabFileIO fabFiles = new FabFileIO(sysMock);
@@ -687,7 +780,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   @SuppressWarnings("boxing")
   @Test
   public void testMethodList() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
     FabFileIO fabFiles = new FabFileIO(sysMock);
@@ -706,7 +799,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   
   @Test
   public void testMethodUnzip() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
     
@@ -741,7 +834,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   @SuppressWarnings("boxing")
   @Test
   public void testMethodUnzipExceptions() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
     
@@ -795,7 +888,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   
   @Test
   public void testMethodWriteFile() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
     
@@ -832,7 +925,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   
   @Test
   public void testMethodVerifyZip() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
     
@@ -863,7 +956,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   @SuppressWarnings({"resource", "boxing"})
   @Test
   public void testMethodWriteFileExceptions() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
     
@@ -918,7 +1011,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   @SuppressWarnings({ "boxing"})
   @Test
   public void testMethodWriteFileWithBufferExceptions() throws Exception {
-    I_FabLogSystem sysMock = mock(I_FabLogSystem.class);
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
     

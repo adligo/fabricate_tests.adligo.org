@@ -1,6 +1,6 @@
-package org.adligo.fabricate_tests.models.common;
+package org.adligo.fabricate_tests.common.system;
 
-import org.adligo.fabricate.models.common.FabricateDefaults;
+import org.adligo.fabricate.common.system.FabricateDefaults;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
@@ -19,7 +19,7 @@ public class FabricateDefaultsTrial extends MockitoSourceFileTrial {
         FabricateDefaults.JAVA_THREADS);
     
     assertEquals(System.getProperty("user.home") + 
-        File.separator + "local_repository", FabricateDefaults.LOCAL_REPOSITORY);
+        File.separator + "local_repository" + File.separator, FabricateDefaults.LOCAL_REPOSITORY);
   }
   
 }

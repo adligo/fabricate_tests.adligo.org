@@ -14,6 +14,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     I18N_Asserter asserter = new I18N_Asserter(this);
     
     SystemEnMessages messages = SystemEnMessages.INSTANCE;
+    asserter.assertConstant("Checking Fabricate runtime dependencies.", 
+        messages.getCheckingFabricateRuntimeDependencies());
     asserter.assertConstant("Compiled on <X/>.", 
         messages.getCompiledOnX());
     asserter.assertConstant("did not pass the extract check.", 
@@ -47,10 +49,14 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getFailed());
     asserter.assertConstant("finished.", 
         messages.getFinished());
+    
+    asserter.assertConstant("No remote repositories could be reached.", 
+        messages.getNoRemoteRepositoriesCouldBeReached());
     asserter.assertConstant("passed the extract check.", 
         messages.getPassedTheExtractCheck());
     asserter.assertConstant("passed the md5 check.", 
         messages.getPassedTheMd5Check());
+    
     asserter.assertConstant("The download from the following url;", 
         messages.getTheDownloadFromTheFollowingUrl());
     asserter.assertConstant("Starting download from the following url;", 
@@ -59,6 +65,11 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getTheFollowingArtifact());
     asserter.assertConstant("The following Fabricate Home should have only these jars;", 
         messages.getTheFollowingFabricateHomeLibShouldHaveOnlyTheseJars());
+    asserter.assertConstant("The following local repository is locked by another process;", 
+        messages.getTheFollowingLocalRepositoryIsLockedByAnotherProcess());
+    asserter.assertConstant("The following remote repository appears to be down;", 
+        messages.getTheFollowingRemoteRepositoryAppearsToBeDown());
+    
     asserter.assertConstant("to the following folder;", 
         messages.getToTheFollowingFolder());
     asserter.assertConstant("Version <X/>.", 

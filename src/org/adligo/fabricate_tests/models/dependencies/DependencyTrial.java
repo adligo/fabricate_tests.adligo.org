@@ -10,6 +10,8 @@ import org.adligo.fabricate.models.dependencies.Ide;
 import org.adligo.fabricate.models.dependencies.IdeMutant;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamsType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.DependencyType;
+import org.adligo.fabricate.xml.io_v1.library_v1_0.IdeType;
+import org.adligo.fabricate_tests.models.common.ParameterMutantTrial;
 import org.adligo.fabricate_tests.models.common.ParameterTrial;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
@@ -20,28 +22,9 @@ import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 import java.util.ArrayList;
 import java.util.List;
 
-@SourceFileScope (sourceClass=Dependency.class, minCoverage=80.0)
+@SourceFileScope (sourceClass=Dependency.class, minCoverage=94.0)
 public class DependencyTrial extends MockitoSourceFileTrial {
 
-  @SuppressWarnings("unused")
-  @Test
-  public void testConstructorExceptions() {
-    assertThrown(new ExpectedThrowable(NullPointerException.class), new I_Thrower() {
-      
-      @Override
-      public void run() throws Throwable {
-        new Dependency((I_Dependency) null);
-      }
-    });
-    assertThrown(new ExpectedThrowable(NullPointerException.class), new I_Thrower() {
-      
-      @Override
-      public void run() throws Throwable {
-        new Dependency((I_Dependency) null);
-      }
-    });
-  }
-  
   @SuppressWarnings("boxing")
   @Test
   public void testConstructorCopy() {
@@ -104,6 +87,68 @@ public class DependencyTrial extends MockitoSourceFileTrial {
     List<I_Ide> children = dmCopy.getChildren();
     assertEquals("java.util.Collections$UnmodifiableRandomAccessList", children.getClass().getName());
   }
+
+  @SuppressWarnings("boxing")
+  @Test
+  public void testConstructorCopyFromXml() {
+    DependencyType dm = new DependencyType();
+    dm.setArtifact("artifact");
+    dm.setFileName("fileName");
+    dm.setGroup("group");
+    dm.setPlatform("platform");
+    dm.setType("type");
+    dm.setVersion("version");
+    
+    IdeType itA = new IdeType();
+    itA.setName("ideA");
+    
+    itA.setArgs(ParameterMutantTrial.createParams());
+    dm.getIde().add(itA);
+    
+    Dependency inst = new Dependency(dm);
+    assertEquals("artifact",inst.getArtifact());
+    assertFalse(inst.isExtract());
+    assertEquals("fileName",inst.getFileName());
+    assertEquals("group",inst.getGroup());
+    assertEquals("platform",inst.getPlatform());
+    assertEquals("type",inst.getType());
+    assertEquals("version",inst.getVersion());
+    
+    List<I_Ide> ides = inst.getChildren();
+    I_Ide ide =  ides.get(0);
+    assertEquals("ideA", ide.getName());
+    
+    ParameterTrial.assertParams(ide.getChildren(), this);
+    
+    dm.setExtract(true);
+    inst = new Dependency(dm);
+    assertTrue(inst.isExtract());
+    
+    dm.setExtract(false);
+    inst = new Dependency(dm);
+    assertFalse(inst.isExtract());
+  }
+  
+  @SuppressWarnings("unused")
+  @Test
+  public void testConstructorExceptions() {
+    assertThrown(new ExpectedThrowable(NullPointerException.class), new I_Thrower() {
+      
+      @Override
+      public void run() throws Throwable {
+        new Dependency((I_Dependency) null);
+      }
+    });
+    assertThrown(new ExpectedThrowable(NullPointerException.class), new I_Thrower() {
+      
+      @Override
+      public void run() throws Throwable {
+        new Dependency((I_Dependency) null);
+      }
+    });
+  }
+  
+  
  
   @SuppressWarnings("boxing")
   @Test

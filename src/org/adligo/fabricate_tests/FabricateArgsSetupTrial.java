@@ -8,9 +8,12 @@ import org.adligo.fabricate.common.log.DeferredLog;
 import org.adligo.fabricate.common.log.FabLog;
 import org.adligo.fabricate.common.log.I_FabLog;
 import org.adligo.fabricate.common.system.FabSystem;
+import org.adligo.fabricate.common.system.FabricateEnvironment;
 import org.adligo.fabricate.java.JavaCalls;
 import org.adligo.fabricate.java.ManifestParser;
 import org.adligo.fabricate_tests.common.log.ThreadLocalPrintStreamMock;
+import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
+import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.shared.asserts.line_text.TextLines;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
@@ -41,6 +44,7 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
   
   public void beforeTests() {
     sysMock_ = mock(FabSystem.class);
+    
     when(sysMock_.lineSeperator()).thenReturn("\n");
     when(sysMock_.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     fileMock_ = mock(I_FabFileIO.class);
@@ -70,20 +74,28 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     MockMethod<Void> setLogMock_ = new MockMethod<Void>();
     doAnswer(setLogMock_).when(sysMock_).setLog(any());
     
-    when(javaCallsMock_.getJavaHome()).thenThrow(new IllegalStateException());
+    when(sysMock_.getenv(FabricateEnvironment.JAVA_HOME)).thenReturn("");
     
     String [] nada = new String[]{};
+    assertThrown(new ExpectedThrowable(IllegalStateException.class), 
+        new I_Thrower() {
+
+          @SuppressWarnings("unused")
+          @Override
+          public void run() throws Throwable {
+            new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
+          }
+    });
     
-    FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
     assertEquals(1, setLogMock_.count());
     I_FabLog log = (I_FabLog) setLogMock_.getArg(0);
     assertFalse(log.hasAllLogsEnabled());
-    assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
     
     String result = baos_.toString();
     assertEquals(
         "Exception: No $JAVA_HOME environment variable set." + System.lineSeparator() + 
         "LASTLINE END" + System.lineSeparator(), result);
+    
     
   }
   
@@ -93,7 +105,7 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     MockMethod<Void> setLogMock_ = new MockMethod<Void>();
     doAnswer(setLogMock_).when(sysMock_).setLog(any());
     
-    when(javaCallsMock_.getJavaHome()).thenReturn("someHome");
+    when(sysMock_.getenv(FabricateEnvironment.JAVA_HOME)).thenReturn("someHome");
     when(javaCallsMock_.getJavaVersion(eq("someHome"), any())).thenThrow(
         new IOException());
     String [] nada = new String[]{};
@@ -111,7 +123,7 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
         lines.getLine(0));
     assertEquals("someHome", lines.getLine(1));
     assertEquals("java.io.IOException", lines.getLine(2));
-    assertEquals("\tat org.adligo.fabricate.FabricateArgsSetup.<init>(FabricateArgsSetup.java:75)", 
+    assertEquals("\tat org.adligo.fabricate.FabricateArgsSetup.<init>(FabricateArgsSetup.java:70)", 
         lines.getLine(3));
     assertEquals("LASTLINE END", lines.getLine(lines.getLines() - 1));
   }
@@ -122,7 +134,7 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     MockMethod<Void> setLogMock_ = new MockMethod<Void>();
     doAnswer(setLogMock_).when(sysMock_).setLog(any());
     
-    when(javaCallsMock_.getJavaHome()).thenReturn("someHome");
+    when(sysMock_.getenv(FabricateEnvironment.JAVA_HOME)).thenReturn("someHome");
     when(javaCallsMock_.getJavaVersion(eq("someHome"), any())).thenReturn("1.6.0_03");
     when(javaCallsMock_.getJavaMajorVersion("1.6.0_03")).thenReturn(1.6);
     String [] nada = new String[]{};
@@ -147,10 +159,10 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     MockMethod<Void> setLogMock_ = new MockMethod<Void>();
     doAnswer(setLogMock_).when(sysMock_).setLog(any());
     
-    when(javaCallsMock_.getJavaHome()).thenReturn("someHome");
+    when(sysMock_.getenv(FabricateEnvironment.JAVA_HOME)).thenReturn("someHome");
     when(javaCallsMock_.getJavaVersion(eq("someHome"), any())).thenReturn("1.7.0_03");
     when(javaCallsMock_.getJavaMajorVersion("1.7.0_03")).thenReturn(1.7);
-    when(sysMock_.getenv("FABRICATE_HOME")).thenReturn("fabHome");
+    when(sysMock_.getenv(FabricateEnvironment.FABRICATE_HOME)).thenReturn("fabHome");
     String [] nada = new String[]{};
     
     FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
@@ -178,10 +190,10 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     MockMethod<Void> setLogMock_ = new MockMethod<Void>();
     doAnswer(setLogMock_).when(sysMock_).setLog(any());
     
-    when(javaCallsMock_.getJavaHome()).thenReturn("someHome");
+    when(sysMock_.getenv(FabricateEnvironment.JAVA_HOME)).thenReturn("someHome");
     when(javaCallsMock_.getJavaVersion(eq("someHome"), any())).thenReturn("1.7.0_03");
     when(javaCallsMock_.getJavaMajorVersion("1.7.0_03")).thenReturn(1.7);
-    when(sysMock_.getenv("FABRICATE_HOME")).thenReturn("fabHome");
+    when(sysMock_.getenv(FabricateEnvironment.FABRICATE_HOME)).thenReturn("fabHome");
     String [] nada = new String[]{"args"};
     
     when(fileMock_.list(any(), any())).thenThrow(new IOException());
@@ -203,7 +215,7 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     assertEquals("httpclient-4.3.5.jar", lines.getLine(4));
     assertEquals("httpcore-4.3.2.jar", lines.getLine(5));
     assertEquals("java.io.IOException", lines.getLine(6));
-    assertEquals("\tat org.adligo.fabricate.FabricateArgsSetup.locateFabricateJarAndVerifyFabricateHomeJars(FabricateArgsSetup.java:151)", lines.getLine(7));
+    assertEquals("\tat org.adligo.fabricate.FabricateArgsSetup.locateFabricateJarAndVerifyFabricateHomeJars(FabricateArgsSetup.java:140)", lines.getLine(7));
     assertEquals("LASTLINE END", lines.getLine(lines.getLines() - 1));
   }
   
@@ -213,10 +225,10 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     MockMethod<Void> setLogMock_ = new MockMethod<Void>();
     doAnswer(setLogMock_).when(sysMock_).setLog(any());
     
-    when(javaCallsMock_.getJavaHome()).thenReturn("someHome");
+    when(sysMock_.getenv(FabricateEnvironment.JAVA_HOME)).thenReturn("someHome");
     when(javaCallsMock_.getJavaVersion(eq("someHome"), any())).thenReturn("1.7.0_03");
     when(javaCallsMock_.getJavaMajorVersion("1.7.0_03")).thenReturn(1.7);
-    when(sysMock_.getenv("FABRICATE_HOME")).thenReturn("fabHome");
+    when(sysMock_.getenv(FabricateEnvironment.FABRICATE_HOME)).thenReturn("fabHome");
     String [] nada = new String[]{"args"};
     
     List<String> names = new ArrayList<String>();
@@ -255,17 +267,24 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     MockMethod<Void> setLogMock_ = new MockMethod<Void>();
     doAnswer(setLogMock_).when(sysMock_).setLog(any());
     
-    when(javaCallsMock_.getJavaHome()).thenReturn("someHome");
+    when(sysMock_.getenv(FabricateEnvironment.JAVA_HOME)).thenReturn("someHome");
     when(javaCallsMock_.getJavaVersion(eq("someHome"), any())).thenReturn("1.7.0_03");
     when(javaCallsMock_.getJavaMajorVersion("1.7.0_03")).thenReturn(1.7);
-    when(sysMock_.getenv("FABRICATE_HOME")).thenReturn(null);
+    when(sysMock_.getenv(FabricateEnvironment.FABRICATE_HOME)).thenReturn("");
     String [] nada = new String[]{"-l"};
     
-    FabricateArgsSetup setup = new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
+    assertThrown(new ExpectedThrowable(IllegalStateException.class), 
+        new I_Thrower() {
+
+          @SuppressWarnings("unused")
+          @Override
+          public void run() throws Throwable {
+            new FabricateArgsSetup(nada,sysMock_, manifestParserMock_);
+          }
+    });
     assertEquals(1, setLogMock_.count());
     I_FabLog log = (I_FabLog) setLogMock_.getArg(0);
     assertTrue(log.hasAllLogsEnabled());
-    assertSame(FabricateEnConstants.INSTANCE, setup.getConstants());
     
     String result = baos_.toString();
     TextLines lines = new TextLines(result);
@@ -273,6 +292,8 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     assertEquals("Exception: No $FABRICATE_HOME environment variable set.",
         lines.getLine(0));
     assertEquals("LASTLINE END", lines.getLine(1));
+    
+
   }
   
   @SuppressWarnings("boxing")
@@ -281,10 +302,10 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     MockMethod<Void> setLogMock_ = new MockMethod<Void>();
     doAnswer(setLogMock_).when(sysMock_).setLog(any());
     
-    when(javaCallsMock_.getJavaHome()).thenReturn("someHome");
+    when(sysMock_.getenv(FabricateEnvironment.JAVA_HOME)).thenReturn("someHome");
     when(javaCallsMock_.getJavaVersion(eq("someHome"), any())).thenReturn("1.7.0_03");
     when(javaCallsMock_.getJavaMajorVersion("1.7.0_03")).thenReturn(1.7);
-    when(sysMock_.getenv("FABRICATE_HOME")).thenReturn("fabHome");
+    when(sysMock_.getenv(FabricateEnvironment.FABRICATE_HOME)).thenReturn("fabHome");
     String [] nada = new String[]{"-l"};
     
     List<String> names = new ArrayList<String>();
@@ -327,10 +348,10 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     MockMethod<Void> setLogMock_ = new MockMethod<Void>();
     doAnswer(setLogMock_).when(sysMock_).setLog(any());
     
-    when(javaCallsMock_.getJavaHome()).thenReturn("someHome");
+    when(sysMock_.getenv(FabricateEnvironment.JAVA_HOME)).thenReturn("someHome");
     when(javaCallsMock_.getJavaVersion(eq("someHome"), any())).thenReturn("1.7.0_03");
     when(javaCallsMock_.getJavaMajorVersion("1.7.0_03")).thenReturn(1.7);
-    when(sysMock_.getenv("FABRICATE_HOME")).thenReturn("fabHome");
+    when(sysMock_.getenv(FabricateEnvironment.FABRICATE_HOME)).thenReturn("fabHome");
     String [] nada = new String[]{"args"};
     
     List<String> names = new ArrayList<String>();
@@ -373,10 +394,10 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     MockMethod<Void> setLogMock_ = new MockMethod<Void>();
     doAnswer(setLogMock_).when(sysMock_).setLog(any());
     
-    when(javaCallsMock_.getJavaHome()).thenReturn("someHome");
+    when(sysMock_.getenv(FabricateEnvironment.JAVA_HOME)).thenReturn("someHome");
     when(javaCallsMock_.getJavaVersion(eq("someHome"), any())).thenReturn("1.7.0_03");
     when(javaCallsMock_.getJavaMajorVersion("1.7.0_03")).thenReturn(1.7);
-    when(sysMock_.getenv("FABRICATE_HOME")).thenReturn("fabHome");
+    when(sysMock_.getenv(FabricateEnvironment.FABRICATE_HOME)).thenReturn("fabHome");
     String [] nada = new String[]{"args"};
     
     List<String> names = new ArrayList<String>();
@@ -419,7 +440,7 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     MockMethod<Void> setLogMock_ = new MockMethod<Void>();
     doAnswer(setLogMock_).when(sysMock_).setLog(any());
     
-    when(javaCallsMock_.getJavaHome()).thenReturn("someHome");
+    when(sysMock_.getenv(FabricateEnvironment.JAVA_HOME)).thenReturn("someHome");
     when(javaCallsMock_.getJavaVersion(eq("someHome"), any())).thenReturn("1.7.0_03");
     when(javaCallsMock_.getJavaMajorVersion("1.7.0_03")).thenReturn(1.7);
     when(sysMock_.getenv("FABRICATE_HOME")).thenReturn("fabHome");
@@ -483,10 +504,10 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     MockMethod<Void> setLogMock_ = new MockMethod<Void>();
     doAnswer(setLogMock_).when(sysMock_).setLog(any());
     
-    when(javaCallsMock_.getJavaHome()).thenReturn("someHome");
+    when(sysMock_.getenv(FabricateEnvironment.JAVA_HOME)).thenReturn("someHome");
     when(javaCallsMock_.getJavaVersion(eq("someHome"), any())).thenReturn("1.7.0_03");
     when(javaCallsMock_.getJavaMajorVersion("1.7.0_03")).thenReturn(1.7);
-    when(sysMock_.getenv("FABRICATE_HOME")).thenReturn("fabHome");
+    when(sysMock_.getenv(FabricateEnvironment.FABRICATE_HOME)).thenReturn("fabHome");
     String [] nada = new String[]{"-rd"};
     
     List<String> names = new ArrayList<String>();

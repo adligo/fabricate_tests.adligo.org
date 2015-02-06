@@ -13,6 +13,7 @@ import org.adligo.fabricate.xml.io_v1.library_v1_0.DependencyType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.IdeType;
 import org.adligo.fabricate_tests.models.common.ParameterMutantTrial;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
+import org.adligo.tests4j.shared.asserts.common.I_Asserts;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
@@ -21,7 +22,7 @@ import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 import java.util.ArrayList;
 import java.util.List;
 
-@SourceFileScope (sourceClass=DependencyMutant.class, minCoverage=73.0)
+@SourceFileScope (sourceClass=DependencyMutant.class, minCoverage=72.0)
 public class DependencyMutantTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("unused")
@@ -45,7 +46,7 @@ public class DependencyMutantTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("boxing")
   @Test
-  public void testConstructorCopy() {
+  public void testConstructorCopyFromInterface() {
     DependencyMutant dm = new DependencyMutant();
     dm.setArtifact("artifact");
     dm.setExtract(true);
@@ -103,48 +104,95 @@ public class DependencyMutantTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("boxing")
   @Test
+  public void testConstructorCopyFromXml() {
+    DependencyType dm = new DependencyType();
+    dm.setArtifact("artifact");
+    dm.setFileName("fileName");
+    dm.setGroup("group");
+    dm.setPlatform("platform");
+    dm.setType("type");
+    dm.setVersion("version");
+    
+    IdeType itA = new IdeType();
+    itA.setName("ideA");
+    
+    itA.setArgs(ParameterMutantTrial.createParams());
+    dm.getIde().add(itA);
+    
+    DependencyMutant inst = new DependencyMutant(dm);
+    assertEquals("artifact",inst.getArtifact());
+    assertFalse(inst.isExtract());
+    assertEquals("fileName",inst.getFileName());
+    assertEquals("group",inst.getGroup());
+    assertEquals("platform",inst.getPlatform());
+    assertEquals("type",inst.getType());
+    assertEquals("version",inst.getVersion());
+    
+    List<I_Ide> ides = inst.getChildren();
+    I_Ide ide =  ides.get(0);
+    assertEquals("ideA", ide.getName());
+    
+    ParameterMutantTrial.assertConvertedParams(ide.getChildren(), this);
+    
+    dm.setExtract(true);
+    inst = new DependencyMutant(dm);
+    assertTrue(inst.isExtract());
+    
+    dm.setExtract(false);
+    inst = new DependencyMutant(dm);
+    assertFalse(inst.isExtract());
+  }
+  
+  @Test
   public void testMethodCovertAndCreateDepTypeListAndDepType() {
     List<DependencyType> types = getDependencies();
     
     List<I_Dependency> result = DependencyMutant.convert(types);
-    I_Dependency depA = result.get(0);
-    assertEquals("artifactA", depA.getArtifact());
-    assertFalse(depA.isExtract());
-    assertEquals("fileNameA", depA.getFileName());
-    assertEquals("groupA", depA.getGroup());
-    assertEquals("platformA", depA.getPlatform());
-    assertEquals("typeA", depA.getType());
-    assertEquals("versionA", depA.getVersion());
-    assertEquals(DependencyMutant.class.getName(), depA.getClass().getName());
-    
-    I_Dependency depB = result.get(1);
-    assertEquals("artifactB", depB.getArtifact());
-    assertTrue(depB.isExtract());
-    assertEquals("fileNameB", depB.getFileName());
-    assertEquals("groupB", depB.getGroup());
-    assertEquals("platformB", depB.getPlatform());
-    assertEquals("typeB", depB.getType());
-    assertEquals("versionB", depB.getVersion());
-    assertEquals(DependencyMutant.class.getName(), depB.getClass().getName());
-    
-    List<I_Ide> ides =  depA.getChildren();
-    I_Ide ide1 = ides.get(0);
-    assertEquals("ideA", ide1.getName());
-    assertEquals(IdeMutant.class.getName(), ide1.getClass().getName());
-    
-    I_Ide ide2 = ides.get(1);
-    assertEquals("ideB", ide2.getName());
-    assertEquals(IdeMutant.class.getName(), ide2.getClass().getName());
-    assertEquals(0, ide2.size());
-    
-    List<I_Parameter> out = ide1.getChildren();
-    ParameterMutantTrial.assertConvertedParams(out, this);
+    List<I_Parameter> out;
+    assertDependencyConversion(this, result);
     
     
     out = ParameterMutant.convert((ParamsType) null);
     assertNotNull(out);
   }
 
+  @SuppressWarnings("boxing")
+  public static void assertDependencyConversion(I_Asserts asserts, List<I_Dependency> result) {
+    I_Dependency depA = result.get(0);
+    asserts.assertEquals("artifactA", depA.getArtifact());
+    asserts.assertFalse(depA.isExtract());
+    asserts.assertEquals("fileNameA", depA.getFileName());
+    asserts.assertEquals("groupA", depA.getGroup());
+    asserts.assertEquals("platformA", depA.getPlatform());
+    asserts.assertEquals("typeA", depA.getType());
+    asserts.assertEquals("versionA", depA.getVersion());
+    asserts.assertEquals(DependencyMutant.class.getName(), depA.getClass().getName());
+    
+    I_Dependency depB = result.get(1);
+    asserts.assertEquals("artifactB", depB.getArtifact());
+    asserts.assertTrue(depB.isExtract());
+    asserts.assertEquals("fileNameB", depB.getFileName());
+    asserts.assertEquals("groupB", depB.getGroup());
+    asserts.assertEquals("platformB", depB.getPlatform());
+    asserts.assertEquals("typeB", depB.getType());
+    asserts.assertEquals("versionB", depB.getVersion());
+    asserts.assertEquals(DependencyMutant.class.getName(), depB.getClass().getName());
+    
+    List<I_Ide> ides =  depA.getChildren();
+    I_Ide ide1 = ides.get(0);
+    asserts.assertEquals("ideA", ide1.getName());
+    asserts.assertEquals(IdeMutant.class.getName(), ide1.getClass().getName());
+    
+    I_Ide ide2 = ides.get(1);
+    asserts.assertEquals("ideB", ide2.getName());
+    asserts.assertEquals(IdeMutant.class.getName(), ide2.getClass().getName());
+    asserts.assertEquals(0, ide2.size());
+    
+    List<I_Parameter> out = ide1.getChildren();
+    ParameterMutantTrial.assertConvertedParams(out, asserts);
+  }
+
+  @SuppressWarnings("boxing")
   public static List<DependencyType> getDependencies() {
     DependencyType type = new DependencyType();
     type.setArtifact("artifactA");

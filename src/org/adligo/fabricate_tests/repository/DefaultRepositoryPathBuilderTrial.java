@@ -98,7 +98,7 @@ public class DefaultRepositoryPathBuilderTrial extends MockitoSourceFileTrial {
     dm.setType("txt");
     dm.setGroup("group");
     dm.setVersion("123");
-    assertEquals("repo/group/extract", builder.getExtractPath(dm, 
+    assertEquals("repo/group/artifactName-123.txt-extract", builder.getExtractPath(dm, 
         FabricateEnConstants.INSTANCE));
   }
   
