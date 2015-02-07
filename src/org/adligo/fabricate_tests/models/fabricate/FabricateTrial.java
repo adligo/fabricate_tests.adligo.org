@@ -48,6 +48,7 @@ public class FabricateTrial extends MockitoSourceFileTrial {
     fm.setJavaHome("jh");
     fm.setFabricateHome("fh");
     fm.setFabricateRepository("fr");
+    fm.setFabricateXmlRunDir("fabXmlDir");
     
     JavaSettingsMutant jsm = new JavaSettingsMutant();
     jsm.setThreads(1);
@@ -56,13 +57,22 @@ public class FabricateTrial extends MockitoSourceFileTrial {
     fm.setJavaSettings(jsm);
     
     Fabricate copy = new Fabricate(fm);
+    assertEquals("fabXmlDir", copy.getFabricateXmlRunDir());
+    assertNull(copy.getFabricateProjectRunDir());
+    assertNull(copy.getFabricateDevXmlDir());
     assertEquals(0, copy.getRemoteRepositories().size());
     
     fm.addRemoteRepository("repoA");
     fm.addRemoteRepository("repoB");
     fm.addRemoteRepository("repoA");
     
+    fm.setFabricateProjectRunDir("projectRunDir");
+    fm.setFabricateDevXmlDir("devXmlDir");
     copy = new Fabricate(fm);
+    assertEquals("fabXmlDir", copy.getFabricateXmlRunDir());
+    assertEquals("projectRunDir", copy.getFabricateProjectRunDir());
+    assertEquals("devXmlDir", copy.getFabricateDevXmlDir());
+    
     List<String> repos = copy.getRemoteRepositories();
     assertEquals("repoA", repos.get(0));
     assertEquals("repoB", repos.get(1));

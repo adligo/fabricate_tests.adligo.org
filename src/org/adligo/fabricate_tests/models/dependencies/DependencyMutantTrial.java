@@ -193,6 +193,34 @@ public class DependencyMutantTrial extends MockitoSourceFileTrial {
   }
 
   @SuppressWarnings("boxing")
+  public static void assertDependencyConversionC(I_Asserts asserts, List<I_Dependency> result) {
+    I_Dependency depA = result.get(0);
+    asserts.assertEquals("artifactC", depA.getArtifact());
+    asserts.assertFalse(depA.isExtract());
+    asserts.assertEquals("fileNameC", depA.getFileName());
+    asserts.assertEquals("groupC", depA.getGroup());
+    asserts.assertEquals("platformC", depA.getPlatform());
+    asserts.assertEquals("typeC", depA.getType());
+    asserts.assertEquals("versionC", depA.getVersion());
+    asserts.assertEquals(DependencyMutant.class.getName(), depA.getClass().getName());
+
+  }
+  
+  @SuppressWarnings("boxing")
+  public static void assertDependencyConversionD(I_Asserts asserts, List<I_Dependency> result) {
+    I_Dependency depA = result.get(0);
+    asserts.assertEquals("artifactD", depA.getArtifact());
+    asserts.assertFalse(depA.isExtract());
+    asserts.assertEquals("fileNameD", depA.getFileName());
+    asserts.assertEquals("groupD", depA.getGroup());
+    asserts.assertEquals("platformD", depA.getPlatform());
+    asserts.assertEquals("typeD", depA.getType());
+    asserts.assertEquals("versionD", depA.getVersion());
+    asserts.assertEquals(DependencyMutant.class.getName(), depA.getClass().getName());
+
+  }
+  
+  @SuppressWarnings("boxing")
   public static List<DependencyType> getDependencies() {
     DependencyType type = new DependencyType();
     type.setArtifact("artifactA");
@@ -230,6 +258,34 @@ public class DependencyMutantTrial extends MockitoSourceFileTrial {
     List<DependencyType> types = new ArrayList<DependencyType>();
     types.add(type);
     types.add(typeB);
+    return types;
+  }
+  
+  public static List<DependencyType> getDependenciesC() {
+    DependencyType type = new DependencyType();
+    type.setArtifact("artifactC");
+    type.setFileName("fileNameC");
+    type.setGroup("groupC");
+    type.setPlatform("platformC");
+    type.setType("typeC");
+    type.setVersion("versionC");
+    
+    List<DependencyType> types = new ArrayList<DependencyType>();
+    types.add(type);
+    return types;
+  }
+
+  public static List<DependencyType> getDependenciesD() {
+    DependencyType type = new DependencyType();
+    type.setArtifact("artifactD");
+    type.setFileName("fileNameD");
+    type.setGroup("groupD");
+    type.setPlatform("platformD");
+    type.setType("typeD");
+    type.setVersion("versionD");
+    
+    List<DependencyType> types = new ArrayList<DependencyType>();
+    types.add(type);
     return types;
   }
   

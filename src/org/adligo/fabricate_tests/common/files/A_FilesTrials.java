@@ -37,6 +37,7 @@ public class A_FilesTrials implements I_Tests4J_TrialList {
     trials.add(PatternFileMatcherTrial.class);
     trials.add(IncludesExcludesFileMatcherTrial.class);
     trials.add(FabFilesTrial.class);
+    trials.add(FabFileUtilsTrial.class);
     return trials;
   }
 

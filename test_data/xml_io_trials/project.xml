@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tns:fabricate_project xmlns:tns="http://www.adligo.org/fabricate/xml/io_v1/project_v1_0.xsd" 
+<pns:fabricate_project xmlns:pns="http://www.adligo.org/fabricate/xml/io_v1/project_v1_0.xsd" 
     xmlns:lns="http://www.adligo.org/fabricate/xml/io_v1/library_v1_0.xsd" 
     xmlns:cns="http://www.adligo.org/fabricate/xml/io_v1/common_v1_0.xsd" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
-    <tns:attributes>
+    <pns:attributes>
     	<cns:param key="srcDirs" value="src,src2">
     		<cns:param key="c2eKeyNested" value="c2eValNested"/>
     	</cns:param>
-    </tns:attributes>
-    <tns:command name="classpath2eclipse">
-    	<tns:param key="c2eKey" value="c2eVal">
+    </pns:attributes>
+    <pns:command name="classpath2eclipse">
+    	<pns:param key="c2eKey" value="c2eVal">
     		<cns:param key="c2eKeyNested" value="c2eValNested"/>
-    	</tns:param>
-    </tns:command>
-    <tns:stages>
-        <tns:stage name="setup" >
-        	<tns:params>
+    	</pns:param>
+    </pns:command>
+    <pns:stages>
+        <pns:stage name="setup" >
+        	<pns:params>
 	        	<cns:param key="setupParam" value="setupParamValue">
 	   	    	       <cns:param key="nestedSetupParam" value="nestedSetupParamValue"/>
 	   	    	</cns:param>
-   	    	</tns:params>
-   	    	<tns:task name="setupTask">
-   	    		<tns:params>
+   	    	</pns:params>
+   	    	<pns:task name="setupTask">
+   	    		<pns:params>
 	   	    	    <cns:param key="Default-Vendor" value="Adligo Inc">
 	   	    	       <cns:param key="nestKey" value="nestVal"/>
 	   	    	    </cns:param>
-   	    	    </tns:params>
-   	    	</tns:task>
-        </tns:stage>
-    </tns:stages>
-    <tns:dependencies>
+   	    	    </pns:params>
+   	    	</pns:task>
+        </pns:stage>
+    </pns:stages>
+    <pns:dependencies>
     	<lns:library platform="bar">foo</lns:library>
     	<lns:dependency group="com.sun.jme" artifact="cldc" version="1.1" type="jar" 
     		fileName="cldc_1.1.jar" platform="JME" extract="true">
@@ -41,6 +41,6 @@
 		    	</lns:args>
     		</lns:ide>
     	</lns:dependency>
-    	<lns:project platform="plat">proj</lns:project>
-	 </tns:dependencies>
- </tns:fabricate_project>
+    	<pns:project platform="plat">proj</pns:project>
+	 </pns:dependencies>
+ </pns:fabricate_project>

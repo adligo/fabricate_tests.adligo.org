@@ -122,7 +122,7 @@ public class IdeTrial extends MockitoSourceFileTrial {
     assertEquals(Ide.class.getName(), ide2.getClass().getName());
     assertEquals(0, ide2.size());
     
-    ParameterTrial.assertParams(ide1.getChildren(), this);
+    ParameterTrial.assertConvertedParams(ide1.getChildren(), this);
     
     List<I_Ide> out = Ide.convert((List<IdeType>) null);
     assertNotNull(out);

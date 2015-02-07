@@ -6,6 +6,7 @@ import org.adligo.fabricate.common.files.I_FabFilesSystem;
 import org.adligo.fabricate.common.files.PatternFileMatcher;
 import org.adligo.fabricate.common.log.I_FabLog;
 import org.adligo.fabricate.common.system.FabSystem;
+import org.adligo.fabricate.common.system.I_FabSystem;
 import org.adligo.tests4j.run.common.FileUtils;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
@@ -44,7 +45,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 @SourceFileScope (sourceClass=FabFileIO.class,
-  minCoverage=91.0,allowedCircularDependencies=CircularDependencies.AllowInnerOuterClasses)
+  minCoverage=90.0,allowedCircularDependencies=CircularDependencies.AllowInnerOuterClasses)
 public class FabFilesTrial extends MockitoSourceFileTrial {
 
   @AfterTrial

@@ -43,7 +43,7 @@ public class DependencyManagerTrial extends MockitoSourceFileTrial {
     when(sysMock_.getFileIO()).thenReturn(filesMock_);
     
     pathBuilderFactoryMock_ = mock(I_RepositoryFactory.class);
-    when(pathBuilderFactoryMock_.create(any())).then(
+    when(pathBuilderFactoryMock_.createRepositoryPathBuilder(any())).then(
         new MockMethod<I_RepositoryPathBuilder>(
         new I_ReturnFactory<I_RepositoryPathBuilder>() {
 
@@ -162,7 +162,6 @@ public class DependencyManagerTrial extends MockitoSourceFileTrial {
   @Test
   public void testMethodManageSimpleExtract() {
     
-  
   }
   
   @Test
@@ -170,6 +169,13 @@ public class DependencyManagerTrial extends MockitoSourceFileTrial {
     
   }
 
+  @Test
+  public void testMethodManageCreateGroupFolder() {
+    
+  }
+  
+
+  
   @Test
   public void testMethodManageExtractIOExcepions() {
     
@@ -179,6 +185,11 @@ public class DependencyManagerTrial extends MockitoSourceFileTrial {
   public void testMethodManageExtractNotValid() {
     
   } 
+  
+  @Test
+  public void testMethodManageGroupFolderCreationOnAnotherThread() {
+    
+  }
   
   @Test
   public void testMethodManageMd5DownloadIOExceptions() {

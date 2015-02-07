@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collections;
 
-@SourceFileScope (sourceClass=FabricateXmlDiscovery.class,minCoverage=92.0)
+@SourceFileScope (sourceClass=FabricateXmlDiscovery.class,minCoverage=90.0)
 public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
   private ByteArrayOutputStream baos_;
   private I_FabSystem sysMock_;
@@ -112,6 +112,11 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
   @Test
   public void testConstructorDirWithFabricateXml() {
     
+    String path = "/somewhere/projects/projectName.example.com/fabricate.xml";
+    File fileMock = mock(File.class);
+    when(fileMock.getAbsolutePath()).thenReturn(path);
+    doReturn(fileMock).when(filesMock_).instance(path);
+    
     when(filesMock_.exists("fabricate.xml")).thenReturn(true);
     File mockFabFile = filesMock_.instance("fabricate.xml");
     when(mockFabFile.exists()).thenReturn(true);
@@ -120,6 +125,8 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     assertTrue(disc.hasFabricateXml());
     assertEquals("/somewhere/projects/projectName.example.com/fabricate.xml", disc.getFabricateXmlPath());
     assertFalse(disc.hasProjectXml());
+    
+    assertEquals("/somewhere/projects/projectName.example.com/", disc.getFabricateXmlDir());
   }
 
   @SuppressWarnings("boxing")
@@ -313,6 +320,21 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
   @Test
   public void testConstructorDirWithProjectAndDevXml() throws Exception {
     
+    String path = "/somewhere/projects/projectGroupName.example.com/fabricate.xml";
+    File fileMock = mock(File.class);
+    when(fileMock.getAbsolutePath()).thenReturn(path);
+    doReturn(fileMock).when(filesMock_).instance(path);
+    
+    String projPath = "/somewhere/projects/projectName.example.com/project.xml";
+    File projFileMock = mock(File.class);
+    when(projFileMock.getAbsolutePath()).thenReturn(projPath);
+    doReturn(projFileMock).when(filesMock_).instance(projPath);
+    
+    String devPath = "/somewhere/projects/dev.xml";
+    File devFileMock = mock(File.class);
+    when(devFileMock.getAbsolutePath()).thenReturn(devPath);
+    doReturn(devFileMock).when(filesMock_).instance(devPath);
+    
     when(filesMock_.exists("fabricate.xml")).thenReturn(false);
     when(filesMock_.exists("project.xml")).thenReturn(true);
     
@@ -331,29 +353,41 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
    
     when(filesMock_.exists("/somewhere/projects/dev.xml")).thenReturn(true);
     FabricateDevType dev = new FabricateDevType();
-    dev.setProjectGroup("projectGroup.example.com");
+    dev.setProjectGroup("projectGroupName.example.com");
     when(xmlFilesMock_.parseDev_v1_0("/somewhere/projects/dev.xml")).thenReturn(dev);
     
+
     
     when(projectFileMock.exists()).thenReturn(true);
     //run
     FabricateXmlDiscovery disc = new FabricateXmlDiscovery(sysMock_);
     //assert
     assertFalse(disc.hasFabricateXml());
-    assertEquals("/somewhere/projects/projectGroup.example.com/fabricate.xml", disc.getFabricateXmlPath());
+    assertEquals("/somewhere/projects/projectGroupName.example.com/fabricate.xml", disc.getFabricateXmlPath());
     assertTrue(disc.hasProjectXml());
     assertEquals("/somewhere/projects/projectName.example.com/project.xml", disc.getProjectXml());
     
     //setup
     File fabFile = filesMock_.instance("/somewhere/projects/projectGroup.example.com/fabricate.xml");
     when(fabFile.exists()).thenReturn(true);
+    
+    File mockFab = mock(File.class);
+    doReturn("/somewhere/projects/projectGroupName.example.com/fabricate.xml").
+      when(mockFab).getAbsolutePath();
+    doReturn(true).when(mockFab).exists();
+    when(filesMock_.instance("/somewhere/projects/projectGroupName.example.com/fabricate.xml"
+          )).thenReturn(mockFab);
     //run
     disc = new FabricateXmlDiscovery(sysMock_);
     //assert
     assertTrue(disc.hasFabricateXml());
-    assertEquals("/somewhere/projects/projectGroup.example.com/fabricate.xml", disc.getFabricateXmlPath());
+    assertEquals("/somewhere/projects/projectGroupName.example.com/fabricate.xml", disc.getFabricateXmlPath());
     assertTrue(disc.hasProjectXml());
     assertEquals("/somewhere/projects/projectName.example.com/project.xml", disc.getProjectXml());
+  
+    assertEquals("/somewhere/projects/projectGroupName.example.com/", disc.getFabricateXmlDir());
+    assertEquals("/somewhere/projects/projectName.example.com/", disc.getProjectXmlDir());
+    assertEquals("/somewhere/projects/", disc.getDevXmlDir());
   }
   
   @SuppressWarnings("boxing")

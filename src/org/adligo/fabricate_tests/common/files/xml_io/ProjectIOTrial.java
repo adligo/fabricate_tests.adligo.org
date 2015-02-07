@@ -4,13 +4,11 @@ import org.adligo.fabricate.common.files.xml_io.FabXmlFileIO;
 import org.adligo.fabricate.common.files.xml_io.ProjectIO;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamType;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamsType;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.TaskType;
-import org.adligo.fabricate.xml.io_v1.library_v1_0.DependenciesType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.DependencyType;
-import org.adligo.fabricate.xml.io_v1.library_v1_0.IdeArgumentType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.IdeType;
 import org.adligo.fabricate.xml.io_v1.project_v1_0.FabricateProjectType;
 import org.adligo.fabricate.xml.io_v1.project_v1_0.ProjectCommandType;
+import org.adligo.fabricate.xml.io_v1.project_v1_0.ProjectDependenciesType;
 import org.adligo.fabricate.xml.io_v1.project_v1_0.ProjectStageType;
 import org.adligo.fabricate.xml.io_v1.project_v1_0.ProjectStagesType;
 import org.adligo.fabricate.xml.io_v1.project_v1_0.ProjectTaskType;
@@ -109,7 +107,7 @@ public class ProjectIOTrial extends MockitoSourceFileTrial {
     assertEquals(1, tasks.size());
     assertEquals(1, stageList.size());
     
-    DependenciesType deps = project.getDependencies();
+    ProjectDependenciesType deps = project.getDependencies();
     assertNotNull(deps);
     List<DependencyType> depsList =  deps.getDependency();
     DependencyType dep = depsList.get(0);

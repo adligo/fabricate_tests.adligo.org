@@ -87,7 +87,7 @@ public class ParameterTrial extends MockitoSourceFileTrial {
     
     
     List<I_Parameter> out = Parameter.convert(ParameterMutantTrial.createParams());
-    assertParams(out, this);
+    assertConvertedParams(out, this);
     
     out = ParameterMutant.convert((List<ParamType>) null);
     assertNotNull(out);
@@ -97,7 +97,7 @@ public class ParameterTrial extends MockitoSourceFileTrial {
   }
 
   @SuppressWarnings("boxing")
-  public static void assertParams(List<I_Parameter> out, I_Asserts asserts) {
+  public static void assertConvertedParams(List<I_Parameter> out, I_Asserts asserts) {
     I_Parameter p1 = out.get(0);
     asserts.assertEquals("a", p1.getKey());
     asserts.assertEquals("1", p1.getValue());

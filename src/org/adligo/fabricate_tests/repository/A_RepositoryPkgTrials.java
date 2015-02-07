@@ -28,10 +28,15 @@ public class A_RepositoryPkgTrials implements I_Tests4J_TrialList {
   @Override
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
+    trials.add(I_DependenciesManagerTrial.class);
+    trials.add(I_DependencyManagerTrial.class);
+    trials.add(I_LibraryResolverTrial.class);
+    trials.add(I_RepositoryFactoryTrial.class);
     trials.add(I_RepositoryPathBuilderTrial.class);
+    
     trials.add(DefaultRepositoryPathBuilderTrial.class);
     trials.add(DependencyManagerTrial.class);
-    
+    trials.add(LibraryResolverTrial.class);
     return trials;
   }
 

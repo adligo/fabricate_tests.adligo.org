@@ -6,6 +6,7 @@ import org.adligo.fabricate.models.dependencies.DependencyMutant;
 import org.adligo.fabricate.models.dependencies.I_Dependency;
 import org.adligo.fabricate.models.fabricate.FabricateMutant;
 import org.adligo.fabricate.models.fabricate.I_Fabricate;
+import org.adligo.fabricate.models.fabricate.I_FabricateXmlDiscovery;
 import org.adligo.fabricate.models.fabricate.I_JavaSettings;
 import org.adligo.fabricate.models.fabricate.JavaSettings;
 import org.adligo.fabricate.models.fabricate.JavaSettingsMutant;
@@ -48,7 +49,7 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
         new I_Thrower() {
           @Override
           public void run() throws Throwable {
-            new FabricateMutant((FabricateType) null);
+            new FabricateMutant(null, null);
           }
         }); 
     assertThrown(new ExpectedThrowable(NullPointerException.class),
@@ -68,6 +69,7 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     fm.setFabricateHome("fh");
     fm.setFabricateRepository("fr");
     
+    fm.setFabricateXmlRunDir("fabXmlDir");
     
     FabricateMutant copy = new FabricateMutant(fm);
     assertEquals("jh", copy.getJavaHome());
@@ -81,6 +83,9 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     fm.setJavaSettings(jsm);
     
     copy = new FabricateMutant(fm);
+    assertEquals("fabXmlDir", copy.getFabricateXmlRunDir());
+    assertNull(copy.getFabricateProjectRunDir());
+    assertNull(copy.getFabricateDevXmlDir());
     assertEquals("jh", copy.getJavaHome());
     assertEquals("fh", copy.getFabricateHome());
     assertEquals("fr", copy.getFabricateRepository());
@@ -134,7 +139,13 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     dms.add(null);
     
     fm.setDependencies(dms);
+    fm.setFabricateProjectRunDir("projectRunDir");
+    fm.setFabricateDevXmlDir("devXmlDir");
     copy = new FabricateMutant(fm);
+    assertEquals("fabXmlDir", copy.getFabricateXmlRunDir());
+    assertEquals("projectRunDir", copy.getFabricateProjectRunDir());
+    assertEquals("devXmlDir", copy.getFabricateDevXmlDir());
+    
     assertSame(dmA, copy.getDependencies().get(0));
     I_Dependency dtCopy = copy.getDependencies().get(1);
     assertEquals(DependencyMutant.class.getName(), dtCopy.getClass().getName());
@@ -158,19 +169,31 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     jt.setXmx("13m");
     ft.setJava(jt);
     
-    FabricateMutant fm = new FabricateMutant(ft);
+    I_FabricateXmlDiscovery fxml = mock(I_FabricateXmlDiscovery.class);
+    
+    
+    FabricateMutant fm = new FabricateMutant(ft, fxml);
     assertEquals(3, fm.getThreads());
     I_JavaSettings js = fm.getJavaSettings();
     assertEquals(3, js.getThreads());
     assertEquals("12m", js.getXms());
     assertEquals("13m", js.getXmx());
+    assertNull(fm.getFabricateDevXmlDir());
+    assertNull(fm.getFabricateProjectRunDir());
+    assertNull(fm.getFabricateXmlRunDir());
     
     FabricateDependencies fdeps = new FabricateDependencies();
     fdeps.getRemoteRepository().add("repoA");
     fdeps.getRemoteRepository().add("repoB");
     ft.setDependencies(fdeps);
+    when(fxml.getDevXmlDir()).thenReturn("devx");
+    when(fxml.getProjectXmlDir()).thenReturn("projx");
+    when(fxml.getFabricateXmlDir()).thenReturn("fabx");
     
-    fm = new FabricateMutant(ft);
+    fm = new FabricateMutant(ft, fxml);
+    assertEquals("devx", fm.getFabricateDevXmlDir());
+    assertEquals("projx", fm.getFabricateProjectRunDir());
+    assertEquals("fabx", fm.getFabricateXmlRunDir());
     
     List<String> repos = fm.getRemoteRepositories();
     assertEquals("repoA", repos.get(0));
@@ -182,7 +205,7 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     fdeps.getDependency().addAll(dts);
     
     
-    fm = new FabricateMutant(ft);
+    fm = new FabricateMutant(ft, fxml);
     assertEquals(3, fm.getThreads());
     js = fm.getJavaSettings();
     assertEquals(3, js.getThreads());

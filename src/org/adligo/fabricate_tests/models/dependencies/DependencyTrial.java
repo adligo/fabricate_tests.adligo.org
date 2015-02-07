@@ -14,6 +14,7 @@ import org.adligo.fabricate.xml.io_v1.library_v1_0.IdeType;
 import org.adligo.fabricate_tests.models.common.ParameterMutantTrial;
 import org.adligo.fabricate_tests.models.common.ParameterTrial;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
+import org.adligo.tests4j.shared.asserts.common.I_Asserts;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
@@ -25,6 +26,66 @@ import java.util.List;
 @SourceFileScope (sourceClass=Dependency.class, minCoverage=94.0)
 public class DependencyTrial extends MockitoSourceFileTrial {
 
+  @SuppressWarnings("boxing")
+  public static void assertDependencyConversion(I_Asserts asserts, List<I_Dependency> result) {
+    I_Dependency depA = result.get(0);
+    asserts.assertEquals("artifactA", depA.getArtifact());
+    asserts.assertFalse(depA.isExtract());
+    asserts.assertEquals("fileNameA", depA.getFileName());
+    asserts.assertEquals("groupA", depA.getGroup());
+    asserts.assertEquals("platformA", depA.getPlatform());
+    asserts.assertEquals("typeA", depA.getType());
+    asserts.assertEquals("versionA", depA.getVersion());
+    asserts.assertEquals(Dependency.class.getName(), depA.getClass().getName());
+    
+    I_Dependency depB = result.get(1);
+    asserts.assertEquals("artifactB", depB.getArtifact());
+    asserts.assertTrue(depB.isExtract());
+    asserts.assertEquals("fileNameB", depB.getFileName());
+    asserts.assertEquals("groupB", depB.getGroup());
+    asserts.assertEquals("platformB", depB.getPlatform());
+    asserts.assertEquals("typeB", depB.getType());
+    asserts.assertEquals("versionB", depB.getVersion());
+    asserts.assertEquals(Dependency.class.getName(), depB.getClass().getName());
+    
+    List<I_Ide> ides =  depA.getChildren();
+    I_Ide ide1 = ides.get(0);
+    asserts.assertEquals("ideA", ide1.getName());
+    asserts.assertEquals(Ide.class.getName(), ide1.getClass().getName());
+    
+    I_Ide ide2 = ides.get(1);
+    asserts.assertEquals("ideB", ide2.getName());
+    asserts.assertEquals(Ide.class.getName(), ide2.getClass().getName());
+    asserts.assertEquals(0, ide2.size());
+    
+    List<I_Parameter> out = ide1.getChildren();
+    ParameterTrial.assertConvertedParams(out, asserts);
+  }
+  
+  public static void assertDependencyConversionC(I_Asserts asserts, List<I_Dependency> result) {
+    I_Dependency dep = result.get(0);
+    asserts.assertEquals("artifactC", dep.getArtifact());
+    asserts.assertFalse(dep.isExtract());
+    asserts.assertEquals("fileNameC", dep.getFileName());
+    asserts.assertEquals("groupC", dep.getGroup());
+    asserts.assertEquals("platformC", dep.getPlatform());
+    asserts.assertEquals("typeC", dep.getType());
+    asserts.assertEquals("versionC", dep.getVersion());
+    asserts.assertEquals(Dependency.class.getName(), dep.getClass().getName());
+  }
+  
+  public static void assertDependencyConversionD(I_Asserts asserts, List<I_Dependency> result) {
+    I_Dependency dep = result.get(0);
+    asserts.assertEquals("artifactD", dep.getArtifact());
+    asserts.assertFalse(dep.isExtract());
+    asserts.assertEquals("fileNameD", dep.getFileName());
+    asserts.assertEquals("groupD", dep.getGroup());
+    asserts.assertEquals("platformD", dep.getPlatform());
+    asserts.assertEquals("typeD", dep.getType());
+    asserts.assertEquals("versionD", dep.getVersion());
+    asserts.assertEquals(Dependency.class.getName(), dep.getClass().getName());
+  }
+  
   @SuppressWarnings("boxing")
   @Test
   public void testConstructorCopy() {
@@ -118,7 +179,7 @@ public class DependencyTrial extends MockitoSourceFileTrial {
     I_Ide ide =  ides.get(0);
     assertEquals("ideA", ide.getName());
     
-    ParameterTrial.assertParams(ide.getChildren(), this);
+    ParameterTrial.assertConvertedParams(ide.getChildren(), this);
     
     dm.setExtract(true);
     inst = new Dependency(dm);
@@ -148,8 +209,6 @@ public class DependencyTrial extends MockitoSourceFileTrial {
     });
   }
   
-  
- 
   @SuppressWarnings("boxing")
   @Test
   public void testMethodCovertAndCreateDepTypeListAndDepType() {
@@ -187,7 +246,7 @@ public class DependencyTrial extends MockitoSourceFileTrial {
     assertEquals(0, ide2.size());
     
     List<I_Parameter> out = ide1.getChildren();
-    ParameterTrial.assertParams(out, this);
+    ParameterTrial.assertConvertedParams(out, this);
     
     out = ParameterMutant.convert((ParamsType) null);
     assertNotNull(out);

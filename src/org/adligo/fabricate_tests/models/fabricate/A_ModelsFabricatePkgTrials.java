@@ -30,6 +30,7 @@ public class A_ModelsFabricatePkgTrials implements I_Tests4J_TrialList {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
     trials.add(I_JavaSettingsTrial.class);
     trials.add(I_FabricateTrial.class);
+    trials.add(I_FabricateXmlDiscoveryTrial.class);
     
     trials.add(FabricateMutantTrial.class);
     trials.add(FabricateTrial.class);

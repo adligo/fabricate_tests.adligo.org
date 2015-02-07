@@ -65,6 +65,10 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getTheFollowingArtifact());
     asserter.assertConstant("The following Fabricate Home should have only these jars;", 
         messages.getTheFollowingFabricateHomeLibShouldHaveOnlyTheseJars());
+    asserter.assertConstant("The following Fabricate library can NOT be found;", 
+        messages.getTheFollowingFabricateLibraryCanNotBeFound());
+    asserter.assertConstant("The following list of Fabricate libraries contains a circular reference;", 
+        messages.getTheFollowingListOfFabricateLibrariesContainsACircularReference());
     asserter.assertConstant("The following local repository is locked by another process;", 
         messages.getTheFollowingLocalRepositoryIsLockedByAnotherProcess());
     asserter.assertConstant("The following remote repository appears to be down;", 

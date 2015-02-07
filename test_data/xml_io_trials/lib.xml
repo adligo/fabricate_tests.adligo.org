@@ -18,6 +18,5 @@
 	    	</tns:args>
     	</tns:ide>
     </tns:dependency>
-    <tns:project platform="plat">proj</tns:project>
    </tns:dependencies>
 </tns:library>
