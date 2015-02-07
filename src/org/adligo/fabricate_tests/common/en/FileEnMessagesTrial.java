@@ -19,6 +19,8 @@ public class FileEnMessagesTrial extends MockitoSourceFileTrial {
     asserter.assertConstant("Excludes: ", 
         messages.getExcludes());
 
+    asserter.assertConstant("Finished download of <X/>", 
+        messages.getFinisedDownloadFromX());
     asserter.assertConstant("Includes: ", 
         messages.getIncludes());
     asserter.assertConstant("File matching patterns may not be empty.", 
@@ -31,6 +33,8 @@ public class FileEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getSubmittingAHttpGetToTheFollowingUrlReturnedAnInvalidStatusCodeX());
     asserter.assertConstant("The following file;", 
         messages.getTheFollowingFile());
+    asserter.assertConstant("The following download is <X/> percent complete;", 
+        messages.getTheFollowingDownloadIsXPercentComplete());
     asserter.assertConstant("The wildcard character (*) is not allowed in the middle of a file matching pattern file name.", 
         messages.getTheWildCardCharacterIsNotAllowedInMiddleFileName());
     asserter.assertConstant("The wildcard character (*) is not allowed at the left or middle of a file matching pattern directory path.", 
@@ -42,6 +46,8 @@ public class FileEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getThereWasAProblemCreatingTheFollowingFile());
     asserter.assertConstant("There was a problem deleting the following file;", 
         messages.getThereWasAProblemDeletingTheFollowingFile());
+    asserter.assertConstant("Starting download from <X/>", 
+        messages.getStartingDownloadFromX());
     asserter.assertConstantsMatchMethods(FileEnMessages.class);
   }
 }

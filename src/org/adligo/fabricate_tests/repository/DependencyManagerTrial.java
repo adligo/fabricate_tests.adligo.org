@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-@SourceFileScope (sourceClass=DependencyManager.class, minCoverage=38.0)
+@SourceFileScope (sourceClass=DependencyManager.class, minCoverage=31.0)
 public class DependencyManagerTrial extends MockitoSourceFileTrial {
   DefaultRepositoryPathBuilder builder_ = new DefaultRepositoryPathBuilder("repo/","/");
   private I_FabSystem sysMock_;
@@ -31,6 +31,7 @@ public class DependencyManagerTrial extends MockitoSourceFileTrial {
   private MockMethod<Void> printlnMethod_;
   private MockMethod<Void> printTraceMethod_;
   
+  @SuppressWarnings("boxing")
   public void beforeTests() {
     sysMock_ = mock(I_FabSystem.class);
     when(sysMock_.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
@@ -38,6 +39,7 @@ public class DependencyManagerTrial extends MockitoSourceFileTrial {
     
     logMock_ = mock(I_FabLog.class);
     when(sysMock_.getLog()).thenReturn(logMock_);
+    when(logMock_.isLogEnabled(DependencyManager.class)).thenReturn(true);
     
     filesMock_ = mock(I_FabFileIO.class);
     when(sysMock_.getFileIO()).thenReturn(filesMock_);
@@ -106,10 +108,6 @@ public class DependencyManagerTrial extends MockitoSourceFileTrial {
     when(filesMock_.exists(any())).then(existsMethod);
     assertTrue(dm.manange(dep));
     
-    assertEquals("Starting download from the following url;" + System.lineSeparator() +
-        "http://example.com/group/artifact/321/artifact-321.jar.md5" + System.lineSeparator() +
-        "to the following folder;" + System.lineSeparator() + 
-        "C:\\foo\\group\\artifact-321.jar.md5",printlnMethod_.getArg(0));
     assertEquals("http://example.com/group/artifact/321/artifact-321.jar.md5", downloadFileMethod.getArgs(0)[0]);
     assertEquals("C:\\foo\\group\\artifact-321.jar.md5", 
         downloadFileMethod.getArgs(0)[1]);
@@ -123,14 +121,7 @@ public class DependencyManagerTrial extends MockitoSourceFileTrial {
     assertEquals("C:\\foo\\group\\artifact-321.jar.md5", 
         existsMethod.getArg(3));
     
-    assertEquals("The download from the following url;" + System.lineSeparator() +
-        "http://example.com/group/artifact/321/artifact-321.jar.md5" + System.lineSeparator() +
-        "finished.",printlnMethod_.getArg(1));
     
-    assertEquals("Starting download from the following url;" + System.lineSeparator() +
-        "http://example.com/group/artifact/321/artifact-321.jar" + System.lineSeparator() +
-        "to the following folder;" + System.lineSeparator() + 
-        "C:\\foo\\group\\artifact-321.jar",printlnMethod_.getArg(2));
     
     assertEquals("http://example.com/group/artifact/321/artifact-321.jar", downloadFileMethod.getArgs(1)[0]);
     assertEquals("C:\\foo\\group\\artifact-321.jar", downloadFileMethod.getArgs(1)[1]);
@@ -144,9 +135,6 @@ public class DependencyManagerTrial extends MockitoSourceFileTrial {
         existsMethod.getArg(4));
     assertEquals(5, existsMethod.count());
     
-    assertEquals("The download from the following url;" + System.lineSeparator() +
-        "http://example.com/group/artifact/321/artifact-321.jar" + System.lineSeparator() +
-        "finished.",printlnMethod_.getArg(3));
     
     assertEquals("C:\\foo\\group\\artifact-321.jar", calcMd5Method.getArg(0));
     assertEquals(1, calcMd5Method.count());
@@ -155,7 +143,7 @@ public class DependencyManagerTrial extends MockitoSourceFileTrial {
     
     assertEquals("The following artifact;" + System.lineSeparator() +
         "C:\\foo\\group\\artifact-321.jar" + System.lineSeparator() + 
-        "passed the md5 check.",printlnMethod_.getArg(4));
+        "passed the md5 check." + System.lineSeparator(), printlnMethod_.getArg(0) );
     
   }
   
