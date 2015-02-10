@@ -3,7 +3,6 @@ package org.adligo.fabricate_tests.common.files;
 import org.adligo.fabricate.common.files.FabFileIO;
 import org.adligo.fabricate.common.files.FabFileUtils;
 import org.adligo.fabricate.common.system.I_FabSystem;
-import org.adligo.tests4j.run.common.FileUtils;
 import org.adligo.tests4j.shared.asserts.reference.CircularDependencies;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
@@ -11,8 +10,8 @@ import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
 import java.io.File;
 
-@SourceFileScope (sourceClass=FileUtils.class,
-  minCoverage=90.0,allowedCircularDependencies=CircularDependencies.AllowInnerOuterClasses)
+@SourceFileScope (sourceClass=FabFileUtils.class,
+  minCoverage=82.0,allowedCircularDependencies=CircularDependencies.AllowInnerOuterClasses)
 public class FabFileUtilsTrial extends MockitoSourceFileTrial {
 
   @Test

@@ -1,5 +1,6 @@
 package org.adligo.fabricate_tests.models.fabricate;
 
+import org.adligo.fabricate.common.system.FabricateDefaults;
 import org.adligo.fabricate.models.dependencies.Dependency;
 import org.adligo.fabricate.models.dependencies.DependencyMutant;
 import org.adligo.fabricate.models.dependencies.I_Dependency;
@@ -17,7 +18,7 @@ import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 import java.util.ArrayList;
 import java.util.List;
 
-@SourceFileScope (sourceClass=Fabricate.class, minCoverage=92.0)
+@SourceFileScope (sourceClass=Fabricate.class, minCoverage=90.0)
 public class FabricateTrial extends MockitoSourceFileTrial {
 
   
@@ -31,14 +32,6 @@ public class FabricateTrial extends MockitoSourceFileTrial {
             new Fabricate( null);
           }
         }); 
-    assertThrown(new ExpectedThrowable(NullPointerException.class),
-        new I_Thrower() {
-          @Override
-          public void run() throws Throwable {
-            FabricateMutant fm = new FabricateMutant();
-            new Fabricate(fm);
-          }
-        }); 
   }
   
   @SuppressWarnings("boxing")
@@ -49,6 +42,10 @@ public class FabricateTrial extends MockitoSourceFileTrial {
     fm.setFabricateHome("fh");
     fm.setFabricateRepository("fr");
     fm.setFabricateXmlRunDir("fabXmlDir");
+    Fabricate copy = new Fabricate(fm);
+    assertEquals(FabricateDefaults.JAVA_THREADS, copy.getThreads());
+    assertEquals(FabricateDefaults.JAVA_XMS_DEFAULT, copy.getXms());
+    assertEquals(FabricateDefaults.JAVA_XMX_DEFAULT, copy.getXmx());
     
     JavaSettingsMutant jsm = new JavaSettingsMutant();
     jsm.setThreads(1);
@@ -56,7 +53,7 @@ public class FabricateTrial extends MockitoSourceFileTrial {
     jsm.setXmx("130m");
     fm.setJavaSettings(jsm);
     
-    Fabricate copy = new Fabricate(fm);
+    copy = new Fabricate(fm);
     assertEquals("fabXmlDir", copy.getFabricateXmlRunDir());
     assertNull(copy.getFabricateProjectRunDir());
     assertNull(copy.getFabricateDevXmlDir());

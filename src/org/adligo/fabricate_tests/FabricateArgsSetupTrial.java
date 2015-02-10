@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@SourceFileScope (sourceClass=FabricateArgsSetup.class, minCoverage=4.0)
+@SourceFileScope (sourceClass=FabricateArgsSetup.class, minCoverage=89.0)
 public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
   private ByteArrayOutputStream baos_;
   private FabSystem sysMock_;
@@ -43,6 +43,9 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
   }
   
   public void beforeTests() {
+    if (javaCallsMock_ == null) {
+      javaCallsMock_ = mock(JavaCalls.class);
+    }
     sysMock_ = mock(FabSystem.class);
     
     when(sysMock_.lineSeperator()).thenReturn("\n");
@@ -52,7 +55,8 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     xmlIoMock_ = mock(I_FabXmlFileIO.class);
     when(sysMock_.getFileIO()).thenReturn(fileMock_);
     when(sysMock_.getXmlFileIO()).thenReturn(xmlIoMock_);
-    javaCallsMock_ = mock(JavaCalls.class);
+    
+    reset(javaCallsMock_);
     FabricateArgsSetup.setJAVA_CALLS(javaCallsMock_);
     assertSame(javaCallsMock_, FabricateArgsSetup.getJAVA_CALLS());
     I_FabLog log = new FabLog(Collections.emptyMap(), false);
@@ -500,12 +504,12 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("boxing")
   @Test
-  public void testConstructorArgsPrintOpts() throws Exception {
+  public void testConstructorArgsPrintArgs() throws Exception {
     MockMethod<Void> setLogMock_ = new MockMethod<Void>();
     doAnswer(setLogMock_).when(sysMock_).setLog(any());
     
-    when(sysMock_.getenv(FabricateEnvironment.JAVA_HOME)).thenReturn("someHome");
-    when(javaCallsMock_.getJavaVersion(eq("someHome"), any())).thenReturn("1.7.0_03");
+    when(sysMock_.getenv(FabricateEnvironment.JAVA_HOME)).thenReturn("someHome1.7.0_03");
+    when(javaCallsMock_.getJavaVersion(any(), any())).thenReturn("1.7.0_03");
     when(javaCallsMock_.getJavaMajorVersion("1.7.0_03")).thenReturn(1.7);
     when(sysMock_.getenv(FabricateEnvironment.FABRICATE_HOME)).thenReturn("fabHome");
     String [] nada = new String[]{"-rd"};

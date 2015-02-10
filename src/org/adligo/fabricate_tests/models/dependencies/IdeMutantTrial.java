@@ -16,7 +16,7 @@ import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 import java.util.ArrayList;
 import java.util.List;
 
-@SourceFileScope (sourceClass=IdeMutant.class, minCoverage=80.0)
+@SourceFileScope (sourceClass=IdeMutant.class, minCoverage=66.0)
 public class IdeMutantTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("unused")

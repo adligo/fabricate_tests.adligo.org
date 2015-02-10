@@ -28,10 +28,16 @@ public class A_ModelsCommonPkgTrials implements I_Tests4J_TrialList {
   @Override
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
+    trials.add(I_FabricationRoutineTrial.class);
     trials.add(I_ParameterTrial.class);
+    trials.add(I_RoutineBriefTrial.class);
     
     trials.add(ParameterMutantTrial.class);
     trials.add(ParameterTrial.class);
+    
+    trials.add(RoutineBriefMutantTrial.class);
+    trials.add(RoutineBriefOriginTrial.class);
+    trials.add(RoutineBriefTrial.class);
     return trials;
   }
 

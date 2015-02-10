@@ -14,6 +14,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     I18N_Asserter asserter = new I18N_Asserter(this);
     
     SystemEnMessages messages = SystemEnMessages.INSTANCE;
+    asserter.assertConstant("Building Fabricate runtime class path.", 
+        messages.getBuildingFabricateRuntimeClassPath());
     asserter.assertConstant("Checking Fabricate runtime dependencies.", 
         messages.getCheckingFabricateRuntimeDependencies());
     asserter.assertConstant("Compiled on <X/>.", 
@@ -36,6 +38,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getExceptionNoFabricateXmlOrProjectXmlFound());
     asserter.assertConstant("Exception: No $JAVA_HOME environment variable set.", 
         messages.getExceptionNoJavaHomeSet());
+    asserter.assertConstant("Exception: No start time argument.", 
+        messages.getExceptionNoStartTimeArg());
     asserter.assertConstant("Extracting the following artifact;", 
         messages.getExtractingTheFollowingArtifact());
     asserter.assertConstant("Extraction of the following artifact;", 
@@ -43,6 +47,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     
     asserter.assertConstant("Fabricate by Adligo.", 
         messages.getFabricateByAdligo());
+    asserter.assertConstant("Fabricating...", 
+        messages.getFabricating());
     asserter.assertConstant("Fabrication failed!", 
         messages.getFabricationFailed());
     asserter.assertConstant("failed!", 
@@ -50,17 +56,25 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     asserter.assertConstant("finished.", 
         messages.getFinished());
     
+    asserter.assertConstant("Managing the following local repository;", 
+        messages.getManagingTheFollowingLocalRepository());
+    asserter.assertConstant("Managing Fabricate runtime class path dependencies.", 
+        messages.getManagingFabricateRuntimeClassPathDependencies());
     asserter.assertConstant("No remote repositories could be reached.", 
         messages.getNoRemoteRepositoriesCouldBeReached());
     asserter.assertConstant("passed the extract check.", 
         messages.getPassedTheExtractCheck());
     asserter.assertConstant("passed the md5 check.", 
         messages.getPassedTheMd5Check());
+
+    asserter.assertConstant("Sending opts to script.", 
+        messages.getSendingOptsToScript());
+    asserter.assertConstant("Starting download from the following url;", 
+        messages.getStartingDownloadFromTheFollowingUrl());
     
     asserter.assertConstant("The download from the following url;", 
         messages.getTheDownloadFromTheFollowingUrl());
-    asserter.assertConstant("Starting download from the following url;", 
-        messages.getStartingDownloadFromTheFollowingUrl());
+
     asserter.assertConstant("The following artifact;", 
         messages.getTheFollowingArtifact());
     asserter.assertConstant("The following Fabricate Home should have only these jars;", 
@@ -76,6 +90,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     
     asserter.assertConstant("to the following folder;", 
         messages.getToTheFollowingFolder());
+    asserter.assertConstant("Using the following remote repositories;", 
+        messages.getUsingTheFollowingRemoteRepositories());
     asserter.assertConstant("Version <X/>.", 
         messages.getVersionX());
     asserter.assertConstantsMatchMethods(SystemEnMessages.class);

@@ -1,6 +1,9 @@
 package org.adligo.fabricate_tests.models.fabricate;
 
 import org.adligo.fabricate_tests.etc.FabTestParamsFactory;
+import org.adligo.fabricate_tests.models.common.I_RoutineBriefTrial;
+import org.adligo.fabricate_tests.models.common.RoutineBriefMutantTrial;
+import org.adligo.fabricate_tests.models.common.RoutineBriefOriginTrial;
 import org.adligo.tests4j.run.api.Tests4J;
 import org.adligo.tests4j.system.shared.api.I_Tests4J_TrialList;
 import org.adligo.tests4j.system.shared.api.Tests4J_Params;
@@ -32,11 +35,15 @@ public class A_ModelsFabricatePkgTrials implements I_Tests4J_TrialList {
     trials.add(I_FabricateTrial.class);
     trials.add(I_FabricateXmlDiscoveryTrial.class);
     
+    
     trials.add(FabricateMutantTrial.class);
     trials.add(FabricateTrial.class);
     
+    
     trials.add(JavaSettingsMutantTrial.class);
     trials.add(JavaSettingsTrial.class);
+    
+    
     return trials;
   }
 

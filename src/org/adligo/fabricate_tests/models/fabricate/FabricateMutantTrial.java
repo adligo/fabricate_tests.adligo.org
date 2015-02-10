@@ -24,7 +24,7 @@ import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 import java.util.ArrayList;
 import java.util.List;
 
-@SourceFileScope (sourceClass=FabricateMutant.class, minCoverage=98.0)
+@SourceFileScope (sourceClass=FabricateMutant.class, minCoverage=95.0)
 public class FabricateMutantTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("boxing")
@@ -38,6 +38,8 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     assertNull(fm.getJavaSettings());
     assertNull(fm.getJavaSettings());
     assertEquals(FabricateDefaults.JAVA_THREADS, fm.getThreads());
+    assertEquals(FabricateDefaults.JAVA_XMS_DEFAULT, fm.getXms());
+    assertEquals(FabricateDefaults.JAVA_XMX_DEFAULT, fm.getXmx());
     List<I_Dependency> deps = fm.getDependencies();
     assertEquals(0, deps.size());
   }

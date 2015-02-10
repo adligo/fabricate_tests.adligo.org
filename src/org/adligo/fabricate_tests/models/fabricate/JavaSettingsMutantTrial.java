@@ -11,7 +11,7 @@ import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
-@SourceFileScope (sourceClass=JavaSettingsMutant.class, minCoverage=97.0)
+@SourceFileScope (sourceClass=JavaSettingsMutant.class, minCoverage=92.0)
 public class JavaSettingsMutantTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("boxing")
@@ -51,6 +51,11 @@ public class JavaSettingsMutantTrial extends MockitoSourceFileTrial {
     assertEquals("12m", js.getXms());
     assertEquals("13m", js.getXmx());
     assertEquals(3, js.getThreads());
+    
+    js = new JavaSettingsMutant(new JavaSettingsMutant());
+    assertEquals(FabricateDefaults.JAVA_XMS_DEFAULT, js.getXms());
+    assertEquals(FabricateDefaults.JAVA_XMX_DEFAULT, js.getXmx());
+    assertEquals(FabricateDefaults.JAVA_THREADS, js.getThreads());
   }
   
   @SuppressWarnings("boxing")
@@ -60,6 +65,7 @@ public class JavaSettingsMutantTrial extends MockitoSourceFileTrial {
     jt.setThreads(3);
     jt.setXms("12m");
     jt.setXmx("13m");
+    
     assertEquals(3, jt.getThreads());
     assertEquals("12m", jt.getXms());
     assertEquals("13m", jt.getXmx());
