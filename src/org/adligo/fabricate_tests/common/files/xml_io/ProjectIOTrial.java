@@ -4,14 +4,13 @@ import org.adligo.fabricate.common.files.xml_io.FabXmlFileIO;
 import org.adligo.fabricate.common.files.xml_io.ProjectIO;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamType;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamsType;
+import org.adligo.fabricate.xml.io_v1.common_v1_0.RoutineParamsParentType;
+import org.adligo.fabricate.xml.io_v1.common_v1_0.RoutineParamsType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.DependencyType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.IdeType;
 import org.adligo.fabricate.xml.io_v1.project_v1_0.FabricateProjectType;
-import org.adligo.fabricate.xml.io_v1.project_v1_0.ProjectCommandType;
 import org.adligo.fabricate.xml.io_v1.project_v1_0.ProjectDependenciesType;
-import org.adligo.fabricate.xml.io_v1.project_v1_0.ProjectStageType;
 import org.adligo.fabricate.xml.io_v1.project_v1_0.ProjectStagesType;
-import org.adligo.fabricate.xml.io_v1.project_v1_0.ProjectTaskType;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.shared.asserts.common.MatchType;
@@ -47,12 +46,14 @@ public class ProjectIOTrial extends MockitoSourceFileTrial {
     assertEquals("c2eValNested", attribute.getValue());
     assertEquals(1, attributesList.size());
     
-    List<ProjectCommandType> commands = project.getCommand();
-    ProjectCommandType command = commands.get(0);
+    List<RoutineParamsParentType> commands = project.getCommand();
+    RoutineParamsParentType command = commands.get(0);
     assertNotNull(command);
     assertEquals("classpath2eclipse",command.getName());
     
-    List<ParamType> params = command.getParam();
+    ParamsType paramsType = command.getParams();
+    
+    List<ParamType> params = paramsType.getParam();
     ParamType param = params.get(0);
     assertNotNull(param);
     assertEquals("c2eKey",param.getKey());
@@ -69,14 +70,14 @@ public class ProjectIOTrial extends MockitoSourceFileTrial {
     assertEquals(1, commands.size());
     
     ProjectStagesType stages = project.getStages();
-    List<ProjectStageType> stageList = stages.getStage();
-    ProjectStageType stage = stageList.get(0);
+    List<RoutineParamsParentType> stageList = stages.getStage();
+    RoutineParamsParentType stage = stageList.get(0);
     
     assertNotNull(stage);
     assertEquals("setup", stage.getName());
     
-    ParamsType paramsType = stage.getParams();
-    params =  paramsType.getParam();
+    paramsType = stage.getParams();
+    params = paramsType.getParam();
     param = params.get(0);
     assertEquals("setupParam", param.getKey());
     assertEquals("setupParamValue", param.getValue());
@@ -88,8 +89,8 @@ public class ProjectIOTrial extends MockitoSourceFileTrial {
     assertEquals("nestedSetupParamValue", param.getValue());
     assertEquals(1, params.size());
     
-    List<ProjectTaskType> tasks = stage.getTask();
-    ProjectTaskType task = tasks.get(0);
+    List<RoutineParamsType> tasks = stage.getTask();
+    RoutineParamsType task = tasks.get(0);
     assertEquals("setupTask" ,task.getName());
     
     ParamsType taskParams = task.getParams();

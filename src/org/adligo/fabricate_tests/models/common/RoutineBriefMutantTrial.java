@@ -10,9 +10,8 @@ import org.adligo.fabricate.routines.DependenciesQueueRoutine;
 import org.adligo.fabricate.routines.ProjectBriefQueueRoutine;
 import org.adligo.fabricate.routines.ProjectQueueRoutine;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamsType;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.CommandType;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.OptionalRoutineType;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.RoutineType;
+import org.adligo.fabricate.xml.io_v1.common_v1_0.RoutineParentType;
+import org.adligo.fabricate.xml.io_v1.common_v1_0.RoutineType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.StageType;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
@@ -25,18 +24,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@SourceFileScope (sourceClass=RoutineBriefMutant.class, minCoverage=88.0)
+@SourceFileScope (sourceClass=RoutineBriefMutant.class, minCoverage=80.0)
 public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
 
   @Test
-  public void testConstructorCopyCommand() {
-    CommandType brief = mock(CommandType.class);
+  public void testConstructorCopyCommand() throws Exception {
+    RoutineParentType brief = mock(RoutineParentType.class);
     when(brief.getClazz()).thenReturn(ProjectBriefQueueRoutine.class.getName());
     when(brief.getName()).thenReturn("go");
     when(brief.getTask()).thenReturn(null);
     when(brief.getParams()).thenReturn(null);
     
-    RoutineBriefMutant copy  = new RoutineBriefMutant(brief);
+    RoutineBriefMutant copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.COMMAND);
     assertEquals(ProjectBriefQueueRoutine.class.getName(), copy.getClazz().getName());
     assertEquals("go", copy.getName());
     assertFalse(copy.isOptional());
@@ -47,8 +46,8 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
   }
   
   @Test
-  public void testConstructorCopyCommandTasksAndParams() {
-    CommandType brief = new CommandType();
+  public void testConstructorCopyCommandTasksAndParams() throws Exception {
+    RoutineParentType brief = new RoutineParentType();
     brief.setClazz(ProjectBriefQueueRoutine.class.getName());
     brief.setName("go");
     
@@ -70,7 +69,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     params = ParameterMutantTrial.createParams();
     brief.setParams(params);
     
-    RoutineBriefMutant copy  = new RoutineBriefMutant(brief);
+    RoutineBriefMutant copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.COMMAND);
     assertEquals(ProjectBriefQueueRoutine.class.getName(), copy.getClazz().getName());
     assertEquals("go", copy.getName());
     assertFalse(copy.isOptional());
@@ -195,7 +194,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
   }
 
   @Test
-  public void testConstructorCopyStage() {
+  public void testConstructorCopyStage() throws Exception {
     StageType brief = mock(StageType.class);
     
     when(brief.getClazz()).thenReturn(ProjectBriefQueueRoutine.class.getName());
@@ -235,30 +234,28 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("boxing")
   @Test
-  public void testConstructorCopyStageParamsAndTask() {
+  public void testConstructorCopyStageParamsAndTask() throws Exception {
     StageType brief = mock(StageType.class);
     
     when(brief.getClazz()).thenReturn(ProjectBriefQueueRoutine.class.getName());
     when(brief.getName()).thenReturn("go");
     
-    List<OptionalRoutineType> routines = new ArrayList<OptionalRoutineType>();
+    List<RoutineType> routines = new ArrayList<RoutineType>();
     when(brief.getTask()).thenReturn(routines);
     when(brief.getParams()).thenReturn(ParameterMutantTrial.createParams());
     when(brief.isOptional()).thenReturn(true);
     
-    OptionalRoutineType briefTaskA = mock(OptionalRoutineType.class);
+    RoutineType briefTaskA = mock(RoutineType.class);
     
     when(briefTaskA.getClazz()).thenReturn(ProjectQueueRoutine.class.getName());
     when(briefTaskA.getName()).thenReturn("goA");
     when(briefTaskA.getParams()).thenReturn(ParameterMutantTrial.createParams());
-    when(briefTaskA.isOptional()).thenReturn(true);
     
-    OptionalRoutineType briefTaskB = mock(OptionalRoutineType.class);
+    RoutineType briefTaskB = mock(RoutineType.class);
     
     when(briefTaskB.getClazz()).thenReturn(DependenciesQueueRoutine.class.getName());
     when(briefTaskB.getName()).thenReturn("goB");
     when(briefTaskB.getParams()).thenReturn(ParameterMutantTrial.createParams());
-    when(briefTaskB.isOptional()).thenReturn(true);
     
     routines.add(briefTaskA);
     routines.add(briefTaskB);
@@ -277,44 +274,29 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertEquals("goA", copySubA.getName());
     assertEquals(RoutineBriefOrigin.STAGE_TASK, copySubA.getOrigin());
     ParameterMutantTrial.assertConvertedParams(copySubA.getParameters(), this);
-    assertTrue(copySubA.isOptional());
+    assertFalse(copySubA.isOptional());
     
     RoutineBriefMutant copySubB  = (RoutineBriefMutant) briefs.get(1);
     assertEquals(DependenciesQueueRoutine.class.getName(), copySubB.getClazz().getName());
     assertEquals("goB", copySubB.getName());
     assertEquals(RoutineBriefOrigin.STAGE_TASK, copySubB.getOrigin());
     ParameterMutantTrial.assertConvertedParams(copySubB.getParameters(), this);
-    assertTrue(copySubB.isOptional());
+    assertFalse(copySubB.isOptional());
   }
   
   @SuppressWarnings("unused")
   @Test
-  public void testConstructorExceptions() {
+  public void testConstructorExceptions() throws Exception {
+
     assertThrown(new ExpectedThrowable(new IllegalArgumentException("name")),
         new I_Thrower() {
           
           @Override
           public void run() throws Throwable {
-            new RoutineBriefMutant(null, null, null);
+            new RoutineBriefMutant(null, null, RoutineBriefOrigin.COMMAND);
           }
         });
-    assertThrown(new ExpectedThrowable(new IllegalArgumentException("name")),
-        new I_Thrower() {
-          
-          @Override
-          public void run() throws Throwable {
-            new RoutineBriefMutant("", null, null);
-          }
-        });
-    assertThrown(new ExpectedThrowable(new IllegalArgumentException("className")),
-        new I_Thrower() {
-          
-          @Override
-          public void run() throws Throwable {
-            new RoutineBriefMutant("dn", null, null);
-          }
-        });
-    assertThrown(new ExpectedThrowable(new IllegalArgumentException("className")),
+    assertThrown(new ExpectedThrowable(new IllegalArgumentException("origin")),
         new I_Thrower() {
           
           @Override
@@ -322,12 +304,12 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
             new RoutineBriefMutant("dn", "", null);
           }
         });
-    assertThrown(new ExpectedThrowable(new IllegalArgumentException("cn")),
+    assertThrown(new ExpectedThrowable(new ClassNotFoundException("cn")),
         new I_Thrower() {
           
           @Override
           public void run() throws Throwable {
-            new RoutineBriefMutant("dn", "cn", null);
+            new RoutineBriefMutant("dn", "cn", RoutineBriefOrigin.COMMAND);
           }
         });
     assertThrown(new ExpectedThrowable(new IllegalArgumentException("origin")),
@@ -344,7 +326,8 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
           
           @Override
           public void run() throws Throwable {
-            new RoutineBriefMutant(new CommandType());
+            new RoutineBriefMutant(new RoutineParentType(),
+                RoutineBriefOrigin.PROJECT_COMMAND);
           }
         });
     assertThrown(new ExpectedThrowable(new IllegalArgumentException("name")),

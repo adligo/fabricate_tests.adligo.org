@@ -9,24 +9,26 @@
     	</cns:param>
     </pns:attributes>
     <pns:command name="classpath2eclipse">
-    	<pns:param key="c2eKey" value="c2eVal">
-    		<cns:param key="c2eKeyNested" value="c2eValNested"/>
-    	</pns:param>
+    	<cns:params>
+	    	<cns:param key="c2eKey" value="c2eVal">
+	    		<cns:param key="c2eKeyNested" value="c2eValNested"/>
+	    	</cns:param>
+    	</cns:params>
     </pns:command>
     <pns:stages>
         <pns:stage name="setup" >
-        	<pns:params>
+        	<cns:params>
 	        	<cns:param key="setupParam" value="setupParamValue">
 	   	    	       <cns:param key="nestedSetupParam" value="nestedSetupParamValue"/>
 	   	    	</cns:param>
-   	    	</pns:params>
-   	    	<pns:task name="setupTask">
-   	    		<pns:params>
+   	    	</cns:params>
+   	    	<cns:task name="setupTask">
+   	    		<cns:params>
 	   	    	    <cns:param key="Default-Vendor" value="Adligo Inc">
 	   	    	       <cns:param key="nestKey" value="nestVal"/>
 	   	    	    </cns:param>
-   	    	    </pns:params>
-   	    	</pns:task>
+   	    	    </cns:params>
+   	    	</cns:task>
         </pns:stage>
     </pns:stages>
     <pns:dependencies>

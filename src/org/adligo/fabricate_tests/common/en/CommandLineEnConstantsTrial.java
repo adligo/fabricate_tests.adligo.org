@@ -1,7 +1,6 @@
 package org.adligo.fabricate_tests.common.en;
 
 import org.adligo.fabricate.common.en.CommandLineEnConstants;
-import org.adligo.fabricate.common.en.SystemEnMessages;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
@@ -21,6 +20,7 @@ public class CommandLineEnConstantsTrial extends MockitoSourceFileTrial {
     assertEquals("--log-verbosely", messages.getLog(false));
     assertEquals("-r", messages.getRebuildDependents(true));
     assertEquals("--rebuild-dependents", messages.getRebuildDependents(false));
+    assertEquals("stages", messages.getStages());
     assertEquals("-u", messages.getUpdate(true));
     assertEquals("--update", messages.getUpdate(false));
     assertEquals("-v", messages.getVersion(true));

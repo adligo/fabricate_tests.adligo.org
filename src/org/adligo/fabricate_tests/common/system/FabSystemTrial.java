@@ -14,11 +14,13 @@ import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
-@SourceFileScope (sourceClass=FabSystem.class, minCoverage=71.0)
+@SourceFileScope (sourceClass=FabSystem.class, minCoverage=80.0)
 public class FabSystemTrial extends MockitoSourceFileTrial {
 
+  @SuppressWarnings("boxing")
   @Test
   public void testMethodsGetsAndSets() throws Exception {
     FabSystem fabSystem = new FabSystem();
@@ -28,15 +30,27 @@ public class FabSystemTrial extends MockitoSourceFileTrial {
     assertNotSame(log, fabSystem.getLog());
     assertSame(log, ((DeferredLog) fabSystem.getLog()).getDelegate());
     
+    fabSystem.setArgs(Collections.singletonMap("k",null));
+    assertEquals(" k", fabSystem.toScriptArgs());
+    assertNull(fabSystem.getArgValues("k"));
+    
     fabSystem.setArgs(Collections.singletonMap("k", "v"));
     assertEquals("v", fabSystem.getArgValue("k"));
     assertNull(fabSystem.getArgValue("v"));
     assertTrue(fabSystem.hasArg("k"));
     assertFalse(fabSystem.hasArg("v"));
+    List<String> vals = fabSystem.getArgValues("k");
+    assertContains(vals, "v");
+    assertEquals(1, vals.size());
     assertEquals(" k=v", fabSystem.toScriptArgs());
     
-    fabSystem.setArgs(Collections.singletonMap("k",null));
-    assertEquals(" k", fabSystem.toScriptArgs());
+    fabSystem.setArgs(Collections.singletonMap("k2", "v1,v2,v3"));
+    vals = fabSystem.getArgValues("k2");
+    assertContains(vals, "v1");
+    assertContains(vals, "v2");
+    assertContains(vals, "v3");
+    assertEquals(3, vals.size());
+    assertEquals(" k2=v1,v2,v3", fabSystem.toScriptArgs());
   }
   
   @Test

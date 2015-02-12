@@ -24,7 +24,7 @@ import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 import java.util.ArrayList;
 import java.util.List;
 
-@SourceFileScope (sourceClass=FabricateMutant.class, minCoverage=95.0)
+@SourceFileScope (sourceClass=FabricateMutant.class, minCoverage=70.0)
 public class FabricateMutantTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("boxing")

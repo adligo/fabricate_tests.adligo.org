@@ -22,7 +22,7 @@
 	    	</lns:ide>
 	    </fns:dependency>
     </fns:dependencies>
-    <fns:trait name="prepare" class="com.example.DefaultPrepare">
+    <fns:trait name="  "  class="com.example.DefaultPrepare" >
     	<cns:params>
    	    	<cns:param key="prepareParam" value="prepareParamValue">
    	    	       <cns:param key="nestedPrepareParam" value="nestedPrepareParamValue"/>

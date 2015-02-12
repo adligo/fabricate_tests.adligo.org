@@ -4,12 +4,12 @@ import org.adligo.fabricate.common.files.xml_io.FabXmlFileIO;
 import org.adligo.fabricate.common.files.xml_io.FabricateIO;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamType;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamsType;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.CommandType;
+import org.adligo.fabricate.xml.io_v1.common_v1_0.RoutineParentType;
+import org.adligo.fabricate.xml.io_v1.common_v1_0.RoutineType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateDependencies;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.GitServerType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.JavaType;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.OptionalRoutineType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.ProjectGroupType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.ProjectGroupsType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.ProjectType;
@@ -18,10 +18,10 @@ import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.ScmType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.StageType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.StagesAndProjectsType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.StagesType;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.TraitType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.DependencyType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.IdeType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.LibraryReferenceType;
+import org.adligo.tests4j.run.common.FileUtils;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.shared.asserts.common.MatchType;
@@ -29,6 +29,7 @@ import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
@@ -63,8 +64,8 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
     assertDependency(dep);
     assertEquals(1, depList.size());
     
-    List<TraitType> traits =  fab.getTrait();
-    TraitType trait = traits.get(0);
+    List<RoutineParentType> traits =  fab.getTrait();
+    RoutineParentType trait = traits.get(0);
     assertEquals("prepare", trait.getName());
     assertEquals("com.example.DefaultPrepare", trait.getClazz());
     
@@ -85,8 +86,8 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
     
     assertEquals(1, traits.size());
     
-    List<CommandType> commands = fab.getCommand();
-    CommandType command = commands.get(0);
+    List<RoutineParentType> commands = fab.getCommand();
+    RoutineParentType command = commands.get(0);
     assertNotNull(command);
     assertEquals("com.example.Classpath2Eclipse",command.getClazz());
     assertEquals("classpath2eclipse",command.getName());
@@ -131,11 +132,10 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
     assertEquals("nestedBuildParamValue", param.getValue());
     assertEquals(1, paramsList.size());
     
-    List<OptionalRoutineType> tasks = stage.getTask();
-    OptionalRoutineType task = tasks.get(0);
+    List<RoutineType> tasks = stage.getTask();
+    RoutineType task = tasks.get(0);
     assertEquals("buildTask" ,task.getName());
     assertEquals("foo", task.getClazz());
-    assertTrue(task.isOptional());
     
     ParamsType taskParams = task.getParams();
     paramsList = taskParams.getParam();
@@ -235,7 +235,7 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
   }
   
   @Test
-  public void testMethod_parse_v1_0_bad_file() {
+  public void testMethod_parse_v1_0_bad_file_path() {
     String osName = System.getProperty("os.name");
     String badFile = "X:/foo.xml";
     if (osName.startsWith("Windows")) {
@@ -253,4 +253,41 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
     });
   }
   
+  @Test
+  public void testMethod_parse_v1_0_bad_file_missing_trait_name() {
+    final String fileName = FileUtils.getRunDir() + "test_data" +
+        File.separator + "xml_io_trials" + 
+        File.separator + "malformed_fabricate" + File.separator;
+    final FabXmlFileIO io = new FabXmlFileIO();
+    String message = "fabricateMissingTraitName.xml; lineNumber: 25; columnNumber: 52; "
+        + "cvc-complex-type.4: Attribute 'name' must appear on element 'fns:trait'.";
+    assertThrown(new ExpectedThrowable(new IOException(message), MatchType.CONTAINS,
+        new ExpectedThrowable(UnmarshalException.class, MatchType.ANY)), new I_Thrower() {
+      
+      @Override
+      public void run() throws Throwable {
+        String file = fileName + "fabricateMissingTraitName.xml";
+        io.parseFabricate_v1_0(file);
+      }
+    });
+  }
+  
+  @Test
+  public void testMethod_parse_v1_0_bad_file_missing_trait_class() {
+    final String fileName = FileUtils.getRunDir() + "test_data" +
+        File.separator + "xml_io_trials" + 
+        File.separator + "malformed_fabricate" + File.separator;
+    final FabXmlFileIO io = new FabXmlFileIO();
+    String message = "lineNumber: 25; columnNumber: 32; cvc-complex-type.4: "
+        + "Attribute 'class' must appear on element 'fns:trait'.";
+    assertThrown(new ExpectedThrowable(new IOException(message), MatchType.CONTAINS,
+        new ExpectedThrowable(UnmarshalException.class, MatchType.ANY)), new I_Thrower() {
+      
+      @Override
+      public void run() throws Throwable {
+        String file = fileName + "fabricateMissingTraitClass.xml";
+        io.parseFabricate_v1_0(file);
+      }
+    });
+  }
 }

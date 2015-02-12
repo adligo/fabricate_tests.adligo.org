@@ -6,7 +6,6 @@ import org.adligo.fabricate.common.files.I_FabFilesSystem;
 import org.adligo.fabricate.common.files.PatternFileMatcher;
 import org.adligo.fabricate.common.log.I_FabLog;
 import org.adligo.fabricate.common.system.FabSystem;
-import org.adligo.fabricate.common.system.I_FabSystem;
 import org.adligo.tests4j.run.common.FileUtils;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
@@ -41,6 +40,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.Semaphore;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -176,7 +176,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   } 
   
   @SuppressWarnings("boxing")
-  @Test
+  @Test (timeout=3000)
   public void testMethodCheckExceptions() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
@@ -335,6 +335,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
     assertNotNull(closeException);
     assertEquals("ioe", closeException.getMessage());
   }
+  
   @Test
   public void testMethodCreateExceptions() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
@@ -347,7 +348,6 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
       badFile = "C:\\somewhere\\somefile";
     }
     String badFileName = badFile;
-    /*
     FabFileIO fabFiles = new FabFileIO(sysMock);
     assertThrown(new ExpectedThrowable(new IOException(
         "There was a problem creating the following file;" + System.lineSeparator() +
@@ -358,10 +358,8 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
             fabFiles.create(badFileName);
           }
         });
-        */
   }  
   
-  @SuppressWarnings("boxing")
   @Test
   public void testMethodNewFileOutputStreamExceptions() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
@@ -386,7 +384,6 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
         });
   } 
 
-  @SuppressWarnings("boxing")
   @Test
   public void testMethodNewZipFile() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
@@ -512,7 +509,6 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   }
   
   
-  @SuppressWarnings("boxing")
   @Test
   public void testMethodDelete() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
@@ -530,7 +526,6 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   }  
   
   
-  @SuppressWarnings("boxing")
   @Test
   public void testMethodDeleteException() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
@@ -554,7 +549,6 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
     
   }  
   
-  @SuppressWarnings("boxing")
   @Test
   public void testMethodDeleteRecursive() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
@@ -585,8 +579,6 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
     assertFalse(fabFiles.exists(to));
   }  
   
-  
-  @SuppressWarnings("boxing")
   @Test
   public void testMethodDeleteRecursiveException() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
@@ -610,7 +602,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
     
   }  
   
-  @Test
+  @Test (timeout=3000)
   public void testMethodDownload() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     I_FabLog logMock = mock(I_FabLog.class);
