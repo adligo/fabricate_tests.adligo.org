@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fns:fabricate xmlns:fns="http://www.adligo.org/fabricate/xml/io_v1/fabricate_v1_0.xsd" 
+    xmlns:lns="http://www.adligo.org/fabricate/xml/io_v1/library_v1_0.xsd" 
+    xmlns:cns="http://www.adligo.org/fabricate/xml/io_v1/common_v1_0.xsd" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+   
+    <fns:project_group>
+    	<fns:stages>
+    	    <fns:stage name="build" class="com.example.ExampleBuild" />
+    	</fns:stages>    
+    	<fns:projects>
+    	    <fns:scm>
+    	        <fns:git hostname="git" path="/opt/git/" user="JimDoe" />
+    	    </fns:scm>
+    	    <fns:project name="widgets.example.com" version="1"/>
+    	</fns:projects>
+    </fns:project_group>
+</fns:fabricate>

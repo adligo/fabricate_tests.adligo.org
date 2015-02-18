@@ -1,6 +1,10 @@
 package org.adligo.fabricate_tests.models.fabricate;
 
 import org.adligo.fabricate.common.system.FabricateDefaults;
+import org.adligo.fabricate.models.common.I_RoutineBrief;
+import org.adligo.fabricate.models.common.RoutineBrief;
+import org.adligo.fabricate.models.common.RoutineBriefMutant;
+import org.adligo.fabricate.models.common.RoutineBriefOrigin;
 import org.adligo.fabricate.models.dependencies.Dependency;
 import org.adligo.fabricate.models.dependencies.DependencyMutant;
 import org.adligo.fabricate.models.dependencies.I_Dependency;
@@ -16,7 +20,10 @@ import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SourceFileScope (sourceClass=Fabricate.class, minCoverage=90.0)
 public class FabricateTrial extends MockitoSourceFileTrial {
@@ -84,6 +91,9 @@ public class FabricateTrial extends MockitoSourceFileTrial {
     assertEquals("fh", copy.getFabricateHome());
     assertEquals("fr", copy.getFabricateRepository());
     assertEquals(1, copy.getThreads());
+    assertSame(Collections.emptyMap(), copy.getCommands());
+    assertSame(Collections.emptyMap(), copy.getStages());
+    assertSame(Collections.emptyMap(), copy.getTraits());
     
     repos = copy.getRemoteRepositories();
     assertEquals("repoA", repos.get(0));
@@ -126,15 +136,25 @@ public class FabricateTrial extends MockitoSourceFileTrial {
     dms.add(null);
     
     fm.setDependencies(dms);
+    fm.setCommands(getRoutines("commands", RoutineBriefOrigin.COMMAND));
+    fm.setStages(getRoutines("stages", RoutineBriefOrigin.STAGE));
+    fm.setTraits(getRoutines("traits", RoutineBriefOrigin.TRAIT));
+    
     copy = new Fabricate(fm);
     assertDependencies(copy); 
+    assertRoutines(copy.getCommands(), "commands", RoutineBriefOrigin.COMMAND);
+    assertRoutines(copy.getStages(), "stages", RoutineBriefOrigin.STAGE);
+    assertRoutines(copy.getTraits(), "traits", RoutineBriefOrigin.TRAIT);
     
     //hit the immutable pointer copy
     copy = new Fabricate(copy);
     assertDependencies(copy); 
+    assertRoutines(copy.getCommands(), "commands", RoutineBriefOrigin.COMMAND);
+    assertRoutines(copy.getStages(), "stages", RoutineBriefOrigin.STAGE);
+    assertRoutines(copy.getTraits(), "traits", RoutineBriefOrigin.TRAIT);
   }
 
-  public void assertDependencies(Fabricate copy) {
+  private void assertDependencies(Fabricate copy) {
     I_Dependency dtCopy = copy.getDependencies().get(0);
     assertEquals(Dependency.class.getName(), dtCopy.getClass().getName());
     assertEquals("artifactA",dtCopy.getArtifact());
@@ -156,4 +176,25 @@ public class FabricateTrial extends MockitoSourceFileTrial {
     assertEquals("versionB" ,dtCopy.getVersion());
   }
   
+  private void assertRoutines(Map<String,I_RoutineBrief> routines, String name, 
+      RoutineBriefOrigin origin) {
+    I_RoutineBrief route = routines.get(name);
+    assertNotNull(route);
+    
+    assertEquals(name, route.getName());
+    assertSame(origin, route.getOrigin());
+    assertEquals(RoutineBrief.class.getName(), route.getClass().getName());
+    assertEquals("java.util.Collections$UnmodifiableMap", routines.getClass().getName());
+  }
+  
+  
+  private Map<String, I_RoutineBrief> getRoutines(String name, RoutineBriefOrigin origin) {
+    Map<String, I_RoutineBrief> toRet = new HashMap<String, I_RoutineBrief>();
+    RoutineBriefMutant rbm = new RoutineBriefMutant();
+    rbm.setName(name);
+    rbm.setOrigin(origin);
+    toRet.put(name, rbm);
+    return toRet;
+    
+  }
 }

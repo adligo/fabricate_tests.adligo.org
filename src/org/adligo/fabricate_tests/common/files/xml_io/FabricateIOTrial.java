@@ -273,21 +273,167 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
   }
   
   @Test
-  public void testMethod_parse_v1_0_bad_file_missing_trait_class() {
+  public void testMethod_parse_v1_0_missing_command_class() throws Exception {
     final String fileName = FileUtils.getRunDir() + "test_data" +
         File.separator + "xml_io_trials" + 
-        File.separator + "malformed_fabricate" + File.separator;
+        File.separator + "fabricate" + File.separator +
+        "fabricateMissingCommandClass.xml";
     final FabXmlFileIO io = new FabXmlFileIO();
-    String message = "lineNumber: 25; columnNumber: 32; cvc-complex-type.4: "
-        + "Attribute 'class' must appear on element 'fns:trait'.";
+    FabricateType ft = io.parseFabricate_v1_0(fileName);
+    List<RoutineParentType> commands = ft.getCommand();
+    RoutineParentType command =  commands.get(0);
+    assertNull(command.getClazz());
+  }
+  
+  @Test
+  public void testMethod_parse_v1_0_empty_remote_repository() throws Exception {
+    final String fileName = FileUtils.getRunDir() + "test_data" +
+        File.separator + "xml_io_trials" + 
+        File.separator + "malformed_fabricate" + File.separator +
+        "fabricateEmptyRemoteRepository.xml";
+    final FabXmlFileIO io = new FabXmlFileIO();
+    String message = "fabricateEmptyRemoteRepository.xml; lineNumber: 7; columnNumber: 60; "
+        + "cvc-minLength-valid: Value '' with length = '0' is not facet-valid with respect to "
+        + "minLength '3' for type '#AnonType_remote_repositoryfabricate_dependencies'.";
     assertThrown(new ExpectedThrowable(new IOException(message), MatchType.CONTAINS,
         new ExpectedThrowable(UnmarshalException.class, MatchType.ANY)), new I_Thrower() {
       
       @Override
       public void run() throws Throwable {
-        String file = fileName + "fabricateMissingTraitClass.xml";
-        io.parseFabricate_v1_0(file);
+        io.parseFabricate_v1_0(fileName);
       }
     });
+  }
+  
+  @Test
+  public void testMethod_parse_v1_0_missing_command_task_class() throws Exception {
+    final String fileName = FileUtils.getRunDir() + "test_data" +
+        File.separator + "xml_io_trials" + 
+        File.separator + "fabricate" + File.separator +
+        "fabricateMissingCommandTaskClass.xml";
+    final FabXmlFileIO io = new FabXmlFileIO();
+    FabricateType ft = io.parseFabricate_v1_0(fileName);
+    List<RoutineParentType> commands = ft.getCommand();
+    RoutineParentType command =  commands.get(0);
+    assertNull(command.getClazz());
+    
+    List<RoutineType> tasks = command.getTask();
+    RoutineType task = tasks.get(0);
+    assertNull(task.getClazz());
+  }
+  
+  @Test
+  public void testMethod_parse_v1_0_missing_dependencies() throws Exception {
+    final String fileName = FileUtils.getRunDir() + "test_data" +
+        File.separator + "xml_io_trials" + 
+        File.separator + "malformed_fabricate" + File.separator +
+        "fabricateMissingDependencies.xml";
+    final FabXmlFileIO io = new FabXmlFileIO();
+    String message = "fabricateMissingDependencies.xml; lineNumber: 7; columnNumber: 24; "
+        + "cvc-complex-type.2.4.a: Invalid content was found starting with element "
+        + "'fns:project_group'. One of '{"
+        + "\"http://www.adligo.org/fabricate/xml/io_v1/fabricate_v1_0.xsd\":java, "
+        + "\"http://www.adligo.org/fabricate/xml/io_v1/fabricate_v1_0.xsd\":logs, "
+        + "\"http://www.adligo.org/fabricate/xml/io_v1/fabricate_v1_0.xsd\":dependencies}' "
+        + "is expected.";
+    assertThrown(new ExpectedThrowable(new IOException(message), MatchType.CONTAINS,
+        new ExpectedThrowable(UnmarshalException.class, MatchType.ANY)), new I_Thrower() {
+      
+      @Override
+      public void run() throws Throwable {
+        io.parseFabricate_v1_0(fileName);
+      }
+    });
+  }
+  
+  @Test
+  public void testMethod_parse_v1_0_missing_remote_repositories() throws Exception {
+    final String fileName = FileUtils.getRunDir() + "test_data" +
+        File.separator + "xml_io_trials" + 
+        File.separator + "malformed_fabricate" + File.separator +
+        "fabricateMissingRemoteRepository.xml";
+    final FabXmlFileIO io = new FabXmlFileIO();
+    String message = "fabricateMissingRemoteRepository.xml; lineNumber: 7; columnNumber: 24; "
+        + "cvc-complex-type.2.4.b: The content of element 'fns:dependencies' is not complete. "
+        + "One of '{"
+        + "\"http://www.adligo.org/fabricate/xml/io_v1/fabricate_v1_0.xsd\":remote_repository}' "
+        + "is expected.";
+    assertThrown(new ExpectedThrowable(new IOException(message), MatchType.CONTAINS,
+        new ExpectedThrowable(UnmarshalException.class, MatchType.ANY)), new I_Thrower() {
+      
+      @Override
+      public void run() throws Throwable {
+        io.parseFabricate_v1_0(fileName);
+      }
+    });
+  }
+  
+  @Test
+  public void testMethod_parse_v1_0_missing_stage_class() throws Exception {
+    final String fileName = FileUtils.getRunDir() + "test_data" +
+        File.separator + "xml_io_trials" + 
+        File.separator + "fabricate" + File.separator +
+        "fabricateMissingStageClass.xml";
+    final FabXmlFileIO io = new FabXmlFileIO();
+    FabricateType ft = io.parseFabricate_v1_0(fileName);
+    StagesAndProjectsType stages = ft.getProjectGroup();
+    StagesType stagesType = stages.getStages();
+    List<StageType> list = stagesType.getStage();
+    
+    StageType stage =  list.get(0);
+    assertNull(stage.getClazz());
+    
+  }
+  
+  @Test
+  public void testMethod_parse_v1_0_missing_trait_stage_class() throws Exception {
+    final String fileName = FileUtils.getRunDir() + "test_data" +
+        File.separator + "xml_io_trials" + 
+        File.separator + "fabricate" + File.separator +
+        "fabricateMissingStageTaskClass.xml";
+    final FabXmlFileIO io = new FabXmlFileIO();
+    FabricateType ft = io.parseFabricate_v1_0(fileName);
+    StagesAndProjectsType stages = ft.getProjectGroup();
+    StagesType stagesType = stages.getStages();
+    List<StageType> list = stagesType.getStage();
+    
+    StageType stage =  list.get(0);
+    assertNull(stage.getClazz());
+    
+    List<RoutineType> tasks = stage.getTask();
+    RoutineType task = tasks.get(0);
+    assertNull(task.getClazz());
+  }
+  
+  
+  @Test
+  public void testMethod_parse_v1_0_missing_trait_class() throws Exception {
+    final String fileName = FileUtils.getRunDir() + "test_data" +
+        File.separator + "xml_io_trials" + 
+        File.separator + "fabricate" + File.separator +
+        "fabricateMissingTraitClass.xml";
+    final FabXmlFileIO io = new FabXmlFileIO();
+    FabricateType ft = io.parseFabricate_v1_0(fileName);
+    List<RoutineParentType> traits = ft.getTrait();
+    RoutineParentType trait =  traits.get(0);
+    assertNull(trait.getClazz());
+    
+  }
+  
+  @Test
+  public void testMethod_parse_v1_0_missing_trait_task_class() throws Exception {
+    final String fileName = FileUtils.getRunDir() + "test_data" +
+        File.separator + "xml_io_trials" + 
+        File.separator + "fabricate" + File.separator +
+        "fabricateMissingTraitTaskClass.xml";
+    final FabXmlFileIO io = new FabXmlFileIO();
+    FabricateType ft = io.parseFabricate_v1_0(fileName);
+    List<RoutineParentType> traits = ft.getTrait();
+    RoutineParentType trait =  traits.get(0);
+    assertNull(trait.getClazz());
+    
+    List<RoutineType> tasks = trait.getTask();
+    RoutineType task = tasks.get(0);
+    assertNull(task.getClazz());
   }
 }

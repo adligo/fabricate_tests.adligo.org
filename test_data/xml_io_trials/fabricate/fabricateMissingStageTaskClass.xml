@@ -6,36 +6,15 @@
     <fns:dependencies>
         <fns:remote_repository>http://127.0.0.1/</fns:remote_repository>
     </fns:dependencies>
-    <fns:trait name="    "  class="com.example.DefaultPrepare" >
-    	<cns:params>
-   	    	<cns:param key="prepareParam" value="prepareParamValue">
-   	    	       <cns:param key="nestedPrepareParam" value="nestedPrepareParamValue"/>
-   	    	</cns:param>
-  	    </cns:params>
-    </fns:trait>
-    <fns:command name="classpath2eclipse" class="com.example.Classpath2Eclipse">
-    	<cns:params>
-	    	<cns:param key="c2eKey" value="c2eVal">
-	    		<cns:param key="c2eKeyNested" value="c2eValNested"/>
-	    	</cns:param>
-    	</cns:params>
-    	<cns:task name="classpath2eclipseTask" class="classpath2eclipseTask" >
-	    	<cns:params>
- 	    	    <cns:param key="Default-Vendor" value="Adligo Inc">
- 	    	       <cns:param key="nestKey" value="nestVal"/>
- 	    	    </cns:param>
-	    	</cns:params>
-	    </cns:task>  
-    </fns:command>
     <fns:project_group>
     	<fns:stages>
-    	    <fns:stage name="build" class="com.example.ExampleBuild" optional="true">
+    	    <fns:stage name="build" >
     	    	<fns:params>
 	    	    	<cns:param key="buildParam" value="buildParamValue">
 	    	    	       <cns:param key="nestedBuildParam" value="nestedBuildParamValue"/>
 	    	    	</cns:param>
     	    	</fns:params>
-    	    	<fns:task name="buildTask" class="foo">
+    	    	<fns:task name="buildTask" >
     	    		<cns:params>
 	    	    	    <cns:param key="Default-Vendor" value="Adligo Inc">
 	    	    	       <cns:param key="nestKey" value="nestVal"/>

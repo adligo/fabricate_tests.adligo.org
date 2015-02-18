@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-@SourceFileScope (sourceClass=FabSystem.class, minCoverage=80.0)
+@SourceFileScope (sourceClass=FabSystem.class, minCoverage=67.0)
 public class FabSystemTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("boxing")

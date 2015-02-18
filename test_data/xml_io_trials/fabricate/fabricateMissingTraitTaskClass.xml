@@ -3,46 +3,18 @@
     xmlns:lns="http://www.adligo.org/fabricate/xml/io_v1/library_v1_0.xsd" 
     xmlns:cns="http://www.adligo.org/fabricate/xml/io_v1/common_v1_0.xsd" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
-    <fns:java Xmx="1g" Xms="256m" threads="8" />
-    <fns:logs>
-        <fns:log class="org.adligo.fabricate.external.RepositoryDownloader" setting="true"/>
-    </fns:logs>
     <fns:dependencies>
         <fns:remote_repository>http://127.0.0.1/</fns:remote_repository>
-        <!--  platform would always be ignored in this context -->
-        <fns:library>lib_foo</fns:library>
-        <fns:dependency group="com.sun.jme" artifact="cldc" version="1.1" type="jar" 
-    		fileName="cldc_1.1.jar" platform="JME" extract="true">
-    		<lns:ide name="eclipse">
-		    	<lns:args>
-			    	<cns:param key="ideKey" value="ideVal">
-			    		<cns:param key="nestedIdeKey" value="nestedIdeVal"/>
-			    	</cns:param>
-		    	</lns:args>
-	    	</lns:ide>
-	    </fns:dependency>
     </fns:dependencies>
     <fns:trait name="prepare" >
-    	<cns:params>
-   	    	<cns:param key="prepareParam" value="prepareParamValue">
-   	    	       <cns:param key="nestedPrepareParam" value="nestedPrepareParamValue"/>
-   	    	</cns:param>
-  	    </cns:params>
+  	    <cns:task name="prepTask">
+  	    	<cns:params>
+	   	    	<cns:param key="prepTaskParam" value="prepTaskValue">
+	   	    	       <cns:param key="nestedPrepParam" value="nestedPrepParamValue"/>
+	   	    	</cns:param>
+	  	    </cns:params>
+  	    </cns:task>
     </fns:trait>
-    <fns:command name="classpath2eclipse" class="com.example.Classpath2Eclipse">
-    	<cns:params>
-	    	<cns:param key="c2eKey" value="c2eVal">
-	    		<cns:param key="c2eKeyNested" value="c2eValNested"/>
-	    	</cns:param>
-    	</cns:params>
-    	<cns:task name="classpath2eclipseTask" class="classpath2eclipseTask" >
-	    	<cns:params>
- 	    	    <cns:param key="Default-Vendor" value="Adligo Inc">
- 	    	       <cns:param key="nestKey" value="nestVal"/>
- 	    	    </cns:param>
-	    	</cns:params>
-	    </cns:task>  
-    </fns:command>
     <fns:project_group>
     	<fns:stages>
     	    <fns:stage name="build" class="com.example.ExampleBuild" optional="true">

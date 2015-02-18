@@ -115,7 +115,7 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
   }
   
   @Test
-  public void testMethodCreate() {
+  public void testMethodCreate() throws Exception {
     FabricateFactory factory = new FabricateFactory();
     FabricateType fabType = new FabricateType();
     I_FabricateXmlDiscovery xmlDiscMock = mock(I_FabricateXmlDiscovery.class);
@@ -149,7 +149,7 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
   }
   
   @Test
-  public void testMethodCreateWithRuntimeDeps() {
+  public void testMethodCreateWithRuntimeDeps() throws Exception {
     FabricateFactory factory = new FabricateFactory();
     FabricateType fabType = new FabricateType();
     
@@ -177,7 +177,7 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("boxing")
   @Test
-  public void testMethodCreateExcptions() {
+  public void testMethodCreateExceptions() {
     FabricateFactory factory = new FabricateFactory();
     FabricateType fabType = new FabricateType();
 

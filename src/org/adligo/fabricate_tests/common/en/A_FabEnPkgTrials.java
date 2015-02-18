@@ -32,6 +32,7 @@ public class A_FabEnPkgTrials implements I_Tests4J_TrialList {
     trials.add(FabricateEnConstantsTrial.class);
     trials.add(FileEnMessagesTrial.class);
     trials.add(GitEnMessagesTrial.class);
+    trials.add(ImplicitTraitMessagesTrial.class);
     trials.add(ProjectEnMessagesTrial.class);
     trials.add(SystemEnMessagesTrial.class);
     return trials;

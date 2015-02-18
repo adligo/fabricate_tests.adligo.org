@@ -343,15 +343,13 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
-    String badFile = "/somewhere/somefile";
-    if (File.separatorChar == '/') {
-      badFile = "C:\\somewhere\\somefile";
-    }
-    String badFileName = badFile;
+    String badFileName = FileUtils.getRunDir() + 
+        "test_data" + File.separator + "file_trials" + File.separator +
+        "alreadyAFile.txt";
     FabFileIO fabFiles = new FabFileIO(sysMock);
     assertThrown(new ExpectedThrowable(new IOException(
         "There was a problem creating the following file;" + System.lineSeparator() +
-        badFile)),
+        badFileName)),
         new I_Thrower() {
           @Override
           public void run() throws Throwable {

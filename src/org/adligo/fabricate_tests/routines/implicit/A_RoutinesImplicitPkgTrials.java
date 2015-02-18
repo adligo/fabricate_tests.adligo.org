@@ -1,4 +1,4 @@
-package org.adligo.fabricate_tests.common.system;
+package org.adligo.fabricate_tests.routines.implicit;
 
 import org.adligo.fabricate_tests.etc.FabTestParamsFactory;
 import org.adligo.tests4j.run.api.Tests4J;
@@ -9,13 +9,13 @@ import org.adligo.tests4j.system.shared.trials.I_Trial;
 import java.util.ArrayList;
 import java.util.List;
 
-public class A_SystemTrials implements I_Tests4J_TrialList {
+public class A_RoutinesImplicitPkgTrials implements I_Tests4J_TrialList {
 	
 	public static void main(String [] args) {
 		try {
 			Tests4J_Params params = new FabTestParamsFactory().create();
 			
-			A_SystemTrials me = new A_SystemTrials();
+			A_RoutinesImplicitPkgTrials me = new A_RoutinesImplicitPkgTrials();
 			params.addTrials(me);
 			
 			Tests4J.run(params);
@@ -28,24 +28,8 @@ public class A_SystemTrials implements I_Tests4J_TrialList {
   @Override
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
-    trials.add(I_ExecutionResultTrial.class);
-    trials.add(I_ExecutorTrial.class);
-    trials.add(I_FabSystemTrial.class);
-    
-    trials.add(ExecutionResultMutantTrial.class);
-    
-    trials.add(FabSystemTrial.class);
-    trials.add(FabricateDefaultsTrial.class);
-    trials.add(FabricateXmlDiscoveryTrial.class);
-    trials.add(FabricateEnvironmentTrial.class);
-
-    
-    
-    trials.add(ProcessBuilderWrapperTrial.class);
-    trials.add(BufferedInputStreamTrial.class);
-    trials.add(ExecutorTrial.class);
-    
-    trials.add(CommandLineArgsTrial.class);
+    trials.add(EncryptTrial.class);
+    trials.add(DecryptTrial.class);
     return trials;
   }
 

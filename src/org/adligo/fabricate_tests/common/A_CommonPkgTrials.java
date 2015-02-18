@@ -3,7 +3,8 @@ package org.adligo.fabricate_tests.common;
 import org.adligo.fabricate_tests.common.en.A_FabEnPkgTrials;
 import org.adligo.fabricate_tests.common.i18n.A_FabI18nPkgTrials;
 import org.adligo.fabricate_tests.common.log.A_LogPkgTrials;
-import org.adligo.fabricate_tests.common.system.A_SystemTrials;
+import org.adligo.fabricate_tests.common.system.A_FabSystemTrials;
+import org.adligo.fabricate_tests.common.util.A_FabUtilTrials;
 import org.adligo.fabricate_tests.etc.FabTestParamsFactory;
 import org.adligo.tests4j.run.api.Tests4J;
 import org.adligo.tests4j.system.shared.api.I_Tests4J_TrialList;
@@ -36,7 +37,8 @@ public class A_CommonPkgTrials implements I_Tests4J_TrialList {
     trials.addAll(new A_FabEnPkgTrials().getTrials());
     trials.addAll(new A_FabI18nPkgTrials().getTrials());
     trials.addAll(new A_LogPkgTrials().getTrials());
-    trials.addAll(new A_SystemTrials().getTrials());
+    trials.addAll(new A_FabSystemTrials().getTrials());
+    trials.addAll(new A_FabUtilTrials().getTrials());
     return trials;
   }
 

@@ -3,7 +3,9 @@
     xmlns:lns="http://www.adligo.org/fabricate/xml/io_v1/library_v1_0.xsd" 
     xmlns:cns="http://www.adligo.org/fabricate/xml/io_v1/common_v1_0.xsd" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
-   
+    <fns:dependencies>
+        <fns:remote_repository>http://127.0.0.1/</fns:remote_repository>
+    </fns:dependencies>
     <fns:groups>
     	<fns:project_group>
     		<fns:scm>

@@ -5,6 +5,7 @@ import org.adligo.fabricate_tests.common.files.A_FilesTrials;
 import org.adligo.fabricate_tests.etc.FabTestParamsFactory;
 import org.adligo.fabricate_tests.models.A_ModelsPkgTrials;
 import org.adligo.fabricate_tests.repository.A_RepositoryPkgTrials;
+import org.adligo.fabricate_tests.routines.A_RoutinesPkgTrials;
 import org.adligo.tests4j.run.api.Tests4J;
 import org.adligo.tests4j.system.shared.api.I_Tests4J_TrialList;
 import org.adligo.tests4j.system.shared.api.Tests4J_Params;
@@ -36,7 +37,7 @@ public class A_FabPkgTrials implements I_Tests4J_TrialList {
     trials.addAll(new A_FilesTrials().getTrials());
     trials.addAll(new A_ModelsPkgTrials().getTrials());
     trials.addAll(new A_RepositoryPkgTrials().getTrials());
-    
+    trials.addAll(new A_RoutinesPkgTrials().getTrials());
     
     trials.add(FabPackagesTrial.class);
     trials.add(FabricateFactoryTrial.class);

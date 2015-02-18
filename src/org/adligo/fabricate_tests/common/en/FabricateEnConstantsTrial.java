@@ -4,6 +4,7 @@ import org.adligo.fabricate.common.en.CommandLineEnConstants;
 import org.adligo.fabricate.common.en.FabricateEnConstants;
 import org.adligo.fabricate.common.en.FileEnMessages;
 import org.adligo.fabricate.common.en.GitEnMessages;
+import org.adligo.fabricate.common.en.ImplicitTraitEnMessages;
 import org.adligo.fabricate.common.en.ProjectEnMessages;
 import org.adligo.fabricate.common.en.SystemEnMessages;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
@@ -22,6 +23,8 @@ public class FabricateEnConstantsTrial extends MockitoSourceFileTrial {
     assertEquals(System.lineSeparator() ,constants.getLineSeperator());
     assertEquals(CommandLineEnConstants.class.getName(), constants.getCommandLineConstants().getClass().getName());
     assertEquals(GitEnMessages.class.getName(), constants.getGitMessages().getClass().getName());
+    assertEquals(ImplicitTraitEnMessages.class.getName(), constants.getImplicitTraitMessages().getClass().getName());
+    
     assertEquals(FileEnMessages.class.getName(), constants.getFileMessages().getClass().getName());
     assertEquals(ProjectEnMessages.class.getName(), constants.getProjectMessages().getClass().getName());
     assertEquals(SystemEnMessages.class.getName(), constants.getSystemMessages().getClass().getName());
