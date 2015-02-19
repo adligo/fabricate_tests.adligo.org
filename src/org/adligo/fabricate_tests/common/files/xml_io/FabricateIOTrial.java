@@ -8,13 +8,11 @@ import org.adligo.fabricate.xml.io_v1.common_v1_0.RoutineParentType;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.RoutineType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateDependencies;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateType;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.GitServerType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.JavaType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.ProjectGroupType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.ProjectGroupsType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.ProjectType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.ProjectsType;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.ScmType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.StageType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.StagesAndProjectsType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.StagesType;
@@ -69,20 +67,20 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
     assertEquals("prepare", trait.getName());
     assertEquals("com.example.DefaultPrepare", trait.getClazz());
     
-    ParamsType params = trait.getParams();
-    List<ParamType> paramsList = params.getParam();
-    ParamType param = paramsList.get(0);
-    assertEquals(1, paramsList.size());
+    ParamsType paramsType = trait.getParams();
+    List<ParamType> params = paramsType.getParam();
+    ParamType param = params.get(0);
+    assertEquals(1, params.size());
     
     assertEquals("prepareParam", param.getKey());
     assertEquals("prepareParamValue", param.getValue());
-    paramsList = param.getParam();
-    param = paramsList.get(0);
+    params = param.getParam();
+    param = params.get(0);
     assertEquals("nestedPrepareParam", param.getKey());
     assertEquals("nestedPrepareParamValue", param.getValue());
-    assertEquals(1, paramsList.size());
-    paramsList = param.getParam();
-    assertEquals(0, paramsList.size());
+    assertEquals(1, params.size());
+    params = param.getParam();
+    assertEquals(0, params.size());
     
     assertEquals(1, traits.size());
     
@@ -93,19 +91,19 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
     assertEquals("classpath2eclipse",command.getName());
     
     ParamsType cmdParams = command.getParams();
-    paramsList = cmdParams.getParam();
-    param = paramsList.get(0);
+    params = cmdParams.getParam();
+    param = params.get(0);
     assertNotNull(param);
     assertEquals("c2eKey",param.getKey());
     assertEquals("c2eVal",param.getValue());
-    assertEquals(1, paramsList.size());
+    assertEquals(1, params.size());
     
-    paramsList = param.getParam();
-    param = paramsList.get(0);
+    params = param.getParam();
+    param = params.get(0);
     assertNotNull(param);
     assertEquals("c2eKeyNested",param.getKey());
     assertEquals("c2eValNested",param.getValue());
-    assertEquals(1, paramsList.size());
+    assertEquals(1, params.size());
     
     assertEquals(1, commands.size());
     
@@ -119,18 +117,18 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
     assertEquals("com.example.ExampleBuild", stage.getClazz());
     assertTrue(stage.isOptional());
     
-    ParamsType paramsType = stage.getParams();
-    paramsList =  paramsType.getParam();
-    param = paramsList.get(0);
+    paramsType = stage.getParams();
+    params =  paramsType.getParam();
+    param = params.get(0);
     assertEquals("buildParam", param.getKey());
     assertEquals("buildParamValue", param.getValue());
-    assertEquals(1, paramsList.size());
+    assertEquals(1, params.size());
     
-    paramsList = param.getParam();
-    param = paramsList.get(0);
+    params = param.getParam();
+    param = params.get(0);
     assertEquals("nestedBuildParam", param.getKey()); 
     assertEquals("nestedBuildParamValue", param.getValue());
-    assertEquals(1, paramsList.size());
+    assertEquals(1, params.size());
     
     List<RoutineType> tasks = stage.getTask();
     RoutineType task = tasks.get(0);
@@ -138,25 +136,45 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
     assertEquals("foo", task.getClazz());
     
     ParamsType taskParams = task.getParams();
-    paramsList = taskParams.getParam();
-    param = paramsList.get(0);
+    params = taskParams.getParam();
+    param = params.get(0);
     assertEquals("Default-Vendor", param.getKey());
     assertEquals("Adligo Inc", param.getValue());
-    assertEquals(1, paramsList.size());
+    assertEquals(1, params.size());
     
-    paramsList = param.getParam();
-    param = paramsList.get(0);
+    params = param.getParam();
+    param = params.get(0);
     assertEquals("nestKey", param.getKey()); 
     assertEquals("nestVal", param.getValue());
-    assertEquals(1, paramsList.size());
+    assertEquals(1, params.size());
     assertEquals(1, tasks.size());
     
     ProjectsType projects = stagesAndProjs.getProjects();
-    ScmType scm = projects.getScm();
-    GitServerType server = scm.getGit();
-    assertEquals("git",server.getHostname());
-    assertEquals("/opt/git/",server.getPath());
-    assertEquals("JimDoe",server.getUser());
+    RoutineType scm = projects.getScm();
+    assertNotNull(scm);
+    assertEquals("Git", scm.getName());
+    paramsType = scm.getParams();
+    params =  paramsType.getParam();
+    ParamType zero = params.get(0);
+    assertEquals("hostname",zero.getKey());
+    assertEquals("github.com",zero.getValue());
+    assertEquals(0, zero.getParam().size());
+    
+    ParamType one = params.get(1);
+    assertEquals("path",one.getKey());
+    assertEquals("/opt/git/",one.getValue());
+    assertEquals(0, one.getParam().size());
+    
+    ParamType two = params.get(2);
+    assertEquals("user",two.getKey());
+    assertEquals("JimDoe",two.getValue());
+    
+    List<ParamType> twoPs = two.getParam();
+    ParamType twoZero = twoPs.get(0);
+    assertEquals("nestKey",twoZero.getKey());
+    assertEquals("nestVal",twoZero.getValue());
+    assertEquals(0, twoZero.getParam().size());
+    assertEquals(1, twoPs.size());
     
     List<ProjectType> projectsList = projects.getProject();
     ProjectType project = projectsList.get(0);
@@ -187,6 +205,7 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
     assertEquals("nestedIdeVal", arg.getValue());
   }
   
+  @SuppressWarnings("boxing")
   @Test
   public void testMethod_parse_v1_0Groups() throws Exception {
     FabricateType fab = new FabXmlFileIO().parseFabricate_v1_0(
@@ -195,13 +214,31 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
     List<ProjectGroupType> pgts = groups.getProjectGroup();
     ProjectGroupType pgt = pgts.get(0);
     assertNotNull(pgt);
-    ScmType scm = pgt.getScm();
+    RoutineType scm = pgt.getScm();
     assertNotNull(scm);
-    GitServerType gst = scm.getGit();
-    assertEquals("git",gst.getHostname());
-    assertEquals("/opt/git/",gst.getPath());
-    assertEquals("JohnDoe",gst.getUser());
-    assertEquals("https", gst.getProtocol());
+    assertEquals("Git", scm.getName());
+    ParamsType paramsType = scm.getParams();
+    List<ParamType> params =  paramsType.getParam();
+    ParamType zero = params.get(0);
+    assertEquals("hostname",zero.getKey());
+    assertEquals("github.com",zero.getValue());
+    assertEquals(0, zero.getParam().size());
+    
+    ParamType one = params.get(1);
+    assertEquals("path",one.getKey());
+    assertEquals("/opt/git/",one.getValue());
+    assertEquals(0, one.getParam().size());
+    
+    ParamType two = params.get(2);
+    assertEquals("user",two.getKey());
+    assertEquals("JimDoe",two.getValue());
+    
+    List<ParamType> twoPs = two.getParam();
+    ParamType twoZero = twoPs.get(0);
+    assertEquals("nestKey",twoZero.getKey());
+    assertEquals("nestVal",twoZero.getValue());
+    assertEquals(0, twoZero.getParam().size());
+    assertEquals(1, twoPs.size());
     
     ProjectType proj = pgt.getProject();
     assertEquals("project_group.example.com",proj.getName());
@@ -211,10 +248,29 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
     assertNotNull(pgt);
     scm = pgt.getScm();
     assertNotNull(scm);
-    gst = scm.getGit();
-    assertEquals("git",gst.getHostname());
-    assertEquals("/opt/git/",gst.getPath());
-    assertEquals("JaneDoe",gst.getUser());
+    assertEquals("Git", scm.getName());
+    paramsType = scm.getParams();
+    params =  paramsType.getParam();
+    zero = params.get(0);
+    assertEquals("hostname",zero.getKey());
+    assertEquals("github.com",zero.getValue());
+    assertEquals(0, zero.getParam().size());
+    
+    one = params.get(1);
+    assertEquals("path",one.getKey());
+    assertEquals("/opt/git/",one.getValue());
+    assertEquals(0, one.getParam().size());
+    
+    two = params.get(2);
+    assertEquals("user",two.getKey());
+    assertEquals("JimDoe",two.getValue());
+    
+    twoPs = two.getParam();
+    twoZero = twoPs.get(0);
+    assertEquals("nestKey",twoZero.getKey());
+    assertEquals("nestVal",twoZero.getValue());
+    assertEquals(0, twoZero.getParam().size());
+    assertEquals(1, twoPs.size());
     
     proj = pgt.getProject();
     assertEquals("other_project_group.example.com",proj.getName());

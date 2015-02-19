@@ -31,8 +31,12 @@
     	    </fns:stage>
     	</fns:stages>    
     	<fns:projects>
-    	    <fns:scm>
-    	        <fns:git hostname="git" path="/opt/git/" user="JimDoe" />
+    	     <fns:scm name="Git">
+    	    	<cns:params>
+	 	    	    <cns:param key="hostname" value="github.com" />
+	 	    	    <cns:param key="path" value="/opt/git/" />
+	 	    	    <cns:param key="user" value="JimDoe" />
+		    	</cns:params>
     	    </fns:scm>
     	    <fns:project name="widgets.example.com" version="1"/>
     	</fns:projects>

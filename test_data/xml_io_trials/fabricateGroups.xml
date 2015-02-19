@@ -8,14 +8,26 @@
     </fns:dependencies>
     <fns:groups>
     	<fns:project_group>
-    		<fns:scm>
-    	        <fns:git hostname="git" path="/opt/git/" user="JohnDoe" protocol="https"/>
+    		<fns:scm name="Git">
+    	    	<cns:params>
+	 	    	    <cns:param key="hostname" value="github.com" />
+	 	    	    <cns:param key="path" value="/opt/git/" />
+	 	    	    <cns:param key="user" value="JimDoe" >
+	 	    	       <cns:param key="nestKey" value="nestVal"/>
+	 	    	    </cns:param>
+		    	</cns:params>
     	    </fns:scm>
     	    <fns:project name="project_group.example.com" version="1"/>
     	</fns:project_group>
     	<fns:project_group>
-    		<fns:scm>
-    	        <fns:git hostname="git" path="/opt/git/" user="JaneDoe" protocol="https"/>
+    		<fns:scm name="Git">
+    	    	<cns:params>
+	 	    	    <cns:param key="hostname" value="github.com" />
+	 	    	    <cns:param key="path" value="/opt/git/" />
+	 	    	    <cns:param key="user" value="JimDoe" >
+	 	    	       <cns:param key="nestKey" value="nestVal"/>
+	 	    	    </cns:param>
+		    	</cns:params>
     	    </fns:scm>
     	    <fns:project name="other_project_group.example.com" version="2"/>
     	</fns:project_group>
