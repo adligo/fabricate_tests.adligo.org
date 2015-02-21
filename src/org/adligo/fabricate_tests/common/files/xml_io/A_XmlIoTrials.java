@@ -30,6 +30,7 @@ public class A_XmlIoTrials implements I_Tests4J_TrialList {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
     trials.add(I_FabXmlFilesTrial.class);
     
+    trials.add(FabricateJaxbContextsTrial.class);
     trials.add(DevIOTrial.class);
     trials.add(LibraryIOTrial.class);
     trials.add(FabricateIOTrial.class);
@@ -38,6 +39,7 @@ public class A_XmlIoTrials implements I_Tests4J_TrialList {
     trials.add(FabXmlFilesTrial.class);
     trials.add(SchemaLoaderTrial.class);
     trials.add(XmlIoPackageTrial.class);
+    trials.add(ResultIOTrial.class);
     
     
     

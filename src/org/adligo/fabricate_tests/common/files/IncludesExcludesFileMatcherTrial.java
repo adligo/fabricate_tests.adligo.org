@@ -19,7 +19,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 
-@SourceFileScope (sourceClass=I_FileMatcher.class)
+@SourceFileScope (sourceClass=IncludesExcludesFileMatcher.class)
 public class IncludesExcludesFileMatcherTrial extends MockitoSourceFileTrial {
   private I_FabSystem sysMock_;
   

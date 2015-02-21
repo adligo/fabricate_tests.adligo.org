@@ -29,6 +29,8 @@ public class A_LogPkgTrials implements I_Tests4J_TrialList {
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
     trials.add(I_FabLogTrial.class);
+    trials.add(I_FabLogSystemTrial.class);
+    trials.add(DeferredLogTrial.class);
     trials.add(ThreadLocalPrintStreamTrial.class);
     trials.add(FabLogTrial.class);
     return trials;

@@ -222,7 +222,8 @@ public class RoutineBriefTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("boxing")
   public void testStaticMethodConvertStages() throws Exception {
-    Map<String, I_RoutineBrief> routinesFromNull = RoutineBrief.convert(null);
+    Map<String, I_RoutineBrief> routinesFromNull = RoutineBrief.convertStages(null, 
+        RoutineBriefOrigin.FABRICATE_STAGE);
     assertEquals(0, routinesFromNull.size());
     
     List<StageType> list = new ArrayList<StageType>();
@@ -240,21 +241,24 @@ public class RoutineBriefTrial extends MockitoSourceFileTrial {
     cmd3.setName("vouch");
     list.add(cmd3);
     
-    Map<String, I_RoutineBrief> routines = RoutineBrief.convert(list);
+    Map<String, I_RoutineBrief> routines = RoutineBrief.convertStages(list, RoutineBriefOrigin.FABRICATE_STAGE);
     I_RoutineBrief rb = routines.get("eclipse");
     assertEquals("eclipse", rb.getName());
     assertEquals(EncryptTrait.class.getName(), rb.getClazz().getName());
     assertEquals(RoutineBrief.class.getName(), rb.getClass().getName());
+    assertEquals(RoutineBriefOrigin.FABRICATE_STAGE, rb.getOrigin());
     
     I_RoutineBrief rb1 = routines.get("build");
     assertEquals("build", rb1.getName());
     assertNull(rb1.getClazz());
     assertEquals(RoutineBrief.class.getName(), rb1.getClass().getName());
+    assertEquals(RoutineBriefOrigin.FABRICATE_STAGE, rb1.getOrigin());
     
     I_RoutineBrief rb2 = routines.get("vouch");
     assertEquals("vouch", rb2.getName());
     assertNull(rb2.getClazz());
     assertEquals(RoutineBrief.class.getName(), rb2.getClass().getName());
+    assertEquals(RoutineBriefOrigin.FABRICATE_STAGE, rb2.getOrigin());
   }
   
 }

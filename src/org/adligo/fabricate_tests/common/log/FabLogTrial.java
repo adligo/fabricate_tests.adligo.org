@@ -1,9 +1,6 @@
 package org.adligo.fabricate_tests.common.log;
 
 import org.adligo.fabricate.common.log.FabLog;
-import org.adligo.fabricate.common.log.ThreadLocalPrintStream;
-import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
-import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.system.shared.trials.AfterTrial;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
@@ -13,7 +10,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Collections;
 
-@SourceFileScope (sourceClass=ThreadLocalPrintStream.class, minCoverage=78.0)
+@SourceFileScope (sourceClass=FabLog.class, minCoverage=68.0)
 public class FabLogTrial extends MockitoSourceFileTrial {
   private ByteArrayOutputStream baos_;
   @Override

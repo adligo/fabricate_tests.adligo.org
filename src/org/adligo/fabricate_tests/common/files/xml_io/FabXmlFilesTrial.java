@@ -9,6 +9,8 @@ import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
  * it is actually tested through the 
  * other trials in this package, which call 
  * FabXmlFiles to get to other files.
+ * TODO write the pass through tests.
+ * 
  * @author scott
  *
  */

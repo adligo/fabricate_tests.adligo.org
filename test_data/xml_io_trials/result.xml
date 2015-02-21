@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:result xmlns="http://www.adligo.org/fabricate/xml/io_v1/result_v1_0.xsd" xmlns:ns2="org.adligo.fabricate.xml.io_v1.result_v1_0" name="project_group.adligo.org" successful="true" duration="P0Y0M0DT0H0M31.303S" os="mac" os_version="10.9.5&#xA;">
+    <machine hostname="somewhere.adligo.com" cpu_name="Intel(R) Core(TM) i7-4930K CPU" cpu_speed="3.40GHz" ram="256m" processors="12" java_version="1.8.0_20"/>
+</ns2:result>

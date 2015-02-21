@@ -6,6 +6,7 @@ import org.adligo.fabricate.common.log.DeferredLog;
 import org.adligo.fabricate.common.log.I_FabLog;
 import org.adligo.fabricate.common.system.BufferedInputStream;
 import org.adligo.fabricate.common.system.FabSystem;
+import org.adligo.fabricate.common.system.I_RunMonitor;
 import org.adligo.fabricate.common.system.ProcessBuilderWrapper;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
@@ -16,6 +17,8 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @SourceFileScope (sourceClass=FabSystem.class, minCoverage=67.0)
 public class FabSystemTrial extends MockitoSourceFileTrial {
@@ -53,9 +56,16 @@ public class FabSystemTrial extends MockitoSourceFileTrial {
     assertEquals(" k2=v1,v2,v3", fabSystem.toScriptArgs());
   }
   
+  @SuppressWarnings("boxing")
   @Test
   public void testMethodsFactories() throws Exception {
     FabSystem fabSystem = new FabSystem();
+    
+    //array blocking queue
+    ArrayBlockingQueue<Boolean> queue = fabSystem.newArrayBlockingQueue(Boolean.class, 1);
+    assertNotNull(queue);
+    queue.put(true);
+    assertTrue(queue.take());
     
     long ft = fabSystem.getCurrentTime();
     long now = System.currentTimeMillis();
@@ -91,5 +101,25 @@ public class FabSystemTrial extends MockitoSourceFileTrial {
     BufferedInputStream bis = fabSystem.newBufferedInputStream(in);
     assertNotNull(bis);
     assertSame(in,  bis.getDelegate());
+    
+    //run monitor
+    final AtomicBoolean ran = new AtomicBoolean(false);
+    Runnable r = new Runnable() {
+
+      @Override
+      public void run() {
+        ran.set(true);
+      }
+    };
+    I_RunMonitor rm = fabSystem.newRunMonitor(r, 0);
+    assertEquals(0, rm.getSequence());
+    rm.run();
+    assertTrue(ran.get());
+    
+    ran.set(false);
+    rm = fabSystem.newRunMonitor(r, 1);
+    assertEquals(1, rm.getSequence());
+    rm.run();
+    assertTrue(ran.get());
   }
 }

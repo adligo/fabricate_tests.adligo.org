@@ -446,16 +446,16 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     
     FabricateMutant fm = new FabricateMutant();
     fm.addCommands(ft);
-    assertRoutinesFromXml(fm.getCommands(), "command", RoutineBriefOrigin.COMMAND);
-    assertRoutinesFromXml(fm.getCommands(), "command", RoutineBriefOrigin.COMMAND);
+    assertRoutinesFromXml(fm.getCommands(), "command", RoutineBriefOrigin.FABRICATE_COMMAND);
+    assertRoutinesFromXml(fm.getCommands(), "command", RoutineBriefOrigin.FABRICATE_COMMAND);
     
     fm.addStages(ft);
-    assertRoutinesFromXml(fm.getStages(), "stage", RoutineBriefOrigin.STAGE);
-    assertRoutinesFromXml(fm.getStages(), "stage", RoutineBriefOrigin.STAGE);
+    assertRoutinesFromXml(fm.getStages(), "stage", RoutineBriefOrigin.FABRICATE_STAGE);
+    assertRoutinesFromXml(fm.getStages(), "stage", RoutineBriefOrigin.FABRICATE_STAGE);
     
     fm.addTraits(ft.getTrait());
-    assertRoutinesFromXml(fm.getTraits(), "trait", RoutineBriefOrigin.TRAIT);
-    assertRoutinesFromXml(fm.getTraits(), "trait", RoutineBriefOrigin.TRAIT);
+    assertRoutinesFromXml(fm.getTraits(), "trait", RoutineBriefOrigin.FABRICATE_TRAIT);
+    assertRoutinesFromXml(fm.getTraits(), "trait", RoutineBriefOrigin.FABRICATE_TRAIT);
   }
   
   @SuppressWarnings("boxing")

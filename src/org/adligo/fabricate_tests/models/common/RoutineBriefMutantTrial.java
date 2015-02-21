@@ -206,20 +206,20 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     when(brief.getTask()).thenReturn(null);
     when(brief.getParams()).thenReturn(null);
     
-    RoutineBriefMutant copy  = new RoutineBriefMutant(brief);
+    RoutineBriefMutant copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.FABRICATE_STAGE);
     assertEquals(ProjectBriefQueueRoutine.class.getName(), copy.getClazz().getName());
     assertEquals("go", copy.getName());
     assertFalse(copy.isOptional());
-    assertEquals(RoutineBriefOrigin.STAGE, copy.getOrigin());
+    assertEquals(RoutineBriefOrigin.FABRICATE_STAGE, copy.getOrigin());
     assertSame(Collections.emptyList(), copy.getNestedRoutines());
     assertSame(Collections.emptyList(), copy.getParameters());
     
     when(brief.getParams()).thenReturn(new ParamsType());
-    copy  = new RoutineBriefMutant(brief);
+    copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.FABRICATE_STAGE);
     assertEquals(ProjectBriefQueueRoutine.class.getName(), copy.getClazz().getName());
     assertEquals("go", copy.getName());
     assertFalse(copy.isOptional());
-    assertEquals(RoutineBriefOrigin.STAGE, copy.getOrigin());
+    assertEquals(RoutineBriefOrigin.FABRICATE_STAGE, copy.getOrigin());
     assertSame(Collections.emptyList(), copy.getNestedRoutines());
     assertSame(Collections.emptyList(), copy.getParameters());
     
@@ -227,11 +227,11 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     ParamsType params = ParameterMutantTrial.createParams();
     when(brief.getParams()).thenReturn(params);
     
-    copy  = new RoutineBriefMutant(brief);
+    copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.FABRICATE_STAGE);
     assertEquals(ProjectBriefQueueRoutine.class.getName(), copy.getClazz().getName());
     assertEquals("go", copy.getName());
     assertFalse(copy.isOptional());
-    assertSame(RoutineBriefOrigin.STAGE, copy.getOrigin());
+    assertSame(RoutineBriefOrigin.FABRICATE_STAGE, copy.getOrigin());
     assertSame(Collections.emptyList(), copy.getNestedRoutines());
     ParameterMutantTrial.assertConvertedParams(copy.getParameters(), this);
   }
@@ -264,10 +264,10 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     routines.add(briefTaskA);
     routines.add(briefTaskB);
     
-    RoutineBriefMutant copy  = new RoutineBriefMutant(brief);
+    RoutineBriefMutant copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.FABRICATE_STAGE);
     assertEquals(ProjectBriefQueueRoutine.class.getName(), copy.getClazz().getName());
     assertEquals("go", copy.getName());
-    assertEquals(RoutineBriefOrigin.STAGE, copy.getOrigin());
+    assertEquals(RoutineBriefOrigin.FABRICATE_STAGE, copy.getOrigin());
     assertTrue(copy.isOptional());
     
     ParameterMutantTrial.assertConvertedParams(copy.getParameters(), this);
@@ -276,14 +276,14 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     RoutineBriefMutant copySubA  = (RoutineBriefMutant) briefs.get(0);
     assertEquals(ProjectQueueRoutine.class.getName(), copySubA.getClazz().getName());
     assertEquals("goA", copySubA.getName());
-    assertEquals(RoutineBriefOrigin.STAGE_TASK, copySubA.getOrigin());
+    assertEquals(RoutineBriefOrigin.FABRICATE_STAGE_TASK, copySubA.getOrigin());
     ParameterMutantTrial.assertConvertedParams(copySubA.getParameters(), this);
     assertFalse(copySubA.isOptional());
     
     RoutineBriefMutant copySubB  = (RoutineBriefMutant) briefs.get(1);
     assertEquals(DependenciesQueueRoutine.class.getName(), copySubB.getClazz().getName());
     assertEquals("goB", copySubB.getName());
-    assertEquals(RoutineBriefOrigin.STAGE_TASK, copySubB.getOrigin());
+    assertEquals(RoutineBriefOrigin.FABRICATE_STAGE_TASK, copySubB.getOrigin());
     ParameterMutantTrial.assertConvertedParams(copySubB.getParameters(), this);
     assertFalse(copySubB.isOptional());
   }
@@ -347,7 +347,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
           
           @Override
           public void run() throws Throwable {
-            new RoutineBriefMutant(new StageType());
+            new RoutineBriefMutant(new StageType(), null);
           }
         });
   }
@@ -455,7 +455,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("boxing")
   public void testStaticMethodConvertStages() throws Exception {
-    Map<String, I_RoutineBrief> routinesFromNull = RoutineBriefMutant.convert(null);
+    Map<String, I_RoutineBrief> routinesFromNull = RoutineBriefMutant.convertStages(null, null);
     assertEquals(0, routinesFromNull.size());
     
     List<StageType> list = new ArrayList<StageType>();
@@ -474,7 +474,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     list.add(cmd3);
     
     Map<String, I_RoutineBrief>  routines = 
-        RoutineBriefMutant.convert(list);
+        RoutineBriefMutant.convertStages(list, RoutineBriefOrigin.FABRICATE_STAGE);
     I_RoutineBrief rb = routines.get("eclipse");
     assertEquals("eclipse", rb.getName());
     assertEquals(EncryptTrait.class.getName(), rb.getClazz().getName());

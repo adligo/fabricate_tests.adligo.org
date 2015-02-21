@@ -22,6 +22,7 @@ public class A_FabPkgTrials implements I_Tests4J_TrialList {
 			
 			A_FabPkgTrials me = new A_FabPkgTrials();
 			params.addTrials(me);
+			params.setMetaTrialClass(FabMetaTrial.class);
 			
 			Tests4J.run(params);
 		} catch (Exception x) {
@@ -43,7 +44,6 @@ public class A_FabPkgTrials implements I_Tests4J_TrialList {
     trials.add(FabricateFactoryTrial.class);
     trials.add(FabricateArgsSetupTrial.class);
     trials.add(FabricateOptsSetupTrial.class);
-    
     return trials;
   }
 

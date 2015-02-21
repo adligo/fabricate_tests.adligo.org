@@ -30,6 +30,7 @@ public class A_FilesTrials implements I_Tests4J_TrialList {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
     trials.addAll(new A_XmlIoTrials().getTrials());
     trials.add(I_FabFilesTrial.class);
+    trials.add(I_FabFilesSystemTrial.class);
     trials.add(I_FileMatcherTrial.class);
     trials.add(I_IOCloseTrackerTrial.class);
     

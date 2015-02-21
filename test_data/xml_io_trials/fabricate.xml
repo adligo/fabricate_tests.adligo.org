@@ -59,6 +59,20 @@
     	    	    </cns:params>
     	    	</fns:task>  
     	    </fns:stage>
+    	    <fns:archiveStage name="archive" class="com.example.ExampleArchive" >
+    	    	<fns:params>
+	    	    	<cns:param key="archiveParam" value="archiveParamValue">
+	    	    	       <cns:param key="nestedArchiveParam" value="nestedArchiveParamValue"/>
+	    	    	</cns:param>
+    	    	</fns:params>
+    	    	<fns:task name="archiveTask" class="bar">
+    	    		<cns:params>
+	    	    	    <cns:param key="A" value="B">
+	    	    	       <cns:param key="C" value="D"/>
+	    	    	    </cns:param>
+    	    	    </cns:params>
+    	    	</fns:task>  
+    	    </fns:archiveStage>
     	</fns:stages>    
     	<fns:projects>
     	    <fns:scm name="Git">

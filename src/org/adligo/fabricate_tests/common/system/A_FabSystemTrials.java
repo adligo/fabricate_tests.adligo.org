@@ -1,5 +1,6 @@
 package org.adligo.fabricate_tests.common.system;
 
+import org.adligo.fabricate.common.system.I_RunMonitor;
 import org.adligo.fabricate_tests.etc.FabTestParamsFactory;
 import org.adligo.tests4j.run.api.Tests4J;
 import org.adligo.tests4j.system.shared.api.I_Tests4J_TrialList;
@@ -31,7 +32,9 @@ public class A_FabSystemTrials implements I_Tests4J_TrialList {
     trials.add(I_ExecutionResultTrial.class);
     trials.add(I_ExecutorTrial.class);
     trials.add(I_FabSystemTrial.class);
+    trials.add(I_RunMonitorTrial.class);
     
+    trials.add(BufferedInputStreamTrial.class);
     trials.add(ExecutionResultMutantTrial.class);
     
     trials.add(FabSystemTrial.class);
@@ -42,7 +45,8 @@ public class A_FabSystemTrials implements I_Tests4J_TrialList {
     
     
     trials.add(ProcessBuilderWrapperTrial.class);
-    trials.add(BufferedInputStreamTrial.class);
+    trials.add(RunMonitorTrial.class);
+    
     trials.add(ExecutorTrial.class);
     
     trials.add(CommandLineArgsTrial.class);
