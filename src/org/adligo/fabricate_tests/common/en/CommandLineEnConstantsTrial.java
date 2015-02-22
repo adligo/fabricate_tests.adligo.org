@@ -36,6 +36,8 @@ public class CommandLineEnConstantsTrial extends MockitoSourceFileTrial {
     assertEquals("--update", messages.getUpdate(false));
     assertEquals("-v", messages.getVersion(true));
     assertEquals("--version", messages.getVersion(false));
+    assertEquals("-w", messages.getWriteLog(true));
+    assertEquals("--write-log", messages.getWriteLog(false));
     
     assertEquals("-a", messages.getAlias("--archive"));
     assertEquals("-c", messages.getAlias("--confirm-repository-integrity"));
@@ -50,6 +52,7 @@ public class CommandLineEnConstantsTrial extends MockitoSourceFileTrial {
     
     assertEquals("-u", messages.getAlias("--update"));
     assertEquals("-v", messages.getAlias("--version"));
+    assertEquals("-w", messages.getAlias("--write-log"));
   }
   
 }

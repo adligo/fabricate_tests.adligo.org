@@ -18,8 +18,8 @@ import org.adligo.tests4j.system.shared.trials.TrialTypeAnnotation;
 
 @TrialTypeAnnotation (type=TrialType.META_TRIAL_TYPE)
 public class FabMetaTrial  extends AbstractTrial implements I_MetaTrial {
-	private static final long TESTS = 472;
-	private static final int TRIALS = 108;
+	private static final long TESTS = 480;
+	private static final int TRIALS = 110;
 	
 	private ClassesWithSourceFileTrialsCalculator calculator_;
 	private I_TrialRunResult results_;
@@ -77,7 +77,7 @@ public class FabMetaTrial  extends AbstractTrial implements I_MetaTrial {
 		assertCoverageMatrix("org.adligo.fabricate.common.files",
         100.0, 73.0);
 		assertCoverageMatrix("org.adligo.fabricate.common.log",
-        100.0, 88.0);
+        100.0, 83.0);
 		
 		assertCoverageMatrix("org.adligo.fabricate.models.common",
         100.0, 75.0);

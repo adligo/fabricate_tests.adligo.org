@@ -20,10 +20,19 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getCheckingFabricateRuntimeDependencies());
     asserter.assertConstant("Compiled on <X/>.", 
         messages.getCompiledOnX());
+    
     asserter.assertConstant("did not pass the extract check.", 
         messages.getDidNotPassTheExtractCheck());
     asserter.assertConstant("did not pass the md5 check.", 
         messages.getDidNotPassTheMd5Check());
+    
+    asserter.assertConstant("Duration was <X/> milliseconds.", 
+        messages.getDurationWasXMilliseconds());
+    asserter.assertConstant("Duration was <X/> minutes.", 
+        messages.getDurationWasXMinutes());
+    asserter.assertConstant("Duration was <X/> seconds.", 
+        messages.getDurationWasXSeconds());
+    
     asserter.assertConstant("Exception: There was a problem executing java with the following $JAVA_HOME;", 
         messages.getExceptionExecutingJavaWithTheFollowingJavaHome());
     asserter.assertConstant("Exception: Fabricate requires Java 1.7 or greater.", 
@@ -49,8 +58,14 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getFabricateByAdligo());
     asserter.assertConstant("Fabricating...", 
         messages.getFabricating());
+    asserter.assertConstant("Fabricate appears to already be running ", 
+        messages.getFabricateAppearsToBeAlreadyRunning());
+    asserter.assertConstant("(run.marker is in the same directory as fabricate.xml).", 
+        messages.getFabricateAppearsToBeAlreadyRunningPartTwo());
     asserter.assertConstant("Fabrication failed!", 
         messages.getFabricationFailed());
+    asserter.assertConstant("Fabrication successful!", 
+        messages.getFabricationSuccessful());
     asserter.assertConstant("failed!", 
         messages.getFailed());
     asserter.assertConstant("finished.", 
@@ -87,6 +102,9 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getTheFollowingLocalRepositoryIsLockedByAnotherProcess());
     asserter.assertConstant("The following remote repository appears to be down;", 
         messages.getTheFollowingRemoteRepositoryAppearsToBeDown());
+    
+    asserter.assertConstant("There was a problem creating run.marker in the following directory;", 
+        messages.getThereWasAProblemCreatingRunMarkerInTheFollowingDirectory());
     
     asserter.assertConstant("to the following folder;", 
         messages.getToTheFollowingFolder());

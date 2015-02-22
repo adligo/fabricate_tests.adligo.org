@@ -5,7 +5,7 @@ import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
-@SourceFileScope (sourceClass=RoutineBriefOrigin.class, minCoverage=92.0)
+@SourceFileScope (sourceClass=RoutineBriefOrigin.class, minCoverage=70.0)
 public class RoutineBriefOriginTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("boxing")
