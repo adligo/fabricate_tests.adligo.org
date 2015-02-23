@@ -3,12 +3,13 @@ package org.adligo.fabricate_tests.common.util;
 import org.adligo.fabricate.common.util.ByteMutant;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
+import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 import org.adligo.tests4j_tests.base_trials.I_CountType;
 import org.adligo.tests4j_tests.base_trials.SourceFileCountingTrial;
 
 
 @SourceFileScope (sourceClass=ByteMutant.class, minCoverage=82.0)
-public class ByteMutantTrial extends SourceFileCountingTrial {
+public class ByteMutantTrial extends MockitoSourceFileTrial {
 	
 	@SuppressWarnings("boxing")
   @Test
@@ -179,37 +180,5 @@ public class ByteMutantTrial extends SourceFileCountingTrial {
 			assertEquals(6, eb.getUTF8_BytesInSequence());
 	}
 
-	public int getTests(I_CountType type) {
-		return super.getTests(type, 5);
-	}
 
-	@Override
-	public int getAsserts(I_CountType type) {
-		int thisAsserts = 2324;
-		//code coverage and circular dependencies +
-		//custom afterTrialTests
-		//+ see above
-		int thisAfterAsserts = 2;
-		if (type.isFromMetaWithCoverage()) {
-			return super.getAsserts(type, thisAsserts + thisAfterAsserts);
-		} else {
-			return super.getAsserts(type, thisAsserts);
-		}
-	}
-
-	@Override
-	public int getUniqueAsserts(I_CountType type) {
-		int thisUniqueAsserts = 1539;
-		//code coverage and circular dependencies +
-		//custom afterTrialTests
-		//+ see above
-		int thisAfterUniqueAsserts = 2;
-		if (type.isFromMetaWithCoverage()) {
-			//code coverage and circular dependencies +
-			//custom afterTrialTests
-			return super.getUniqueAsserts(type, thisUniqueAsserts + thisAfterUniqueAsserts);
-		} else {
-			return super.getUniqueAsserts(type, thisUniqueAsserts);
-		}
-	}
 }

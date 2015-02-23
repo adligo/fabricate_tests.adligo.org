@@ -5,6 +5,7 @@ import org.adligo.fabricate.common.files.xml_io.FabXmlFileIO;
 import org.adligo.fabricate.common.log.DeferredLog;
 import org.adligo.fabricate.common.log.I_FabLog;
 import org.adligo.fabricate.common.system.BufferedInputStream;
+import org.adligo.fabricate.common.system.ComputerInfoDiscovery;
 import org.adligo.fabricate.common.system.FabSystem;
 import org.adligo.fabricate.common.system.I_RunMonitor;
 import org.adligo.fabricate.common.system.ProcessBuilderWrapper;
@@ -54,6 +55,10 @@ public class FabSystemTrial extends MockitoSourceFileTrial {
     assertContains(vals, "v3");
     assertEquals(3, vals.size());
     assertEquals(" k2=v1,v2,v3", fabSystem.toScriptArgs());
+    
+    assertEquals(Runtime.getRuntime().availableProcessors(), fabSystem.getAvailableProcessors());
+    assertEquals(System.getProperty("java.version", "Unknown"), 
+        fabSystem.getProperty("java.version", "Unknown"));
   }
   
   @SuppressWarnings("boxing")
@@ -121,5 +126,27 @@ public class FabSystemTrial extends MockitoSourceFileTrial {
     assertEquals(1, rm.getSequence());
     rm.run();
     assertTrue(ran.get());
+  }
+  
+  @SuppressWarnings("boxing")
+  @Test
+  public void testMethodsGetComputerInfoDiscoveryDelegates() {
+    FabSystem sys = new FabSystem();
+    //yep mirror the asserts just to do the passthrough,
+    // the implementation is tested in ComputerInfoDiscoverTrial
+    assertEquals(ComputerInfoDiscovery.getJavaVersion(sys), sys.getJavaVersion());
+    String os = ComputerInfoDiscovery.getOperatingSystem(sys);
+    assertEquals(os, sys.getOperatingSystem());
+    assertEquals(ComputerInfoDiscovery.getOperatingSystemVersion(sys, os), 
+        sys.getOperatingSystemVersion(os));
+    
+    String [] cpuInfo = ComputerInfoDiscovery.getCpuInfo(sys, os);
+    String [] sysCpuInfo = sys.getCpuInfo(os);
+    assertEquals(cpuInfo[0], sysCpuInfo[0]);
+    assertEquals(cpuInfo[1], sysCpuInfo[1]);
+    assertEquals(cpuInfo.length, sysCpuInfo.length);
+    assertEquals(2, sysCpuInfo.length);
+    
+    
   }
 }

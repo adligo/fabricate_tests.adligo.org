@@ -113,6 +113,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     asserter.assertConstant("Using the following remote repositories;", 
         messages.getUsingTheFollowingRemoteRepositories());
     
+    asserter.assertConstant("Unknown", 
+        messages.getUnknown());
     asserter.assertConstant("Version <X/>.", 
         messages.getVersionX());
     asserter.assertConstantsMatchMethods(SystemEnMessages.class);

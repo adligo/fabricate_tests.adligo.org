@@ -35,9 +35,11 @@ public class A_FabSystemTrials implements I_Tests4J_TrialList {
     trials.add(I_RunMonitorTrial.class);
     
     trials.add(BufferedInputStreamTrial.class);
+    trials.add(ComputerInfoDiscoveryTrial.class);
     trials.add(ExecutionResultMutantTrial.class);
     
     trials.add(FabSystemTrial.class);
+    trials.add(FabSystemSetupTrial.class);
     trials.add(FabricateDefaultsTrial.class);
     trials.add(FabricateXmlDiscoveryTrial.class);
     trials.add(FabricateEnvironmentTrial.class);

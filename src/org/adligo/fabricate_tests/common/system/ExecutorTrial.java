@@ -1,5 +1,6 @@
 package org.adligo.fabricate_tests.common.system;
 
+import org.adligo.fabricate.common.files.I_FabFileIO;
 import org.adligo.fabricate.common.system.BufferedInputStream;
 import org.adligo.fabricate.common.system.Executor;
 import org.adligo.fabricate.common.system.FabSystem;
@@ -53,6 +54,15 @@ public class ExecutorTrial extends MockitoSourceFileTrial {
     });
     doAnswer(interrupMethod).when(threadMock).interrupt();
     
+    I_FabFileIO fileMock = mock(I_FabFileIO.class);
+    File dirMock = mock(File.class);
+    when(dirMock.getAbsolutePath()).thenReturn("absPath");
+    when(fileMock.instance(".")).thenReturn(dirMock);
+    when(sysMock.getFileIO()).thenReturn(fileMock);
+    
+    File dirMock2 = mock(File.class);
+    when(fileMock.instance("absPath")).thenReturn(dirMock2);
+    
     when(sysMock.currentThread()).thenReturn(threadMock);
     ExecutorMock exe = new ExecutorMock(sysMock);
     assertThrown(new ExpectedThrowable(new RuntimeException("oi")), 
@@ -67,8 +77,7 @@ public class ExecutorTrial extends MockitoSourceFileTrial {
     assertEquals(1, redirectErrorStreamMethod.count());
     assertTrue((Boolean) redirectErrorStreamMethod.getArg(0));
     assertEquals(1, directoryMethod.count());
-    File dir = (File) directoryMethod.getArg(0);
-    assertEquals(".", dir.getName());
+    assertSame(dirMock2, (File) directoryMethod.getArg(0));
     assertEquals(1, interrupMethod.count());
   }
   
@@ -105,6 +114,15 @@ public class ExecutorTrial extends MockitoSourceFileTrial {
     when(bisMock.readLine()).thenThrow(new IOException("xyz"));
     when(sysMock.newBufferedInputStream(in)).thenReturn(bisMock);
     
+    I_FabFileIO fileMock = mock(I_FabFileIO.class);
+    File dirMock = mock(File.class);
+    when(dirMock.getAbsolutePath()).thenReturn("absPath");
+    when(fileMock.instance(".")).thenReturn(dirMock);
+    when(sysMock.getFileIO()).thenReturn(fileMock);
+    
+    File dirMock2 = mock(File.class);
+    when(fileMock.instance("absPath")).thenReturn(dirMock2);
+    
     ExecutorMock exe = new ExecutorMock(sysMock);
     assertThrown(new ExpectedThrowable(new IOException("xyz")), 
         new I_Thrower() {
@@ -119,8 +137,7 @@ public class ExecutorTrial extends MockitoSourceFileTrial {
     assertTrue((Boolean) redirectErrorStreamMethod.getArg(0));
     assertEquals(1, waitForMethod.count());
     assertEquals(1, directoryMethod.count());
-    File dir = (File) directoryMethod.getArg(0);
-    assertEquals(".", dir.getName());
+    assertSame(dirMock2,(File) directoryMethod.getArg(0));
     assertEquals(1, closeMethod.count());
     
   }
@@ -159,6 +176,16 @@ public class ExecutorTrial extends MockitoSourceFileTrial {
     BufferedInputStream bir = new BufferedInputStream(baos);
     when(sysMock.newBufferedInputStream(in)).thenReturn(bir);
     
+    I_FabFileIO fileMock = mock(I_FabFileIO.class);
+    File dirMock = mock(File.class);
+    when(dirMock.getAbsolutePath()).thenReturn("absPath");
+    when(fileMock.instance(".")).thenReturn(dirMock);
+    
+    File dirMock2 = mock(File.class);
+    when(fileMock.instance("absPath")).thenReturn(dirMock2);
+    
+    when(sysMock.getFileIO()).thenReturn(fileMock);
+    
     ExecutorMock exe = new ExecutorMock(sysMock);
     I_ExecutionResult er = exe.executeProcess(".", "echo","foo");
     
@@ -167,8 +194,7 @@ public class ExecutorTrial extends MockitoSourceFileTrial {
     assertTrue((Boolean) redirectErrorStreamMethod.getArg(0));
     assertEquals(1, waitForMethod.count());
     assertEquals(1, directoryMethod.count());
-    File dir = (File) directoryMethod.getArg(0);
-    assertEquals(".", dir.getName());
+    assertSame(dirMock2,  (File) directoryMethod.getArg(0));
     
     assertEquals(output + System.lineSeparator(), er.getOutput());
     assertEquals(0, er.getExitCode());

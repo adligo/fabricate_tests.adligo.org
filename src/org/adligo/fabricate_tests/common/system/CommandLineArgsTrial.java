@@ -72,6 +72,26 @@ public class CommandLineArgsTrial extends MockitoSourceFileTrial {
    
     passable =  CommandLineArgs.toPassableString(new String[] {"-v","--debug"});
     assertEquals("\"[2,[2,-v][7,--debug]]\"", passable);
+    assertVDebug(passable);
+    //windows bat file pulls off the quotes
+    assertVDebug("[2,[2,-v][7,--debug]]");
+    
+    passable =  CommandLineArgs.toPassableString(new String[] {"cmd=encrypt"});
+    assertEquals("\"[1,[11,cmd=encrypt]]\"", passable);
+    assertCmdEncrypt(passable);
+    //windows bat file pulls off the quotes
+    assertCmdEncrypt("[1,[11,cmd=encrypt]]");
+  }
+
+  public void assertCmdEncrypt(String passable) {
+    String[] passed;
+    passed = CommandLineArgs.fromPassableString(passable);
+    assertEquals("cmd=encrypt", passed[0]);
+    assertEquals(1, passed.length);
+  }
+
+  public void assertVDebug(String passable) {
+    String[] passed;
     passed = CommandLineArgs.fromPassableString(passable);
     assertEquals("-v", passed[0]);
     assertEquals("--debug", passed[1]);

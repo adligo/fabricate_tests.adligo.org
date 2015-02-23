@@ -199,8 +199,8 @@ public class FabricateOptsSetupTrial extends MockitoSourceFileTrial {
     
     new FabricateOptsSetup(new String[] {}, sysMock_, factoryMock);
     
-    assertEquals("LASTLINE -Xmx64m -Xms16m -cp /somewhere/fabHome/commons-logging-1.2.jar;"
-        + "/somewhere/fabHome/httpclient-4.3.5.jar;/somewhere/fabHome/httpcore-4.3.2.jar", 
+    assertEquals("LASTLINE -Xmx64m -Xms16m -cp /somewhere/fabHome/lib/commons-logging-1.2.jar;"
+        + "/somewhere/fabHome/lib/httpclient-4.3.5.jar;/somewhere/fabHome/lib/httpcore-4.3.2.jar", 
         printlnMethod.getArg(0));
   }
   
@@ -250,8 +250,8 @@ public class FabricateOptsSetupTrial extends MockitoSourceFileTrial {
     
     new FabricateOptsSetup(new String[] {}, sysMock_, factoryMock);
     
-    assertEquals("LASTLINE -Xmx64m -Xms16m -cp /somewhere/fabHome/commons-logging-1.2.jar;"
-        + "/somewhere/fabHome/httpclient-4.3.5.jar;/somewhere/fabHome/httpcore-4.3.2.jar;"
+    assertEquals("LASTLINE -Xmx64m -Xms16m -cp /somewhere/fabHome/lib/commons-logging-1.2.jar;"
+        + "/somewhere/fabHome/lib/httpclient-4.3.5.jar;/somewhere/fabHome/lib/httpcore-4.3.2.jar;"
         + "/somewhere/repogroupA/fileNameA;/somewhere/repogroupB/fileNameB", 
         printlnMethod.getArg(0));
   }

@@ -29,6 +29,8 @@ public class A_FabUtilTrials implements I_Tests4J_TrialList {
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
     trials.add(ByteMutantTrial.class);
+    trials.add(MethodBlockerTrial.class);
+    trials.add(StringUtilsTrial.class);
     return trials;
   }
 
