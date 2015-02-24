@@ -1,6 +1,7 @@
 package org.adligo.fabricate_tests.common.system;
 
 import org.adligo.fabricate.common.system.I_FabSystem;
+import org.adligo.fabricate.common.system.I_LocatableRunable;
 import org.adligo.fabricate.common.system.RunMonitor;
 import org.adligo.tests4j.system.shared.trials.BeforeTrial;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
@@ -29,7 +30,12 @@ public class RunMonitorTrial extends MockitoSourceFileTrial {
         new ArrayBlockingQueue<Boolean>(1));
     
     AtomicBoolean ran = new AtomicBoolean(false);
-    Runnable run = new Runnable() {
+    I_LocatableRunable run = new I_LocatableRunable() {
+
+      @Override
+      public String getCurrentLocation() {
+        return "cl";
+      }
       
       @Override
       public void run() {
@@ -61,8 +67,10 @@ public class RunMonitorTrial extends MockitoSourceFileTrial {
       Thread.currentThread().interrupt();
     }
     assertTrue(ran.get());
+    assertFalse(rm.hasFailure());
     assertTrue(rm.isFinished());
     assertNull(rm.getCaught());
+    assertSame(run, rm.getDelegate());
   }
   
   @SuppressWarnings("boxing")
@@ -71,7 +79,12 @@ public class RunMonitorTrial extends MockitoSourceFileTrial {
     I_FabSystem system = mock(I_FabSystem.class);
     when(system.newArrayBlockingQueue(Boolean.class, 1)).thenReturn(
         new ArrayBlockingQueue<Boolean>(1));
-    Runnable run = new Runnable() {
+    I_LocatableRunable run = new I_LocatableRunable() {
+
+      @Override
+      public String getCurrentLocation() {
+        return "cl";
+      }
       
       @Override
       public void run() {
@@ -103,6 +116,7 @@ public class RunMonitorTrial extends MockitoSourceFileTrial {
       Thread.currentThread().interrupt();
     }
     assertTrue(rm.isFinished());
+    assertTrue(rm.hasFailure());
     Throwable caught = rm.getCaught();
     assertEquals(RuntimeException.class.getName(), caught.getClass().getName());
     assertEquals("x", caught.getMessage());

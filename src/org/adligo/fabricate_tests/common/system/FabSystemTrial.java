@@ -7,6 +7,7 @@ import org.adligo.fabricate.common.log.I_FabLog;
 import org.adligo.fabricate.common.system.BufferedInputStream;
 import org.adligo.fabricate.common.system.ComputerInfoDiscovery;
 import org.adligo.fabricate.common.system.FabSystem;
+import org.adligo.fabricate.common.system.I_LocatableRunable;
 import org.adligo.fabricate.common.system.I_RunMonitor;
 import org.adligo.fabricate.common.system.ProcessBuilderWrapper;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
@@ -109,11 +110,16 @@ public class FabSystemTrial extends MockitoSourceFileTrial {
     
     //run monitor
     final AtomicBoolean ran = new AtomicBoolean(false);
-    Runnable r = new Runnable() {
+    I_LocatableRunable r = new I_LocatableRunable() {
 
       @Override
       public void run() {
         ran.set(true);
+      }
+
+      @Override
+      public String getCurrentLocation() {
+        return "cl";
       }
     };
     I_RunMonitor rm = fabSystem.newRunMonitor(r, 0);

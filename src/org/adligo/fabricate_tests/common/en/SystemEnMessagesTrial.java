@@ -14,8 +14,43 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     I18N_Asserter asserter = new I18N_Asserter(this);
     
     SystemEnMessages messages = SystemEnMessages.INSTANCE;
+    
+    asserter.assertConstant("Archive stage <X/> is still running.", 
+        messages.getArchiveStageXIsStillRunning());
+    asserter.assertConstant("Archive stage <X/> is still running on project <Z/>.", 
+        messages.getArchiveStageXIsStillRunningOnProjectZ());
+    asserter.assertConstant("Archive stage <X/>, task <Y/> is still running.", 
+        messages.getArchiveStageXTaskYIsStillRunning());
+    asserter.assertConstant("Archive stage <X/>, task <Y/> is still running on project <Z/>.", 
+        messages.getArchiveStageXTaskYIsStillRunningOnProjectZ());
+    asserter.assertConstant("Archive stage <X/> is still setting up.", 
+        messages.getArchiveStageXIsStillSettingUp());
+
+    asserter.assertConstant("Build stage <X/> is still running.", 
+        messages.getBuildStageXIsStillRunning());
+    asserter.assertConstant("Build stage <X/> is still running on project <Z/>.", 
+        messages.getBuildStageXIsStillRunningOnProjectZ());
+    asserter.assertConstant("Build stage <X/>, task <Y/> is still running.", 
+        messages.getBuildStageXTaskYIsStillRunning());
+    asserter.assertConstant("Build stage <X/>, task <Y/> is still running on project <Z/>.", 
+        messages.getBuildStageXTaskYIsStillRunningOnProjectZ());
+    asserter.assertConstant("Build stage <X/> is still setting up.", 
+        messages.getBuildStageXIsStillSettingUp());
+    
     asserter.assertConstant("Building Fabricate runtime class path.", 
         messages.getBuildingFabricateRuntimeClassPath());
+    
+    asserter.assertConstant("Command <X/> is still running.", 
+        messages.getCommandXIsStillRunning());
+    asserter.assertConstant("Command <X/> is still running on project <Z/>.", 
+        messages.getCommandXIsStillRunningOnProjectZ());
+    asserter.assertConstant("Command <X/>, task <Y/> is still running.", 
+        messages.getCommandXTaskYIsStillRunning());
+    asserter.assertConstant("Command <X/>, task <Y/> is still running on project <Z/>.", 
+        messages.getCommandXTaskYIsStillRunningOnProjectZ());
+    asserter.assertConstant("Command <X/> is still setting up.", 
+        messages.getCommandXIsStillSettingUp());
+    
     asserter.assertConstant("Checking Fabricate runtime dependencies.", 
         messages.getCheckingFabricateRuntimeDependencies());
     asserter.assertConstant("Compiled on <X/>.", 

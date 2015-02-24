@@ -32,6 +32,7 @@ public class A_RoutinesPkgTrials implements I_Tests4J_TrialList {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
     trials.addAll(new A_RoutinesImplicitPkgTrials().getTrials());
     
+    trials.add(RoutineExecutionEngineTrial.class);
     return trials;
   }
 

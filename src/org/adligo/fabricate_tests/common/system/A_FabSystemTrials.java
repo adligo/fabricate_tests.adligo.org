@@ -31,6 +31,7 @@ public class A_FabSystemTrials implements I_Tests4J_TrialList {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
     trials.add(I_ExecutionResultTrial.class);
     trials.add(I_ExecutorTrial.class);
+    trials.add(I_LocatableRunableTrial.class);
     trials.add(I_FabSystemTrial.class);
     trials.add(I_RunMonitorTrial.class);
     
