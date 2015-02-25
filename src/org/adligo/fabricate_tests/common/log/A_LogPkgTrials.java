@@ -31,6 +31,7 @@ public class A_LogPkgTrials implements I_Tests4J_TrialList {
     trials.add(I_FabLogTrial.class);
     trials.add(I_FabLogSystemTrial.class);
     trials.add(I_PrintTrial.class);
+    trials.add(I_FabFileLogTrial.class);
     
     trials.add(DeferredLogTrial.class);
     trials.add(ThreadLocalPrintStreamTrial.class);

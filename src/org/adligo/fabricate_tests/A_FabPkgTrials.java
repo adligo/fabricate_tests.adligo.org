@@ -44,6 +44,7 @@ public class A_FabPkgTrials implements I_Tests4J_TrialList {
     trials.add(FabricateFactoryTrial.class);
     trials.add(FabricateArgsSetupTrial.class);
     trials.add(FabricateOptsSetupTrial.class);
+    trials.add(FabricateControllerTrial.class);
     return trials;
   }
 

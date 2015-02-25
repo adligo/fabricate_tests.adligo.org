@@ -1,6 +1,5 @@
 package org.adligo.fabricate_tests.routines;
 
-import org.adligo.fabricate.repository.DependenciesNormalizer;
 import org.adligo.fabricate_tests.etc.FabTestParamsFactory;
 import org.adligo.fabricate_tests.routines.implicit.A_RoutinesImplicitPkgTrials;
 import org.adligo.tests4j.run.api.Tests4J;
@@ -33,6 +32,8 @@ public class A_RoutinesPkgTrials implements I_Tests4J_TrialList {
     trials.addAll(new A_RoutinesImplicitPkgTrials().getTrials());
     
     trials.add(RoutineExecutionEngineTrial.class);
+    trials.add(RoutineFabricateFactoryTrial.class);
+    trials.add(RoutineFactoryTrial.class);
     return trials;
   }
 

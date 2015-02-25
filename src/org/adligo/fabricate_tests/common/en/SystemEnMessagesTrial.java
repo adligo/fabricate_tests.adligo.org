@@ -138,6 +138,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     asserter.assertConstant("The following remote repository appears to be down;", 
         messages.getTheFollowingRemoteRepositoryAppearsToBeDown());
     
+    asserter.assertConstant("There was a problem creating the following directory;", 
+        messages.getThereWasAProblemCreatingTheFollowingDirectory());
     asserter.assertConstant("There was a problem creating run.marker in the following directory;", 
         messages.getThereWasAProblemCreatingRunMarkerInTheFollowingDirectory());
     

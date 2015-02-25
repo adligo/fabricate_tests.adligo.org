@@ -9,9 +9,11 @@ import org.adligo.fabricate.common.system.FabSystem;
 import org.adligo.fabricate.common.system.FabricateDefaults;
 import org.adligo.fabricate.common.system.FabricateEnvironment;
 import org.adligo.fabricate.common.system.FabricateXmlDiscovery;
+import org.adligo.fabricate.managers.CommandManager;
 import org.adligo.fabricate.models.dependencies.I_Dependency;
 import org.adligo.fabricate.models.fabricate.Fabricate;
 import org.adligo.fabricate.models.fabricate.FabricateMutant;
+import org.adligo.fabricate.models.fabricate.I_Fabricate;
 import org.adligo.fabricate.models.fabricate.I_FabricateXmlDiscovery;
 import org.adligo.fabricate.repository.DefaultRepositoryPathBuilder;
 import org.adligo.fabricate.repository.DependenciesManager;
@@ -24,6 +26,7 @@ import org.adligo.fabricate.repository.I_LibraryResolver;
 import org.adligo.fabricate.repository.I_RepositoryPathBuilder;
 import org.adligo.fabricate.repository.LibraryResolver;
 import org.adligo.fabricate.repository.RepositoryManager;
+import org.adligo.fabricate.routines.RoutineFabricateFactory;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateDependencies;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.DependencyType;
@@ -75,44 +78,7 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
     ThreadLocalPrintStreamMock.set(printStream);
   }
   
-  @Test
-  public void testMethods() {
-    FabricateFactory factory = new FabricateFactory();
-    ConcurrentLinkedQueue<I_Dependency> clq = new ConcurrentLinkedQueue<I_Dependency>();
-    I_DependenciesManager idm = factory.createDependenciesManager(sysMock_, clq);
-    assertEquals(DependenciesManager.class.getName(), idm.getClass().getName());
-    DependenciesManager dm = (DependenciesManager) idm;
-    assertSame(clq, dm.getDependencyQueue());
-    
-    I_DependenciesNormalizer idn = factory.createDependenciesNormalizer();
-    assertEquals(DependenciesNormalizer.class.getName(), idn.getClass().getName());
-    
-    I_RepositoryPathBuilder rpb = factory.createRepositoryPathBuilder("remoteRepo");
-    assertEquals(DefaultRepositoryPathBuilder.class.getName(), rpb.getClass().getName());
-    DefaultRepositoryPathBuilder builder = (DefaultRepositoryPathBuilder) rpb;
-    assertEquals("remoteRepo", builder.getRepository());
-    assertEquals("/", builder.getSeperator());
-    
-    I_RepositoryPathBuilder lpb = factory.createRepositoryPathBuilder("remoteRepo","\\");
-    assertEquals(DefaultRepositoryPathBuilder.class.getName(), lpb.getClass().getName());
-    DefaultRepositoryPathBuilder localBuilder = (DefaultRepositoryPathBuilder) lpb;
-    assertEquals("remoteRepo", localBuilder.getRepository());
-    assertEquals("\\", localBuilder.getSeperator());
-    
-    I_DependencyManager idepm = factory.createDependencyManager(sysMock_, Collections.singletonList("repo"), builder);
-    assertEquals(DependencyManager.class.getName(), idepm.getClass().getName());
-    
-    FabricateXmlDiscovery disc = factory.createDiscovery(sysMock_);
-    assertNotNull(disc);
-    
-    FabricateMutant fabricate = new FabricateMutant();
-    I_LibraryResolver lr =  factory.createLibraryResolver(sysMock_, fabricate);
-    assertEquals(LibraryResolver.class.getName(), lr.getClass().getName());
-    
-    RepositoryManager rm = factory.createRepositoryManager(sysMock_, fabricate);
-    assertNotNull(rm);
-    
-  }
+  
   
   @Test
   public void testMethodCreate() throws Exception {
@@ -148,6 +114,129 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
     assertEquals(FabricateDefaults.LOCAL_REPOSITORY, fab.getFabricateRepository());
   }
   
+  @Test
+  public void testMethodCreateSimple() throws Exception {
+    FabricateFactory factory = new FabricateFactory();
+    Fabricate fab = factory.create(new FabricateMutant());
+    assertNotNull(fab);
+  }
+  
+  @Test
+  public void testMethodCreateCommandManager() throws Exception {
+    FabricateFactory factory = new FabricateFactory();
+    RoutineFabricateFactory routineFactory = new RoutineFabricateFactory(new FabricateMutant(), true);
+    
+    CommandManager cm = factory.createCommandManager(
+        Collections.singleton("hey"), sysMock_, routineFactory);
+    assertNotNull(cm);
+  }
+  
+  @Test
+  public void testMethodCreateDependenciesNormalizer() {
+    FabricateFactory factory = new FabricateFactory();
+    ConcurrentLinkedQueue<I_Dependency> clq = new ConcurrentLinkedQueue<I_Dependency>();
+    I_DependenciesManager idm = factory.createDependenciesManager(sysMock_, clq);
+    assertEquals(DependenciesManager.class.getName(), idm.getClass().getName());
+    DependenciesManager dm = (DependenciesManager) idm;
+    assertSame(clq, dm.getDependencyQueue());
+    
+    I_DependenciesNormalizer idn = factory.createDependenciesNormalizer();
+    assertEquals(DependenciesNormalizer.class.getName(), idn.getClass().getName());
+  }
+  
+  @Test
+  public void testMethodCreateDependenciesManager() {
+    FabricateFactory factory = new FabricateFactory();
+    ConcurrentLinkedQueue<I_Dependency> clq = new ConcurrentLinkedQueue<I_Dependency>();
+    I_DependenciesManager idm = factory.createDependenciesManager(sysMock_, clq);
+    assertEquals(DependenciesManager.class.getName(), idm.getClass().getName());
+    DependenciesManager dm = (DependenciesManager) idm;
+    assertSame(clq, dm.getDependencyQueue());
+    
+    I_DependenciesNormalizer idn = factory.createDependenciesNormalizer();
+    assertEquals(DependenciesNormalizer.class.getName(), idn.getClass().getName());
+    
+    I_RepositoryPathBuilder builder = mock(I_RepositoryPathBuilder.class);
+    
+    I_DependencyManager idepm = factory.createDependencyManager(sysMock_, Collections.singletonList("repo"), builder);
+    assertEquals(DependencyManager.class.getName(), idepm.getClass().getName());
+
+    FabricateXmlDiscovery disc = factory.createDiscovery(sysMock_);
+    assertNotNull(disc);
+    
+  }
+  
+  @Test
+  public void testMethodCreateDiscovery() {
+    FabricateFactory factory = new FabricateFactory();
+    FabricateXmlDiscovery disc = factory.createDiscovery(sysMock_);
+    assertNotNull(disc);
+  }
+  
+  @Test
+  public void testMethodCreateMutant() throws Exception {
+    FabricateFactory factory = new FabricateFactory();
+    FabricateType fabType = new FabricateType();
+    I_FabricateXmlDiscovery xmlDiscMock = mock(I_FabricateXmlDiscovery.class);
+    when(xmlDiscMock.getDevXmlDir()).thenReturn("someDevXmlDir");
+    when(xmlDiscMock.getFabricateXmlDir()).thenReturn("someFabricateXmlDir");
+    when(xmlDiscMock.getProjectXmlDir()).thenReturn("someProjectXmlDir");
+    
+    when(sysMock_.getenv(FabricateEnvironment.JAVA_HOME)).thenReturn("javaHome");
+    when(sysMock_.getenv(FabricateEnvironment.FABRICATE_HOME)).thenReturn("fabricateHome");
+    
+   
+    Fabricate fab = factory.create(sysMock_, fabType, xmlDiscMock);
+    FabricateMutant mut = factory.createMutant(fab);
+    assertNotNull(mut);
+  }
+  
+  @Test
+  public void testMethodCreateRepositoryManager() {
+    FabricateFactory factory = new FabricateFactory();
+    ConcurrentLinkedQueue<I_Dependency> clq = new ConcurrentLinkedQueue<I_Dependency>();
+    I_DependenciesManager idm = factory.createDependenciesManager(sysMock_, clq);
+    assertEquals(DependenciesManager.class.getName(), idm.getClass().getName());
+    DependenciesManager dm = (DependenciesManager) idm;
+    assertSame(clq, dm.getDependencyQueue());
+    
+    FabricateMutant fabricate = new FabricateMutant();
+    I_LibraryResolver lr =  factory.createLibraryResolver(sysMock_, fabricate);
+    assertEquals(LibraryResolver.class.getName(), lr.getClass().getName());
+    
+    RepositoryManager rm = factory.createRepositoryManager(sysMock_, fabricate);
+    assertNotNull(rm);
+  }
+  
+  @Test
+  public void testMethodCreateRepositoryPathBuilder() {
+    FabricateFactory factory = new FabricateFactory();
+    ConcurrentLinkedQueue<I_Dependency> clq = new ConcurrentLinkedQueue<I_Dependency>();
+    I_DependenciesManager idm = factory.createDependenciesManager(sysMock_, clq);
+    assertEquals(DependenciesManager.class.getName(), idm.getClass().getName());
+    DependenciesManager dm = (DependenciesManager) idm;
+    assertSame(clq, dm.getDependencyQueue());
+    
+    I_RepositoryPathBuilder rpb = factory.createRepositoryPathBuilder("remoteRepo");
+    assertEquals(DefaultRepositoryPathBuilder.class.getName(), rpb.getClass().getName());
+    DefaultRepositoryPathBuilder builder = (DefaultRepositoryPathBuilder) rpb;
+    assertEquals("remoteRepo", builder.getRepository());
+    assertEquals("/", builder.getSeperator());
+    
+    I_RepositoryPathBuilder lpb = factory.createRepositoryPathBuilder("remoteRepo","\\");
+    assertEquals(DefaultRepositoryPathBuilder.class.getName(), lpb.getClass().getName());
+    DefaultRepositoryPathBuilder localBuilder = (DefaultRepositoryPathBuilder) lpb;
+    assertEquals("remoteRepo", localBuilder.getRepository());
+    assertEquals("\\", localBuilder.getSeperator());
+  }
+   
+  @Test
+  public void testMethodCreateRoutineFabricateFactory() {
+    FabricateFactory factory = new FabricateFactory();
+    I_Fabricate fab = mock(I_Fabricate.class);
+    RoutineFabricateFactory routineFactory =  factory.createRoutineFabricateFactory(fab, true);
+   assertNotNull(routineFactory);
+  }
   @Test
   public void testMethodCreateWithRuntimeDeps() throws Exception {
     FabricateFactory factory = new FabricateFactory();

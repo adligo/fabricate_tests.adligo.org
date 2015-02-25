@@ -63,7 +63,7 @@ public class ThreadLocalPrintStreamTrial extends MockitoSourceFileTrial {
     ThreadLocalFabFileLog fileLog = new ThreadLocalFabFileLog();
     
     FabSystem sys = new FabSystem();
-    sys.setLogFileOutputStream(fileLog);
+    sys.setLogFile(fileLog);
     ThreadLocalPrintStreamMock.set(printStream);
     ThreadLocalPrintStreamMock.printlnP("hey");
     String result = new String( baos.toByteArray());
@@ -105,7 +105,7 @@ public class ThreadLocalPrintStreamTrial extends MockitoSourceFileTrial {
     assertSame(x1, throwables.get(0));
     throwables.clear();
     
-    sys.setLogFileOutputStream(null);
+    sys.setLogFile(null);
     
     ThreadLocalPrintStreamMock.set(null);
     ThreadLocalPrintStreamMock.get();
