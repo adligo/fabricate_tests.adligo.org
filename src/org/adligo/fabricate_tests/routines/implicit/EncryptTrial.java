@@ -28,7 +28,7 @@ public class EncryptTrial extends MockitoSourceFileTrial {
     //ASCII 1 shifted to the right by 1 is 1001 1000
     
     encrypt_.run();
-    String result = encrypt_.getResult();
+    String result = encrypt_.getOutput();
     assertEquals("@@@AS@", result);
     // 0100 0000 = @
     // 0100 0001 = A
@@ -43,7 +43,7 @@ public class EncryptTrial extends MockitoSourceFileTrial {
     // 0100 1100
     
     encrypt_.run();
-    result = encrypt_.getResult();
+    result = encrypt_.getOutput();
     // 0100 0000 = @
     // 0100 0010 = B
     
@@ -55,39 +55,39 @@ public class EncryptTrial extends MockitoSourceFileTrial {
     
     encrypt_.setInput("123");
     encrypt_.run();
-    result = encrypt_.getResult();
+    result = encrypt_.getOutput();
     assertEquals("@@@CLXSDL", result);
     
     encrypt_.setInput("1236");
     encrypt_.run();
-    result = encrypt_.getResult();
+    result = encrypt_.getOutput();
     assertEquals("@@@DLLIRFLX", result);
     
     encrypt_.setInput("12361");
     encrypt_.run();
-    result = encrypt_.getResult();
+    result = encrypt_.getOutput();
     assertEquals("@@@EQFDYCFMQ", result);    
     
     encrypt_.setInput("123612");
     encrypt_.run();
-    result = encrypt_.getResult();
+    result = encrypt_.getOutput();
     assertEquals("@@@FYCBLQSFXXP", result);    
     
     encrypt_.setInput("1236122");
     encrypt_.run();
-    result = encrypt_.getResult();
+    result = encrypt_.getOutput();
     assertEquals("@@@GLQQFHYSLLIR@", result);    
     
     encrypt_.setInput("12361224");
     encrypt_.run();
-    result = encrypt_.getResult();
+    result = encrypt_.getOutput();
     assertEquals("@@@HFPXSDLYVFDYCD", result);    
     
    
     
     encrypt_.setInput("0000000000000000000000000000000");
     encrypt_.run();
-    result = encrypt_.getResult();
+    result = encrypt_.getOutput();
     assertEquals("@@@_LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@L@", result);  
     
     StringBuilder sb = new StringBuilder();
@@ -96,7 +96,7 @@ public class EncryptTrial extends MockitoSourceFileTrial {
     }
     encrypt_.setInput(sb.toString());
     encrypt_.run();
-    result = encrypt_.getResult();
+    result = encrypt_.getOutput();
     assertEquals("@A@@F@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAP"
         + "F@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAP"
         + "F@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAP"

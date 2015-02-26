@@ -3,8 +3,8 @@ package org.adligo.fabricate_tests.routines.implicit.mocks;
 import org.adligo.fabricate.models.common.FabricationRoutineCreationException;
 import org.adligo.fabricate.models.common.I_FabricationMemory;
 import org.adligo.fabricate.models.common.I_FabricationMemoryMutant;
+import org.adligo.fabricate.routines.AbstractRoutine;
 import org.adligo.fabricate.routines.I_ConcurrencyAware;
-import org.adligo.fabricate.routines.implicit.AbstractRoutine;
 
 public class SimpleConcurrentRoutineMock extends AbstractRoutine implements I_ConcurrencyAware {
   private boolean ran_ = false;

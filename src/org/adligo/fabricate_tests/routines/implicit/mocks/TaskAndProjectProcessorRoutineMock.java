@@ -1,8 +1,8 @@
 package org.adligo.fabricate_tests.routines.implicit.mocks;
 
+import org.adligo.fabricate.routines.AbstractRoutine;
 import org.adligo.fabricate.routines.I_ProjectProcessor;
 import org.adligo.fabricate.routines.I_TaskProcessor;
-import org.adligo.fabricate.routines.implicit.AbstractRoutine;
 
 public class TaskAndProjectProcessorRoutineMock extends AbstractRoutine implements
   I_TaskProcessor, I_ProjectProcessor {

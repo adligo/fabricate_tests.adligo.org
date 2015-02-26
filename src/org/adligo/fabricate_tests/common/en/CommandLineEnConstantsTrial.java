@@ -29,6 +29,7 @@ public class CommandLineEnConstantsTrial extends MockitoSourceFileTrial {
     assertEquals("--rebuild-dependents", messages.getRebuildDependents(false));
     assertEquals("-s", messages.getShare(true));
     assertEquals("--share", messages.getShare(false));
+    assertEquals("skip", messages.getSkip());
     assertEquals("stages", messages.getStages());
     assertEquals("-t", messages.getTest(true));
     assertEquals("--test", messages.getTest(false));

@@ -1,6 +1,7 @@
 package org.adligo.fabricate_tests.routines.implicit;
 
 import org.adligo.fabricate_tests.etc.FabTestParamsFactory;
+import org.adligo.fabricate_tests.routines.AbstractRoutineTrial;
 import org.adligo.tests4j.run.api.Tests4J;
 import org.adligo.tests4j.system.shared.api.I_Tests4J_TrialList;
 import org.adligo.tests4j.system.shared.api.Tests4J_Params;
@@ -28,7 +29,6 @@ public class A_RoutinesImplicitPkgTrials implements I_Tests4J_TrialList {
   @Override
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
-    trials.add(AbstractRoutineTrial.class);
     trials.add(EncryptTrial.class);
     trials.add(DecryptTrial.class);
     return trials;

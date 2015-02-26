@@ -40,7 +40,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
 
-@SourceFileScope (sourceClass=FabricateController.class, minCoverage=78.0)
+@SourceFileScope (sourceClass=FabricateController.class, minCoverage=76.0)
 public class FabricateControllerTrial extends MockitoSourceFileTrial {
   private FabSystem sysMock_;
   private I_FabFileIO fileMock_;

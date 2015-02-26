@@ -13,9 +13,10 @@ import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-@SourceFileScope (sourceClass=Parameter.class, minCoverage=80.0)
+@SourceFileScope (sourceClass=Parameter.class, minCoverage=97.0)
 public class ParameterTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("unused")
@@ -116,5 +117,186 @@ public class ParameterTrial extends MockitoSourceFileTrial {
     asserts.assertEquals(1, p2.size());
     
     asserts.assertEquals(2, out.size());
+  }
+  
+  @SuppressWarnings("boxing")
+  @Test
+  public void testMethodsEqualsHashCodeAndToString() {
+    ParameterMutant a1 = new ParameterMutant();
+    ParameterMutant b1 = new ParameterMutant();
+    b1.setKey("key");
+    ParameterMutant c1 = new ParameterMutant();
+    c1.setKey("key2");
+    ParameterMutant d1 = new ParameterMutant();
+    d1.setKey("key");
+    d1.setValue("value");
+    ParameterMutant e1 = new ParameterMutant();
+    e1.setKey("key");
+    e1.setValue("value2");
+    ParameterMutant f1 = new ParameterMutant();
+    f1.setKey("keyF");
+    ParameterMutant g1 = new ParameterMutant();
+    g1.setKey("keyG");
+    g1.setChildren(Collections.singletonList(f1));
+    ParameterMutant h1 = new ParameterMutant();
+    h1.setKey("keyH");
+    h1.setChildren(Collections.singletonList(g1));
+    
+    Parameter a = new Parameter(a1);
+    Parameter b = new Parameter(b1);
+    Parameter c = new Parameter(c1);
+    Parameter d = new Parameter(d1);
+    Parameter e = new Parameter(e1);
+    Parameter f = new Parameter(f1);
+    Parameter g = new Parameter(g1);
+    Parameter h = new Parameter(h1);
+    
+    assertEquals(a.hashCode(), a.hashCode());
+    assertNotEquals(a.hashCode(), b.hashCode());
+    assertNotEquals(a.hashCode(), c.hashCode());
+    assertNotEquals(a.hashCode(), d.hashCode());
+    assertNotEquals(a.hashCode(), e.hashCode());
+    assertNotEquals(a.hashCode(), f.hashCode());
+    assertNotEquals(a.hashCode(), g.hashCode());
+    assertNotEquals(a.hashCode(), h.hashCode());
+    assertEquals(a, a);
+    assertNotEquals(a, b);
+    assertNotEquals(a, c);
+    assertNotEquals(a, d);
+    assertNotEquals(a, e);
+    assertNotEquals(a, f);
+    assertNotEquals(a, g);
+    assertNotEquals(a, h);
+    assertEquals("Parameter [key=null, value=null]", a.toString());
+    
+    assertEquals(b.hashCode(), b.hashCode());
+    assertNotEquals(b.hashCode(), a.hashCode());
+    assertNotEquals(b.hashCode(), c.hashCode());
+    assertNotEquals(b.hashCode(), d.hashCode());
+    assertNotEquals(b.hashCode(), e.hashCode());
+    assertNotEquals(b.hashCode(), f.hashCode());
+    assertNotEquals(b.hashCode(), g.hashCode());
+    assertNotEquals(b.hashCode(), h.hashCode());
+    assertEquals(b, b);
+    assertNotEquals(b, a);
+    assertNotEquals(b, c);
+    assertNotEquals(b, d);
+    assertNotEquals(b, e);
+    assertNotEquals(b, f);
+    assertNotEquals(b, g);
+    assertNotEquals(b, h);
+    assertEquals("Parameter [key=key, value=null]", b.toString());
+    
+    assertEquals(c.hashCode(), c.hashCode());
+    assertNotEquals(c.hashCode(), a.hashCode());
+    assertNotEquals(c.hashCode(), b.hashCode());
+    assertNotEquals(c.hashCode(), d.hashCode());
+    assertNotEquals(c.hashCode(), e.hashCode());
+    assertNotEquals(c.hashCode(), f.hashCode());
+    assertNotEquals(c.hashCode(), g.hashCode());
+    assertNotEquals(c.hashCode(), h.hashCode());
+    assertEquals(c, c);
+    assertNotEquals(c, a);
+    assertNotEquals(c, b);
+    assertNotEquals(c, d);
+    assertNotEquals(c, e);
+    assertNotEquals(c, f);
+    assertNotEquals(c, g);
+    assertNotEquals(c, h);
+    assertEquals("Parameter [key=key2, value=null]", c.toString());
+    
+    assertEquals(d.hashCode(), d.hashCode());
+    assertNotEquals(d.hashCode(), a.hashCode());
+    assertNotEquals(d.hashCode(), b.hashCode());
+    assertNotEquals(d.hashCode(), c.hashCode());
+    assertNotEquals(d.hashCode(), e.hashCode());
+    assertNotEquals(d.hashCode(), f.hashCode());
+    assertNotEquals(d.hashCode(), g.hashCode());
+    assertNotEquals(d.hashCode(), h.hashCode());
+    assertEquals(d, d);
+    assertNotEquals(d, a);
+    assertNotEquals(d, b);
+    assertNotEquals(d, c);
+    assertNotEquals(d, e);
+    assertNotEquals(d, f);
+    assertNotEquals(d, g);
+    assertNotEquals(d, h);
+    assertEquals("Parameter [key=key, value=value]", d.toString());
+    
+    assertEquals(e.hashCode(), e.hashCode());
+    assertNotEquals(e.hashCode(), a.hashCode());
+    assertNotEquals(e.hashCode(), b.hashCode());
+    assertNotEquals(e.hashCode(), c.hashCode());
+    assertNotEquals(e.hashCode(), d.hashCode());
+    assertNotEquals(e.hashCode(), f.hashCode());
+    assertNotEquals(e.hashCode(), g.hashCode());
+    assertNotEquals(e.hashCode(), h.hashCode());
+    assertEquals(e, e);
+    assertNotEquals(e, a);
+    assertNotEquals(e, b);
+    assertNotEquals(e, c);
+    assertNotEquals(e, d);
+    assertNotEquals(e, f);
+    assertNotEquals(e, g);
+    assertNotEquals(e, h);
+    assertEquals("Parameter [key=key, value=value2]", e.toString());
+    
+    assertEquals(f.hashCode(), f.hashCode());
+    assertNotEquals(f.hashCode(), a.hashCode());
+    assertNotEquals(f.hashCode(), b.hashCode());
+    assertNotEquals(f.hashCode(), c.hashCode());
+    assertNotEquals(f.hashCode(), d.hashCode());
+    assertNotEquals(f.hashCode(), e.hashCode());
+    assertNotEquals(f.hashCode(), g.hashCode());
+    assertNotEquals(f.hashCode(), h.hashCode());
+    assertEquals(f, f);
+    assertNotEquals(f, a);
+    assertNotEquals(f, b);
+    assertNotEquals(f, c);
+    assertNotEquals(f, d);
+    assertNotEquals(f, e);
+    assertNotEquals(f, g);
+    assertNotEquals(f, h);
+    assertEquals("Parameter [key=keyF, value=null]", f.toString());
+    
+    assertEquals(g.hashCode(), g.hashCode());
+    assertNotEquals(g.hashCode(), a.hashCode());
+    assertNotEquals(g.hashCode(), b.hashCode());
+    assertNotEquals(g.hashCode(), c.hashCode());
+    assertNotEquals(g.hashCode(), d.hashCode());
+    assertNotEquals(g.hashCode(), e.hashCode());
+    assertNotEquals(g.hashCode(), f.hashCode());
+    assertNotEquals(g.hashCode(), h.hashCode());
+    assertEquals(g, g);
+    assertNotEquals(g, a);
+    assertNotEquals(g, b);
+    assertNotEquals(g, c);
+    assertNotEquals(g, d);
+    assertNotEquals(g, e);
+    assertNotEquals(g, f);
+    assertNotEquals(g, h);
+    assertEquals("Parameter [key=keyG, value=null" + System.lineSeparator() +
+        "\tParameter [key=keyF, value=null]" + System.lineSeparator() +
+        "]", g.toString());
+    
+    assertEquals(h.hashCode(), h.hashCode());
+    assertNotEquals(h.hashCode(), a.hashCode());
+    assertNotEquals(h.hashCode(), b.hashCode());
+    assertNotEquals(h.hashCode(), c.hashCode());
+    assertNotEquals(h.hashCode(), d.hashCode());
+    assertNotEquals(h.hashCode(), e.hashCode());
+    assertNotEquals(h.hashCode(), f.hashCode());
+    assertEquals(h, h);
+    assertNotEquals(h, a);
+    assertNotEquals(h, b);
+    assertNotEquals(h, c);
+    assertNotEquals(h, d);
+    assertNotEquals(h, e);
+    assertNotEquals(h, f);
+    assertEquals("Parameter [key=keyH, value=null" + System.lineSeparator() +
+        "\tParameter [key=keyG, value=null" + System.lineSeparator() +
+        "\t\tParameter [key=keyF, value=null]" + System.lineSeparator() +
+        "\t]" + System.lineSeparator() +
+        "]", h.toString());
   }
 }

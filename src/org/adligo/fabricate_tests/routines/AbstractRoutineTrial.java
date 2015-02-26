@@ -1,4 +1,4 @@
-package org.adligo.fabricate_tests.routines.implicit;
+package org.adligo.fabricate_tests.routines;
 
 import org.adligo.fabricate.common.en.FabricateEnConstants;
 import org.adligo.fabricate.common.system.I_FabSystem;
@@ -8,7 +8,7 @@ import org.adligo.fabricate.models.common.I_RoutineBrief;
 import org.adligo.fabricate.models.common.I_RoutineFactory;
 import org.adligo.fabricate.models.common.RoutineBriefOrigin;
 import org.adligo.fabricate.models.fabricate.I_FabricateXmlDiscovery;
-import org.adligo.fabricate.routines.implicit.AbstractRoutine;
+import org.adligo.fabricate.routines.AbstractRoutine;
 import org.adligo.fabricate.routines.implicit.DecryptTrait;
 import org.adligo.fabricate_tests.routines.implicit.mocks.ProjectProcessorRoutineMock;
 import org.adligo.fabricate_tests.routines.implicit.mocks.SimpleRoutineMock;
@@ -63,7 +63,7 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     ar.setup(memory);
     ar.run();
     
-    assertEquals("org.adligo.fabricate.routines.implicit.AbstractRoutine.getCurrentLocation() "
+    assertEquals("org.adligo.fabricate.routines.AbstractRoutine.getCurrentLocation() "
         + "unknown location for ARCHIVE_STAGE_TASK",
         ar.getCurrentLocation());
     

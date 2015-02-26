@@ -28,7 +28,7 @@ public class DecryptTrial extends MockitoSourceFileTrial {
     //ASCII 1 shifted to the right by 1 is 1001 1000
     
     encrypt_.run();
-    String result = encrypt_.getResult();
+    String result = encrypt_.getOutput();
     // 0100 0000 = @
     // 0100 0001 = A
     
@@ -44,7 +44,7 @@ public class DecryptTrial extends MockitoSourceFileTrial {
     
     encrypt_.setInput("@@@BQQF@");
     encrypt_.run();
-    result = encrypt_.getResult();
+    result = encrypt_.getOutput();
     // 0100 0000 = @
     // 0100 0010 = B
     
@@ -56,37 +56,37 @@ public class DecryptTrial extends MockitoSourceFileTrial {
     
     encrypt_.setInput("@@@CLXSDL");
     encrypt_.run();
-    result = encrypt_.getResult();
+    result = encrypt_.getOutput();
     assertEquals("123", result);
     
     encrypt_.setInput("@@@DLLIRFLX");
     encrypt_.run();
-    result = encrypt_.getResult();
+    result = encrypt_.getOutput();
     assertEquals("1236", result);
     
     encrypt_.setInput("@@@EQFDYCFMQ");
     encrypt_.run();
-    result = encrypt_.getResult();
+    result = encrypt_.getOutput();
     assertEquals("12361", result);    
     
     encrypt_.setInput("@@@FYCBLQSFXXP");
     encrypt_.run();
-    result = encrypt_.getResult();
+    result = encrypt_.getOutput();
     assertEquals("123612", result);    
     
     encrypt_.setInput("@@@GLQQFHYSLLIR@");
     encrypt_.run();
-    result = encrypt_.getResult();
+    result = encrypt_.getOutput();
     assertEquals("1236122", result);    
     
     encrypt_.setInput("@@@HFPXSDLYVFDYCD");
     encrypt_.run();
-    result = encrypt_.getResult();
+    result = encrypt_.getOutput();
     assertEquals("12361224", result);    
     
     encrypt_.setInput("@@@_LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@L@");
     encrypt_.run();
-    result = encrypt_.getResult();
+    result = encrypt_.getOutput();
     assertEquals("0000000000000000000000000000000", result);  
     
     encrypt_.setInput("@A@@F@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAP"
@@ -113,7 +113,7 @@ public class DecryptTrial extends MockitoSourceFileTrial {
         + "F@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAP"
         + "F@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@LAPF@XC@L@");
     encrypt_.run();
-    result = encrypt_.getResult();
+    result = encrypt_.getOutput();
     assertEquals(1024, result.length());
 
     char [] chars = result.toCharArray();
