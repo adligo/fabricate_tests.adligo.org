@@ -33,7 +33,6 @@ public class A_RoutinesPkgTrials implements I_Tests4J_TrialList {
     
     trials.add(AbstractRoutineTrial.class);
     trials.add(RoutineExecutionEngineTrial.class);
-    trials.add(RoutineFabricateFactoryTrial.class);
     trials.add(RoutineFactoryTrial.class);
     return trials;
   }

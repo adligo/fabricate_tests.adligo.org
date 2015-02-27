@@ -53,12 +53,13 @@ public class RoutineFactoryTrial extends MockitoSourceFileTrial {
     when(sysMock_.getLog()).thenReturn(logMock_);
     printlnMethod_ = new MockMethod<Void>();
     doAnswer(printlnMethod_).when(logMock_).println(any());
-    
+   
+    when(sysMock_.currentThreadName()).thenReturn("main");
   }
   
   @Test
   public void testConstructorCopy() throws Exception {
-    RoutineFactory factory = new RoutineFactory();
+    RoutineFactory factory = new RoutineFactory(sysMock_);
     
     RoutineBriefMutant a = new RoutineBriefMutant();
     a.setName("a");
@@ -74,7 +75,7 @@ public class RoutineFactoryTrial extends MockitoSourceFileTrial {
     c.setName("c");
     c.setOrigin(RoutineBriefOrigin.FABRICATE_STAGE);
     factory.add(c);
-    RoutineFactory copy = new RoutineFactory(factory);
+    RoutineFactory copy = new RoutineFactory(sysMock_, factory);
     
     List<I_RoutineBrief> values = copy.getValues();
     I_RoutineBrief a1 = values.get(0);
@@ -95,7 +96,7 @@ public class RoutineFactoryTrial extends MockitoSourceFileTrial {
 
   @Test
   public void testMethodsAddAndGetSimple() throws Exception {
-    RoutineFactory factory = new RoutineFactory();
+    RoutineFactory factory = new RoutineFactory(sysMock_);
     
     RoutineBriefMutant a = new RoutineBriefMutant();
     a.setName("a");
@@ -138,7 +139,7 @@ public class RoutineFactoryTrial extends MockitoSourceFileTrial {
   @SuppressWarnings("boxing")
   @Test
   public void testMethodsAddAndGetOverlay() throws Exception {
-    RoutineFactory factory = new RoutineFactory();
+    RoutineFactory factory = new RoutineFactory(sysMock_);
     
     RoutineBriefMutant a = new RoutineBriefMutant();
     a.setName("a");
@@ -228,7 +229,7 @@ public class RoutineFactoryTrial extends MockitoSourceFileTrial {
   
   @Test
   public void testMethodCreateFactory() throws Exception {
-    RoutineFactory factory = new RoutineFactory();
+    RoutineFactory factory = new RoutineFactory(sysMock_);
     RoutineBriefMutant a = new RoutineBriefMutant();
     a.setName("a");
     a.setOrigin(RoutineBriefOrigin.FABRICATE_STAGE);
@@ -249,7 +250,7 @@ public class RoutineFactoryTrial extends MockitoSourceFileTrial {
   
   @Test
   public void testMethodCreateSimple() throws Exception {
-    RoutineFactory factory = new RoutineFactory();
+    RoutineFactory factory = new RoutineFactory(sysMock_);
     RoutineBriefMutant a = new RoutineBriefMutant();
     a.setName("a");
     a.setOrigin(RoutineBriefOrigin.FABRICATE_STAGE);
@@ -265,7 +266,7 @@ public class RoutineFactoryTrial extends MockitoSourceFileTrial {
   
   @Test
   public void testMethodCreateSimpleExceptions() throws Exception {
-    RoutineFactory factory = new RoutineFactory();
+    RoutineFactory factory = new RoutineFactory(sysMock_);
     RoutineBriefMutant a = new RoutineBriefMutant();
     a.setName("a");
     a.setOrigin(RoutineBriefOrigin.FABRICATE_STAGE);
@@ -288,12 +289,25 @@ public class RoutineFactoryTrial extends MockitoSourceFileTrial {
             factory.createRoutine("a", Collections.emptySet());
           }
         });
+    
+    a.setClazz(EncryptTrait.class);
+    factory.add(a);
+    when(sysMock_.currentThreadName()).thenReturn("blah");
+    assertThrown(new ExpectedThrowable(new IllegalStateException(
+        "This method must be called from the main thread (try moving the call to setup?).")),
+        new I_Thrower() {
+          
+          @Override
+          public void run() throws Throwable {
+            factory.createRoutine("a", Collections.emptySet());
+          }
+        });
   }
   
   @SuppressWarnings("boxing")
   @Test
   public void testMethodCreateSimpleFailureExpectedInterfacesDoNOTMatch() throws Exception {
-    RoutineFactory factory = new RoutineFactory();
+    RoutineFactory factory = new RoutineFactory(sysMock_);
     RoutineBriefMutant a = new RoutineBriefMutant();
     a.setName("a");
     a.setOrigin(RoutineBriefOrigin.FABRICATE_STAGE);

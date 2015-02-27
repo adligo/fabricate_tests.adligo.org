@@ -13,6 +13,9 @@ import org.adligo.fabricate.models.fabricate.FabricateMutant;
 import org.adligo.fabricate.models.fabricate.I_JavaSettings;
 import org.adligo.fabricate.models.fabricate.JavaSettings;
 import org.adligo.fabricate.models.fabricate.JavaSettingsMutant;
+import org.adligo.fabricate.models.project.I_ProjectBrief;
+import org.adligo.fabricate.models.project.ProjectBrief;
+import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.ProjectType;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
@@ -49,10 +52,15 @@ public class FabricateTrial extends MockitoSourceFileTrial {
     fm.setFabricateHome("fh");
     fm.setFabricateRepository("fr");
     fm.setFabricateXmlRunDir("fabXmlDir");
+    fm.setProjectsDir("pjDir");
+    
     Fabricate copy = new Fabricate(fm);
     assertEquals(FabricateDefaults.JAVA_THREADS, copy.getThreads());
     assertEquals(FabricateDefaults.JAVA_XMS_DEFAULT, copy.getXms());
     assertEquals(FabricateDefaults.JAVA_XMX_DEFAULT, copy.getXmx());
+    assertEquals("pjDir", copy.getProjectsDir());
+    assertEquals("java.util.Collections$UnmodifiableRandomAccessList", copy.getProjects().getClass().getName());
+    assertNull(copy.getScm());
     
     JavaSettingsMutant jsm = new JavaSettingsMutant();
     jsm.setThreads(1);
@@ -152,6 +160,48 @@ public class FabricateTrial extends MockitoSourceFileTrial {
     assertRoutines(copy.getCommands(), "commands", RoutineBriefOrigin.COMMAND);
     assertRoutines(copy.getStages(), "stages", RoutineBriefOrigin.STAGE);
     assertRoutines(copy.getTraits(), "traits", RoutineBriefOrigin.TRAIT);
+    
+    RoutineBriefMutant scm = new RoutineBriefMutant();
+    scm.setName("Git");
+    scm.setOrigin(RoutineBriefOrigin.FABRICATE_SCM);
+    fm.setScm(scm);
+    
+    ProjectType pA = new ProjectType();
+    pA.setName("a.example.com");
+    pA.setVersion("");
+    ProjectBrief pbA = new ProjectBrief(pA);
+    
+    ProjectType pB = new ProjectType();
+    pB.setName("b.example.com");
+    pB.setVersion("1");
+    ProjectBrief pbB = new ProjectBrief(pB);
+    
+    List<I_ProjectBrief> briefs = new ArrayList<I_ProjectBrief>();
+    briefs.add(pbA);
+    briefs.add(pbB);
+    
+    fm.setProjects(briefs);
+    copy = new Fabricate(fm);
+    
+    I_RoutineBrief rb =  copy.getScm();
+    assertNotNull(rb);
+    assertEquals("Git", rb.getName());
+    assertEquals(RoutineBrief.class.getName(), rb.getClass().getName());
+    
+    List<I_ProjectBrief> projs = copy.getProjects();
+    I_ProjectBrief prjA = projs.get(0);
+    assertNotNull(prjA);
+    assertEquals("a.example.com", prjA.getName());
+    assertEquals("", prjA.getVersion());
+    assertEquals(ProjectBrief.class.getName(), prjA.getClass().getName());
+    
+    I_ProjectBrief prjB = projs.get(1);
+    assertNotNull(prjB);
+    assertEquals("b.example.com", prjB.getName());
+    assertEquals("1", prjB.getVersion());
+    assertEquals(ProjectBrief.class.getName(), prjB.getClass().getName());
+    assertEquals(2, projs.size());
+    assertEquals("java.util.Collections$UnmodifiableRandomAccessList", projs.getClass().getName());
   }
 
   private void assertDependencies(Fabricate copy) {

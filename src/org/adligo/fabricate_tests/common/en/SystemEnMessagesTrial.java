@@ -106,6 +106,11 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     asserter.assertConstant("finished.", 
         messages.getFinished());
     
+    asserter.assertConstant("Instead of the following actual generic type;", 
+        messages.getInsteadOfTheFollowingActualGenericType());
+    asserter.assertConstant("It was expected to implement the following interface;", 
+        messages.getItWasExpectedToImplementTheFollowingInterface());
+    
     asserter.assertConstant("Managing the following local repository;", 
         messages.getManagingTheFollowingLocalRepository());
     asserter.assertConstant("Managing Fabricate runtime class path dependencies.", 
@@ -116,7 +121,10 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getPassedTheExtractCheck());
     asserter.assertConstant("passed the md5 check.", 
         messages.getPassedTheMd5Check());
-
+    asserter.assertConstant("Please enter your git key-store password "
+        + "(or just press enter for a key-store without a password).", 
+        messages.getPleaseEnterYourGitKeystorePassword());
+    
     asserter.assertConstant("Sending opts to script.", 
         messages.getSendingOptsToScript());
     asserter.assertConstant("Starting download from the following url;", 
@@ -140,9 +148,12 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     
     asserter.assertConstant("There was a problem creating the following directory;", 
         messages.getThereWasAProblemCreatingTheFollowingDirectory());
+    asserter.assertConstant("There was a problem creating the following routine;", 
+        messages.getThereWasAProblemCreatingTheFollowingRoutine());
     asserter.assertConstant("There was a problem creating run.marker in the following directory;", 
         messages.getThereWasAProblemCreatingRunMarkerInTheFollowingDirectory());
-    
+    asserter.assertConstant("This method must be called from the main thread (try moving the call to setup?).", 
+        messages.getThisMethodMustBeCalledFromTheMainThread());
     asserter.assertConstant("to the following folder;", 
         messages.getToTheFollowingFolder());
     asserter.assertConstant("Unable to load the following class;", 
@@ -154,6 +165,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getUnknown());
     asserter.assertConstant("Version <X/>.", 
         messages.getVersionX());
+    asserter.assertConstant("With the following generic type <X/>;", 
+        messages.getWithTheFollowingGenericTypeX());
     asserter.assertConstantsMatchMethods(SystemEnMessages.class);
   }
   

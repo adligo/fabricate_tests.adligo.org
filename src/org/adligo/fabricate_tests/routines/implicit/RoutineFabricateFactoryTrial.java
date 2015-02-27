@@ -1,4 +1,4 @@
-package org.adligo.fabricate_tests.routines;
+package org.adligo.fabricate_tests.routines.implicit;
 
 import org.adligo.fabricate.common.en.FabricateEnConstants;
 import org.adligo.fabricate.common.log.I_FabLog;
@@ -10,8 +10,8 @@ import org.adligo.fabricate.models.common.I_FabricationMemory;
 import org.adligo.fabricate.models.common.I_FabricationRoutine;
 import org.adligo.fabricate.routines.I_RoutineBuilder;
 import org.adligo.fabricate.routines.RoutineExecutionEngine;
-import org.adligo.fabricate.routines.RoutineFabricateFactory;
 import org.adligo.fabricate.routines.implicit.DecryptTrait;
+import org.adligo.fabricate.routines.implicit.RoutineFabricateFactory;
 import org.adligo.fabricate_tests.routines.implicit.mocks.SimpleConcurrentRoutineMock;
 import org.adligo.fabricate_tests.routines.implicit.mocks.SimpleRoutineMock;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;

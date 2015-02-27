@@ -359,6 +359,21 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   }  
   
   @Test
+  public void testMethodGetParentDir() throws Exception {
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
+    when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    FabFileIO fabFiles = new FabFileIO(sysMock);
+    
+    File dot = new File(".");
+    String absPath = dot.getAbsolutePath();
+    assertEquals(absPath.substring(0, absPath.length() - 28), fabFiles.getParentDir(absPath));
+  }
+  
+  @Test
   public void testMethodNewFileOutputStreamExceptions() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);

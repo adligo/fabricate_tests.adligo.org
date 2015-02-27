@@ -6,6 +6,8 @@ import org.adligo.fabricate.models.common.I_FabricationMemory;
 import org.adligo.fabricate.models.common.I_FabricationMemoryMutant;
 import org.adligo.fabricate.models.common.I_RoutineBrief;
 import org.adligo.fabricate.models.common.I_RoutineFactory;
+import org.adligo.fabricate.models.common.I_RoutineMemory;
+import org.adligo.fabricate.models.common.I_RoutineMemoryMutant;
 import org.adligo.fabricate.models.common.RoutineBriefOrigin;
 import org.adligo.fabricate.models.fabricate.I_FabricateXmlDiscovery;
 import org.adligo.fabricate.routines.AbstractRoutine;
@@ -60,7 +62,8 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     addAndAssertBrief(ar, RoutineBriefOrigin.ARCHIVE_STAGE_TASK);
     
     I_FabricationMemory memory = mock(I_FabricationMemory.class);
-    ar.setup(memory);
+    I_RoutineMemory routineMemory = mock(I_RoutineMemory.class);
+    ar.setup(memory, routineMemory);
     ar.run();
     
     assertEquals("org.adligo.fabricate.routines.AbstractRoutine.getCurrentLocation() "
@@ -77,14 +80,16 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     addAndAssertBrief(ar, RoutineBriefOrigin.ARCHIVE_STAGE);
     
     I_FabricationMemory memory = mock(I_FabricationMemory.class);
-    ar.setup(memory);
+    I_RoutineMemory routineMemory = mock(I_RoutineMemory.class);
+    ar.setup(memory, routineMemory);
     assertEquals("Archive stage routineName is still setting up.", ar.getCurrentLocation());
     
     ar = new SimpleRoutineMock();
     ar.setSystem(sysMock_);
     addAndAssertBrief(ar, RoutineBriefOrigin.ARCHIVE_STAGE);
     I_FabricationMemoryMutant memoryMutant = mock(I_FabricationMemoryMutant.class);
-    ar.setup(memoryMutant);
+    I_RoutineMemoryMutant routineMemoryMutant = mock(I_RoutineMemoryMutant.class);
+    ar.setup(memoryMutant, routineMemoryMutant);
     assertEquals("Archive stage routineName is still setting up.", ar.getCurrentLocation());
     
     ar.run();
@@ -100,14 +105,16 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     addAndAssertBrief(ar, RoutineBriefOrigin.COMMAND);
     
     I_FabricationMemory memory = mock(I_FabricationMemory.class);
-    ar.setup(memory);
+    I_RoutineMemory routineMemory = mock(I_RoutineMemory.class);
+    ar.setup(memory, routineMemory);
     assertEquals("Command routineName is still setting up.", ar.getCurrentLocation());
     
     ar = new SimpleRoutineMock();
     ar.setSystem(sysMock_);
     addAndAssertBrief(ar, RoutineBriefOrigin.COMMAND);
     I_FabricationMemoryMutant memoryMutant = mock(I_FabricationMemoryMutant.class);
-    ar.setup(memoryMutant);
+    I_RoutineMemoryMutant routineMemoryMutant = mock(I_RoutineMemoryMutant.class);
+    ar.setup(memoryMutant, routineMemoryMutant);
     assertEquals("Command routineName is still setting up.", ar.getCurrentLocation());
     
     ar.run();
@@ -123,14 +130,16 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     addAndAssertBrief(ar, RoutineBriefOrigin.STAGE);
     
     I_FabricationMemory memory = mock(I_FabricationMemory.class);
-    ar.setup(memory);
+    I_RoutineMemory routineMemory = mock(I_RoutineMemory.class);
+    ar.setup(memory, routineMemory);
     assertEquals("Build stage routineName is still setting up.", ar.getCurrentLocation());
     
     ar = new SimpleRoutineMock();
     ar.setSystem(sysMock_);
     addAndAssertBrief(ar, RoutineBriefOrigin.FABRICATE_STAGE);
     I_FabricationMemoryMutant memoryMutant = mock(I_FabricationMemoryMutant.class);
-    ar.setup(memoryMutant);
+    I_RoutineMemoryMutant routineMemoryMutant = mock(I_RoutineMemoryMutant.class);
+    ar.setup(memoryMutant, routineMemoryMutant);
     assertEquals("Build stage routineName is still setting up.", ar.getCurrentLocation());
     
     ar.run();
@@ -144,21 +153,22 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     ar.setSystem(sysMock_);
     addAndAssertBrief(ar, RoutineBriefOrigin.ARCHIVE_STAGE);
     I_FabricationMemory memory = mock(I_FabricationMemory.class);
-    ar.setup(memory);
+    I_RoutineMemory routineMemory = mock(I_RoutineMemory.class);
+    ar.setup(memory, routineMemory);
     ar.run();
     assertEquals("Archive stage routineName, task taskName is still running.", ar.getCurrentLocation());
     
     ProjectProcessorRoutineMock ar2 = new ProjectProcessorRoutineMock("projectName");
     ar2.setSystem(sysMock_);
     addAndAssertBrief(ar2, RoutineBriefOrigin.ARCHIVE_STAGE);
-    ar2.setup(memory);
+    ar2.setup(memory, routineMemory);
     ar2.run();
     assertEquals("Archive stage routineName is still running on project projectName.", ar2.getCurrentLocation());
     
     TaskAndProjectProcessorRoutineMock ar3 = new TaskAndProjectProcessorRoutineMock("taskName","projectName");
     ar3.setSystem(sysMock_);
     addAndAssertBrief(ar3, RoutineBriefOrigin.FABRICATE_ARCHIVE_STAGE);
-    ar3.setup(memory);
+    ar3.setup(memory, routineMemory);
     ar3.run();
     assertEquals("Archive stage routineName, task taskName is still running on project projectName.", ar3.getCurrentLocation());
   }
@@ -169,21 +179,22 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     ar.setSystem(sysMock_);
     addAndAssertBrief(ar, RoutineBriefOrigin.COMMAND);
     I_FabricationMemory memory = mock(I_FabricationMemory.class);
-    ar.setup(memory);
+    I_RoutineMemory routineMemory = mock(I_RoutineMemory.class);
+    ar.setup(memory, routineMemory);
     ar.run();
     assertEquals("Command routineName, task taskName is still running.", ar.getCurrentLocation());
     
     ProjectProcessorRoutineMock ar2 = new ProjectProcessorRoutineMock("projectName");
     ar2.setSystem(sysMock_);
     addAndAssertBrief(ar2, RoutineBriefOrigin.FABRICATE_COMMAND);
-    ar2.setup(memory);
+    ar2.setup(memory, routineMemory);
     ar2.run();
     assertEquals("Command routineName is still running on project projectName.", ar2.getCurrentLocation());
     
     TaskAndProjectProcessorRoutineMock ar3 = new TaskAndProjectProcessorRoutineMock("taskName","projectName");
     ar3.setSystem(sysMock_);
     addAndAssertBrief(ar3, RoutineBriefOrigin.PROJECT_COMMAND);
-    ar3.setup(memory);
+    ar3.setup(memory, routineMemory);
     ar3.run();
     assertEquals("Command routineName, task taskName is still running on project projectName.", ar3.getCurrentLocation());
   }
@@ -194,21 +205,22 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     ar.setSystem(sysMock_);
     addAndAssertBrief(ar, RoutineBriefOrigin.STAGE);
     I_FabricationMemory memory = mock(I_FabricationMemory.class);
-    ar.setup(memory);
+    I_RoutineMemory routineMemory = mock(I_RoutineMemory.class);
+    ar.setup(memory, routineMemory);
     ar.run();
     assertEquals("Build stage routineName, task taskName is still running.", ar.getCurrentLocation());
     
     ProjectProcessorRoutineMock ar2 = new ProjectProcessorRoutineMock("projectName");
     ar2.setSystem(sysMock_);
     addAndAssertBrief(ar2, RoutineBriefOrigin.FABRICATE_STAGE);
-    ar2.setup(memory);
+    ar2.setup(memory, routineMemory);
     ar2.run();
     assertEquals("Build stage routineName is still running on project projectName.", ar2.getCurrentLocation());
     
     TaskAndProjectProcessorRoutineMock ar3 = new TaskAndProjectProcessorRoutineMock("taskName","projectName");
     ar3.setSystem(sysMock_);
     addAndAssertBrief(ar3, RoutineBriefOrigin.PROJECT_STAGE);
-    ar3.setup(memory);
+    ar3.setup(memory, routineMemory);
     ar3.run();
     assertEquals("Build stage routineName, task taskName is still running on project projectName.", ar3.getCurrentLocation());
   }

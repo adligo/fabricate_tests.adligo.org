@@ -15,13 +15,18 @@ import org.adligo.fabricate.models.fabricate.I_FabricateXmlDiscovery;
 import org.adligo.fabricate.models.fabricate.I_JavaSettings;
 import org.adligo.fabricate.models.fabricate.JavaSettings;
 import org.adligo.fabricate.models.fabricate.JavaSettingsMutant;
+import org.adligo.fabricate.models.project.I_ProjectBrief;
+import org.adligo.fabricate.models.project.ProjectBrief;
 import org.adligo.fabricate.routines.implicit.EncryptTrait;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamType;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamsType;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.RoutineParentType;
+import org.adligo.fabricate.xml.io_v1.common_v1_0.RoutineType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateDependencies;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.JavaType;
+import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.ProjectType;
+import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.ProjectsType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.StageType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.StagesAndProjectsType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.StagesType;
@@ -38,7 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@SourceFileScope (sourceClass=FabricateMutant.class, minCoverage=70.0)
+@SourceFileScope (sourceClass=FabricateMutant.class, minCoverage=80.0)
 public class FabricateMutantTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("boxing")
@@ -84,13 +89,14 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     fm.setJavaHome("jh");
     fm.setFabricateHome("fh");
     fm.setFabricateRepository("fr");
-    
+    fm.setProjectsDir("pjDir");
     fm.setFabricateXmlRunDir("fabXmlDir");
     
     FabricateMutant copy = new FabricateMutant(fm);
     assertEquals("jh", copy.getJavaHome());
     assertEquals("fh", copy.getFabricateHome());
     assertEquals("fr", copy.getFabricateRepository());
+    assertEquals("pjDir", copy.getProjectsDir());
     
     JavaSettingsMutant jsm = new JavaSettingsMutant();
     jsm.setThreads(1);
@@ -391,6 +397,9 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     fm.setTraits(getRoutines("traits", RoutineBriefOrigin.TRAIT));
     assertRoutines(fm.getTraits(), "traits", RoutineBriefOrigin.TRAIT);
     assertRoutines(fm.getTraits(), "traits", RoutineBriefOrigin.TRAIT);
+    
+    fm.setProjectsDir("pjDir");
+    assertEquals("pjDir", fm.getProjectsDir());
   }
   
   @SuppressWarnings("boxing")
@@ -456,6 +465,44 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     fm.addTraits(ft.getTrait());
     assertRoutinesFromXml(fm.getTraits(), "trait", RoutineBriefOrigin.FABRICATE_TRAIT);
     assertRoutinesFromXml(fm.getTraits(), "trait", RoutineBriefOrigin.FABRICATE_TRAIT);
+    
+    ProjectsType projects = new ProjectsType();
+    RoutineType scm = new RoutineType();
+    scm.setName("Git");
+    projects.setScm(scm);
+    
+    ProjectType projA = new ProjectType();
+    projA.setName("a.example.com");
+    projA.setVersion("");
+    
+    ProjectType projB = new ProjectType();
+    projB.setName("b.example.com");
+    projB.setVersion("1");
+    
+    projects.getProject().add(projA);
+    projects.getProject().add(projB);
+    spt.setProjects(projects);
+    
+    fm.addScmAndProjects(ft);
+    
+    I_RoutineBrief rb =  fm.getScm();
+    assertNotNull(rb);
+    assertEquals("Git", rb.getName());
+    assertEquals(RoutineBriefMutant.class.getName(), rb.getClass().getName());
+    
+    List<I_ProjectBrief> projs = fm.getProjects();
+    I_ProjectBrief prjA = projs.get(0);
+    assertNotNull(prjA);
+    assertEquals("a.example.com", prjA.getName());
+    assertEquals("", prjA.getVersion());
+    assertEquals(ProjectBrief.class.getName(), prjA.getClass().getName());
+    
+    I_ProjectBrief prjB = projs.get(1);
+    assertNotNull(prjB);
+    assertEquals("b.example.com", prjB.getName());
+    assertEquals("1", prjB.getVersion());
+    assertEquals(ProjectBrief.class.getName(), prjB.getClass().getName());
+    assertEquals(2, projs.size());
   }
   
   @SuppressWarnings("boxing")

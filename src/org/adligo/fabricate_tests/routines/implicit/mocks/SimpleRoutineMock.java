@@ -3,6 +3,8 @@ package org.adligo.fabricate_tests.routines.implicit.mocks;
 import org.adligo.fabricate.models.common.FabricationRoutineCreationException;
 import org.adligo.fabricate.models.common.I_FabricationMemory;
 import org.adligo.fabricate.models.common.I_FabricationMemoryMutant;
+import org.adligo.fabricate.models.common.I_RoutineMemory;
+import org.adligo.fabricate.models.common.I_RoutineMemoryMutant;
 import org.adligo.fabricate.routines.AbstractRoutine;
 
 public class SimpleRoutineMock extends AbstractRoutine {
@@ -17,15 +19,15 @@ public class SimpleRoutineMock extends AbstractRoutine {
   }
 
   @Override
-  public boolean setup(I_FabricationMemoryMutant memory) throws FabricationRoutineCreationException {
+  public boolean setup(I_FabricationMemoryMutant memory, I_RoutineMemoryMutant routineMemory) throws FabricationRoutineCreationException {
     lastMemoryMutant_ = memory;
-    return super.setup(memory);
+    return super.setup(memory, routineMemory);
   }
 
   @Override
-  public void setup(I_FabricationMemory memory) throws FabricationRoutineCreationException {
+  public void setup(I_FabricationMemory memory, I_RoutineMemory routineMemory) throws FabricationRoutineCreationException {
     lastMemory_ = memory;
-    super.setup(memory);
+    super.setup(memory, routineMemory);
   }
 
   public boolean isRan() {

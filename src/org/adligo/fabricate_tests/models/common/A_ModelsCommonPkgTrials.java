@@ -1,6 +1,5 @@
 package org.adligo.fabricate_tests.models.common;
 
-import org.adligo.fabricate.models.common.I_ExpectedRoutineInterface;
 import org.adligo.fabricate_tests.etc.FabTestParamsFactory;
 import org.adligo.tests4j.run.api.Tests4J;
 import org.adligo.tests4j.system.shared.api.I_Tests4J_TrialList;
@@ -37,10 +36,13 @@ public class A_ModelsCommonPkgTrials implements I_Tests4J_TrialList {
     trials.add(I_ParameterTrial.class);
     trials.add(I_RoutineBriefTrial.class);
     trials.add(I_RoutineFactoryTrial.class);
+    trials.add(I_RoutineMemoryMutantTrial.class);
+    trials.add(I_RoutineMemoryTrial.class);
     
     trials.add(ExpectedRoutineInterfaceTrial.class);
     trials.add(ExpectedRoutineInterfaceMutantTrial.class);
     
+    trials.add(FabricationMemoryConstantsTrial.class);
     trials.add(FabricationMemoryTrial.class);
     trials.add(FabricationMemoryMutantTrial.class);
     trials.add(FabricationRoutineCreationExceptionTrial.class);

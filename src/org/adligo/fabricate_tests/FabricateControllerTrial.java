@@ -12,9 +12,10 @@ import org.adligo.fabricate.common.system.CommandLineArgs;
 import org.adligo.fabricate.common.system.FabSystem;
 import org.adligo.fabricate.common.system.FabricateXmlDiscovery;
 import org.adligo.fabricate.managers.CommandManager;
+import org.adligo.fabricate.models.common.FabricationMemoryMutant;
 import org.adligo.fabricate.models.fabricate.Fabricate;
 import org.adligo.fabricate.models.fabricate.FabricateMutant;
-import org.adligo.fabricate.routines.RoutineFabricateFactory;
+import org.adligo.fabricate.routines.implicit.RoutineFabricateFactory;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.RoutineParentType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateType;
 import org.adligo.fabricate.xml.io_v1.result_v1_0.FailureType;
@@ -40,7 +41,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
 
-@SourceFileScope (sourceClass=FabricateController.class, minCoverage=76.0)
+@SourceFileScope (sourceClass=FabricateController.class, minCoverage=60.0)
 public class FabricateControllerTrial extends MockitoSourceFileTrial {
   private FabSystem sysMock_;
   private I_FabFileIO fileMock_;
@@ -82,14 +83,14 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     
     xmlDiscoveryMock_ = mock(FabricateXmlDiscovery.class);
     when(xmlDiscoveryMock_.hasFabricateXml()).thenReturn(true);
-    when(xmlDiscoveryMock_.getFabricateXmlDir()).thenReturn("fabricateXmlDir");
+    when(xmlDiscoveryMock_.getFabricateXmlDir()).thenReturn("fabricateXmlDir/");
     factoryMock_ = mock(FabricateFactory.class);
     when(factoryMock_.createDiscovery(sysMock_)).thenReturn(xmlDiscoveryMock_);
   }
   
   @SuppressWarnings({"unused", "boxing"})
   @Test
-  public void testConstructorBasicCommandNoFabricateXmlOrProjectXml() throws Exception {
+  public void testConstructorCommandNoFabricateXmlOrProjectXml() throws Exception {
     when(xmlDiscoveryMock_.hasFabricateXml()).thenReturn(false);
     
     new FabricateController(sysMock_, new String[] {}, factoryMock_);
@@ -99,19 +100,19 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings({"unused", "boxing"})
   @Test
-  public void testConstructorBasicCommandFabricateAlreadyRunning() throws Exception {
+  public void testConstructorCommandFabricateAlreadyRunning() throws Exception {
     when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(true);
     
     new FabricateController(sysMock_, new String[] {}, factoryMock_);
     
     assertEquals("Fabricate appears to already be running \n" + 
         "(run.marker is in the same directory as fabricate.xml).\n" +
-        "fabricateXmlDir", printlnMethod_.getArg(0));
+        "fabricateXmlDir/", printlnMethod_.getArg(0));
   }
   
   @SuppressWarnings({"boxing", "unused"})
   @Test
-  public void testConstructorBasicCommandClassNotFoundFromAddCommands() throws Exception {
+  public void testConstructorCommandClassNotFoundFromAddCommands() throws Exception {
     when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
     when(xmlDiscoveryMock_.getFabricateXmlPath()).thenReturn("fabricateDir/fabricate.xml");
     FabricateType ftMock = new FabricateType();
@@ -154,7 +155,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings({"boxing", "unused"})
   @Test
-  public void testConstructorBasicCommandClassNotFoundFromAddStages() throws Exception {
+  public void testConstructorCommandClassNotFoundFromAddStages() throws Exception {
     when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
     when(xmlDiscoveryMock_.getFabricateXmlPath()).thenReturn("fabricateDir/fabricate.xml");
     FabricateType ftMock = new FabricateType();
@@ -193,7 +194,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings({"boxing", "unused"})
   @Test
-  public void testConstructorBasicCommandClassNotFoundFromAddTraits() throws Exception {
+  public void testConstructorCommandClassNotFoundFromAddTraits() throws Exception {
     when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
     when(xmlDiscoveryMock_.getFabricateXmlPath()).thenReturn("fabricateDir/fabricate.xml");
     FabricateType ftMock = mock(FabricateType.class);
@@ -234,7 +235,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings({"boxing", "unused"})
   @Test
-  public void testConstructorBasicCommandDataTypeConfigurationException() throws Exception {
+  public void testConstructorCommandDataTypeConfigurationException() throws Exception {
     when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
     when(xmlDiscoveryMock_.getFabricateXmlPath()).thenReturn("fabricateDir/fabricate.xml");
     FabricateType ftMock = new FabricateType();
@@ -258,7 +259,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     List<String> commands = Collections.singletonList("hey");
     when(factoryMock_.createMutant(fabMock)).thenReturn(fmMock);
     RoutineFabricateFactory routineFactoryMock = mock(RoutineFabricateFactory.class);
-    when(factoryMock_.createRoutineFabricateFactory(fabMock, true)).thenReturn(routineFactoryMock);
+    when(factoryMock_.createRoutineFabricateFactory(sysMock_, fabMock, true)).thenReturn(routineFactoryMock);
     CommandManager cmMock = mock(CommandManager.class);
     when(factoryMock_.createCommandManager(commands, sysMock_, routineFactoryMock)).thenReturn(cmMock);
     
@@ -268,7 +269,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     when(sysMock_.getArgValue(CommandLineArgs.PASSABLE_ARGS_)).thenReturn("[1,[11,cmd=encrypt]]");
     File fabricateFileMock = mock(File.class);
     when(fabricateFileMock.getName()).thenReturn("fabProject");
-    when(fileMock_.instance("fabricateXmlDir")).thenReturn(fabricateFileMock);
+    when(fileMock_.instance("fabricateXmlDir/")).thenReturn(fabricateFileMock);
     when(sysMock_.getOperatingSystem()).thenReturn("other");
     when(sysMock_.getCpuInfo("other")).thenReturn(new String[] {"cpuInfo1", "cpuInfo2"});
     when(sysMock_.getArgValue("start")).thenReturn("123");
@@ -288,7 +289,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings({"boxing", "unused"})
   @Test
-  public void testConstructorBasicCommandIOExceptionFromCreateRunMarker() throws Exception {
+  public void testConstructorCommandIOExceptionFromCreateRunMarker() throws Exception {
     when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
     IOException x = new IOException("ipe");
     when(fileMock_.create("fabricateXmlDir/run.marker")).thenThrow(x);
@@ -297,13 +298,13 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     assertSame(x, printTraceMethod_.getArg(0));
     assertEquals(1, printTraceMethod_.count());
     assertEquals("There was a problem creating run.marker in the following directory;\n" +
-        "fabricateXmlDir", printlnMethod_.getArg(0));
+        "fabricateXmlDir/", printlnMethod_.getArg(0));
     assertEquals(1, printlnMethod_.count());
   }
   
   @SuppressWarnings({"boxing", "unused"})
   @Test
-  public void testConstructorBasicCommandIOExceptionFromCreateRunMarkerOutputStream() throws Exception {
+  public void testConstructorCommandIOExceptionFromCreateRunMarkerOutputStream() throws Exception {
     when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
     IOException x = new IOException("ipe");
     when(fileMock_.newFileOutputStream("fabricateXmlDir/run.marker")).thenThrow(x);
@@ -312,13 +313,13 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     assertSame(x, printTraceMethod_.getArg(0));
     assertEquals(1, printTraceMethod_.count());
     assertEquals("There was a problem creating run.marker in the following directory;\n" +
-        "fabricateXmlDir", printlnMethod_.getArg(0));
+        "fabricateXmlDir/", printlnMethod_.getArg(0));
     assertEquals(1, printlnMethod_.count());
   }
   
   @SuppressWarnings({"boxing", "unused"})
   @Test
-  public void testConstructorBasicCommandIOExceptionFromCreateFabLogFile() throws Exception {
+  public void testConstructorCommandIOExceptionFromCreateFabLogFile() throws Exception {
     when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
     when(xmlDiscoveryMock_.getFabricateXmlPath()).thenReturn("fabricateDir/fabricate.xml");
     FabricateType ftMock = new FabricateType();
@@ -342,7 +343,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     List<String> commands = Collections.singletonList("hey");
     when(factoryMock_.createMutant(fabMock)).thenReturn(fmMock);
     RoutineFabricateFactory routineFactoryMock = mock(RoutineFabricateFactory.class);
-    when(factoryMock_.createRoutineFabricateFactory(fabMock, true)).thenReturn(routineFactoryMock);
+    when(factoryMock_.createRoutineFabricateFactory(sysMock_, fabMock, true)).thenReturn(routineFactoryMock);
     CommandManager cmMock = mock(CommandManager.class);
     when(factoryMock_.createCommandManager(commands, sysMock_, routineFactoryMock)).thenReturn(cmMock);
     
@@ -352,7 +353,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     when(sysMock_.getArgValue(CommandLineArgs.PASSABLE_ARGS_)).thenReturn("[1,[11,cmd=encrypt]]");
     File fabricateFileMock = mock(File.class);
     when(fabricateFileMock.getName()).thenReturn("fabProject");
-    when(fileMock_.instance("fabricateXmlDir")).thenReturn(fabricateFileMock);
+    when(fileMock_.instance("fabricateXmlDir/")).thenReturn(fabricateFileMock);
     when(sysMock_.getOperatingSystem()).thenReturn("other");
     when(sysMock_.getCpuInfo("other")).thenReturn(new String[] {"cpuInfo1", "cpuInfo2"});
     when(sysMock_.getArgValue("start")).thenReturn("123");
@@ -377,7 +378,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings({"unused", "boxing"})
   @Test
-  public void testConstructorBasicCommandIOExceptionFromDeleteOutputDirRecursive() throws Exception {
+  public void testConstructorCommandIOExceptionFromDeleteOutputDirRecursive() throws Exception {
     when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
     OutputStream outMock = mock(OutputStream.class);
     MockMethod<Void> writeMethod = new MockMethod<Void>();
@@ -407,18 +408,18 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
   }
   
   @Test
-  public void testConstructorBasicCommandIOExceptionFromCreateResultXmlFile() {
+  public void testConstructorCommandIOExceptionFromCreateResultXmlFile() {
     
   }
   
   @Test
-  public void testConstructorBasicCommandIOExceptionFromWriteResultXmlFile() {
+  public void testConstructorCommandIOExceptionFromWriteResultXmlFile() {
     
   }
 
   @SuppressWarnings({"unused", "boxing"})
   @Test
-  public void testConstructorBasicCommandIOExceptionFromWriteToRunMarker() throws Exception {
+  public void testConstructorCommandIOExceptionFromWriteToRunMarker() throws Exception {
     when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
     OutputStream outMock = mock(OutputStream.class);
     IOException x = new IOException("ipe");
@@ -434,13 +435,13 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     assertSame(x, printTraceMethod_.getArg(0));
     assertEquals(1, printTraceMethod_.count());
     assertEquals("There was a problem creating run.marker in the following directory;\n" +
-        "fabricateXmlDir", printlnMethod_.getArg(0));
+        "fabricateXmlDir/", printlnMethod_.getArg(0));
     assertEquals(1, printlnMethod_.count());
   }
   
   @SuppressWarnings({"unused", "boxing"})
   @Test
-  public void testConstructorBasicCommandFailureToCreateOutputDir() throws Exception {
+  public void testConstructorCommandFailureToCreateOutputDir() throws Exception {
     when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
     OutputStream outMock = mock(OutputStream.class);
     MockMethod<Void> writeMethod = new MockMethod<Void>();
@@ -467,7 +468,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings({"boxing", "unused"})
   @Test
-  public void testConstructorBasicCommandFileNotFoundExceptionFromCreateRunMarkerOutputStream() throws Exception {
+  public void testConstructorCommandFileNotFoundExceptionFromCreateRunMarkerOutputStream() throws Exception {
     when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
     FileNotFoundException x = new FileNotFoundException("ipe");
     when(fileMock_.newFileOutputStream("fabricateXmlDir/run.marker")).thenThrow(x);
@@ -476,13 +477,13 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     assertSame(x, printTraceMethod_.getArg(0));
     assertEquals(1, printTraceMethod_.count());
     assertEquals("There was a problem creating run.marker in the following directory;\n" +
-        "fabricateXmlDir", printlnMethod_.getArg(0));
+        "fabricateXmlDir/", printlnMethod_.getArg(0));
     assertEquals(1, printlnMethod_.count());
   }
   
   @SuppressWarnings({"boxing", "unused"})
   @Test
-  public void testConstructorBasicCommandEncrypt() throws Exception {
+  public void testConstructorCommandEncrypt() throws Exception {
     when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
     when(xmlDiscoveryMock_.getFabricateXmlPath()).thenReturn("fabricateDir/fabricate.xml");
     FabricateType ftMock = new FabricateType();
@@ -512,7 +513,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     List<String> commands = Collections.singletonList("hey");
     when(factoryMock_.createMutant(fabMock)).thenReturn(fmMock);
     RoutineFabricateFactory routineFactoryMock = mock(RoutineFabricateFactory.class);
-    when(factoryMock_.createRoutineFabricateFactory(fabMock, true)).thenReturn(routineFactoryMock);
+    when(factoryMock_.createRoutineFabricateFactory(sysMock_, fabMock, true)).thenReturn(routineFactoryMock);
     CommandManager cmMock = mock(CommandManager.class);
     when(factoryMock_.createCommandManager(commands, sysMock_, routineFactoryMock)).thenReturn(cmMock);
     
@@ -522,7 +523,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     when(sysMock_.getArgValue(CommandLineArgs.PASSABLE_ARGS_)).thenReturn("[1,[11,cmd=encrypt]]");
     File fabricateFileMock = mock(File.class);
     when(fabricateFileMock.getName()).thenReturn("fabProject");
-    when(fileMock_.instance("fabricateXmlDir")).thenReturn(fabricateFileMock);
+    when(fileMock_.instance("fabricateXmlDir/")).thenReturn(fabricateFileMock);
     when(sysMock_.getOperatingSystem()).thenReturn("other");
     when(sysMock_.getOperatingSystemVersion("other")).thenReturn("3.1");
     when(sysMock_.getCpuInfo("other")).thenReturn(new String[] {"cpuInfo1", "cpuInfo2"});
@@ -569,7 +570,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings({"boxing", "unused"})
   @Test
-  public void testConstructorBasicCommandEncryptWithFabLogFile() throws Exception {
+  public void testConstructorCommandEncryptWithFabLogFile() throws Exception {
     when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
     when(xmlDiscoveryMock_.getFabricateXmlPath()).thenReturn("fabricateDir/fabricate.xml");
     FabricateType ftMock = new FabricateType();
@@ -599,7 +600,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     List<String> commands = Collections.singletonList("hey");
     when(factoryMock_.createMutant(fabMock)).thenReturn(fmMock);
     RoutineFabricateFactory routineFactoryMock = mock(RoutineFabricateFactory.class);
-    when(factoryMock_.createRoutineFabricateFactory(fabMock, true)).thenReturn(routineFactoryMock);
+    when(factoryMock_.createRoutineFabricateFactory(sysMock_, fabMock, true)).thenReturn(routineFactoryMock);
     CommandManager cmMock = mock(CommandManager.class);
     when(factoryMock_.createCommandManager(commands, sysMock_, routineFactoryMock)).thenReturn(cmMock);
     
@@ -609,7 +610,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     when(sysMock_.getArgValue(CommandLineArgs.PASSABLE_ARGS_)).thenReturn("[1,[11,cmd=encrypt]]");
     File fabricateFileMock = mock(File.class);
     when(fabricateFileMock.getName()).thenReturn("fabProject");
-    when(fileMock_.instance("fabricateXmlDir")).thenReturn(fabricateFileMock);
+    when(fileMock_.instance("fabricateXmlDir/")).thenReturn(fabricateFileMock);
     when(sysMock_.getOperatingSystem()).thenReturn("other");
     when(sysMock_.getOperatingSystemVersion("other")).thenReturn("3.1");
     when(sysMock_.getCpuInfo("other")).thenReturn(new String[] {"cpuInfo1", "cpuInfo2"});
@@ -666,7 +667,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings({"boxing", "unused"})
   @Test
-  public void testConstructorBasicCommandMockEncryptFailure() throws Exception {
+  public void testConstructorCommandMockEncryptFailure() throws Exception {
     when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
     when(xmlDiscoveryMock_.getFabricateXmlPath()).thenReturn("fabricateDir/fabricate.xml");
     FabricateType ftMock = new FabricateType();
@@ -696,12 +697,14 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     List<String> commands = Collections.singletonList("hey");
     when(factoryMock_.createMutant(fabMock)).thenReturn(fmMock);
     RoutineFabricateFactory routineFactoryMock = mock(RoutineFabricateFactory.class);
-    when(factoryMock_.createRoutineFabricateFactory(fabMock, true)).thenReturn(routineFactoryMock);
+    when(factoryMock_.createRoutineFabricateFactory(sysMock_, fabMock, true)).thenReturn(routineFactoryMock);
     CommandManager cmMock = mock(CommandManager.class);
     FailureType ft = new FailureType();
     ft.setCommand("encrypt");
     ft.setDetail("detail");
-    when(cmMock.processCommands()).thenReturn(ft);
+    FabricationMemoryMutant memory = new FabricationMemoryMutant();
+    when(factoryMock_.createMemory()).thenReturn(memory);
+    when(cmMock.processCommands(memory)).thenReturn(ft);
     when(factoryMock_.createCommandManager(commands, sysMock_, routineFactoryMock)).thenReturn(cmMock);
     
     when(sysMock_.getArgValues(CommandLineEnConstants.INSTANCE.getCommand())).thenReturn(
@@ -710,7 +713,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     when(sysMock_.getArgValue(CommandLineArgs.PASSABLE_ARGS_)).thenReturn("[1,[11,cmd=encrypt]]");
     File fabricateFileMock = mock(File.class);
     when(fabricateFileMock.getName()).thenReturn("fabProject");
-    when(fileMock_.instance("fabricateXmlDir")).thenReturn(fabricateFileMock);
+    when(fileMock_.instance("fabricateXmlDir/")).thenReturn(fabricateFileMock);
     when(sysMock_.getOperatingSystem()).thenReturn("other");
     when(sysMock_.getOperatingSystemVersion("other")).thenReturn("3.1");
     when(sysMock_.getCpuInfo("other")).thenReturn(new String[] {"cpuInfo1", "cpuInfo2"});

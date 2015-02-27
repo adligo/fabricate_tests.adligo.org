@@ -37,7 +37,7 @@ public class FabSystemTrial extends MockitoSourceFileTrial {
     
     fabSystem.setArgs(Collections.singletonMap("k",null));
     assertEquals(" k", fabSystem.toScriptArgs());
-    assertNull(fabSystem.getArgValues("k"));
+    assertEquals(0, fabSystem.getArgValues("k").size());
     
     fabSystem.setArgs(Collections.singletonMap("k", "v"));
     assertEquals("v", fabSystem.getArgValue("k"));

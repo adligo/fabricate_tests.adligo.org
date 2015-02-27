@@ -26,7 +26,7 @@ import org.adligo.fabricate.repository.I_LibraryResolver;
 import org.adligo.fabricate.repository.I_RepositoryPathBuilder;
 import org.adligo.fabricate.repository.LibraryResolver;
 import org.adligo.fabricate.repository.RepositoryManager;
-import org.adligo.fabricate.routines.RoutineFabricateFactory;
+import org.adligo.fabricate.routines.implicit.RoutineFabricateFactory;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateDependencies;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.DependencyType;
@@ -124,7 +124,8 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
   @Test
   public void testMethodCreateCommandManager() throws Exception {
     FabricateFactory factory = new FabricateFactory();
-    RoutineFabricateFactory routineFactory = new RoutineFabricateFactory(new FabricateMutant(), true);
+    RoutineFabricateFactory routineFactory = new RoutineFabricateFactory(
+        sysMock_, new FabricateMutant(), true);
     
     CommandManager cm = factory.createCommandManager(
         Collections.singleton("hey"), sysMock_, routineFactory);
@@ -234,7 +235,8 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
   public void testMethodCreateRoutineFabricateFactory() {
     FabricateFactory factory = new FabricateFactory();
     I_Fabricate fab = mock(I_Fabricate.class);
-    RoutineFabricateFactory routineFactory =  factory.createRoutineFabricateFactory(fab, true);
+    RoutineFabricateFactory routineFactory =  factory.createRoutineFabricateFactory(
+        sysMock_, fab, true);
    assertNotNull(routineFactory);
   }
   @Test

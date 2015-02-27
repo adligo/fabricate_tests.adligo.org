@@ -25,6 +25,9 @@ public class CommandLineEnConstantsTrial extends MockitoSourceFileTrial {
     assertEquals("--log-verbosely", messages.getLog(false));
     assertEquals("-m", messages.getMarkVersions(true));
     assertEquals("--mark-versions", messages.getMarkVersions(false));
+    assertEquals("-p", messages.getPurge(true));
+    assertEquals("--purge", messages.getPurge(false));
+    
     assertEquals("-r", messages.getRebuildDependents(true));
     assertEquals("--rebuild-dependents", messages.getRebuildDependents(false));
     assertEquals("-s", messages.getShare(true));
@@ -47,6 +50,7 @@ public class CommandLineEnConstantsTrial extends MockitoSourceFileTrial {
     
     assertEquals("-l", messages.getAlias("--log-verbosely"));
     assertEquals("-m", messages.getAlias("--mark-versions"));
+    assertEquals("-p", messages.getAlias("--purge"));
     assertEquals("-r", messages.getAlias("--rebuild-dependents"));
     assertEquals("-s", messages.getAlias("--share"));
     assertEquals("-t", messages.getAlias("--test"));
