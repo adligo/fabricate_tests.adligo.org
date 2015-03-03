@@ -37,7 +37,7 @@ public class ParameterTrial extends MockitoSourceFileTrial {
       }
     });
   }
-  
+
   @SuppressWarnings("boxing")
   @Test
   public void testConstructorCopy() {
@@ -81,6 +81,37 @@ public class ParameterTrial extends MockitoSourceFileTrial {
     
     List<I_Parameter> kv = kv2.getChildren();
     assertEquals("java.util.Collections$UnmodifiableRandomAccessList", kv.getClass().getName());
+  }
+  
+  @SuppressWarnings("boxing")
+  @Test
+  public void testConstructordWithArgValues() {
+    ParameterMutant pm = new ParameterMutant();
+    pm.setKey("k1");
+    pm.setValue("v1");
+    
+    List<I_Parameter> children = new ArrayList<I_Parameter>();
+    children.add(pm);
+    Parameter p = new Parameter("k","v", children);
+    assertEquals("k", p.getKey());
+    assertEquals("v", p.getValue());
+    
+    List<I_Parameter> pChildren = p.getChildren();
+    I_Parameter child = pChildren.get(0);
+    assertEquals("k1", child.getKey());
+    assertEquals("v1", child.getValue());
+    assertEquals(Parameter.class.getName(), child.getClass().getName());
+    assertEquals(1, pChildren.size());
+    assertEquals("java.util.Collections$UnmodifiableRandomAccessList", 
+        pChildren.getClass().getName());
+    
+    Parameter p2 = new Parameter("k2","v2");
+    assertEquals("k2", p2.getKey());
+    assertEquals("v2", p2.getValue());
+    pChildren = p2.getChildren();
+    assertTrue(pChildren.isEmpty());
+    assertEquals("java.util.Collections$UnmodifiableRandomAccessList",
+        pChildren.getClass().getName());
   }
   
   @Test

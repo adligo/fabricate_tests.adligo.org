@@ -41,7 +41,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
 
-@SourceFileScope (sourceClass=FabricateController.class, minCoverage=60.0)
+@SourceFileScope (sourceClass=FabricateController.class, minCoverage=55.0)
 public class FabricateControllerTrial extends MockitoSourceFileTrial {
   private FabSystem sysMock_;
   private I_FabFileIO fileMock_;
@@ -52,6 +52,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
   private MockMethod<Void> printTraceMethod_;
   private FabricateFactory factoryMock_;
   private FabricateXmlDiscovery xmlDiscoveryMock_;
+  private FabricationMemoryMutant<Object> memory_ = new FabricationMemoryMutant<Object>();
   
   public void afterTests() {
     ThreadLocalPrintStreamMock.revert();
@@ -86,6 +87,8 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     when(xmlDiscoveryMock_.getFabricateXmlDir()).thenReturn("fabricateXmlDir/");
     factoryMock_ = mock(FabricateFactory.class);
     when(factoryMock_.createDiscovery(sysMock_)).thenReturn(xmlDiscoveryMock_);
+    
+    when(factoryMock_.createMemory()).thenReturn(memory_);
   }
   
   @SuppressWarnings({"unused", "boxing"})

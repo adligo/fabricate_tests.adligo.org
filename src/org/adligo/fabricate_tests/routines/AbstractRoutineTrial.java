@@ -1,6 +1,7 @@
 package org.adligo.fabricate_tests.routines;
 
 import org.adligo.fabricate.common.en.FabricateEnConstants;
+import org.adligo.fabricate.common.log.I_FabLog;
 import org.adligo.fabricate.common.system.I_FabSystem;
 import org.adligo.fabricate.models.common.I_FabricationMemory;
 import org.adligo.fabricate.models.common.I_FabricationMemoryMutant;
@@ -20,13 +21,17 @@ import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
-@SourceFileScope (sourceClass=AbstractRoutine.class, minCoverage=93.0)
+@SourceFileScope (sourceClass=AbstractRoutine.class, minCoverage=91.0)
 public class AbstractRoutineTrial extends MockitoSourceFileTrial {
   private I_FabSystem sysMock_;
+  private I_FabLog logMock_;
   private DecryptTrait encrypt_ = new DecryptTrait();
   
   public void beforeTests() {
     sysMock_ = mock(I_FabSystem.class);
+    logMock_ = mock(I_FabLog.class);
+    when(sysMock_.getLog()).thenReturn(logMock_);
+    
     when(sysMock_.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     when(sysMock_.lineSeperator()).thenReturn(System.lineSeparator());
     encrypt_.setSystem(sysMock_);

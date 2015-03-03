@@ -3,7 +3,7 @@ package org.adligo.fabricate_tests.routines.implicit;
 import org.adligo.fabricate.common.en.FabricateEnConstants;
 import org.adligo.fabricate.common.log.I_FabLog;
 import org.adligo.fabricate.common.system.I_FabSystem;
-import org.adligo.fabricate.common.system.I_LocatableRunable;
+import org.adligo.fabricate.common.system.I_LocatableRunnable;
 import org.adligo.fabricate.common.system.I_RunMonitor;
 import org.adligo.fabricate.common.system.RunMonitor;
 import org.adligo.fabricate.models.common.I_FabricationMemory;

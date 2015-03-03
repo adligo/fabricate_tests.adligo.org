@@ -29,7 +29,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-@SourceFileScope (sourceClass=RoutineBriefMutant.class, minCoverage=74.0)
+@SourceFileScope (sourceClass=RoutineBriefMutant.class, minCoverage=81.0)
 public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
 
   @Test
@@ -47,7 +47,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertEquals(RoutineBriefOrigin.COMMAND, copy.getOrigin());
     assertSame(Collections.emptyList(), copy.getNestedRoutines());
     assertSame(Collections.emptyList(), copy.getParameters());
-    
+    assertNull(copy.getParameter("hey"));
   }
   
   @Test
@@ -394,6 +394,8 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     
     assertTrue(rbm.hasParameter("nr"));
     assertFalse(rbm.hasParameter("key"));
+    assertEquals("nr", rbm.getParameter("nr"));
+    assertNull(rbm.getParameter("key"));
     List<String> params = rbm.getParameters("nr");
     assertContains(params, "nr");
     assertEquals(1, params.size());

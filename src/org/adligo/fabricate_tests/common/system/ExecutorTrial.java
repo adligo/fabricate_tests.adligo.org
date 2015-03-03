@@ -7,6 +7,7 @@ import org.adligo.fabricate.common.system.FabSystem;
 import org.adligo.fabricate.common.system.I_ExecutionResult;
 import org.adligo.fabricate.common.system.I_FabSystem;
 import org.adligo.fabricate.common.system.ProcessBuilderWrapper;
+import org.adligo.fabricate.models.common.FabricationMemoryConstants;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
@@ -20,7 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-@SourceFileScope (sourceClass=Executor.class,minCoverage=73.0)
+@SourceFileScope (sourceClass=Executor.class,minCoverage=50.0)
 public class ExecutorTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("boxing")
@@ -69,7 +70,8 @@ public class ExecutorTrial extends MockitoSourceFileTrial {
         new I_Thrower() {
           @Override
           public void run() throws Throwable {
-            exe.executeProcess(".", "echo","foo");
+            exe.executeProcess(FabricationMemoryConstants.EMPTY_ENV, 
+                ".", "echo","foo");
           }
         });
     
@@ -128,7 +130,8 @@ public class ExecutorTrial extends MockitoSourceFileTrial {
         new I_Thrower() {
           @Override
           public void run() throws Throwable {
-            exe.executeProcess(".", "echo","foo");
+            exe.executeProcess(FabricationMemoryConstants.EMPTY_ENV, 
+                ".", "echo","foo");
           }
         });
     
@@ -187,7 +190,8 @@ public class ExecutorTrial extends MockitoSourceFileTrial {
     when(sysMock.getFileIO()).thenReturn(fileMock);
     
     ExecutorMock exe = new ExecutorMock(sysMock);
-    I_ExecutionResult er = exe.executeProcess(".", "echo","foo");
+    I_ExecutionResult er = exe.executeProcess(FabricationMemoryConstants.EMPTY_ENV, 
+        ".", "echo","foo");
     
     assertEquals(1, newProcessBuilderMethod.count());
     assertEquals(1, redirectErrorStreamMethod.count());
@@ -208,7 +212,8 @@ public class ExecutorTrial extends MockitoSourceFileTrial {
   public void testMethodExecuteProcessRealIO() throws Exception {
     FabSystem sys = new FabSystem();
     ExecutorMock exe = new ExecutorMock(sys);
-    I_ExecutionResult er = exe.executeProcess(".", "echo","foo");
+    I_ExecutionResult er = exe.executeProcess(FabricationMemoryConstants.EMPTY_ENV, 
+        ".", "echo","foo");
     
     String out = er.getOutput();
     assertTrue(out.contains("foo"));

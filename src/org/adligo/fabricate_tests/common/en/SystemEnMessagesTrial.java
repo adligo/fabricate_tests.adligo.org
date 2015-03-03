@@ -84,6 +84,13 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getExceptionNoJavaHomeSet());
     asserter.assertConstant("Exception: No start time argument.", 
         messages.getExceptionNoStartTimeArg());
+    asserter.assertConstant("Extraction of the following artifact;", 
+        messages.getExtractionOfTheFollowingArtifact());
+    asserter.assertConstant("Exception: Unable to find SSH_AGENT_PID when parsing output of ssh-agent.", 
+        messages.getExceptionUnableToFindSSH_AGENT_PIDWhenParsingOutputOfSshAgent());
+    asserter.assertConstant("Exception: Unable to find SSH_AUTH_SOCK when parsing output of ssh-agent.", 
+        messages.getExceptionUnableToFindSSH_AUTH_SOCKWhenParsingOutputOfSshAgent());
+    
     asserter.assertConstant("Extracting the following artifact;", 
         messages.getExtractingTheFollowingArtifact());
     asserter.assertConstant("Extraction of the following artifact;", 
@@ -105,6 +112,10 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getFailed());
     asserter.assertConstant("finished.", 
         messages.getFinished());
+    asserter.assertConstant("Finished git clone on project <X/>.", 
+        messages.getFinishedGetCloneOnProjectX());
+    asserter.assertConstant("Finished git pull on project <X/>.", 
+        messages.getFinishedGetPullOnProjectX());
     
     asserter.assertConstant("Instead of the following actual generic type;", 
         messages.getInsteadOfTheFollowingActualGenericType());
@@ -121,14 +132,17 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getPassedTheExtractCheck());
     asserter.assertConstant("passed the md5 check.", 
         messages.getPassedTheMd5Check());
-    asserter.assertConstant("Please enter your git key-store password "
-        + "(or just press enter for a key-store without a password).", 
-        messages.getPleaseEnterYourGitKeystorePassword());
+    asserter.assertConstant("Projects are located in the following directory;", 
+        messages.getProjectsAreLocatedInTheFollowingDirectory());
     
     asserter.assertConstant("Sending opts to script.", 
         messages.getSendingOptsToScript());
     asserter.assertConstant("Starting download from the following url;", 
         messages.getStartingDownloadFromTheFollowingUrl());
+    asserter.assertConstant("Starting git clone on project <X/>.", 
+        messages.getStartingGetCloneOnProjectX());
+    asserter.assertConstant("Starting git pull on project <X/>.", 
+        messages.getStartingGetPullOnProjectX());
     
     asserter.assertConstant("The download from the following url;", 
         messages.getTheDownloadFromTheFollowingUrl());
@@ -143,6 +157,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getTheFollowingListOfFabricateLibrariesContainsACircularReference());
     asserter.assertConstant("The following local repository is locked by another process;", 
         messages.getTheFollowingLocalRepositoryIsLockedByAnotherProcess());
+    asserter.assertConstant("The following command line program exited abnormally with exit code <X/>;", 
+        messages.getTheFollowingCommandLineProgramExitedAbnormallyWithExitCodeX());
     asserter.assertConstant("The following remote repository appears to be down;", 
         messages.getTheFollowingRemoteRepositoryAppearsToBeDown());
     
@@ -152,10 +168,27 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getThereWasAProblemCreatingTheFollowingRoutine());
     asserter.assertConstant("There was a problem creating run.marker in the following directory;", 
         messages.getThereWasAProblemCreatingRunMarkerInTheFollowingDirectory());
+    asserter.assertConstant("There was a problem deleting the following directory;", 
+        messages.getThereWasAProblemDeletingTheFollowingDirectory());
     asserter.assertConstant("This method must be called from the main thread (try moving the call to setup?).", 
         messages.getThisMethodMustBeCalledFromTheMainThread());
+    asserter.assertConstant("This version of Fabricate requires Git <X/> or greater, and 'git --version' "
+        + "returned the following;", 
+        messages.getThisVersionOfFabricateRequiresGitXOrGreater());
+    
     asserter.assertConstant("to the following folder;", 
         messages.getToTheFollowingFolder());
+    asserter.assertConstant("Trait <X/> is still running.", 
+        messages.getTraitXIsStillRunning());
+    asserter.assertConstant("Trait <X/> is still running on project <Z/>.", 
+        messages.getTraitXIsStillRunningOnProjectZ());
+    asserter.assertConstant("Trait <X/>, task <Y/> is still running.", 
+        messages.getTraitXTaskYIsStillRunning());
+    asserter.assertConstant("Trait <X/>, task <Y/> is still running on project <Z/>.", 
+        messages.getTraitXTaskYIsStillRunningOnProjectZ());
+    asserter.assertConstant("Trait <X/> is still setting up.", 
+        messages.getTraitXIsStillSettingUp());
+    
     asserter.assertConstant("Unable to load the following class;", 
         messages.getUnableToLoadTheFollowingClass());
     asserter.assertConstant("Using the following remote repositories;", 

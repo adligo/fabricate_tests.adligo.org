@@ -5,6 +5,7 @@ import org.adligo.fabricate.common.system.ComputerInfoDiscovery;
 import org.adligo.fabricate.common.system.I_ExecutionResult;
 import org.adligo.fabricate.common.system.I_Executor;
 import org.adligo.fabricate.common.system.I_FabSystem;
+import org.adligo.fabricate.models.common.FabricationMemoryConstants;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
@@ -32,14 +33,16 @@ public class ComputerInfoDiscoveryTrial extends MockitoSourceFileTrial {
     
     I_ExecutionResult result = mock(I_ExecutionResult.class);
     when(result.getOutput()).thenReturn("machdep.cpu.brand_string: Intel(R) Core(TM) i7-4930K CPU @ 3.40GHz");
-    when(exec.executeProcess(".", "sysctl", "-a")).thenReturn(result);
+    when(exec.executeProcess(FabricationMemoryConstants.EMPTY_ENV, 
+        ".", "sysctl", "-a")).thenReturn(result);
     String [] cpuInfo = ComputerInfoDiscovery.getCpuInfo(
         sysMock, ComputerInfoDiscovery.MAC);
     assertEquals("Intel(R) Core(TM) i7-4930K CPU", cpuInfo[0] );
     assertEquals("3.40GHz", cpuInfo[1] );
    
     when(result.getOutput()).thenReturn("model name\t: Intel(R) Core(TM) i7 CPU         860 @ 2.80GHz");
-    when(exec.executeProcess(".", "cat", "/proc/cpuinfo")).thenReturn(result);
+    when(exec.executeProcess(FabricationMemoryConstants.EMPTY_ENV, 
+        ".", "cat", "/proc/cpuinfo")).thenReturn(result);
     cpuInfo = ComputerInfoDiscovery.getCpuInfo(
         sysMock, ComputerInfoDiscovery.LINUX);
     assertEquals("Intel(R) Core(TM) i7 CPU 860", cpuInfo[0] );
@@ -48,7 +51,8 @@ public class ComputerInfoDiscoveryTrial extends MockitoSourceFileTrial {
     //actual value from a real call on a Windows 8.1 virtual box
     when(result.getOutput()).thenReturn("Name\r\n" +
         "Intel(R) Core(TM) i7-4930K CPU @ 3.40GHz");
-    when(exec.executeProcess(".", "wmic", "cpu", "get","name")).thenReturn(result);
+    when(exec.executeProcess(FabricationMemoryConstants.EMPTY_ENV, 
+        ".", "wmic", "cpu", "get","name")).thenReturn(result);
     cpuInfo = ComputerInfoDiscovery.getCpuInfo(
         sysMock, ComputerInfoDiscovery.WINDOWS);
     assertEquals("Intel(R) Core(TM) i7-4930K CPU", cpuInfo[0] );
@@ -86,7 +90,8 @@ public class ComputerInfoDiscoveryTrial extends MockitoSourceFileTrial {
     
     I_ExecutionResult result = mock(I_ExecutionResult.class);
     when(result.getOutput()).thenReturn("10.0.0");
-    when(exec.executeProcess(".", "sw_vers", "-productVersion")).thenReturn(result);
+    when(exec.executeProcess(FabricationMemoryConstants.EMPTY_ENV, 
+        ".", "sw_vers", "-productVersion")).thenReturn(result);
     assertEquals("10.0.0", ComputerInfoDiscovery.getOperatingSystemVersion(
         sysMock, ComputerInfoDiscovery.MAC));
     

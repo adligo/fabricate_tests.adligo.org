@@ -28,9 +28,12 @@ public class A_RoutinesImplicitPkgTrials implements I_Tests4J_TrialList {
   @Override
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
-    trials.add(EncryptTrial.class);
     trials.add(DecryptTrial.class);
-
+    trials.add(EncryptTrial.class);
+    
+    trials.add(ScmContextTrial.class);
+    trials.add(SshAgentHelperTrial.class);
+    
     trials.add(RoutineFabricateFactoryTrial.class);
     return trials;
   }

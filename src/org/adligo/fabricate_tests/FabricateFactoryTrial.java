@@ -10,6 +10,7 @@ import org.adligo.fabricate.common.system.FabricateDefaults;
 import org.adligo.fabricate.common.system.FabricateEnvironment;
 import org.adligo.fabricate.common.system.FabricateXmlDiscovery;
 import org.adligo.fabricate.managers.CommandManager;
+import org.adligo.fabricate.managers.ProjectsManager;
 import org.adligo.fabricate.models.dependencies.I_Dependency;
 import org.adligo.fabricate.models.fabricate.Fabricate;
 import org.adligo.fabricate.models.fabricate.FabricateMutant;
@@ -26,9 +27,12 @@ import org.adligo.fabricate.repository.I_LibraryResolver;
 import org.adligo.fabricate.repository.I_RepositoryPathBuilder;
 import org.adligo.fabricate.repository.LibraryResolver;
 import org.adligo.fabricate.repository.RepositoryManager;
+import org.adligo.fabricate.routines.RoutineExecutionEngine;
 import org.adligo.fabricate.routines.implicit.RoutineFabricateFactory;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateDependencies;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateType;
+import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.LogSettingType;
+import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.LogSettingsType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.DependencyType;
 import org.adligo.fabricate_tests.common.log.ThreadLocalPrintStreamMock;
 import org.adligo.fabricate_tests.models.dependencies.DependencyMutantTrial;
@@ -89,6 +93,16 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
     when(xmlDiscMock.getFabricateXmlDir()).thenReturn("someFabricateXmlDir");
     when(xmlDiscMock.getProjectXmlDir()).thenReturn("someProjectXmlDir");
     
+    LogSettingsType lst = new LogSettingsType();
+    LogSettingType logSetting = new LogSettingType();
+    logSetting.setClazz(RoutineExecutionEngine.class.getName());
+    logSetting.setSetting(true);
+    lst.getLog().add(logSetting);
+    fabType.setLogs(lst);
+    
+    MockMethod<Void> setLogMethod = new MockMethod<Void>();
+    doAnswer(setLogMethod).when(sysMock_).setLog(any());
+    
     when(sysMock_.getenv(FabricateEnvironment.JAVA_HOME)).thenReturn("javaHome");
     when(sysMock_.getenv(FabricateEnvironment.FABRICATE_HOME)).thenReturn("fabricateHome");
     
@@ -112,6 +126,10 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
     assertEquals("someFabricateXmlDir", fab.getFabricateXmlRunDir());
     assertEquals("someProjectXmlDir", fab.getFabricateProjectRunDir());
     assertEquals(FabricateDefaults.LOCAL_REPOSITORY, fab.getFabricateRepository());
+    
+    I_FabLog log = (I_FabLog) setLogMethod.getArg(0);
+    assertTrue(log.isLogEnabled(RoutineExecutionEngine.class));
+    
   }
   
   @Test
@@ -239,6 +257,18 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
         sysMock_, fab, true);
    assertNotNull(routineFactory);
   }
+  
+  @Test
+  public void testMethodCreateProjectsManager() {
+    FabricateFactory factory = new FabricateFactory();
+    I_Fabricate fab = mock(I_Fabricate.class);
+    RoutineFabricateFactory routineFabFactory = mock(RoutineFabricateFactory.class);
+    
+    ProjectsManager pm =  factory.createProjectsManager(
+        sysMock_, routineFabFactory);
+   assertNotNull(pm);
+  }
+  
   @Test
   public void testMethodCreateWithRuntimeDeps() throws Exception {
     FabricateFactory factory = new FabricateFactory();

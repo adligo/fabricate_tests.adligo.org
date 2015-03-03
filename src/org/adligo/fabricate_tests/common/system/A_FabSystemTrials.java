@@ -1,6 +1,5 @@
 package org.adligo.fabricate_tests.common.system;
 
-import org.adligo.fabricate.common.system.I_RunMonitor;
 import org.adligo.fabricate_tests.etc.FabTestParamsFactory;
 import org.adligo.tests4j.run.api.Tests4J;
 import org.adligo.tests4j.system.shared.api.I_Tests4J_TrialList;
@@ -29,15 +28,20 @@ public class A_FabSystemTrials implements I_Tests4J_TrialList {
   @Override
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
+    trials.add(AntHelperTrial.class);
+    
     trials.add(I_ExecutionResultTrial.class);
     trials.add(I_ExecutorTrial.class);
+    trials.add(I_ExecutingProcessTrial.class);
     trials.add(I_LocatableRunableTrial.class);
     trials.add(I_FabSystemTrial.class);
+    trials.add(I_GitCallsTrial.class);
     trials.add(I_RunMonitorTrial.class);
     
     trials.add(BufferedInputStreamTrial.class);
     trials.add(ComputerInfoDiscoveryTrial.class);
     trials.add(ExecutionResultMutantTrial.class);
+    trials.add(ExecutingProcessTrial.class);
     
     trials.add(FabSystemTrial.class);
     trials.add(FabSystemSetupTrial.class);
@@ -45,9 +49,11 @@ public class A_FabSystemTrials implements I_Tests4J_TrialList {
     trials.add(FabricateXmlDiscoveryTrial.class);
     trials.add(FabricateEnvironmentTrial.class);
 
-    
+    trials.add(GitCallsTrial.class);
     
     trials.add(ProcessBuilderWrapperTrial.class);
+    trials.add(ProcessOutputDataTrial.class);
+    trials.add(ProcessRunnableTrial.class);
     trials.add(RunMonitorTrial.class);
     
     trials.add(ExecutorTrial.class);

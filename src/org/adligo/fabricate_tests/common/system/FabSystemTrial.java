@@ -7,7 +7,7 @@ import org.adligo.fabricate.common.log.I_FabLog;
 import org.adligo.fabricate.common.system.BufferedInputStream;
 import org.adligo.fabricate.common.system.ComputerInfoDiscovery;
 import org.adligo.fabricate.common.system.FabSystem;
-import org.adligo.fabricate.common.system.I_LocatableRunable;
+import org.adligo.fabricate.common.system.I_LocatableRunnable;
 import org.adligo.fabricate.common.system.I_RunMonitor;
 import org.adligo.fabricate.common.system.ProcessBuilderWrapper;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
@@ -20,9 +20,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@SourceFileScope (sourceClass=FabSystem.class, minCoverage=67.0)
+@SourceFileScope (sourceClass=FabSystem.class, minCoverage=64.0)
 public class FabSystemTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("boxing")
@@ -110,7 +111,7 @@ public class FabSystemTrial extends MockitoSourceFileTrial {
     
     //run monitor
     final AtomicBoolean ran = new AtomicBoolean(false);
-    I_LocatableRunable r = new I_LocatableRunable() {
+    I_LocatableRunnable r = new I_LocatableRunnable() {
 
       @Override
       public void run() {
@@ -120,6 +121,12 @@ public class FabSystemTrial extends MockitoSourceFileTrial {
       @Override
       public String getCurrentLocation() {
         return "cl";
+      }
+
+      @Override
+      public String getAdditionalDetail() {
+        // TODO Auto-generated method stub
+        return null;
       }
     };
     I_RunMonitor rm = fabSystem.newRunMonitor(r, 0);
@@ -132,6 +139,12 @@ public class FabSystemTrial extends MockitoSourceFileTrial {
     assertEquals(1, rm.getSequence());
     rm.run();
     assertTrue(ran.get());
+    
+    ExecutorService es = fabSystem.newFixedThreadPool(1);
+    assertEquals("java.util.concurrent.Executors$FinalizableDelegatedExecutorService", es.getClass().getName());
+     
+    ExecutorService es2 = fabSystem.newFixedThreadPool(2);
+    assertEquals("java.util.concurrent.ThreadPoolExecutor", es2.getClass().getName());
   }
   
   @SuppressWarnings("boxing")

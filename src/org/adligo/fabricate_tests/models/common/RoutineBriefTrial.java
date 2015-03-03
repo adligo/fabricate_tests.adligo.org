@@ -52,6 +52,7 @@ public class RoutineBriefTrial extends MockitoSourceFileTrial {
     assertSame(Collections.emptyList(), copy.getNestedRoutines());
     assertNull(copy.getNestedRoutine(""));
     assertSame(Collections.emptyList(), copy.getParameters());
+    assertNull(copy.getParameter("l"));
     assertEquals(0, copy.getParameters("").size());
   }
   
@@ -191,12 +192,17 @@ public class RoutineBriefTrial extends MockitoSourceFileTrial {
     nest.setValue("nrVal");
     rb = new RoutineBrief(rbm);
     
+    assertEquals("nrVal", rb.getParameter("nr"));
+    assertNull(rb.getParameter("k"));
     params = rb.getParameters("nr");
     assertContains(params, "nrVal");
     assertEquals(1, params.size());
     
     rbm.setParameters(Collections.singletonList(new Parameter(nest)));
     rb = new RoutineBrief(rbm);
+    
+    assertEquals("nrVal", rb.getParameter("nr"));
+    assertNull(rb.getParameter("k"));
     params = rb.getParameters("nr");
     assertContains(params, "nrVal");
     assertEquals(1, params.size());
@@ -207,6 +213,8 @@ public class RoutineBriefTrial extends MockitoSourceFileTrial {
     rbm.addParameter(pm);
     rb = new RoutineBrief(rbm);
     
+    assertEquals("nrVal", rb.getParameter("nr"));
+    assertNull(rb.getParameter("k"));
     params = rb.getParameters("nr");
     assertContains(params, "nrVal");
     assertContains(params, "nrVal2");

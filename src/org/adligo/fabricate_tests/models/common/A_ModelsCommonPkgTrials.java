@@ -28,7 +28,12 @@ public class A_ModelsCommonPkgTrials implements I_Tests4J_TrialList {
   @Override
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
+    trials.add(ExecutionEnvironmentMutantTrial.class);
+    trials.add(ExecutionEnvironmentTrial.class);
+    
     trials.add(I_ExpectedRoutineInterfaceTrial.class);
+    trials.add(I_ExecutionEnvironmentMutantTrial.class);
+    trials.add(I_ExecutionEnvironmentTrial.class);
     trials.add(I_FabricationTrial.class);
     trials.add(I_FabricationMemoryTrial.class);
     trials.add(I_FabricationMemoryMutantTrial.class);
@@ -38,6 +43,7 @@ public class A_ModelsCommonPkgTrials implements I_Tests4J_TrialList {
     trials.add(I_RoutineFactoryTrial.class);
     trials.add(I_RoutineMemoryMutantTrial.class);
     trials.add(I_RoutineMemoryTrial.class);
+    trials.add(I_MemoryLockTrial.class);
     
     trials.add(ExpectedRoutineInterfaceTrial.class);
     trials.add(ExpectedRoutineInterfaceMutantTrial.class);
@@ -47,6 +53,7 @@ public class A_ModelsCommonPkgTrials implements I_Tests4J_TrialList {
     trials.add(FabricationMemoryMutantTrial.class);
     trials.add(FabricationRoutineCreationExceptionTrial.class);
     
+    trials.add(MemoryLockTrial.class);
     trials.add(ParameterMutantTrial.class);
     trials.add(ParameterTrial.class);
     

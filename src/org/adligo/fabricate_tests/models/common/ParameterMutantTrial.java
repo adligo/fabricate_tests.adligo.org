@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@SourceFileScope (sourceClass=ParameterMutant.class, minCoverage=75.0)
+@SourceFileScope (sourceClass=ParameterMutant.class, minCoverage=74.0)
 public class ParameterMutantTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("unused")
@@ -76,6 +76,53 @@ public class ParameterMutantTrial extends MockitoSourceFileTrial {
     assertNotSame(kvmC, kvmC1);
     assertEquals("keyC", kvmC1.getKey());
     assertEquals("value2", kvmC1.getValue());
+  }
+  
+  @SuppressWarnings("boxing")
+  @Test
+  public void testConstructordWithArgValues() {
+    ParameterMutant pm = new ParameterMutant();
+    pm.setKey("k1");
+    pm.setValue("v1");
+    
+    List<I_Parameter> children = new ArrayList<I_Parameter>();
+    children.add(pm);
+    ParameterMutant p = new ParameterMutant("k","v", children);
+    assertEquals("k", p.getKey());
+    assertEquals("v", p.getValue());
+    
+    List<I_Parameter> pChildren = p.getChildren();
+    I_Parameter child = pChildren.get(0);
+    assertEquals("k1", child.getKey());
+    assertEquals("v1", child.getValue());
+    assertEquals(ParameterMutant.class.getName(), child.getClass().getName());
+    assertEquals(1, pChildren.size());
+    assertEquals("java.util.ArrayList", 
+        pChildren.getClass().getName());
+    
+    ParameterMutant p2 = new ParameterMutant("k2","v2");
+    assertEquals("k2", p2.getKey());
+    assertEquals("v2", p2.getValue());
+    pChildren = p2.getChildren();
+    assertTrue(pChildren.isEmpty());
+    assertEquals("java.util.ArrayList",
+        pChildren.getClass().getName());
+    
+    p2 = new ParameterMutant("k2","v2", null);
+    assertEquals("k2", p2.getKey());
+    assertEquals("v2", p2.getValue());
+    pChildren = p2.getChildren();
+    assertTrue(pChildren.isEmpty());
+    assertEquals("java.util.ArrayList",
+        pChildren.getClass().getName());
+    
+    p2 = new ParameterMutant("k2","v2", Collections.emptyList());
+    assertEquals("k2", p2.getKey());
+    assertEquals("v2", p2.getValue());
+    pChildren = p2.getChildren();
+    assertTrue(pChildren.isEmpty());
+    assertEquals("java.util.ArrayList",
+        pChildren.getClass().getName());
   }
   
   @SuppressWarnings("boxing")
