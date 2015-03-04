@@ -1,15 +1,19 @@
 package org.adligo.fabricate_tests.common.system;
 
+import org.adligo.fabricate.common.en.FabricateEnConstants;
 import org.adligo.fabricate.common.files.FabFileIO;
 import org.adligo.fabricate.common.files.xml_io.FabXmlFileIO;
+import org.adligo.fabricate.common.i18n.I_FabricateConstants;
 import org.adligo.fabricate.common.log.DeferredLog;
 import org.adligo.fabricate.common.log.I_FabLog;
 import org.adligo.fabricate.common.system.BufferedInputStream;
 import org.adligo.fabricate.common.system.ComputerInfoDiscovery;
+import org.adligo.fabricate.common.system.ExecutingProcess;
 import org.adligo.fabricate.common.system.FabSystem;
 import org.adligo.fabricate.common.system.I_LocatableRunnable;
+import org.adligo.fabricate.common.system.I_ProcessBuilderWrapper;
 import org.adligo.fabricate.common.system.I_RunMonitor;
-import org.adligo.fabricate.common.system.ProcessBuilderWrapper;
+import org.adligo.fabricate.common.system.ProcessRunnable;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
@@ -23,7 +27,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@SourceFileScope (sourceClass=FabSystem.class, minCoverage=64.0)
+@SourceFileScope (sourceClass=FabSystem.class, minCoverage=70.0)
 public class FabSystemTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("boxing")
@@ -80,7 +84,7 @@ public class FabSystemTrial extends MockitoSourceFileTrial {
     assertTrue(ft -1000 < now);
     
     assertNull(fabSystem.getenv("nullvoid"));
-    assertEquals(System.lineSeparator(), fabSystem.lineSeperator());
+    assertEquals(System.lineSeparator(), fabSystem.lineSeparator());
     
     assertEquals(Locale.getDefault().getLanguage(), fabSystem.getDefaultLanguage());
     assertEquals(Locale.getDefault().getCountry(), fabSystem.getDefaultCountry());
@@ -93,12 +97,12 @@ public class FabSystemTrial extends MockitoSourceFileTrial {
     assertNotNull(baos);
     assertNotSame(baos, fabSystem.newByteArrayOutputStream());
     
-    ProcessBuilderWrapper pbw = fabSystem.newProcessBuilder(new String[] {""});
+    I_ProcessBuilderWrapper pbw = fabSystem.newProcessBuilder(new String[] {""});
     assertNotNull(pbw);
     ProcessBuilder pb = pbw.getDelegate();
     assertNotNull(pb);
     
-    ProcessBuilderWrapper pbw2 = fabSystem.newProcessBuilder(new String [] {""});
+    I_ProcessBuilderWrapper pbw2 = fabSystem.newProcessBuilder(new String [] {""});
     assertNotNull(pbw2);
     ProcessBuilder pb2 = pbw2.getDelegate();
     assertNotNull(pb2);
@@ -145,6 +149,16 @@ public class FabSystemTrial extends MockitoSourceFileTrial {
      
     ExecutorService es2 = fabSystem.newFixedThreadPool(2);
     assertEquals("java.util.concurrent.ThreadPoolExecutor", es2.getClass().getName());
+    
+    Process proc = mock(Process.class);
+    ProcessRunnable pr =  fabSystem.newProcessRunnable(proc);
+    assertNotNull(pr);
+    
+    ExecutingProcess ep =  fabSystem.newExecutingProcess(proc);
+    assertNotNull(ep);
+    
+    I_FabricateConstants constants = fabSystem.newFabConstantsDiscovery("languageCode", "countryCode");
+    assertEquals(FabricateEnConstants.class.getName(), constants.getClass().getName());
   }
   
   @SuppressWarnings("boxing")

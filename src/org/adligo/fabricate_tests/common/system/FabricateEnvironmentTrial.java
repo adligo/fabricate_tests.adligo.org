@@ -24,7 +24,7 @@ public class FabricateEnvironmentTrial extends MockitoSourceFileTrial {
     sysMock_ = mock(I_FabSystem.class);
     logMock_ = mock(I_FabLog.class);
     when(sysMock_.getLog()).thenReturn(logMock_);
-    when(sysMock_.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock_.lineSeparator()).thenReturn(System.lineSeparator());
     when(sysMock_.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     
     printlnMethod_ = new MockMethod<Void>();

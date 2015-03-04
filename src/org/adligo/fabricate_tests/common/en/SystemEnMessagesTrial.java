@@ -14,7 +14,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     I18N_Asserter asserter = new I18N_Asserter(this);
     
     SystemEnMessages messages = SystemEnMessages.INSTANCE;
-    
+    asserter.assertConstant("AntHelper requires a directory argument.", 
+        messages.getAntHelperRequiresADirectoryArgument());
     asserter.assertConstant("Archive stage <X/> is still running.", 
         messages.getArchiveStageXIsStillRunning());
     asserter.assertConstant("Archive stage <X/> is still running on project <Z/>.", 
@@ -84,8 +85,6 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getExceptionNoJavaHomeSet());
     asserter.assertConstant("Exception: No start time argument.", 
         messages.getExceptionNoStartTimeArg());
-    asserter.assertConstant("Extraction of the following artifact;", 
-        messages.getExtractionOfTheFollowingArtifact());
     asserter.assertConstant("Exception: Unable to find SSH_AGENT_PID when parsing output of ssh-agent.", 
         messages.getExceptionUnableToFindSSH_AGENT_PIDWhenParsingOutputOfSshAgent());
     asserter.assertConstant("Exception: Unable to find SSH_AUTH_SOCK when parsing output of ssh-agent.", 
@@ -116,6 +115,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getFinishedGetCloneOnProjectX());
     asserter.assertConstant("Finished git pull on project <X/>.", 
         messages.getFinishedGetPullOnProjectX());
+    asserter.assertConstant("Git does not appear to be installed please install it.", 
+        messages.getGitDoesNotAppearToBeInstalledPleaseInstallIt());
     
     asserter.assertConstant("Instead of the following actual generic type;", 
         messages.getInsteadOfTheFollowingActualGenericType());

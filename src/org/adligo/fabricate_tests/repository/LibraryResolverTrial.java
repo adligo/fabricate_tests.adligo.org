@@ -36,7 +36,7 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
   public void beforeTests() {
     sysMock_ = mock(I_FabSystem.class);
     when(sysMock_.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock_.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock_.lineSeparator()).thenReturn(System.lineSeparator());
     
     
     filesMock_ = mock(I_FabFileIO.class);

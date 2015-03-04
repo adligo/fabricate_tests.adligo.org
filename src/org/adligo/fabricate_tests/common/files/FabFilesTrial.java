@@ -122,7 +122,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   public void testMethodCalculateMd5() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
@@ -140,7 +140,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   public void testMethodCalculateMd5PassthroughExceptions() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
@@ -180,7 +180,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   public void testMethodCheckExceptions() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
@@ -240,7 +240,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   public void testMethodClose() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
@@ -262,7 +262,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   public void testMethodCloseIOPair() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
@@ -321,7 +321,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   public void testMethodCloseExceptions() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
@@ -339,7 +339,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   @Test
   public void testMethodCreateExceptions() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
@@ -362,7 +362,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   public void testMethodGetParentDir() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
@@ -377,7 +377,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   public void testMethodNewFileOutputStreamExceptions() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
@@ -401,7 +401,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   public void testMethodNewZipFile() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
@@ -427,7 +427,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   public void testMethodNewZipFileExceptions() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
@@ -442,7 +442,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   public void testMethodReadBytesException() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
@@ -466,7 +466,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   public void testMethodReadFile() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
@@ -485,7 +485,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   public void testMethodDecodeExceptions() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
@@ -545,7 +545,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     FabFileIO fabFiles = new FabFileIO(sysMock);
     
     String to = FileUtils.getRunDir() + "test_data" + File.separator +
@@ -598,7 +598,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     FabFileIO fabFiles = new FabFileIO(sysMock);
     
     String to = FileUtils.getRunDir() + "test_data" + File.separator +
@@ -638,7 +638,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   public void testMethodDownloadExceptions() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
@@ -811,7 +811,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   public void testMethodUnzip() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
@@ -846,7 +846,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   public void testMethodUnzipExceptions() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
@@ -900,7 +900,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   public void testMethodWriteFile() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
@@ -937,7 +937,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   public void testMethodVerifyZip() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
@@ -968,7 +968,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   public void testMethodWriteFileExceptions() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);
@@ -1023,7 +1023,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
   public void testMethodWriteFileWithBufferExceptions() throws Exception {
     I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
     when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
     
     I_FabLog logMock = mock(I_FabLog.class);
     when(sysMock.getLog()).thenReturn(logMock);

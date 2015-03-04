@@ -47,7 +47,7 @@ public class RoutineFactoryTrial extends MockitoSourceFileTrial {
     when(sysMock_.newArrayBlockingQueue(Boolean.class, 1))
         .thenReturn(new ArrayBlockingQueue<Boolean>(1));
     when(sysMock_.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock_.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock_.lineSeparator()).thenReturn(System.lineSeparator());
     encrypt_.setSystem(sysMock_);
     logMock_ = mock(I_FabLog.class);
     when(sysMock_.getLog()).thenReturn(logMock_);

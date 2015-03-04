@@ -48,8 +48,12 @@ public class FabricateArgsSetupTrial extends MockitoSourceFileTrial {
     }
     sysMock_ = mock(FabSystem.class);
     
-    when(sysMock_.lineSeperator()).thenReturn("\n");
+    when(sysMock_.lineSeparator()).thenReturn("\n");
     when(sysMock_.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock_.getDefaultLanguage()).thenReturn("en");
+    when(sysMock_.getDefaultCountry()).thenReturn("US");
+    when(sysMock_.newFabConstantsDiscovery("en", "US")).thenReturn(FabricateEnConstants.INSTANCE);
+    
     fileMock_ = mock(I_FabFileIO.class);
     when(fileMock_.getNameSeparator()).thenReturn("/");
     xmlIoMock_ = mock(I_FabXmlFileIO.class);

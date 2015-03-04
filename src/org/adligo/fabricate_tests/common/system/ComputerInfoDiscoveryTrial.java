@@ -10,7 +10,7 @@ import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
-@SourceFileScope (sourceClass=ComputerInfoDiscovery.class,minCoverage=0.0)
+@SourceFileScope (sourceClass=ComputerInfoDiscovery.class,minCoverage=71.0)
 public class ComputerInfoDiscoveryTrial extends MockitoSourceFileTrial {
 
   @Test

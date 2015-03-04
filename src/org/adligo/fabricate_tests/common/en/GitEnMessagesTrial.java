@@ -13,14 +13,16 @@ public class GitEnMessagesTrial extends MockitoSourceFileTrial {
   public void testConstants() {
     I18N_Asserter asserter = new I18N_Asserter(this);
     
+    
     GitEnMessages messages = GitEnMessages.INSTANCE;
+    
     asserter.assertConstant("Discovered <X/> projects.", 
         messages.getDiscoveredXProjects());
     asserter.assertConstant("Finished git checkout for the following project;", 
         messages.getFinishedGitCheckoutForTheFollowingProject());
     asserter.assertConstant("Finished git clone for the following project;", 
         messages.getFinishedGitCloneForTheFollowingProject());
-    asserter.assertConstant("Finished git checkout for the following project;", 
+    asserter.assertConstant("Finished git commit for the following project;", 
         messages.getFinishedGitCommitForTheFollowingProject());
     asserter.assertConstant("Finished git pull for the following project;", 
         messages.getFinishedGitPullForTheFollowingProject());

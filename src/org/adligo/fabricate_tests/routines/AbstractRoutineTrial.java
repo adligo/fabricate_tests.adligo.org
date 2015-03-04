@@ -33,7 +33,7 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     when(sysMock_.getLog()).thenReturn(logMock_);
     
     when(sysMock_.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
-    when(sysMock_.lineSeperator()).thenReturn(System.lineSeparator());
+    when(sysMock_.lineSeparator()).thenReturn(System.lineSeparator());
     encrypt_.setSystem(sysMock_);
   }
   

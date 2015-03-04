@@ -1,5 +1,6 @@
 package org.adligo.fabricate_tests.common.system;
 
+import org.adligo.fabricate.common.system.I_ProcessBuilderWrapper;
 import org.adligo.fabricate.common.system.ProcessBuilderWrapper;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
@@ -16,7 +17,7 @@ public class ProcessBuilderWrapperTrial extends MockitoSourceFileTrial {
   @Test
   public void testMethodsGetsAndSets() throws IOException {
     ProcessBuilder pb = new ProcessBuilder("echo","foo");
-    ProcessBuilderWrapper pbr = new ProcessBuilderWrapper(pb);
+    I_ProcessBuilderWrapper pbr = new ProcessBuilderWrapper(pb);
     pbr.directory(new File("."));
     File dir = pb.directory();
     assertEquals(".", dir.getPath());

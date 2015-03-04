@@ -65,7 +65,7 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
   public void beforeTests() {
     sysMock_ = mock(FabSystem.class);
     
-    when(sysMock_.lineSeperator()).thenReturn("\n");
+    when(sysMock_.lineSeparator()).thenReturn("\n");
     when(sysMock_.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     fileMock_ = mock(I_FabFileIO.class);
     when(fileMock_.getNameSeparator()).thenReturn("/");
