@@ -18,8 +18,8 @@ import org.adligo.tests4j.system.shared.trials.TrialTypeAnnotation;
 
 @TrialTypeAnnotation (type=TrialType.META_TRIAL_TYPE)
 public class FabMetaTrial  extends AbstractTrial implements I_MetaTrial {
-	private static final long TESTS = 647;
-	private static final int TRIALS = 141;
+	private static final long TESTS = 656;
+	private static final int TRIALS = 142;
 	
 	private ClassesWithSourceFileTrialsCalculator calculator_;
 	private I_TrialRunResult results_;
@@ -36,15 +36,15 @@ public class FabMetaTrial  extends AbstractTrial implements I_MetaTrial {
 		calculator_ = new ClassesWithSourceFileTrialsCalculator(metadata);
 		
 		log_ = super.getLog();
-		if (calculator_.getPctWithTrialsDouble() <= 28.0) {
+		double minPctWithTrials = 50.0;
+		if (calculator_.getPctWithTrialsDouble() <= minPctWithTrials) {
 			Set<String> classes = calculator_.getClassesWithOutTrials();
 			log_.log("The following source files do NOT have a associated SourceFileTrial.");
 			for (String className: classes) {
 				log_.log(className);
 			}
 		}
-		assertGreaterThanOrEquals(47.0, calculator_.getPctWithTrialsDouble());
-		
+		assertGreaterThanOrEquals(minPctWithTrials, calculator_.getPctWithTrialsDouble());
 		// includes this
 		List<? extends I_TrialMetadata> trialMetadata = metadata.getAllTrialMetadata();
 		
@@ -81,7 +81,7 @@ public class FabMetaTrial  extends AbstractTrial implements I_MetaTrial {
 		assertCoverageMatrix("org.adligo.fabricate.common.log",
         100.0, 83.0);
 		assertCoverageMatrix("org.adligo.fabricate.common.system",
-        100.0, 66.0);
+        100.0, 75.0);
 		
 		assertCoverageMatrix("org.adligo.fabricate.models.common",
         100.0, 75.0);

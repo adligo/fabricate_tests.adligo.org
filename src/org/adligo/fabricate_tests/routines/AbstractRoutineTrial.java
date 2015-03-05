@@ -59,6 +59,7 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     assertSame(traitFactory, ar.getTraitFactory());
   }
   
+  @SuppressWarnings("unchecked")
   @Test
   public void testMethodGetCurrentLocationDefault() throws Exception {
     SimpleRoutineMock ar = new SimpleRoutineMock();
@@ -66,8 +67,8 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
    
     addAndAssertBrief(ar, RoutineBriefOrigin.ARCHIVE_STAGE_TASK);
     
-    I_FabricationMemory memory = mock(I_FabricationMemory.class);
-    I_RoutineMemory routineMemory = mock(I_RoutineMemory.class);
+    I_FabricationMemory<Object> memory = mock(I_FabricationMemory.class);
+    I_RoutineMemory<Object> routineMemory = mock(I_RoutineMemory.class);
     ar.setup(memory, routineMemory);
     ar.run();
     
@@ -77,6 +78,7 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     
   }
   
+  @SuppressWarnings("unchecked")
   @Test
   public void testMethodGetCurrentLocationSimpleArchives() throws Exception {
     SimpleRoutineMock ar = new SimpleRoutineMock();
@@ -84,16 +86,16 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
    
     addAndAssertBrief(ar, RoutineBriefOrigin.ARCHIVE_STAGE);
     
-    I_FabricationMemory memory = mock(I_FabricationMemory.class);
-    I_RoutineMemory routineMemory = mock(I_RoutineMemory.class);
+    I_FabricationMemory<Object> memory = mock(I_FabricationMemory.class);
+    I_RoutineMemory<Object> routineMemory = mock(I_RoutineMemory.class);
     ar.setup(memory, routineMemory);
     assertEquals("Archive stage routineName is still setting up.", ar.getCurrentLocation());
     
     ar = new SimpleRoutineMock();
     ar.setSystem(sysMock_);
     addAndAssertBrief(ar, RoutineBriefOrigin.ARCHIVE_STAGE);
-    I_FabricationMemoryMutant memoryMutant = mock(I_FabricationMemoryMutant.class);
-    I_RoutineMemoryMutant routineMemoryMutant = mock(I_RoutineMemoryMutant.class);
+    I_FabricationMemoryMutant<Object> memoryMutant = mock(I_FabricationMemoryMutant.class);
+    I_RoutineMemoryMutant<Object> routineMemoryMutant = mock(I_RoutineMemoryMutant.class);
     ar.setup(memoryMutant, routineMemoryMutant);
     assertEquals("Archive stage routineName is still setting up.", ar.getCurrentLocation());
     
@@ -102,6 +104,7 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     
   }
   
+  @SuppressWarnings("unchecked")
   @Test
   public void testMethodGetCurrentLocationSimpleCommands() throws Exception {
     SimpleRoutineMock ar = new SimpleRoutineMock();
@@ -109,16 +112,16 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
    
     addAndAssertBrief(ar, RoutineBriefOrigin.COMMAND);
     
-    I_FabricationMemory memory = mock(I_FabricationMemory.class);
-    I_RoutineMemory routineMemory = mock(I_RoutineMemory.class);
+    I_FabricationMemory<Object> memory = mock(I_FabricationMemory.class);
+    I_RoutineMemory<Object> routineMemory = mock(I_RoutineMemory.class);
     ar.setup(memory, routineMemory);
     assertEquals("Command routineName is still setting up.", ar.getCurrentLocation());
     
     ar = new SimpleRoutineMock();
     ar.setSystem(sysMock_);
     addAndAssertBrief(ar, RoutineBriefOrigin.COMMAND);
-    I_FabricationMemoryMutant memoryMutant = mock(I_FabricationMemoryMutant.class);
-    I_RoutineMemoryMutant routineMemoryMutant = mock(I_RoutineMemoryMutant.class);
+    I_FabricationMemoryMutant<Object> memoryMutant = mock(I_FabricationMemoryMutant.class);
+    I_RoutineMemoryMutant<Object> routineMemoryMutant = mock(I_RoutineMemoryMutant.class);
     ar.setup(memoryMutant, routineMemoryMutant);
     assertEquals("Command routineName is still setting up.", ar.getCurrentLocation());
     
@@ -127,6 +130,7 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     
   }
   
+  @SuppressWarnings("unchecked")
   @Test
   public void testMethodGetCurrentLocationSimpleStages() throws Exception {
     SimpleRoutineMock ar = new SimpleRoutineMock();
@@ -134,16 +138,16 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
    
     addAndAssertBrief(ar, RoutineBriefOrigin.STAGE);
     
-    I_FabricationMemory memory = mock(I_FabricationMemory.class);
-    I_RoutineMemory routineMemory = mock(I_RoutineMemory.class);
+    I_FabricationMemory<Object> memory = mock(I_FabricationMemory.class);
+    I_RoutineMemory<Object> routineMemory = mock(I_RoutineMemory.class);
     ar.setup(memory, routineMemory);
     assertEquals("Build stage routineName is still setting up.", ar.getCurrentLocation());
     
     ar = new SimpleRoutineMock();
     ar.setSystem(sysMock_);
     addAndAssertBrief(ar, RoutineBriefOrigin.FABRICATE_STAGE);
-    I_FabricationMemoryMutant memoryMutant = mock(I_FabricationMemoryMutant.class);
-    I_RoutineMemoryMutant routineMemoryMutant = mock(I_RoutineMemoryMutant.class);
+    I_FabricationMemoryMutant<Object> memoryMutant = mock(I_FabricationMemoryMutant.class);
+    I_RoutineMemoryMutant<Object> routineMemoryMutant = mock(I_RoutineMemoryMutant.class);
     ar.setup(memoryMutant, routineMemoryMutant);
     assertEquals("Build stage routineName is still setting up.", ar.getCurrentLocation());
     
@@ -152,13 +156,39 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     
   }
   
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testMethodGetCurrentLocationSimpleTraits() throws Exception {
+    SimpleRoutineMock ar = new SimpleRoutineMock();
+    ar.setSystem(sysMock_);
+   
+    addAndAssertBrief(ar, RoutineBriefOrigin.TRAIT);
+    
+    I_FabricationMemory<Object> memory = mock(I_FabricationMemory.class);
+    I_RoutineMemory<Object> routineMemory = mock(I_RoutineMemory.class);
+    ar.setup(memory, routineMemory);
+    assertEquals("Trait routineName is still setting up.", ar.getCurrentLocation());
+    
+    ar = new SimpleRoutineMock();
+    ar.setSystem(sysMock_);
+    addAndAssertBrief(ar, RoutineBriefOrigin.FABRICATE_TRAIT);
+    I_FabricationMemoryMutant<Object> memoryMutant = mock(I_FabricationMemoryMutant.class);
+    I_RoutineMemoryMutant<Object> routineMemoryMutant = mock(I_RoutineMemoryMutant.class);
+    ar.setup(memoryMutant, routineMemoryMutant);
+    assertEquals("Trait routineName is still setting up.", ar.getCurrentLocation());
+    
+    ar.run();
+    assertEquals("Trait routineName is still running.", ar.getCurrentLocation());
+    
+  }
+  @SuppressWarnings("unchecked")
   @Test
   public void testMethodGetCurrentLocationTaskProjectArchives() throws Exception {
     TaskProcessorRoutineMock ar = new TaskProcessorRoutineMock("taskName");
     ar.setSystem(sysMock_);
     addAndAssertBrief(ar, RoutineBriefOrigin.ARCHIVE_STAGE);
-    I_FabricationMemory memory = mock(I_FabricationMemory.class);
-    I_RoutineMemory routineMemory = mock(I_RoutineMemory.class);
+    I_FabricationMemory<Object> memory = mock(I_FabricationMemory.class);
+    I_RoutineMemory<Object> routineMemory = mock(I_RoutineMemory.class);
     ar.setup(memory, routineMemory);
     ar.run();
     assertEquals("Archive stage routineName, task taskName is still running.", ar.getCurrentLocation());
@@ -178,13 +208,14 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     assertEquals("Archive stage routineName, task taskName is still running on project projectName.", ar3.getCurrentLocation());
   }
   
+  @SuppressWarnings("unchecked")
   @Test
   public void testMethodGetCurrentLocationTaskProjectCommands() throws Exception {
     TaskProcessorRoutineMock ar = new TaskProcessorRoutineMock("taskName");
     ar.setSystem(sysMock_);
     addAndAssertBrief(ar, RoutineBriefOrigin.COMMAND);
-    I_FabricationMemory memory = mock(I_FabricationMemory.class);
-    I_RoutineMemory routineMemory = mock(I_RoutineMemory.class);
+    I_FabricationMemory<Object> memory = mock(I_FabricationMemory.class);
+    I_RoutineMemory<Object> routineMemory = mock(I_RoutineMemory.class);
     ar.setup(memory, routineMemory);
     ar.run();
     assertEquals("Command routineName, task taskName is still running.", ar.getCurrentLocation());
@@ -204,13 +235,14 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     assertEquals("Command routineName, task taskName is still running on project projectName.", ar3.getCurrentLocation());
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   public void testMethodGetCurrentLocationTaskProjectStages() throws Exception {
     TaskProcessorRoutineMock ar = new TaskProcessorRoutineMock("taskName");
     ar.setSystem(sysMock_);
     addAndAssertBrief(ar, RoutineBriefOrigin.STAGE);
-    I_FabricationMemory memory = mock(I_FabricationMemory.class);
-    I_RoutineMemory routineMemory = mock(I_RoutineMemory.class);
+    I_FabricationMemory<Object> memory = mock(I_FabricationMemory.class);
+    I_RoutineMemory<Object> routineMemory = mock(I_RoutineMemory.class);
     ar.setup(memory, routineMemory);
     ar.run();
     assertEquals("Build stage routineName, task taskName is still running.", ar.getCurrentLocation());
@@ -228,6 +260,33 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     ar3.setup(memory, routineMemory);
     ar3.run();
     assertEquals("Build stage routineName, task taskName is still running on project projectName.", ar3.getCurrentLocation());
+  }
+  
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testMethodGetCurrentLocationTaskProjectTraits() throws Exception {
+    TaskProcessorRoutineMock ar = new TaskProcessorRoutineMock("taskName");
+    ar.setSystem(sysMock_);
+    addAndAssertBrief(ar, RoutineBriefOrigin.TRAIT);
+    I_FabricationMemory<Object> memory = mock(I_FabricationMemory.class);
+    I_RoutineMemory<Object> routineMemory = mock(I_RoutineMemory.class);
+    ar.setup(memory, routineMemory);
+    ar.run();
+    assertEquals("Trait routineName, task taskName is still running.", ar.getCurrentLocation());
+    
+    ProjectProcessorRoutineMock ar2 = new ProjectProcessorRoutineMock("projectName");
+    ar2.setSystem(sysMock_);
+    addAndAssertBrief(ar2, RoutineBriefOrigin.FABRICATE_TRAIT);
+    ar2.setup(memory, routineMemory);
+    ar2.run();
+    assertEquals("Trait routineName is still running on project projectName.", ar2.getCurrentLocation());
+    
+    TaskAndProjectProcessorRoutineMock ar3 = new TaskAndProjectProcessorRoutineMock("taskName","projectName");
+    ar3.setSystem(sysMock_);
+    addAndAssertBrief(ar3, RoutineBriefOrigin.IMPLICIT_TRAIT);
+    ar3.setup(memory, routineMemory);
+    ar3.run();
+    assertEquals("Trait routineName, task taskName is still running on project projectName.", ar3.getCurrentLocation());
   }
   
   public void addAndAssertBrief(AbstractRoutine ar, RoutineBriefOrigin type) {

@@ -12,8 +12,9 @@ import org.adligo.fabricate.common.system.ExecutingProcess;
 import org.adligo.fabricate.common.system.FabSystem;
 import org.adligo.fabricate.common.system.I_LocatableRunnable;
 import org.adligo.fabricate.common.system.I_ProcessBuilderWrapper;
+import org.adligo.fabricate.common.system.I_ProcessRunnable;
 import org.adligo.fabricate.common.system.I_RunMonitor;
-import org.adligo.fabricate.common.system.ProcessRunnable;
+import org.adligo.tests4j.shared.asserts.reference.CircularDependencies;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
@@ -27,7 +28,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@SourceFileScope (sourceClass=FabSystem.class, minCoverage=70.0)
+@SourceFileScope (sourceClass=FabSystem.class, minCoverage=70.0,
+    allowedCircularDependencies=CircularDependencies.AllowInnerOuterClasses)
 public class FabSystemTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("boxing")
@@ -151,7 +153,7 @@ public class FabSystemTrial extends MockitoSourceFileTrial {
     assertEquals("java.util.concurrent.ThreadPoolExecutor", es2.getClass().getName());
     
     Process proc = mock(Process.class);
-    ProcessRunnable pr =  fabSystem.newProcessRunnable(proc);
+    I_ProcessRunnable pr =  fabSystem.newProcessRunnable(proc);
     assertNotNull(pr);
     
     ExecutingProcess ep =  fabSystem.newExecutingProcess(proc);

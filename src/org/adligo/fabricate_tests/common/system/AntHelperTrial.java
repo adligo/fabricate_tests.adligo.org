@@ -59,8 +59,8 @@ public class AntHelperTrial extends MockitoSourceFileTrial {
     I_Executor executorMock = mock(I_Executor.class);
     when(sysMock_.getExecutor()).thenReturn(executorMock);
     
-    MockMethod<Boolean> checkMethod = new MockMethod<Boolean>(true, true);
-    when(gitCallsMock.check(executorMock)).then(checkMethod);
+    MockMethod<Void> checkMethod = new MockMethod<Void>();
+    doAnswer(checkMethod).when(gitCallsMock).check(executorMock);
     
     MockMethod<String> describeMethod = new MockMethod<String>("gitDesc", true);
     when(gitCallsMock.describe()).then(describeMethod);
@@ -139,8 +139,8 @@ public class AntHelperTrial extends MockitoSourceFileTrial {
     
     I_Executor executorMock = mock(I_Executor.class);
     when(sysMock_.getExecutor()).thenReturn(executorMock);
-    
-    doReturn(true).when(gitCallsMock).check(executorMock);
+    MockMethod<Void> checkMethod = new MockMethod<Void>();
+    doAnswer(checkMethod).when(gitCallsMock).check(executorMock);
     
     MockMethod<String> describeMethod = new MockMethod<String>("gitDesc", true);
 
@@ -156,7 +156,7 @@ public class AntHelperTrial extends MockitoSourceFileTrial {
     when(filesMock_.newFileOutputStream("dir/version.properties")).then(newFileOutputStreamMethod);
     
     new AntHelper(sysMock_, new String[] {"dir"});
-    
+    assertEquals(1, checkMethod.count());
     assertEquals(0, newFileOutputStreamMethod.count());
     assertEquals(0, writeMethod.count());
     assertEquals(descIo, printTraceMethod_.getArg(0));
@@ -172,8 +172,8 @@ public class AntHelperTrial extends MockitoSourceFileTrial {
     
     I_Executor executorMock = mock(I_Executor.class);
     when(sysMock_.getExecutor()).thenReturn(executorMock);
-    
-    doReturn(false).when(gitCallsMock).check(executorMock);
+    IOException x = new IOException("git not installed");
+    doThrow(x).when(gitCallsMock).check(executorMock);
     
     MockMethod<String> describeMethod = new MockMethod<String>("gitDesc", true);
 
@@ -188,7 +188,8 @@ public class AntHelperTrial extends MockitoSourceFileTrial {
     when(filesMock_.newFileOutputStream("dir/version.properties")).then(newFileOutputStreamMethod);
     
     new AntHelper(sysMock_, new String[] {"dir"});
-    
+    assertEquals(x, printTraceMethod_.getArg(0));
+    assertEquals(1, printTraceMethod_.count());
     assertEquals(0, newFileOutputStreamMethod.count());
     assertEquals(0, writeMethod.count());
     assertEquals("Git does not appear to be installed please install it.", printlnMethod_.getArg(0));
@@ -204,8 +205,8 @@ public class AntHelperTrial extends MockitoSourceFileTrial {
     I_Executor executorMock = mock(I_Executor.class);
     when(sysMock_.getExecutor()).thenReturn(executorMock);
     
-    MockMethod<Boolean> checkMethod = new MockMethod<Boolean>(true, true);
-    when(gitCallsMock.check(executorMock)).then(checkMethod);
+    MockMethod<Void> checkMethod = new MockMethod<Void>();
+    doAnswer(checkMethod).when(gitCallsMock).check(executorMock);
     
     MockMethod<String> describeMethod = new MockMethod<String>("gitDesc", true);
     when(gitCallsMock.describe()).then(describeMethod);
