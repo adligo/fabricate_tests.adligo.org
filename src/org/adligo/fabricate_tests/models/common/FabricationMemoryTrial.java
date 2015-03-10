@@ -1,5 +1,6 @@
 package org.adligo.fabricate_tests.models.common;
 
+import org.adligo.fabricate.common.en.SystemEnMessages;
 import org.adligo.fabricate.models.common.ExecutionEnvironment;
 import org.adligo.fabricate.models.common.ExecutionEnvironmentMutant;
 import org.adligo.fabricate.models.common.FabricationMemory;
@@ -20,9 +21,9 @@ public class FabricationMemoryTrial extends MockitoSourceFileTrial {
   @Test
   public void testCopyConstructor() {
     Object o = new Object();
-    FabricationMemoryMutant<Object> fmm = new FabricationMemoryMutant<Object>();
+    FabricationMemoryMutant<Object> fmm = new FabricationMemoryMutant<Object>(SystemEnMessages.INSTANCE);
     fmm.put("key", o);
-    ExecutionEnvironmentMutant eem = new ExecutionEnvironmentMutant();
+    ExecutionEnvironmentMutant eem = new ExecutionEnvironmentMutant(SystemEnMessages.INSTANCE);
     eem.put("foo", "bar");
     fmm.put(FabricationMemoryConstants.ENV, eem);
     FabricationMemory<Object> fm = new FabricationMemory<Object>(fmm);

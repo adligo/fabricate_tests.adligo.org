@@ -192,7 +192,6 @@ public class DependencyMutantTrial extends MockitoSourceFileTrial {
     ParameterMutantTrial.assertConvertedParams(out, asserts);
   }
 
-  @SuppressWarnings("boxing")
   public static void assertDependencyConversionC(I_Asserts asserts, List<I_Dependency> result) {
     I_Dependency depA = result.get(0);
     asserts.assertEquals("artifactC", depA.getArtifact());
@@ -206,7 +205,6 @@ public class DependencyMutantTrial extends MockitoSourceFileTrial {
 
   }
   
-  @SuppressWarnings("boxing")
   public static void assertDependencyConversionD(I_Asserts asserts, List<I_Dependency> result) {
     I_Dependency depA = result.get(0);
     asserts.assertEquals("artifactD", depA.getArtifact());

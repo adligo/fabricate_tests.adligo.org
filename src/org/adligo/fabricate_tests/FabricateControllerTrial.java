@@ -4,6 +4,7 @@ import org.adligo.fabricate.FabricateController;
 import org.adligo.fabricate.FabricateFactory;
 import org.adligo.fabricate.common.en.CommandLineEnConstants;
 import org.adligo.fabricate.common.en.FabricateEnConstants;
+import org.adligo.fabricate.common.en.SystemEnMessages;
 import org.adligo.fabricate.common.files.I_FabFileIO;
 import org.adligo.fabricate.common.files.xml_io.I_FabXmlFileIO;
 import org.adligo.fabricate.common.log.I_FabFileLog;
@@ -52,7 +53,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
   private MockMethod<Void> printTraceMethod_;
   private FabricateFactory factoryMock_;
   private FabricateXmlDiscovery xmlDiscoveryMock_;
-  private FabricationMemoryMutant<Object> memory_ = new FabricationMemoryMutant<Object>();
+  private FabricationMemoryMutant<Object> memory_ = new FabricationMemoryMutant<Object>(SystemEnMessages.INSTANCE);
   
   public void afterTests() {
     ThreadLocalPrintStreamMock.revert();
@@ -91,7 +92,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     factoryMock_ = mock(FabricateFactory.class);
     when(factoryMock_.createDiscovery(sysMock_)).thenReturn(xmlDiscoveryMock_);
     
-    when(factoryMock_.createMemory()).thenReturn(memory_);
+    when(factoryMock_.createMemory(sysMock_)).thenReturn(memory_);
   }
   
   @SuppressWarnings({"unused", "boxing"})
@@ -708,8 +709,8 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     FailureType ft = new FailureType();
     ft.setCommand("encrypt");
     ft.setDetail("detail");
-    FabricationMemoryMutant memory = new FabricationMemoryMutant();
-    when(factoryMock_.createMemory()).thenReturn(memory);
+    FabricationMemoryMutant memory = new FabricationMemoryMutant(SystemEnMessages.INSTANCE);
+    when(factoryMock_.createMemory(sysMock_)).thenReturn(memory);
     when(cmMock.processCommands(memory)).thenReturn(ft);
     when(factoryMock_.createCommandManager(commands, sysMock_, routineFactoryMock)).thenReturn(cmMock);
     

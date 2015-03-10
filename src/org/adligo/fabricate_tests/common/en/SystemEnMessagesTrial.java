@@ -123,6 +123,11 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     asserter.assertConstant("It was expected to implement the following interface;", 
         messages.getItWasExpectedToImplementTheFollowingInterface());
     
+    asserter.assertConstant("Locks may only be set on or under the caller's package.", 
+        messages.getLocksMayOnlyBeSetOnOrUnderTheCallersPackage());
+    asserter.assertConstant("Locks must contain at least one allowed caller.", 
+        messages.getLocksMustContainAtLeastOneAllowedCaller());
+    
     asserter.assertConstant("Managing the following local repository;", 
         messages.getManagingTheFollowingLocalRepository());
     asserter.assertConstant("Managing Fabricate runtime class path dependencies.", 
@@ -162,6 +167,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getTheFollowingCommandLineProgramExitedAbnormallyWithExitCodeX());
     asserter.assertConstant("The following remote repository appears to be down;", 
         messages.getTheFollowingRemoteRepositoryAppearsToBeDown());
+    asserter.assertConstant("The memory key '<X/>' has been locked by the following classes;", 
+        messages.getTheMemoryKeyXHasBeenLockedByTheFollowingClasses());
     
     asserter.assertConstant("There was a problem creating the following directory;", 
         messages.getThereWasAProblemCreatingTheFollowingDirectory());
