@@ -132,6 +132,38 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("unchecked")
   @Test
+  public void testMethodGetCurrentLocationSimpleFacets() throws Exception {
+    SimpleRoutineMock ar = new SimpleRoutineMock();
+    ar.setSystem(sysMock_);
+   
+    addAndAssertBrief(ar, RoutineBriefOrigin.FACET);
+    
+    I_FabricationMemory<Object> memory = mock(I_FabricationMemory.class);
+    I_RoutineMemory<Object> routineMemory = mock(I_RoutineMemory.class);
+    ar.setup(memory, routineMemory);
+    assertEquals("Facet routineName is still setting up.", ar.getCurrentLocation());
+    
+    ar = new SimpleRoutineMock();
+    ar.setSystem(sysMock_);
+    addAndAssertBrief(ar, RoutineBriefOrigin.FABRICATE_FACET);
+    I_FabricationMemoryMutant<Object> memoryMutant = mock(I_FabricationMemoryMutant.class);
+    I_RoutineMemoryMutant<Object> routineMemoryMutant = mock(I_RoutineMemoryMutant.class);
+    ar.setup(memoryMutant, routineMemoryMutant);
+    assertEquals("Facet routineName is still setting up.", ar.getCurrentLocation());
+    
+    addAndAssertBrief(ar, RoutineBriefOrigin.IMPLICIT_FACET);
+    memoryMutant = mock(I_FabricationMemoryMutant.class);
+    routineMemoryMutant = mock(I_RoutineMemoryMutant.class);
+    ar.setup(memoryMutant, routineMemoryMutant);
+    assertEquals("Facet routineName is still setting up.", ar.getCurrentLocation());
+    
+    ar.run();
+    assertEquals("Facet routineName is still running.", ar.getCurrentLocation());
+    
+  }
+  
+  @SuppressWarnings("unchecked")
+  @Test
   public void testMethodGetCurrentLocationSimpleStages() throws Exception {
     SimpleRoutineMock ar = new SimpleRoutineMock();
     ar.setSystem(sysMock_);
@@ -235,6 +267,33 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     assertEquals("Command routineName, task taskName is still running on project projectName.", ar3.getCurrentLocation());
   }
 
+  @SuppressWarnings("unchecked")
+  @Test
+  public void testMethodGetCurrentLocationTaskProjectFacets() throws Exception {
+    TaskProcessorRoutineMock ar = new TaskProcessorRoutineMock("taskName");
+    ar.setSystem(sysMock_);
+    addAndAssertBrief(ar, RoutineBriefOrigin.FACET);
+    I_FabricationMemory<Object> memory = mock(I_FabricationMemory.class);
+    I_RoutineMemory<Object> routineMemory = mock(I_RoutineMemory.class);
+    ar.setup(memory, routineMemory);
+    ar.run();
+    assertEquals("Facet routineName, task taskName is still running.", ar.getCurrentLocation());
+    
+    ProjectProcessorRoutineMock ar2 = new ProjectProcessorRoutineMock("projectName");
+    ar2.setSystem(sysMock_);
+    addAndAssertBrief(ar2, RoutineBriefOrigin.FABRICATE_FACET);
+    ar2.setup(memory, routineMemory);
+    ar2.run();
+    assertEquals("Facet routineName is still running on project projectName.", ar2.getCurrentLocation());
+    
+    TaskAndProjectProcessorRoutineMock ar3 = new TaskAndProjectProcessorRoutineMock("taskName","projectName");
+    ar3.setSystem(sysMock_);
+    addAndAssertBrief(ar3, RoutineBriefOrigin.IMPLICIT_FACET);
+    ar3.setup(memory, routineMemory);
+    ar3.run();
+    assertEquals("Facet routineName, task taskName is still running on project projectName.", ar3.getCurrentLocation());
+  }
+  
   @SuppressWarnings("unchecked")
   @Test
   public void testMethodGetCurrentLocationTaskProjectStages() throws Exception {

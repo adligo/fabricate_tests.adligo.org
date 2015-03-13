@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fns:fabricate xmlns:fns="http://www.adligo.org/fabricate/xml/io_v1/fabricate_v1_0.xsd" 
+    xmlns:lns="http://www.adligo.org/fabricate/xml/io_v1/library_v1_0.xsd" 
+    xmlns:cns="http://www.adligo.org/fabricate/xml/io_v1/common_v1_0.xsd" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+   <fns:dependencies>
+        <fns:remote_repository>someUrl</fns:remote_repository>
+    </fns:dependencies>
+    <fns:trait name="trex"  class="org.adligo.fabricate.routines.implicit.EncryptTrait" >
+  	    <cns:task name="trexIn"  class="org.adligo.fabricate.routines.implicit.EncryptTrait" />
+  	    <cns:task name="trexIn"  class="org.adligo.fabricate.routines.implicit.EncryptTrait" />
+    </fns:trait>
+</fns:fabricate>

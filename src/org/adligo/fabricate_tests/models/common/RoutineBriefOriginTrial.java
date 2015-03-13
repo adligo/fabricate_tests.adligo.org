@@ -11,6 +11,6 @@ public class RoutineBriefOriginTrial extends MockitoSourceFileTrial {
   @SuppressWarnings("boxing")
   @Test
   public void testEnum() {
-    assertEquals(27,  RoutineBriefOrigin.values().length);
+    assertEquals(37,  RoutineBriefOrigin.values().length);
   }
 }

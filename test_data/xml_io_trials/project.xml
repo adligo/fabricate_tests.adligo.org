@@ -8,29 +8,6 @@
     		<cns:param key="c2eKeyNested" value="c2eValNested"/>
     	</cns:param>
     </pns:attributes>
-    <pns:command name="classpath2eclipse">
-    	<cns:params>
-	    	<cns:param key="c2eKey" value="c2eVal">
-	    		<cns:param key="c2eKeyNested" value="c2eValNested"/>
-	    	</cns:param>
-    	</cns:params>
-    </pns:command>
-    <pns:stages>
-        <pns:stage name="setup" >
-        	<cns:params>
-	        	<cns:param key="setupParam" value="setupParamValue">
-	   	    	       <cns:param key="nestedSetupParam" value="nestedSetupParamValue"/>
-	   	    	</cns:param>
-   	    	</cns:params>
-   	    	<cns:task name="setupTask">
-   	    		<cns:params>
-	   	    	    <cns:param key="Default-Vendor" value="Adligo Inc">
-	   	    	       <cns:param key="nestKey" value="nestVal"/>
-	   	    	    </cns:param>
-   	    	    </cns:params>
-   	    	</cns:task>
-        </pns:stage>
-    </pns:stages>
     <pns:dependencies>
     	<lns:library platform="bar">foo</lns:library>
     	<lns:dependency group="com.sun.jme" artifact="cldc" version="1.1" type="jar" 
@@ -45,4 +22,34 @@
     	</lns:dependency>
     	<pns:project platform="plat">proj</pns:project>
 	 </pns:dependencies>
+    <pns:trait name="traitXyz" class="xyz">
+    	<cns:params>
+	    	<cns:param key="c2eKey" value="c2eVal">
+	    		<cns:param key="c2eKeyNested" value="c2eValNested"/>
+	    	</cns:param>
+    	</cns:params>
+    </pns:trait>
+    <pns:command name="classpath2eclipse">
+    	<cns:params>
+	    	<cns:param key="c2eKey" value="c2eVal">
+	    		<cns:param key="c2eKeyNested" value="c2eValNested"/>
+	    	</cns:param>
+    	</cns:params>
+    </pns:command>
+    <pns:stages>
+        <pns:stage name="setup" >
+        	<cns:params>
+	        	<cns:param key="setupParam" value="setupParamValue">
+	   	    	       <cns:param key="nestedSetupParam" value="nestedSetupParamValue"/>
+	   	    	</cns:param>
+   	    	</cns:params>
+   	    	<pns:task name="setupTask" class="setupClass" >
+   	    		<cns:params>
+	   	    	    <cns:param key="Default-Vendor" value="Adligo Inc">
+	   	    	       <cns:param key="nestKey" value="nestVal"/>
+	   	    	    </cns:param>
+   	    	    </cns:params>
+   	    	</pns:task>
+        </pns:stage>
+    </pns:stages>
  </pns:fabricate_project>

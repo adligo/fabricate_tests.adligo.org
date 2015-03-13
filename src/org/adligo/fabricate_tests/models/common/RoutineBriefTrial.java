@@ -1,5 +1,6 @@
 package org.adligo.fabricate_tests.models.common;
 
+import org.adligo.fabricate.models.common.DuplicateRoutineException;
 import org.adligo.fabricate.models.common.I_FabricationRoutine;
 import org.adligo.fabricate.models.common.I_Parameter;
 import org.adligo.fabricate.models.common.I_RoutineBrief;
@@ -129,9 +130,56 @@ public class RoutineBriefTrial extends MockitoSourceFileTrial {
     assertSame(nest1, copy.getNestedRoutine("goB"));
   }
 
+  @SuppressWarnings({"unused", "boxing"})
+  @Test
+  public void testConstructorDuplicateNestedException() {
+    I_RoutineBrief brief = mock(I_RoutineBrief.class);
+    
+    MockMethod<Class<? extends I_FabricationRoutine>> getClassMethod = 
+          new MockMethod<Class<? extends I_FabricationRoutine>>(
+              ProjectBriefQueueRoutine.class, true);
+    doAnswer(getClassMethod).when(brief).getClazz();
+    when(brief.getName()).thenReturn("go");
+    when(brief.getNestedRoutines()).thenReturn(null);
+    List<I_Parameter> params = ParameterMutant.convert(ParameterMutantTrial.createParams());
+    when(brief.getParameters()).thenReturn(params);
+    when(brief.isOptional()).thenReturn(true);
+    
+    I_RoutineBrief briefA = mock(I_RoutineBrief.class);
+    
+    MockMethod<Class<? extends I_FabricationRoutine>> getClassMethodA = 
+          new MockMethod<Class<? extends I_FabricationRoutine>>(
+              ProjectQueueRoutine.class, true);
+    doAnswer(getClassMethodA).when(briefA).getClazz();
+    when(briefA.getName()).thenReturn("goA");
+    when(briefA.getNestedRoutines()).thenReturn(null);
+    when(briefA.getParameters()).thenReturn(params);
+    when(briefA.isOptional()).thenReturn(true);
+    
+    List<I_RoutineBrief> nested = new ArrayList<I_RoutineBrief>();
+    nested.add(briefA);
+    nested.add(briefA);
+    when(brief.getNestedRoutines()).thenReturn(nested);
+
+    when(brief.getOrigin()).thenReturn(RoutineBriefOrigin.STAGE);
+    when(briefA.getOrigin()).thenReturn(RoutineBriefOrigin.STAGE_TASK);
+    
+    DuplicateRoutineException caught = null;
+    try {
+      new RoutineBrief(brief);
+    } catch (DuplicateRoutineException x){
+      caught = x;
+    }
+    assertNotNull(caught);
+    assertEquals("goA", caught.getName());
+    assertSame(RoutineBriefOrigin.STAGE_TASK, caught.getOrigin());
+    assertEquals("go", caught.getParentName());
+    assertSame(RoutineBriefOrigin.STAGE, caught.getParentOrigin());
+  }
+  
   @SuppressWarnings("unused")
   @Test
-  public void testConstructorExceptions() {
+  public void testConstructorSimpleExceptions() {
     assertThrown(new ExpectedThrowable(new IllegalArgumentException("name")),
         new I_Thrower() {
           
@@ -163,6 +211,7 @@ public class RoutineBriefTrial extends MockitoSourceFileTrial {
     assertSame(Collections.emptyList(), copy.getNestedRoutines());
     assertSame(Collections.emptyList(), copy.getParameters());
   }
+  
   
   
   

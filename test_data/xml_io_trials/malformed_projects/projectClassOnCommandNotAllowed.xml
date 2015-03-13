@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pns:fabricate_project xmlns:pns="http://www.adligo.org/fabricate/xml/io_v1/project_v1_0.xsd" 
+    xmlns:lns="http://www.adligo.org/fabricate/xml/io_v1/library_v1_0.xsd" 
+    xmlns:cns="http://www.adligo.org/fabricate/xml/io_v1/common_v1_0.xsd" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+	<pns:command name="classpath2eclipse" class="notAllowed" >
+    	<cns:params>
+	    	<cns:param key="c2eKey" value="c2eVal">
+	    		<cns:param key="c2eKeyNested" value="c2eValNested"/>
+	    	</cns:param>
+    	</cns:params>
+    </pns:command>
+ </pns:fabricate_project>

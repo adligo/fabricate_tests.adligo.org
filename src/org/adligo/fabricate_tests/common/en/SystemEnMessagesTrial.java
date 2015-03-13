@@ -107,6 +107,18 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getFabricationFailed());
     asserter.assertConstant("Fabrication successful!", 
         messages.getFabricationSuccessful());
+    
+    asserter.assertConstant("Facet <X/> is still running.", 
+        messages.getFacetXIsStillRunning());
+    asserter.assertConstant("Facet <X/> is still running on project <Z/>.", 
+        messages.getFacetXIsStillRunningOnProjectZ());
+    asserter.assertConstant("Facet <X/>, task <Y/> is still running.", 
+        messages.getFacetXTaskYIsStillRunning());
+    asserter.assertConstant("Facet <X/>, task <Y/> is still running on project <Z/>.", 
+        messages.getFacetXTaskYIsStillRunningOnProjectZ());
+    asserter.assertConstant("Facet <X/> is still setting up.", 
+        messages.getFacetXIsStillSettingUp());
+    
     asserter.assertConstant("failed!", 
         messages.getFailed());
     asserter.assertConstant("finished.", 

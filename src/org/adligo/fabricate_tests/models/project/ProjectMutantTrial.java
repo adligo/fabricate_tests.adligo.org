@@ -23,7 +23,7 @@ import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 import java.util.ArrayList;
 import java.util.List;
 
-@SourceFileScope (sourceClass=ProjectMutant.class,minCoverage=95.0)
+@SourceFileScope (sourceClass=ProjectMutant.class,minCoverage=80.0)
 public class ProjectMutantTrial extends MockitoSourceFileTrial {
 
   public DependencyMutant getDependencyA() {

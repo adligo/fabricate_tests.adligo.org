@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pns:fabricate_project xmlns:pns="http://www.adligo.org/fabricate/xml/io_v1/project_v1_0.xsd" 
+    xmlns:lns="http://www.adligo.org/fabricate/xml/io_v1/library_v1_0.xsd" 
+    xmlns:cns="http://www.adligo.org/fabricate/xml/io_v1/common_v1_0.xsd" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+    <pns:stages>
+        <pns:stage name="setup" class="notAllowed" >
+        	<cns:params>
+	        	<cns:param key="setupParam" value="setupParamValue">
+	   	    	       <cns:param key="nestedSetupParam" value="nestedSetupParamValue"/>
+	   	    	</cns:param>
+   	    	</cns:params>
+   	    	<pns:task name="setupTask">
+   	    		<cns:params>
+	   	    	    <cns:param key="Default-Vendor" value="Adligo Inc">
+	   	    	       <cns:param key="nestKey" value="nestVal"/>
+	   	    	    </cns:param>
+   	    	    </cns:params>
+   	    	</pns:task>
+        </pns:stage>
+    </pns:stages>
+ </pns:fabricate_project>

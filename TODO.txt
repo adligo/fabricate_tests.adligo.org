@@ -1,0 +1,9 @@
+Add tests to FabricateControllerTrial, for 
+  Running the fabrication stages
+Add tests for the following facets, using parent child class ordering
+  Obtain
+  Load
+  ObtainDependencies
+  
+  
+  

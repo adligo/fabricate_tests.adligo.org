@@ -29,9 +29,51 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-@SourceFileScope (sourceClass=RoutineBriefMutant.class, minCoverage=81.0)
+@SourceFileScope (sourceClass=RoutineBriefMutant.class, minCoverage=78.0)
 public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
 
+  @Test
+  public void testConstructorCopyArchiveStageXmlTasks() throws Exception {
+    RoutineParentType brief = new RoutineParentType();
+    brief.setClazz(ProjectBriefQueueRoutine.class.getName());
+    brief.setName("go");
+    
+    RoutineType briefTaskA = new RoutineType();
+    briefTaskA.setClazz(ProjectQueueRoutine.class.getName());
+    briefTaskA.setName("goA");
+    brief.getTask().add(briefTaskA);
+    
+    RoutineBriefMutant copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.FABRICATE_ARCHIVE_STAGE);
+    assertEquals(ProjectBriefQueueRoutine.class.getName(), copy.getClazz().getName());
+    assertEquals("go", copy.getName());
+    assertFalse(copy.isOptional());
+    assertEquals(RoutineBriefOrigin.FABRICATE_ARCHIVE_STAGE, copy.getOrigin());
+    
+    List<I_RoutineBrief>  briefs = copy.getNestedRoutines();
+    
+    RoutineBriefMutant copySubA  = (RoutineBriefMutant) briefs.get(0);
+    assertEquals(ProjectQueueRoutine.class.getName(), copySubA.getClazz().getName());
+    assertEquals("goA", copySubA.getName());
+    assertFalse(copySubA.isOptional());
+    assertEquals(RoutineBriefOrigin.FABRICATE_ARCHIVE_STAGE_TASK, copySubA.getOrigin());
+    
+    
+    copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.ARCHIVE_STAGE);
+    assertEquals(RoutineBriefOrigin.ARCHIVE_STAGE, copy.getOrigin());
+    briefs = copy.getNestedRoutines();
+    copySubA  = (RoutineBriefMutant) briefs.get(0);
+    assertEquals(RoutineBriefOrigin.ARCHIVE_STAGE_TASK, copySubA.getOrigin());
+    
+    
+    copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.IMPLICIT_ARCHIVE_STAGE);
+    assertEquals(RoutineBriefOrigin.IMPLICIT_ARCHIVE_STAGE, copy.getOrigin());
+    briefs = copy.getNestedRoutines();
+    copySubA  = (RoutineBriefMutant) briefs.get(0);
+    assertEquals(RoutineBriefOrigin.IMPLICIT_ARCHIVE_STAGE_TASK, copySubA.getOrigin());
+    
+    //note no project_archive_stage 
+  }
+  
   @Test
   public void testConstructorCopyCommandXml() throws Exception {
     RoutineParentType brief = mock(RoutineParentType.class);
@@ -40,14 +82,23 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     when(brief.getTask()).thenReturn(null);
     when(brief.getParams()).thenReturn(null);
     
-    RoutineBriefMutant copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.COMMAND);
+    RoutineBriefMutant copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.FABRICATE_COMMAND);
     assertEquals(ProjectBriefQueueRoutine.class.getName(), copy.getClazz().getName());
     assertEquals("go", copy.getName());
     assertFalse(copy.isOptional());
-    assertEquals(RoutineBriefOrigin.COMMAND, copy.getOrigin());
+    assertEquals(RoutineBriefOrigin.FABRICATE_COMMAND, copy.getOrigin());
     assertSame(Collections.emptyList(), copy.getNestedRoutines());
     assertSame(Collections.emptyList(), copy.getParameters());
     assertNull(copy.getParameter("hey"));
+    
+    copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.PROJECT_COMMAND);
+    assertEquals(RoutineBriefOrigin.PROJECT_COMMAND, copy.getOrigin());
+    
+    copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.IMPLICIT_COMMAND);
+    assertEquals(RoutineBriefOrigin.IMPLICIT_COMMAND, copy.getOrigin());
+    
+    copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.COMMAND);
+    assertEquals(RoutineBriefOrigin.COMMAND, copy.getOrigin());
   }
   
   @Test
@@ -74,11 +125,11 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     params = ParameterMutantTrial.createParams();
     brief.setParams(params);
     
-    RoutineBriefMutant copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.COMMAND);
+    RoutineBriefMutant copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.FABRICATE_COMMAND);
     assertEquals(ProjectBriefQueueRoutine.class.getName(), copy.getClazz().getName());
     assertEquals("go", copy.getName());
     assertFalse(copy.isOptional());
-    assertEquals(RoutineBriefOrigin.COMMAND, copy.getOrigin());
+    assertEquals(RoutineBriefOrigin.FABRICATE_COMMAND, copy.getOrigin());
     
     ParameterMutantTrial.assertConvertedParams(copy.getParameters(), this);
     List<I_RoutineBrief>  briefs = copy.getNestedRoutines();
@@ -87,15 +138,79 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertEquals(ProjectQueueRoutine.class.getName(), copySubA.getClazz().getName());
     assertEquals("goA", copySubA.getName());
     assertFalse(copySubA.isOptional());
-    assertEquals(RoutineBriefOrigin.COMMAND_TASK, copySubA.getOrigin());
+    assertEquals(RoutineBriefOrigin.FABRICATE_COMMAND_TASK, copySubA.getOrigin());
     ParameterMutantTrial.assertConvertedParams(copySubA.getParameters(), this);
     
     RoutineBriefMutant copySubB  = (RoutineBriefMutant) briefs.get(1);
     assertEquals(DependenciesQueueRoutine.class.getName(), copySubB.getClazz().getName());
     assertEquals("goB", copySubB.getName());
     assertFalse(copySubB.isOptional());
-    assertEquals(RoutineBriefOrigin.COMMAND_TASK, copySubB.getOrigin());
+    assertEquals(RoutineBriefOrigin.FABRICATE_COMMAND_TASK, copySubB.getOrigin());
     ParameterMutantTrial.assertConvertedParams(copySubB.getParameters(), this);
+    
+    
+    copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.PROJECT_COMMAND);
+    assertEquals(RoutineBriefOrigin.PROJECT_COMMAND, copy.getOrigin());
+    briefs = copy.getNestedRoutines();
+    copySubA  = (RoutineBriefMutant) briefs.get(0);
+    assertEquals(RoutineBriefOrigin.PROJECT_COMMAND_TASK, copySubA.getOrigin());
+    
+    copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.IMPLICIT_COMMAND);
+    assertEquals(RoutineBriefOrigin.IMPLICIT_COMMAND, copy.getOrigin());
+    briefs = copy.getNestedRoutines();
+    copySubA  = (RoutineBriefMutant) briefs.get(0);
+    assertEquals(RoutineBriefOrigin.IMPLICIT_COMMAND_TASK, copySubA.getOrigin());
+    
+    copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.COMMAND);
+    assertEquals(RoutineBriefOrigin.COMMAND, copy.getOrigin());
+    briefs = copy.getNestedRoutines();
+    copySubA  = (RoutineBriefMutant) briefs.get(0);
+    assertEquals(RoutineBriefOrigin.COMMAND_TASK, copySubA.getOrigin());
+    
+  }
+  
+  
+
+  @Test
+  public void testConstructorCopyFacetXmlTasks() throws Exception {
+    RoutineParentType brief = new RoutineParentType();
+    brief.setClazz(ProjectBriefQueueRoutine.class.getName());
+    brief.setName("go");
+    
+    RoutineType briefTaskA = new RoutineType();
+    briefTaskA.setClazz(ProjectQueueRoutine.class.getName());
+    briefTaskA.setName("goA");
+    brief.getTask().add(briefTaskA);
+    
+    RoutineBriefMutant copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.FABRICATE_FACET);
+    assertEquals(ProjectBriefQueueRoutine.class.getName(), copy.getClazz().getName());
+    assertEquals("go", copy.getName());
+    assertFalse(copy.isOptional());
+    assertEquals(RoutineBriefOrigin.FABRICATE_FACET, copy.getOrigin());
+    
+    List<I_RoutineBrief>  briefs = copy.getNestedRoutines();
+    
+    RoutineBriefMutant copySubA  = (RoutineBriefMutant) briefs.get(0);
+    assertEquals(ProjectQueueRoutine.class.getName(), copySubA.getClazz().getName());
+    assertEquals("goA", copySubA.getName());
+    assertFalse(copySubA.isOptional());
+    assertEquals(RoutineBriefOrigin.FABRICATE_FACET_TASK, copySubA.getOrigin());
+    
+    
+    copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.FACET);
+    assertEquals(RoutineBriefOrigin.FACET, copy.getOrigin());
+    briefs = copy.getNestedRoutines();
+    copySubA  = (RoutineBriefMutant) briefs.get(0);
+    assertEquals(RoutineBriefOrigin.FACET_TASK, copySubA.getOrigin());
+    
+    
+    copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.IMPLICIT_FACET);
+    assertEquals(RoutineBriefOrigin.IMPLICIT_FACET, copy.getOrigin());
+    briefs = copy.getNestedRoutines();
+    copySubA  = (RoutineBriefMutant) briefs.get(0);
+    assertEquals(RoutineBriefOrigin.IMPLICIT_FACET_TASK, copySubA.getOrigin());
+    
+    //note no project_archive_stage 
   }
   
   @Test
@@ -207,6 +322,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     when(brief.getTask()).thenReturn(null);
     when(brief.getParams()).thenReturn(null);
     
+    
     RoutineBriefMutant copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.FABRICATE_STAGE);
     assertEquals(ProjectBriefQueueRoutine.class.getName(), copy.getClazz().getName());
     assertEquals("go", copy.getName());
@@ -228,13 +344,77 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     ParamsType params = ParameterMutantTrial.createParams();
     when(brief.getParams()).thenReturn(params);
     
+    brief = new StageType();
+    brief.setClazz(ProjectBriefQueueRoutine.class.getName());
+    brief.setName("go");
+    
+    RoutineType briefTaskA = new RoutineType();
+    briefTaskA.setClazz(ProjectQueueRoutine.class.getName());
+    briefTaskA.setName("goA");
+    brief.getTask().add(briefTaskA);
+    
     copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.FABRICATE_STAGE);
     assertEquals(ProjectBriefQueueRoutine.class.getName(), copy.getClazz().getName());
     assertEquals("go", copy.getName());
     assertFalse(copy.isOptional());
     assertSame(RoutineBriefOrigin.FABRICATE_STAGE, copy.getOrigin());
-    assertSame(Collections.emptyList(), copy.getNestedRoutines());
-    ParameterMutantTrial.assertConvertedParams(copy.getParameters(), this);
+    List<I_RoutineBrief> briefs = copy.getNestedRoutines();
+    RoutineBriefMutant copySubA  = (RoutineBriefMutant) briefs.get(0);
+    assertEquals(RoutineBriefOrigin.FABRICATE_STAGE_TASK, copySubA.getOrigin());
+    
+    copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.PROJECT_STAGE);
+    assertEquals(RoutineBriefOrigin.PROJECT_STAGE, copy.getOrigin());
+    briefs = copy.getNestedRoutines();
+    copySubA  = (RoutineBriefMutant) briefs.get(0);
+    assertEquals(RoutineBriefOrigin.PROJECT_STAGE_TASK, copySubA.getOrigin());
+    
+    copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.STAGE);
+    assertEquals(RoutineBriefOrigin.STAGE, copy.getOrigin());
+    briefs = copy.getNestedRoutines();
+    copySubA  = (RoutineBriefMutant) briefs.get(0);
+    assertEquals(RoutineBriefOrigin.STAGE_TASK, copySubA.getOrigin());
+  }
+  
+  @Test
+  public void testConstructorCopyTraitXmlTasks() throws Exception {
+    RoutineParentType brief = new RoutineParentType();
+    brief.setClazz(ProjectBriefQueueRoutine.class.getName());
+    brief.setName("go");
+    
+    RoutineType briefTaskA = new RoutineType();
+    briefTaskA.setClazz(ProjectQueueRoutine.class.getName());
+    briefTaskA.setName("goA");
+    brief.getTask().add(briefTaskA);
+    
+    RoutineBriefMutant copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.FABRICATE_TRAIT);
+    assertEquals(ProjectBriefQueueRoutine.class.getName(), copy.getClazz().getName());
+    assertEquals("go", copy.getName());
+    assertFalse(copy.isOptional());
+    assertEquals(RoutineBriefOrigin.FABRICATE_TRAIT, copy.getOrigin());
+    
+    List<I_RoutineBrief>  briefs = copy.getNestedRoutines();
+    
+    RoutineBriefMutant copySubA  = (RoutineBriefMutant) briefs.get(0);
+    assertEquals(ProjectQueueRoutine.class.getName(), copySubA.getClazz().getName());
+    assertEquals("goA", copySubA.getName());
+    assertFalse(copySubA.isOptional());
+    assertEquals(RoutineBriefOrigin.FABRICATE_TRAIT_TASK, copySubA.getOrigin());
+    
+    
+    copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.TRAIT);
+    assertEquals(RoutineBriefOrigin.TRAIT, copy.getOrigin());
+    briefs = copy.getNestedRoutines();
+    copySubA  = (RoutineBriefMutant) briefs.get(0);
+    assertEquals(RoutineBriefOrigin.TRAIT_TASK, copySubA.getOrigin());
+    
+    
+    copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.IMPLICIT_TRAIT);
+    assertEquals(RoutineBriefOrigin.IMPLICIT_TRAIT, copy.getOrigin());
+    briefs = copy.getNestedRoutines();
+    copySubA  = (RoutineBriefMutant) briefs.get(0);
+    assertEquals(RoutineBriefOrigin.IMPLICIT_TRAIT_TASK, copySubA.getOrigin());
+    
+    //note no project_archive_stage 
   }
   
   @SuppressWarnings("boxing")
@@ -382,7 +562,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertEquals(RoutineBriefOrigin.COMMAND, nestActual.getOrigin());
     assertEquals(RoutineBriefMutant.class.getName(), nest.getClass().getName());
   }
-  
+
   @SuppressWarnings("boxing")
   @Test
   public void testMethodGetNestedParameter() throws Exception {
