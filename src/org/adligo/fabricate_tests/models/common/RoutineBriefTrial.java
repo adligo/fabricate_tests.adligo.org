@@ -199,6 +199,30 @@ public class RoutineBriefTrial extends MockitoSourceFileTrial {
             new RoutineBrief(rbm);
           }
         });
+    assertThrown(new ExpectedThrowable(new IllegalArgumentException("clazz_ != null")),
+        new I_Thrower() {
+          
+          @Override
+          public void run() throws Throwable {
+            RoutineBriefMutant rbm = new RoutineBriefMutant();
+            rbm.setName("dn");
+            rbm.setClazz(DependenciesQueueRoutine.class);
+            rbm.setOrigin(RoutineBriefOrigin.PROJECT_COMMAND);
+            new RoutineBrief(rbm);
+          }
+        });
+    assertThrown(new ExpectedThrowable(new IllegalArgumentException("clazz_ != null")),
+        new I_Thrower() {
+          
+          @Override
+          public void run() throws Throwable {
+            RoutineBriefMutant rbm = new RoutineBriefMutant();
+            rbm.setName("dn");
+            rbm.setClazz(DependenciesQueueRoutine.class);
+            rbm.setOrigin(RoutineBriefOrigin.PROJECT_STAGE);
+            new RoutineBrief(rbm);
+          }
+        });
   }
   
   @Test
@@ -324,6 +348,7 @@ public class RoutineBriefTrial extends MockitoSourceFileTrial {
     l1.addNestedRoutine(b1);
     
     RoutineBrief a = new RoutineBrief(a1);
+    RoutineBrief aa = new RoutineBrief(a1);
     RoutineBrief b = new RoutineBrief(b1);
     RoutineBrief c = new RoutineBrief(c1);
     RoutineBrief d = new RoutineBrief(d1);
@@ -337,6 +362,9 @@ public class RoutineBriefTrial extends MockitoSourceFileTrial {
     RoutineBrief l = new RoutineBrief(l1);
     
     assertEquals(a.hashCode(), a.hashCode());
+    assertEquals(aa.hashCode(), a.hashCode());
+    assertEquals(a.hashCode(), aa.hashCode());
+    assertEquals(a.hashCode(), a1.hashCode());
     assertNotEquals(a.hashCode(), b.hashCode());
     assertNotEquals(a.hashCode(), c.hashCode());
     assertNotEquals(a.hashCode(), d.hashCode());
@@ -349,6 +377,9 @@ public class RoutineBriefTrial extends MockitoSourceFileTrial {
     assertNotEquals(a.hashCode(), k.hashCode());
     assertNotEquals(a.hashCode(), l.hashCode());
     assertEquals(a, a);
+    assertEquals(a, a1);
+    assertEquals(a, aa);
+    assertEquals(aa, a);
     assertNotEquals(a, b);
     assertNotEquals(a, c);
     assertNotEquals(a, d);

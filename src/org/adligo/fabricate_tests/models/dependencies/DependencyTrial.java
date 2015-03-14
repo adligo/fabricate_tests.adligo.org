@@ -254,7 +254,7 @@ public class DependencyTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("boxing")
   @Test
-  public void testMethodsEqualsHashCode() {
+  public void testMethodsEqualsHashCodeAndToString() {
     Dependency dm = new Dependency(new DependencyMutant());
     
     DependencyMutant dmA = new DependencyMutant();
@@ -329,24 +329,47 @@ public class DependencyTrial extends MockitoSourceFileTrial {
     
     assertEquals(dm, dm);
     assertEquals(dm.hashCode(), dm.hashCode());
+    assertEquals("Dependency [artifact=null, extract=false," + System.lineSeparator() +
+        "\tfileName=null, group=null," + System.lineSeparator() +
+        "\tplatform=null, type=null,"  + System.lineSeparator() +
+        "\tversion=null, ideChidren=0]", dm.toString());
     
     assertNotEquals(dm, depA);
     assertNotEquals(dm.hashCode(), depA.hashCode());
+    assertEquals("Dependency [artifact=artifact, extract=false," + System.lineSeparator() +
+        "\tfileName=null, group=null," + System.lineSeparator() +
+        "\tplatform=null, type=null,"  + System.lineSeparator() +
+        "\tversion=null, ideChidren=0]", depA.toString());
     
     assertNotEquals(dm, depA);
-    assertNotEquals(dm.hashCode(), depA.hashCode());
     
     assertNotEquals(dm, depB);
     assertNotEquals(dm.hashCode(), depB.hashCode());
+    assertEquals("Dependency [artifact=artifact, extract=false," + System.lineSeparator() +
+        "\tfileName=fileName, group=null," + System.lineSeparator() +
+        "\tplatform=null, type=null,"  + System.lineSeparator() +
+        "\tversion=null, ideChidren=0]", depB.toString());
     
     assertNotEquals(dm, depC);
     assertNotEquals(dm.hashCode(), depC.hashCode());
+    assertEquals("Dependency [artifact=artifact, extract=false," + System.lineSeparator() +
+        "\tfileName=fileName, group=group," + System.lineSeparator() +
+        "\tplatform=null, type=null,"  + System.lineSeparator() +
+        "\tversion=null, ideChidren=0]", depC.toString());
     
     assertNotEquals(dm, depD);
     assertNotEquals(dm.hashCode(), depD.hashCode());
+    assertEquals("Dependency [artifact=artifact, extract=false," + System.lineSeparator() +
+        "\tfileName=fileName, group=group," + System.lineSeparator() +
+        "\tplatform=null, type=type,"  + System.lineSeparator() +
+        "\tversion=null, ideChidren=0]", depD.toString());
     
     assertNotEquals(dm, depE);
     assertNotEquals(dm.hashCode(), depE.hashCode());
+    assertEquals("Dependency [artifact=artifact, extract=false," + System.lineSeparator() +
+        "\tfileName=fileName, group=group," + System.lineSeparator() +
+        "\tplatform=null, type=type,"  + System.lineSeparator() +
+        "\tversion=version, ideChidren=0]", depE.toString());
     
     //done with null compares
     assertEquals(depE, new DependencyMutant(depE));

@@ -17,6 +17,7 @@ import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamsType;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.RoutineParentType;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.RoutineType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.StageType;
+import org.adligo.fabricate.xml.io_v1.project_v1_0.ProjectRoutineType;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
@@ -322,7 +323,6 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     when(brief.getTask()).thenReturn(null);
     when(brief.getParams()).thenReturn(null);
     
-    
     RoutineBriefMutant copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.FABRICATE_STAGE);
     assertEquals(ProjectBriefQueueRoutine.class.getName(), copy.getClazz().getName());
     assertEquals("go", copy.getName());
@@ -361,12 +361,6 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     List<I_RoutineBrief> briefs = copy.getNestedRoutines();
     RoutineBriefMutant copySubA  = (RoutineBriefMutant) briefs.get(0);
     assertEquals(RoutineBriefOrigin.FABRICATE_STAGE_TASK, copySubA.getOrigin());
-    
-    copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.PROJECT_STAGE);
-    assertEquals(RoutineBriefOrigin.PROJECT_STAGE, copy.getOrigin());
-    briefs = copy.getNestedRoutines();
-    copySubA  = (RoutineBriefMutant) briefs.get(0);
-    assertEquals(RoutineBriefOrigin.PROJECT_STAGE_TASK, copySubA.getOrigin());
     
     copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.STAGE);
     assertEquals(RoutineBriefOrigin.STAGE, copy.getOrigin());
@@ -415,6 +409,102 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertEquals(RoutineBriefOrigin.IMPLICIT_TRAIT_TASK, copySubA.getOrigin());
     
     //note no project_archive_stage 
+  }
+  
+  @Test
+  public void testConstructorCopyProjectCommandXml() throws Exception {
+    ProjectRoutineType brief = mock(ProjectRoutineType.class);
+    
+    when(brief.getName()).thenReturn("go");
+    when(brief.getTask()).thenReturn(null);
+    when(brief.getParams()).thenReturn(null);
+    
+    RoutineBriefMutant copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.PROJECT_COMMAND);
+    assertNull(copy.getClazz());
+    assertEquals("go", copy.getName());
+    assertFalse(copy.isOptional());
+    assertEquals(RoutineBriefOrigin.PROJECT_COMMAND, copy.getOrigin());
+    assertSame(Collections.emptyList(), copy.getNestedRoutines());
+    assertSame(Collections.emptyList(), copy.getParameters());
+    
+    when(brief.getParams()).thenReturn(new ParamsType());
+    copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.PROJECT_COMMAND);
+    assertNull(copy.getClazz());
+    assertEquals("go", copy.getName());
+    assertFalse(copy.isOptional());
+    assertEquals(RoutineBriefOrigin.PROJECT_COMMAND, copy.getOrigin());
+    assertSame(Collections.emptyList(), copy.getNestedRoutines());
+    assertSame(Collections.emptyList(), copy.getParameters());
+    
+    when(brief.getTask()).thenReturn(Collections.emptyList());
+    ParamsType params = ParameterMutantTrial.createParams();
+    when(brief.getParams()).thenReturn(params);
+    
+    brief = new ProjectRoutineType();
+    brief.setName("go");
+    
+    RoutineType briefTaskA = new RoutineType();
+    briefTaskA.setClazz(ProjectQueueRoutine.class.getName());
+    briefTaskA.setName("goA");
+    brief.getTask().add(briefTaskA);
+    
+    copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.PROJECT_COMMAND);
+    assertNull(copy.getClazz());
+    assertEquals("go", copy.getName());
+    assertFalse(copy.isOptional());
+    assertSame(RoutineBriefOrigin.PROJECT_COMMAND, copy.getOrigin());
+    List<I_RoutineBrief> briefs = copy.getNestedRoutines();
+    RoutineBriefMutant copySubA  = (RoutineBriefMutant) briefs.get(0);
+    assertEquals(RoutineBriefOrigin.PROJECT_COMMAND_TASK, copySubA.getOrigin());
+    
+  }
+  
+  @Test
+  public void testConstructorCopyProjectStageXml() throws Exception {
+    ProjectRoutineType brief = mock(ProjectRoutineType.class);
+    
+    when(brief.getName()).thenReturn("go");
+    when(brief.getTask()).thenReturn(null);
+    when(brief.getParams()).thenReturn(null);
+    
+    RoutineBriefMutant copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.PROJECT_STAGE);
+    assertNull(copy.getClazz());
+    assertEquals("go", copy.getName());
+    assertFalse(copy.isOptional());
+    assertEquals(RoutineBriefOrigin.PROJECT_STAGE, copy.getOrigin());
+    assertSame(Collections.emptyList(), copy.getNestedRoutines());
+    assertSame(Collections.emptyList(), copy.getParameters());
+    
+    when(brief.getParams()).thenReturn(new ParamsType());
+    copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.PROJECT_STAGE);
+    assertNull(copy.getClazz());
+    assertEquals("go", copy.getName());
+    assertFalse(copy.isOptional());
+    assertEquals(RoutineBriefOrigin.PROJECT_STAGE, copy.getOrigin());
+    assertSame(Collections.emptyList(), copy.getNestedRoutines());
+    assertSame(Collections.emptyList(), copy.getParameters());
+    
+    when(brief.getTask()).thenReturn(Collections.emptyList());
+    ParamsType params = ParameterMutantTrial.createParams();
+    when(brief.getParams()).thenReturn(params);
+    
+    brief = new ProjectRoutineType();
+    brief.setName("go");
+    
+    RoutineType briefTaskA = new RoutineType();
+    briefTaskA.setClazz(ProjectQueueRoutine.class.getName());
+    briefTaskA.setName("goA");
+    brief.getTask().add(briefTaskA);
+    
+    copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.PROJECT_STAGE);
+    assertNull(copy.getClazz());
+    assertEquals("go", copy.getName());
+    assertFalse(copy.isOptional());
+    assertSame(RoutineBriefOrigin.PROJECT_STAGE, copy.getOrigin());
+    List<I_RoutineBrief> briefs = copy.getNestedRoutines();
+    RoutineBriefMutant copySubA  = (RoutineBriefMutant) briefs.get(0);
+    assertEquals(RoutineBriefOrigin.PROJECT_STAGE_TASK, copySubA.getOrigin());
+    
   }
   
   @SuppressWarnings("boxing")
@@ -686,8 +776,10 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
   @Test
   public void testMethodsEqualsHashCodeAndToString() {
     RoutineBriefMutant a = new RoutineBriefMutant();
+    
     RoutineBriefMutant b = new RoutineBriefMutant();
     b.setName("b");
+    
     RoutineBriefMutant c = new RoutineBriefMutant();
     c.setName("c");
     RoutineBriefMutant d = new RoutineBriefMutant();
@@ -713,6 +805,11 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     RoutineBriefMutant l = new RoutineBriefMutant();
     l.addNestedRoutine(b);
     
+    RoutineBriefMutant m = new RoutineBriefMutant();
+    m.setName("m");
+    m.setOrigin(RoutineBriefOrigin.ARCHIVE_STAGE);
+    RoutineBrief m1 = new RoutineBrief(m);
+    
     assertEquals(a.hashCode(), a.hashCode());
     assertNotEquals(a.hashCode(), b.hashCode());
     assertNotEquals(a.hashCode(), c.hashCode());
@@ -725,6 +822,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(a.hashCode(), j.hashCode());
     assertNotEquals(a.hashCode(), k.hashCode());
     assertNotEquals(a.hashCode(), l.hashCode());
+    assertNotEquals(a.hashCode(), m.hashCode());
     assertEquals(a, a);
     assertNotEquals(a, b);
     assertNotEquals(a, c);
@@ -737,6 +835,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(a, j);
     assertNotEquals(a, k);
     assertNotEquals(a, l);
+    assertNotEquals(a, m);
     assertEquals("RoutineBriefMutant [name=null, class=null]", a.toString());
     
     assertEquals(b.hashCode(), b.hashCode());
@@ -751,6 +850,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(b.hashCode(), j.hashCode());
     assertNotEquals(b.hashCode(), k.hashCode());
     assertNotEquals(b.hashCode(), l.hashCode());
+    assertNotEquals(b.hashCode(), m.hashCode());
     assertEquals(b, b);
     assertNotEquals(b, a);
     assertNotEquals(b, c);
@@ -763,6 +863,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(b, j);
     assertNotEquals(b, k);
     assertNotEquals(b, l);
+    assertNotEquals(b, m);
     assertEquals("RoutineBriefMutant [name=b, class=null]", b.toString());
     
     assertEquals(c.hashCode(), c.hashCode());
@@ -777,6 +878,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(c.hashCode(), j.hashCode());
     assertNotEquals(c.hashCode(), k.hashCode());
     assertNotEquals(c.hashCode(), l.hashCode());
+    assertNotEquals(c.hashCode(), m.hashCode());
     assertEquals(c, c);
     assertNotEquals(c, a);
     assertNotEquals(c, b);
@@ -789,6 +891,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(c, j);
     assertNotEquals(c, k);
     assertNotEquals(c, l);
+    assertNotEquals(c, m);
     assertEquals("RoutineBriefMutant [name=c, class=null]", c.toString());
     
     assertEquals(d.hashCode(), d.hashCode());
@@ -803,6 +906,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(d.hashCode(), j.hashCode());
     assertNotEquals(d.hashCode(), k.hashCode());
     assertNotEquals(d.hashCode(), l.hashCode());
+    assertNotEquals(d.hashCode(), m.hashCode());
     assertEquals(d, d);
     assertNotEquals(d, a);
     assertNotEquals(d, b);
@@ -815,6 +919,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(d, j);
     assertNotEquals(d, k);
     assertNotEquals(d, l);
+    assertNotEquals(d, m);
     assertEquals("RoutineBriefMutant [name=null, class=org.adligo.fabricate.routines.implicit.EncryptTrait]", d.toString());
   
     assertEquals(e.hashCode(), e.hashCode());
@@ -829,6 +934,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(e.hashCode(), j.hashCode());
     assertNotEquals(e.hashCode(), k.hashCode());
     assertNotEquals(e.hashCode(), l.hashCode());
+    assertNotEquals(e.hashCode(), m.hashCode());
     assertEquals(e, e);
     assertNotEquals(e, a);
     assertNotEquals(e, b);
@@ -841,6 +947,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(e, j);
     assertNotEquals(e, k);
     assertNotEquals(e, l);
+    assertNotEquals(e, m);
     assertEquals("RoutineBriefMutant [name=null, class=org.adligo.fabricate.routines.implicit.DecryptTrait]", e.toString());
   
     assertEquals(f.hashCode(), f.hashCode());
@@ -855,6 +962,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(f.hashCode(), j.hashCode());
     assertNotEquals(f.hashCode(), k.hashCode());
     assertNotEquals(f.hashCode(), l.hashCode());
+    assertNotEquals(f.hashCode(), m.hashCode());
     assertEquals(f, f);
     assertNotEquals(f, a);
     assertNotEquals(f, b);
@@ -867,6 +975,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(f, j);
     assertNotEquals(f, k);
     assertNotEquals(f, l);
+    assertNotEquals(f, m);
     assertEquals("RoutineBriefMutant [name=null, class=null]", f.toString());
     
     assertEquals(g.hashCode(), g.hashCode());
@@ -881,6 +990,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(g.hashCode(), j.hashCode());
     assertNotEquals(g.hashCode(), k.hashCode());
     assertNotEquals(g.hashCode(), l.hashCode());
+    assertNotEquals(g.hashCode(), m.hashCode());
     assertEquals(g, g);
     assertNotEquals(g, a);
     assertNotEquals(g, b);
@@ -893,6 +1003,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(g, j);
     assertNotEquals(g, k);
     assertNotEquals(g, l);
+    assertNotEquals(g, m);
     assertEquals("RoutineBriefMutant [name=null, class=null]", g.toString());
     
     assertEquals(h.hashCode(), h.hashCode());
@@ -907,6 +1018,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(h.hashCode(), j.hashCode());
     assertNotEquals(h.hashCode(), k.hashCode());
     assertNotEquals(h.hashCode(), l.hashCode());
+    assertNotEquals(h.hashCode(), m.hashCode());
     assertEquals(h, h);
     assertNotEquals(h, a);
     assertNotEquals(h, b);
@@ -919,6 +1031,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(h, j);
     assertNotEquals(h, k);
     assertNotEquals(h, l);
+    assertNotEquals(h, m);
     assertEquals("RoutineBriefMutant [name=null, class=null]", h.toString());
   
     assertEquals(i.hashCode(), i.hashCode());
@@ -933,6 +1046,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(i.hashCode(), j.hashCode());
     assertNotEquals(i.hashCode(), k.hashCode());
     assertNotEquals(i.hashCode(), l.hashCode());
+    assertNotEquals(i.hashCode(), m.hashCode());
     assertEquals(i, i);
     assertNotEquals(i, a);
     assertNotEquals(i, b);
@@ -945,6 +1059,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(i, j);
     assertNotEquals(i, k);
     assertNotEquals(i, l);
+    assertNotEquals(i, m);
     assertEquals("RoutineBriefMutant [name=null, class=null," + System.lineSeparator() +
         "\tParameterMutant [key=null, value=null]" + System.lineSeparator() +
         "]", i.toString());
@@ -961,6 +1076,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(j.hashCode(), i.hashCode());
     assertNotEquals(j.hashCode(), k.hashCode());
     assertNotEquals(j.hashCode(), l.hashCode());
+    assertNotEquals(j.hashCode(), m.hashCode());
     assertEquals(j, j);
     assertNotEquals(j, a);
     assertNotEquals(j, b);
@@ -973,6 +1089,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(j, i);
     assertNotEquals(j, k);
     assertNotEquals(j, l);
+    assertNotEquals(j, m);
     assertEquals("RoutineBriefMutant [name=null, class=null," + System.lineSeparator() +
           "\tParameterMutant [key=keyJ, value=null]" + System.lineSeparator() +
           "]", j.toString());
@@ -989,6 +1106,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(k.hashCode(), i.hashCode());
     assertNotEquals(k.hashCode(), j.hashCode());
     assertNotEquals(k.hashCode(), l.hashCode());
+    assertNotEquals(k.hashCode(), m.hashCode());
     assertEquals(k, k);
     assertNotEquals(k, a);
     assertNotEquals(k, b);
@@ -1001,6 +1119,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(k, i);
     assertNotEquals(k, j);
     assertNotEquals(k, l);
+    assertNotEquals(k, m);
     assertEquals("RoutineBriefMutant [name=null, class=null," + System.lineSeparator() +
         "\tRoutineBriefMutant [name=null, class=null]" + System.lineSeparator() +
         "]", k.toString());
@@ -1017,6 +1136,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(l.hashCode(), i.hashCode());
     assertNotEquals(l.hashCode(), j.hashCode());
     assertNotEquals(l.hashCode(), k.hashCode());
+    assertNotEquals(l.hashCode(), m.hashCode());
     assertEquals(l, l);
     assertNotEquals(l, a);
     assertNotEquals(l, b);
@@ -1029,9 +1149,13 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(l, i);
     assertNotEquals(l, j);
     assertNotEquals(l, k);
+    assertNotEquals(l, m);
     assertEquals("RoutineBriefMutant [name=null, class=null," + System.lineSeparator() +
         "\tRoutineBriefMutant [name=b, class=null]" + System.lineSeparator() +
         "]", l.toString());
+    
+    assertEquals(m.hashCode(), m1.hashCode());
+    assertEquals(m, m1);
   }
   
   @SuppressWarnings("boxing")

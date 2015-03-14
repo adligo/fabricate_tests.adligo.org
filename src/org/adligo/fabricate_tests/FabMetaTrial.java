@@ -18,7 +18,7 @@ import org.adligo.tests4j.system.shared.trials.TrialTypeAnnotation;
 
 @TrialTypeAnnotation (type=TrialType.META_TRIAL_TYPE)
 public class FabMetaTrial  extends AbstractTrial implements I_MetaTrial {
-	private static final long TESTS = 701;
+	private static final long TESTS = 707;
 	private static final int TRIALS = 149;
 	
 	private ClassesWithSourceFileTrialsCalculator calculator_;
@@ -144,7 +144,7 @@ public class FabMetaTrial  extends AbstractTrial implements I_MetaTrial {
 		//you may want to require this for your project.
 		if (results.hasCoverage()) {
 			double actual = results.getCoveragePercentage();
-			assertGreaterThanOrEquals(58.0, actual);
+			assertGreaterThanOrEquals(59.0, actual);
 		}	
 		//TODO
 		//assertEquals(1,results.getTrialsIgnored());
