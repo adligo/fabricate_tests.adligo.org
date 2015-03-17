@@ -15,9 +15,12 @@ public class FabricationMemoryConstantsTrial extends MockitoSourceFileTrial {
   @SuppressWarnings("boxing")
   @Test
   public void testConstants() {
-    assertEquals("gitClonedProjects", FabricationMemoryConstants.CLONED_PROJECTS);
+    assertEquals("dependencies", FabricationMemoryConstants.DEPENDENCIES);
     assertEquals("environment", FabricationMemoryConstants.ENV);
-    assertEquals("gitKeystorePassword", FabricationMemoryConstants.GIT_KEYSTORE_PASSWORD);
+    assertEquals("gitClonedProjects", FabricationMemoryConstants.CLONED_PROJECTS);
+    
+    
+    assertEquals("loadedProjects", FabricationMemoryConstants.LOADED_PROJECTS);
     assertEquals("setupSshAgent", FabricationMemoryConstants.SETUP_SSH_AGENT);
     I_ExecutionEnvironment executionEnv = FabricationMemoryConstants.EMPTY_ENV;
     Map<String,String> map = new HashMap<String,String>();

@@ -24,9 +24,9 @@ import org.adligo.fabricate.repository.I_DependenciesManager;
 import org.adligo.fabricate.repository.I_DependenciesNormalizer;
 import org.adligo.fabricate.repository.I_DependencyManager;
 import org.adligo.fabricate.repository.I_LibraryResolver;
+import org.adligo.fabricate.repository.I_RepositoryManager;
 import org.adligo.fabricate.repository.I_RepositoryPathBuilder;
 import org.adligo.fabricate.repository.LibraryResolver;
-import org.adligo.fabricate.repository.RepositoryManager;
 import org.adligo.fabricate.routines.RoutineExecutionEngine;
 import org.adligo.fabricate.routines.implicit.RoutineFabricateFactory;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateDependencies;
@@ -223,7 +223,7 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
     I_LibraryResolver lr =  factory.createLibraryResolver(sysMock_, fabricate);
     assertEquals(LibraryResolver.class.getName(), lr.getClass().getName());
     
-    RepositoryManager rm = factory.createRepositoryManager(sysMock_, fabricate);
+    I_RepositoryManager rm = factory.createRepositoryManager(sysMock_, fabricate);
     assertNotNull(rm);
   }
   
@@ -263,9 +263,10 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
     FabricateFactory factory = new FabricateFactory();
     I_Fabricate fab = mock(I_Fabricate.class);
     RoutineFabricateFactory routineFabFactory = mock(RoutineFabricateFactory.class);
+    I_RepositoryManager rm = mock(I_RepositoryManager.class);
     
     ProjectsManager pm =  factory.createProjectsManager(
-        sysMock_, routineFabFactory);
+        sysMock_, routineFabFactory, rm);
    assertNotNull(pm);
   }
   

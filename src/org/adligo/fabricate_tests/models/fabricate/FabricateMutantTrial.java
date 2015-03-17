@@ -161,9 +161,10 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     dms.add(null);
     
     fm.setDependencies(dms);
-    fm.setCommands(getRoutines("commands", RoutineBriefOrigin.COMMAND));
-    fm.setStages(getRoutines("stages", RoutineBriefOrigin.STAGE));
-    fm.setTraits(getRoutines("traits", RoutineBriefOrigin.TRAIT));
+    fm.setCommands(getRoutines("command", RoutineBriefOrigin.COMMAND));
+    fm.setFacets(getRoutines("facet", RoutineBriefOrigin.FACET));
+    fm.setStages(getRoutines("stage", RoutineBriefOrigin.STAGE));
+    fm.setTraits(getRoutines("trait", RoutineBriefOrigin.TRAIT));
     fm.setFabricateProjectRunDir("projectRunDir");
     fm.setFabricateDevXmlDir("devXmlDir");
     copy = new FabricateMutant(fm);
@@ -182,9 +183,14 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     assertEquals("typeB" ,dtCopy.getType());
     assertEquals("versionB" ,dtCopy.getVersion()); 
     
-    assertRoutines(copy.getCommands(), "commands", RoutineBriefOrigin.COMMAND);
-    assertRoutines(copy.getStages(), "stages", RoutineBriefOrigin.STAGE);
-    assertRoutines(copy.getTraits(), "traits", RoutineBriefOrigin.TRAIT);
+    I_RoutineBrief cmd = assertRoutines(copy.getCommands(), "command", RoutineBriefOrigin.COMMAND);
+    assertSame(cmd, copy.getCommand("command"));
+    I_RoutineBrief facet = assertRoutines(copy.getFacets(), "facet", RoutineBriefOrigin.FACET);
+    assertSame(facet, copy.getFacet("facet"));
+    I_RoutineBrief stage = assertRoutines(copy.getStages(), "stage", RoutineBriefOrigin.STAGE);
+    assertSame(stage, copy.getStage("stage"));
+    I_RoutineBrief trait = assertRoutines(copy.getTraits(), "trait", RoutineBriefOrigin.TRAIT);
+    assertSame(trait, copy.getTrait("trait"));
   }
   
   @SuppressWarnings("boxing")
@@ -386,17 +392,37 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     assertEquals("typeB" ,dtCopy.getType());
     assertEquals("versionB" ,dtCopy.getVersion()); 
     
-    fm.setCommands(getRoutines("commands", RoutineBriefOrigin.COMMAND));
-    assertRoutines(fm.getCommands(), "commands", RoutineBriefOrigin.COMMAND);
-    assertRoutines(fm.getCommands(), "commands", RoutineBriefOrigin.COMMAND);
+    fm.setCommands(getRoutines("command", RoutineBriefOrigin.COMMAND));
+    I_RoutineBrief cmd = assertRoutines(fm.getCommands(), "command", RoutineBriefOrigin.COMMAND);
+    assertSame(cmd, fm.getCommand("command"));
+    // check encapsulation
+    fm.getCommands().clear();
+    cmd = assertRoutines(fm.getCommands(), "command", RoutineBriefOrigin.COMMAND);
+    assertSame(cmd, fm.getCommand("command"));
     
-    fm.setStages(getRoutines("stages", RoutineBriefOrigin.STAGE));
-    assertRoutines(fm.getStages(), "stages", RoutineBriefOrigin.STAGE);
-    assertRoutines(fm.getStages(), "stages", RoutineBriefOrigin.STAGE);
+    fm.setFacets(getRoutines("facet", RoutineBriefOrigin.FACET));
+    I_RoutineBrief facet = assertRoutines(fm.getFacets(), "facet", RoutineBriefOrigin.FACET);
+    assertSame(facet, fm.getFacet("facet"));
+    // check encapsulation
+    fm.getFacets().clear();
+    cmd = assertRoutines(fm.getFacets(), "facet", RoutineBriefOrigin.FACET);
+    assertSame(cmd, fm.getFacet("facet"));
     
-    fm.setTraits(getRoutines("traits", RoutineBriefOrigin.TRAIT));
-    assertRoutines(fm.getTraits(), "traits", RoutineBriefOrigin.TRAIT);
-    assertRoutines(fm.getTraits(), "traits", RoutineBriefOrigin.TRAIT);
+    fm.setStages(getRoutines("stage", RoutineBriefOrigin.STAGE));
+    I_RoutineBrief stage = assertRoutines(fm.getStages(), "stage", RoutineBriefOrigin.STAGE);
+    assertSame(stage, fm.getStage("stage"));
+    // check encapsulation
+    fm.getStages().clear();
+    stage = assertRoutines(fm.getStages(), "stage", RoutineBriefOrigin.STAGE);
+    assertSame(stage, fm.getStage("stage"));
+    
+    fm.setTraits(getRoutines("trait", RoutineBriefOrigin.TRAIT));
+    I_RoutineBrief trait = assertRoutines(fm.getTraits(), "trait", RoutineBriefOrigin.TRAIT);
+    assertSame(trait, fm.getTrait("trait"));
+    // check encapsulation
+    fm.getTraits().clear();
+    trait = assertRoutines(fm.getTraits(), "trait", RoutineBriefOrigin.TRAIT);
+    assertSame(trait, fm.getTrait("trait"));
     
     fm.setProjectsDir("pjDir");
     assertEquals("pjDir", fm.getProjectsDir());
@@ -413,8 +439,6 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     jt.setXmx("13m");
     ft.setJava(jt);
     
-    I_FabricateXmlDiscovery fxml = mock(I_FabricateXmlDiscovery.class);
-    
     RoutineParentType rtp = new RoutineParentType();
     rtp.setName("command");
     rtp.setClazz(EncryptTrait.class.getName());
@@ -426,6 +450,17 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     rtp.setParams(params);
     ft.getCommand().add(rtp);
 
+    RoutineParentType facetType = new RoutineParentType();
+    facetType.setName("facet");
+    facetType.setClazz(EncryptTrait.class.getName());
+    ParamsType fParams = new ParamsType();
+    ParamType fParam = new ParamType();
+    fParam.setKey("facetKey");
+    fParam.setValue("facetValue");
+    fParams.getParam().add(fParam);
+    facetType.setParams(fParams);
+    ft.getFacet().add(facetType);
+    
     StageType stage = new StageType();
     stage.setName("stage");
     stage.setClazz(EncryptTrait.class.getName());
@@ -456,14 +491,26 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     FabricateMutant fm = new FabricateMutant();
     fm.addCommands(ft);
     assertRoutinesFromXml(fm.getCommands(), "command", RoutineBriefOrigin.FABRICATE_COMMAND);
+    //check encapsulation
+    fm.getCommands().clear();
     assertRoutinesFromXml(fm.getCommands(), "command", RoutineBriefOrigin.FABRICATE_COMMAND);
+
+    fm.addFacets(ft.getFacet());
+    assertRoutinesFromXml(fm.getFacets(), "facet", RoutineBriefOrigin.FABRICATE_FACET);
+    //check encapsulation
+    fm.getFacets().clear();
+    assertRoutinesFromXml(fm.getFacets(), "facet", RoutineBriefOrigin.FABRICATE_FACET);
     
     fm.addStages(ft);
     assertRoutinesFromXml(fm.getStages(), "stage", RoutineBriefOrigin.FABRICATE_STAGE);
+    //check encapsulation
+    fm.getStages().clear();
     assertRoutinesFromXml(fm.getStages(), "stage", RoutineBriefOrigin.FABRICATE_STAGE);
     
     fm.addTraits(ft.getTrait());
     assertRoutinesFromXml(fm.getTraits(), "trait", RoutineBriefOrigin.FABRICATE_TRAIT);
+    //check encapsulation
+    fm.getTraits().clear();
     assertRoutinesFromXml(fm.getTraits(), "trait", RoutineBriefOrigin.FABRICATE_TRAIT);
     
     ProjectsType projects = new ProjectsType();
@@ -529,7 +576,7 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
   }
   
   @SuppressWarnings("boxing")
-  private void assertRoutines(Map<String,I_RoutineBrief> routines, String name, 
+  private I_RoutineBrief assertRoutines(Map<String,I_RoutineBrief> routines, String name, 
       RoutineBriefOrigin origin) {
     I_RoutineBrief route = routines.get(name);
     assertNotNull(route);
@@ -541,6 +588,7 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     
     routines.clear();
     assertEquals(0, routines.size());
+    return route;
   }
   
   private Map<String, I_RoutineBrief> getRoutines(String name, RoutineBriefOrigin origin) {

@@ -272,7 +272,7 @@ public class RoutineFactoryTrial extends MockitoSourceFileTrial {
     a.setOrigin(RoutineBriefOrigin.FABRICATE_STAGE);
     factory.add(a);
     
-    assertThrown(new ExpectedThrowable(new IllegalArgumentException("b")),
+    assertThrown(new ExpectedThrowable(new IllegalArgumentException("No routine found with name 'b'.")),
         new I_Thrower() {
           
           @Override

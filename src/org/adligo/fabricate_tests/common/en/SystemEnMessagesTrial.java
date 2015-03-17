@@ -146,6 +146,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getManagingFabricateRuntimeClassPathDependencies());
     asserter.assertConstant("No remote repositories could be reached.", 
         messages.getNoRemoteRepositoriesCouldBeReached());
+    asserter.assertConstant("No routine found with name '<X/>'.", 
+        messages.getNoRoutineFoundWithNameX());
     asserter.assertConstant("passed the extract check.", 
         messages.getPassedTheExtractCheck());
     asserter.assertConstant("passed the md5 check.", 

@@ -17,6 +17,7 @@ import org.adligo.fabricate.models.dependencies.LibraryDependency;
 import org.adligo.fabricate.models.dependencies.LibraryDependencyMutant;
 import org.adligo.fabricate.models.dependencies.ProjectDependency;
 import org.adligo.fabricate.models.dependencies.ProjectDependencyMutant;
+import org.adligo.fabricate.models.project.I_Project;
 import org.adligo.fabricate.models.project.ProjectMutant;
 import org.adligo.fabricate.routines.implicit.EncryptTrait;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamType;
@@ -314,9 +315,9 @@ public class ProjectMutantTrial extends MockitoSourceFileTrial {
   @SuppressWarnings("boxing")
   @Test
   public void testConstructorCopyFromXml() throws Exception {
-    ProjectType pt = new ProjectType();
-    pt.setName("name");
-    pt.setVersion("version");
+    I_Project pt = mock(I_Project.class);
+    when(pt.getName()).thenReturn("name");
+    when(pt.getVersion()).thenReturn("version");
     
     FabricateProjectType fpt = new FabricateProjectType();
     fpt.setDependencies(null);

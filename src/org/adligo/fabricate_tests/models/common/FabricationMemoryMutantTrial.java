@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-@SourceFileScope (sourceClass=FabricationMemoryMutant.class, minCoverage=98.0)
+@SourceFileScope (sourceClass=FabricationMemoryMutant.class, minCoverage=91.0)
 public class FabricationMemoryMutantTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("boxing")
