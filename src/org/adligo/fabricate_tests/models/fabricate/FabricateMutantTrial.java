@@ -4,6 +4,7 @@ package org.adligo.fabricate_tests.models.fabricate;
 import org.adligo.fabricate.common.system.FabricateDefaults;
 import org.adligo.fabricate.models.common.I_Parameter;
 import org.adligo.fabricate.models.common.I_RoutineBrief;
+import org.adligo.fabricate.models.common.RoutineBrief;
 import org.adligo.fabricate.models.common.RoutineBriefMutant;
 import org.adligo.fabricate.models.common.RoutineBriefOrigin;
 import org.adligo.fabricate.models.dependencies.Dependency;
@@ -301,6 +302,37 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("boxing")
   @Test
+  public void testMethodAddStageDuplicate() {
+    FabricateMutant fm = new FabricateMutant();
+    RoutineBriefMutant rbm = new RoutineBriefMutant();
+    rbm.setName("1");
+    fm.addStage(rbm);
+    assertThrown(new ExpectedThrowable(new IllegalArgumentException("Duplicate stage name 1")),
+        new I_Thrower() {
+          
+          @Override
+          public void run() throws Throwable {
+            fm.addStage(rbm);
+          }
+        });
+    
+    RoutineBriefMutant rbm2 = new RoutineBriefMutant();
+    rbm2.setName("2");
+    rbm2.setOrigin(RoutineBriefOrigin.FABRICATE_ARCHIVE_STAGE);
+    fm.addStage(new RoutineBrief(rbm2));
+    
+    List<String> order = fm.getStageOrder();
+    assertEquals("1", order.get(0));
+    assertEquals("2", order.get(1));
+    assertEquals(2, order.size());
+  
+    assertSame(rbm, fm.getStage("1"));
+    assertEquals(rbm2, fm.getStage("2"));
+    assertNotSame(rbm2, fm.getStage("2"));
+  }
+  
+  @SuppressWarnings("boxing")
+  @Test
   public void testMethods() {
     FabricateMutant fm = new FabricateMutant();
     fm.setJavaHome("jh");
@@ -503,9 +535,16 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     
     fm.addStages(ft);
     assertRoutinesFromXml(fm.getStages(), "stage", RoutineBriefOrigin.FABRICATE_STAGE);
+    List<String> so = fm.getStageOrder();
+    assertEquals("stage", so.get(0));
+    assertEquals(1, so.size());
     //check encapsulation
     fm.getStages().clear();
+    so.clear();
     assertRoutinesFromXml(fm.getStages(), "stage", RoutineBriefOrigin.FABRICATE_STAGE);
+    so = fm.getStageOrder();
+    assertEquals("stage", so.get(0));
+    assertEquals(1, so.size());
     
     fm.addTraits(ft.getTrait());
     assertRoutinesFromXml(fm.getTraits(), "trait", RoutineBriefOrigin.FABRICATE_TRAIT);

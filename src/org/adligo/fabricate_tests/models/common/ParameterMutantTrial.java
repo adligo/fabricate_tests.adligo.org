@@ -344,6 +344,13 @@ public class ParameterMutantTrial extends MockitoSourceFileTrial {
     //test external mutation
     children.clear();
     assertEquals(2, kvm.size());
+    
+    kvm.setValue("a,b,c");
+    String [] vals = kvm.getValueDelimited(",");
+    assertEquals("a", vals[0]);
+    assertEquals("b", vals[1]);
+    assertEquals("c", vals[2]);
+    assertEquals(3, vals.length);
   }
   
   @Test

@@ -112,11 +112,21 @@ public class ParameterTrial extends MockitoSourceFileTrial {
     assertTrue(pChildren.isEmpty());
     assertEquals("java.util.Collections$UnmodifiableRandomAccessList",
         pChildren.getClass().getName());
+    
+    pm = new ParameterMutant();
+    pm.setKey("k1");
+    pm.setValue("a,b,c");
+    
+    p = new Parameter(pm);
+    String [] vals = p.getValueDelimited(",");
+    assertEquals("a", vals[0]);
+    assertEquals("b", vals[1]);
+    assertEquals("c", vals[2]);
+    assertEquals(3, vals.length);
   }
   
   @Test
   public void testMethodsCovertAndCreateParamsTypeAndParamType() {
-    
     
     List<I_Parameter> out = Parameter.convert(ParameterMutantTrial.createParams());
     assertConvertedParams(out, this);

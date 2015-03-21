@@ -179,6 +179,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getTheFollowingLocalRepositoryIsLockedByAnotherProcess());
     asserter.assertConstant("The following command line program exited abnormally with exit code <X/>;", 
         messages.getTheFollowingCommandLineProgramExitedAbnormallyWithExitCodeX());
+    asserter.assertConstant("The following required file is missing;", 
+        messages.getTheFollowingRequiredFileIsMissing());
     asserter.assertConstant("The following remote repository appears to be down;", 
         messages.getTheFollowingRemoteRepositoryAppearsToBeDown());
     asserter.assertConstant("The memory key '<X/>' has been locked by the following classes;", 

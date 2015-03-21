@@ -10,6 +10,7 @@ import org.adligo.fabricate.common.system.FabricateDefaults;
 import org.adligo.fabricate.common.system.FabricateEnvironment;
 import org.adligo.fabricate.common.system.FabricateXmlDiscovery;
 import org.adligo.fabricate.managers.CommandManager;
+import org.adligo.fabricate.managers.FabricationManager;
 import org.adligo.fabricate.managers.ProjectsManager;
 import org.adligo.fabricate.models.dependencies.I_Dependency;
 import org.adligo.fabricate.models.fabricate.Fabricate;
@@ -266,6 +267,18 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
     I_RepositoryManager rm = mock(I_RepositoryManager.class);
     
     ProjectsManager pm =  factory.createProjectsManager(
+        sysMock_, routineFabFactory, rm);
+   assertNotNull(pm);
+  }
+  
+  @Test
+  public void testMethodCreateFabriationManager() {
+    FabricateFactory factory = new FabricateFactory();
+    I_Fabricate fab = mock(I_Fabricate.class);
+    RoutineFabricateFactory routineFabFactory = mock(RoutineFabricateFactory.class);
+    I_RepositoryManager rm = mock(I_RepositoryManager.class);
+    
+    FabricationManager pm =  factory.createFabricationManager(
         sysMock_, routineFabFactory, rm);
    assertNotNull(pm);
   }

@@ -164,7 +164,7 @@ public class RoutineFactoryTrial extends MockitoSourceFileTrial {
     a1 = factory.get("a");
     assertEquals(a, a1);
     assertEquals(RoutineBrief.class.getName(), a1.getClass().getName());
-    List<String> values = a1.getParameters("key1");
+    List<String> values = a1.getParameterValues("key1");
     assertContains(values, "value1");
     assertEquals(1, values.size());
     
@@ -177,7 +177,7 @@ public class RoutineFactoryTrial extends MockitoSourceFileTrial {
     a1 = factory.get("a");
     assertEquals(a, a1);
     assertEquals(RoutineBrief.class.getName(), a1.getClass().getName());
-    values = a1.getParameters("key1");
+    values = a1.getParameterValues("key1");
     assertContains(values, "value2");
     assertEquals(1, values.size());
     
@@ -186,7 +186,7 @@ public class RoutineFactoryTrial extends MockitoSourceFileTrial {
     a1 = factory.get("a");
     assertEquals(a, a1);
     assertEquals(RoutineBrief.class.getName(), a1.getClass().getName());
-    values = a1.getParameters("key1");
+    values = a1.getParameterValues("key1");
     assertContains(values, "value2");
     assertContains(values, "value1");
     assertEquals(2, values.size());

@@ -30,7 +30,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-@SourceFileScope (sourceClass=RoutineBriefMutant.class, minCoverage=78.0)
+@SourceFileScope (sourceClass=RoutineBriefMutant.class, minCoverage=74.0)
 public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
 
   @Test
@@ -90,7 +90,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertEquals(RoutineBriefOrigin.FABRICATE_COMMAND, copy.getOrigin());
     assertSame(Collections.emptyList(), copy.getNestedRoutines());
     assertSame(Collections.emptyList(), copy.getParameters());
-    assertNull(copy.getParameter("hey"));
+    assertNull(copy.getParameterValue("hey"));
     
     copy  = new RoutineBriefMutant(brief, RoutineBriefOrigin.PROJECT_COMMAND);
     assertEquals(RoutineBriefOrigin.PROJECT_COMMAND, copy.getOrigin());
@@ -664,9 +664,9 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     
     assertTrue(rbm.hasParameter("nr"));
     assertFalse(rbm.hasParameter("key"));
-    assertEquals("nr", rbm.getParameter("nr"));
-    assertNull(rbm.getParameter("key"));
-    List<String> params = rbm.getParameters("nr");
+    assertEquals("nr", rbm.getParameterValue("nr"));
+    assertNull(rbm.getParameterValue("key"));
+    List<String> params = rbm.getParameterValues("nr");
     assertContains(params, "nr");
     assertEquals(1, params.size());
     ParameterMutant nest = new ParameterMutant();
@@ -675,12 +675,12 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     
     assertNull(rbm.getNestedRoutine("nr"));
     nest.setValue("nrVal");
-    params = rbm.getParameters("nr");
+    params = rbm.getParameterValues("nr");
     assertContains(params, "nrVal");
     assertEquals(1, params.size());
     
     rbm.setParameters(Collections.singletonList(new Parameter(nest)));
-    params = rbm.getParameters("nr");
+    params = rbm.getParameterValues("nr");
     assertContains(params, "nrVal");
     assertEquals(1, params.size());
     
@@ -689,12 +689,62 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     pm.setValue("nrVal2");
     rbm.addParameter(pm);
     
-    params = rbm.getParameters("nr");
+    params = rbm.getParameterValues("nr");
     assertContains(params, "nrVal");
     assertContains(params, "nrVal2");
     assertEquals(2, params.size());
   }
   
+  @Test
+  public void testMethodIsCommand() throws Exception {
+    RoutineBriefMutant rbm = new RoutineBriefMutant();
+    
+    assertFalse(rbm.isCommand());
+    rbm.setOrigin(RoutineBriefOrigin.COMMAND);
+    assertTrue(rbm.isCommand());
+    rbm.setOrigin(RoutineBriefOrigin.FABRICATE_COMMAND);
+    assertTrue(rbm.isCommand());
+    rbm.setOrigin(RoutineBriefOrigin.IMPLICIT_COMMAND);
+    assertTrue(rbm.isCommand());
+    rbm.setOrigin(RoutineBriefOrigin.PROJECT_COMMAND);
+    assertTrue(rbm.isCommand());
+    rbm.setOrigin(RoutineBriefOrigin.STAGE);
+    assertFalse(rbm.isCommand());
+  }
+  
+  @Test
+  public void testMethodIsArchiveStage() throws Exception {
+    RoutineBriefMutant rbm = new RoutineBriefMutant();
+    
+    assertFalse(rbm.isArchivalStage());
+    rbm.setOrigin(RoutineBriefOrigin.ARCHIVE_STAGE);
+    assertTrue(rbm.isArchivalStage());
+    rbm.setOrigin(RoutineBriefOrigin.FABRICATE_ARCHIVE_STAGE);
+    assertTrue(rbm.isArchivalStage());
+    rbm.setOrigin(RoutineBriefOrigin.IMPLICIT_ARCHIVE_STAGE);
+    assertTrue(rbm.isArchivalStage());
+    rbm.setOrigin(RoutineBriefOrigin.PROJECT_ARCHIVE_STAGE);
+    assertTrue(rbm.isArchivalStage());
+    rbm.setOrigin(RoutineBriefOrigin.STAGE);
+    assertFalse(rbm.isArchivalStage());
+  }
+  
+  @Test
+  public void testMethodIsStage() throws Exception {
+    RoutineBriefMutant rbm = new RoutineBriefMutant();
+    
+    assertFalse(rbm.isStage());
+    rbm.setOrigin(RoutineBriefOrigin.STAGE);
+    assertTrue(rbm.isStage());
+    rbm.setOrigin(RoutineBriefOrigin.FABRICATE_STAGE);
+    assertTrue(rbm.isStage());
+    rbm.setOrigin(RoutineBriefOrigin.IMPLICIT_STAGE);
+    assertTrue(rbm.isStage());
+    rbm.setOrigin(RoutineBriefOrigin.PROJECT_STAGE);
+    assertTrue(rbm.isStage());
+    rbm.setOrigin(RoutineBriefOrigin.COMMAND);
+    assertFalse(rbm.isStage());
+  }
   
   @Test
   public void testMethodRemoveNestedRoutine() throws Exception {
@@ -725,7 +775,7 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     pm.setValue("nrVal2");
     rbm.addParameter(pm);
     
-    List<String> params = rbm.getParameters("nr");
+    List<String> params = rbm.getParameterValues("nr");
     assertContains(params, "nrVal");
     assertContains(params, "nrVal2");
     assertEquals(2, params.size());
@@ -1160,6 +1210,30 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("boxing")
   @Test
+  public void testMethodsGetParameterAndParameters() throws Exception {
+    List<I_Parameter> params = new ArrayList<I_Parameter>();
+    ParameterMutant pmA = new ParameterMutant();
+    pmA.setKey("a");
+    
+    ParameterMutant pmA1 = new ParameterMutant();
+    pmA1.setKey("a");
+    
+    params.add(pmA);
+    params.add(pmA1);
+    
+    RoutineBriefMutant rbm = new RoutineBriefMutant();
+    rbm.setParameters(params);
+    List<I_Parameter> result0 = rbm.getParameters("");
+    assertEquals(0, result0.size());
+    
+    List<I_Parameter> result1 = rbm.getParameters("a");
+    assertSame(pmA, result1.get(0));
+    assertSame(pmA1, result1.get(1));
+    assertSame(2, result1.size());
+  }
+  
+  @SuppressWarnings("boxing")
+  @Test
   public void testStaticMethodConvertStages() throws Exception {
     Map<String, I_RoutineBrief> routinesFromNull = RoutineBriefMutant.convertStages(null, null);
     assertEquals(0, routinesFromNull.size());
@@ -1195,5 +1269,47 @@ public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
     assertEquals("vouch", rb2.getName());
     assertNull(rb2.getClazz());
     assertEquals(RoutineBriefMutant.class.getName(), rb2.getClass().getName());
+  }
+  
+
+  @Test
+  public void testStaticMethodGetParameter() {
+    List<I_Parameter> params = new ArrayList<I_Parameter>();
+    ParameterMutant pmA = new ParameterMutant();
+    pmA.setKey("a");
+    
+    ParameterMutant pmA1 = new ParameterMutant();
+    pmA1.setKey("a");
+    
+    params.add(pmA);
+    params.add(pmA1);
+    
+    I_Parameter result0 = RoutineBriefMutant.getParameter(params, "");
+    assertNull(result0);
+    
+    I_Parameter result1 = RoutineBriefMutant.getParameter(params, "a");
+    assertSame(pmA, result1);
+  }
+  
+  @SuppressWarnings("boxing")
+  @Test
+  public void testStaticMethodGetParameters() {
+    List<I_Parameter> params = new ArrayList<I_Parameter>();
+    ParameterMutant pmA = new ParameterMutant();
+    pmA.setKey("a");
+    
+    ParameterMutant pmA1 = new ParameterMutant();
+    pmA1.setKey("a");
+    
+    params.add(pmA);
+    params.add(pmA1);
+    
+    List<I_Parameter> result0 = RoutineBriefMutant.getParameters(params, "");
+    assertEquals(0, result0.size());
+    
+    List<I_Parameter> result1 = RoutineBriefMutant.getParameters(params, "a");
+    assertSame(pmA, result1.get(0));
+    assertSame(pmA1, result1.get(1));
+    assertSame(2, result1.size());
   }
 }

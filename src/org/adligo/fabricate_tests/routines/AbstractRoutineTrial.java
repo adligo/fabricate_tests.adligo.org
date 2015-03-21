@@ -1,6 +1,7 @@
 package org.adligo.fabricate_tests.routines;
 
 import org.adligo.fabricate.common.en.FabricateEnConstants;
+import org.adligo.fabricate.common.files.I_FabFileIO;
 import org.adligo.fabricate.common.log.I_FabLog;
 import org.adligo.fabricate.common.system.I_FabSystem;
 import org.adligo.fabricate.models.common.I_FabricationMemory;
@@ -17,14 +18,18 @@ import org.adligo.fabricate_tests.routines.implicit.mocks.ProjectProcessorRoutin
 import org.adligo.fabricate_tests.routines.implicit.mocks.SimpleRoutineMock;
 import org.adligo.fabricate_tests.routines.implicit.mocks.TaskAndProjectProcessorRoutineMock;
 import org.adligo.fabricate_tests.routines.implicit.mocks.TaskProcessorRoutineMock;
+import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
+import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
+import org.adligo.tests4j_4mockito.MockMethod;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
 @SourceFileScope (sourceClass=AbstractRoutine.class, minCoverage=91.0)
 public class AbstractRoutineTrial extends MockitoSourceFileTrial {
   private I_FabSystem sysMock_;
   private I_FabLog logMock_;
+  private I_FabFileIO filesMock_;
   private DecryptTrait encrypt_ = new DecryptTrait();
   
   public void beforeTests() {
@@ -35,6 +40,9 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     when(sysMock_.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
     when(sysMock_.lineSeparator()).thenReturn(System.lineSeparator());
     encrypt_.setSystem(sysMock_);
+    
+    filesMock_ = mock(I_FabFileIO.class);
+    when(sysMock_.getFileIO()).thenReturn(filesMock_);
   }
   
   public void testMethodsGetsAndSets() {
@@ -346,6 +354,28 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     ar3.setup(memory, routineMemory);
     ar3.run();
     assertEquals("Trait routineName, task taskName is still running on project projectName.", ar3.getCurrentLocation());
+  }
+  
+  @SuppressWarnings({"boxing"})
+  @Test
+  public void testMethodMakeDir() throws Exception {
+    TaskProcessorRoutineMock ar = new TaskProcessorRoutineMock("taskName");
+    ar.setSystem(sysMock_);
+    
+    assertThrown(new ExpectedThrowable(new RuntimeException("There was a problem creating the following directory;\n" +
+        "filePath")),
+        new I_Thrower() {
+          
+          @Override
+          public void run() throws Throwable {
+            ar.makeDir("filePath");
+            
+          }
+        });
+    
+    MockMethod<Boolean> mkdirsMethod = new MockMethod<Boolean>(true, true);
+    when(filesMock_.mkdirs("filePath")).then(mkdirsMethod);
+    ar.makeDir("filePath");
   }
   
   public void addAndAssertBrief(AbstractRoutine ar, RoutineBriefOrigin type) {

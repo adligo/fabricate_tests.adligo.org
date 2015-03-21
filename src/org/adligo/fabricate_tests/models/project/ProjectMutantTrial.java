@@ -23,7 +23,6 @@ import org.adligo.fabricate.routines.implicit.EncryptTrait;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamType;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.ParamsType;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.RoutineParentType;
-import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.ProjectType;
 import org.adligo.fabricate.xml.io_v1.project_v1_0.FabricateProjectType;
 import org.adligo.fabricate.xml.io_v1.project_v1_0.ProjectDependenciesType;
 import org.adligo.fabricate.xml.io_v1.project_v1_0.ProjectRoutineType;
@@ -428,6 +427,23 @@ public class ProjectMutantTrial extends MockitoSourceFileTrial {
     assertEquals(1, trait2.size());
   }
   
+  @Test
+  public void testMethodsEqualsHashCode() {
+    ProjectMutant pmA = new ProjectMutant();
+    ProjectMutant pmB = new ProjectMutant();
+    
+    assertEquals(pmA, pmA);
+    assertEquals(pmA, pmB);
+    pmA.setName("a");
+    assertNotEquals(pmA, pmB);
+    assertNotEquals(pmB, pmA);
+    
+    pmB.setName("b");
+    assertNotEquals(pmA, pmB);
+    assertNotEquals(pmB, pmA);
+  }
+  
+  
   @SuppressWarnings({"boxing"})
   @Test
   public void testMethodsGetsAndSets() {
@@ -668,6 +684,32 @@ public class ProjectMutantTrial extends MockitoSourceFileTrial {
     assertEquals("routineName", caught.getName());
     assertEquals(RoutineBriefOrigin.PROJECT_TRAIT, caught.getOrigin());
     assertEquals("projectName", caught.getParentName());
+  }
+  
+  @Test
+  public void testMethodsToString() {
+    ProjectMutant pm = mock(ProjectMutant.class);
+    
+    when(pm.getAttributes()).thenReturn(null);
+    when(pm.getCommands()).thenReturn(null);
+    when(pm.getDependencies()).thenReturn(null);
+    when(pm.getLibraryDependencies()).thenReturn(null);
+    when(pm.getNormalizedDependencies()).thenReturn(null);
+    when(pm.getProjectDependencies()).thenReturn(null);
+    when(pm.getStages()).thenReturn(null);
+    when(pm.getTraits()).thenReturn(null);
+    String result = ProjectMutant.toString(pm);
+    int firstSquare = result.indexOf("[");
+    result = result.substring(firstSquare, result.length());
+    assertEquals("[name=null, dir=null]", result);
+    
+    pm = new ProjectMutant();
+    pm.setDir("dir");
+    
+    pm.setName("name.adigo.org");
+    assertEquals("ProjectMutant [name=name.adigo.org, dir=dir, attributes=0, commands=0, dependencies=0, "
+        + "libraryDependencies=0, normalizedDependencies=0, projectDependencies=0, stages=0, traits=0]", ProjectMutant.toString(pm));
+    
   }
   
   private void assertDependencyLetterPrime(String letter, I_Dependency dep) {

@@ -23,6 +23,9 @@ public class CommandLineEnConstantsTrial extends MockitoSourceFileTrial {
     assertEquals("--log-verbosely", messages.getLog(false));
     assertEquals("-n", messages.getNoSshKeystorePassPhrase(true));
     assertEquals("--no-ssh-keystore-passphrase", messages.getNoSshKeystorePassPhrase(false));
+    
+    assertEquals("platforms", messages.getPlatforms());
+    
     assertEquals("-p", messages.getPurge(true));
     assertEquals("--purge", messages.getPurge(false));
     

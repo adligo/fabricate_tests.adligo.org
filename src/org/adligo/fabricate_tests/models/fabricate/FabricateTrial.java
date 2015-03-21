@@ -61,6 +61,7 @@ public class FabricateTrial extends MockitoSourceFileTrial {
     assertEquals(FabricateDefaults.JAVA_XMX_DEFAULT, copy.getXmx());
     assertEquals("pjDir", copy.getProjectsDir());
     assertEquals("java.util.Collections$UnmodifiableRandomAccessList", copy.getProjects().getClass().getName());
+    assertEquals("java.util.Collections$EmptyList", copy.getStageOrder().getClass().getName());
     assertNull(copy.getScm());
     
     JavaSettingsMutant jsm = new JavaSettingsMutant();
@@ -158,6 +159,11 @@ public class FabricateTrial extends MockitoSourceFileTrial {
     assertSame(facet, copy.getFacet("facet"));
     I_RoutineBrief stage = assertRoutines(copy.getStages(), "stage", RoutineBriefOrigin.STAGE);
     assertSame(stage, copy.getStage("stage"));
+    List<String> stageOrder = copy.getStageOrder();
+    assertEquals("stage",stageOrder.get(0));
+    assertEquals(1,stageOrder.size());
+    assertEquals("java.util.Collections$UnmodifiableRandomAccessList", stageOrder.getClass().getName());
+    
     I_RoutineBrief trait = assertRoutines(copy.getTraits(), "trait", RoutineBriefOrigin.TRAIT);
     assertSame(trait, copy.getTrait("trait"));
     

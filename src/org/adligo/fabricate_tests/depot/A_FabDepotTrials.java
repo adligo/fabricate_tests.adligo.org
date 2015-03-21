@@ -1,4 +1,4 @@
-package org.adligo.fabricate_tests.models.project;
+package org.adligo.fabricate_tests.depot;
 
 import org.adligo.fabricate_tests.etc.FabTestParamsFactory;
 import org.adligo.tests4j.run.api.Tests4J;
@@ -9,13 +9,13 @@ import org.adligo.tests4j.system.shared.trials.I_Trial;
 import java.util.ArrayList;
 import java.util.List;
 
-public class A_ModelsProjectPkgTrials implements I_Tests4J_TrialList {
+public class A_FabDepotTrials implements I_Tests4J_TrialList {
 	
 	public static void main(String [] args) {
 		try {
 			Tests4J_Params params = new FabTestParamsFactory().create();
 			
-			A_ModelsProjectPkgTrials me = new A_ModelsProjectPkgTrials();
+			A_FabDepotTrials me = new A_FabDepotTrials();
 			params.addTrials(me);
 			
 			Tests4J.run(params);
@@ -24,24 +24,11 @@ public class A_ModelsProjectPkgTrials implements I_Tests4J_TrialList {
 		}
 	}
 
-
   @Override
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
-
-    trials.add(I_ProjectBriefTrial.class);
-    trials.add(I_ProjectTrial.class);
-    
-    trials.add(ProjectBriefTrial.class);
-    trials.add(ProjectBlockKeyTrial.class);
-    trials.add(ProjectBlockTrial.class);
-    
-    trials.add(ProjectDependencyOrdererTrial.class);
-    trials.add(ProjectMutantTrial.class);
-    trials.add(ProjectTrial.class);
-    
+    trials.add(ArtifactKeyTrial.class);
     return trials;
   }
-
 
 }

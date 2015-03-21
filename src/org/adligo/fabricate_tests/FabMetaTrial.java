@@ -18,8 +18,8 @@ import org.adligo.tests4j.system.shared.trials.TrialTypeAnnotation;
 
 @TrialTypeAnnotation (type=TrialType.META_TRIAL_TYPE)
 public class FabMetaTrial  extends AbstractTrial implements I_MetaTrial {
-	private static final long TESTS = 707;
-	private static final int TRIALS = 149;
+	private static final long TESTS = 739;
+	private static final int TRIALS = 153;
 	
 	private ClassesWithSourceFileTrialsCalculator calculator_;
 	private I_TrialRunResult results_;
@@ -36,7 +36,7 @@ public class FabMetaTrial  extends AbstractTrial implements I_MetaTrial {
 		calculator_ = new ClassesWithSourceFileTrialsCalculator(metadata);
 		
 		log_ = super.getLog();
-		double minPctWithTrials = 50.0;
+		double minPctWithTrials = 45.0;
 		if (calculator_.getPctWithTrialsDouble() <= minPctWithTrials) {
 			Set<String> classes = calculator_.getClassesWithOutTrials();
 			log_.log("The following source files do NOT have a associated SourceFileTrial.");
