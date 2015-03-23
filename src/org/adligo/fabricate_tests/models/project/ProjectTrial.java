@@ -301,6 +301,10 @@ public class ProjectTrial extends MockitoSourceFileTrial {
     assertEquals("java.util.ArrayList", attribs.getClass().getName());
     assertEquals(1, attribs.size());
     
+    I_Parameter paramA = copy3.getAttribute("keyA");
+    assertEquals(attributeA, paramA);
+    assertNotSame(attributeA, paramA);
+    
     Map<String,I_RoutineBrief> commands = copy3.getCommands();
     assertTwoFromMemoryCommands(commands, cmdA, cmdB1, copy3);
     assertEquals("java.util.Collections$UnmodifiableMap", commands.getClass().getName());

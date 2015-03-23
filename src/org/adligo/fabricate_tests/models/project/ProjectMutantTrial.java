@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@SourceFileScope (sourceClass=ProjectMutant.class,minCoverage=94.0)
+@SourceFileScope (sourceClass=ProjectMutant.class,minCoverage=93.0)
 public class ProjectMutantTrial extends MockitoSourceFileTrial {
 
   
@@ -374,6 +374,11 @@ public class ProjectMutantTrial extends MockitoSourceFileTrial {
     assertEquals("key", paramA.getKey());
     assertEquals("value", paramA.getValue());
     assertEquals(1, attributes.size());
+    
+    paramA = copy2.getAttribute("key");
+    assertEquals("key", paramA.getKey());
+    assertEquals("value", paramA.getValue());
+    
     assertEquals(0, copy2.getCommands().size());
     
     DependencyMutantTrial.assertDependencyConversion(this, copy2.getDependencies());

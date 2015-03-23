@@ -23,7 +23,7 @@ import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 import java.util.ArrayList;
 import java.util.List;
 
-@SourceFileScope (sourceClass=Dependency.class, minCoverage=94.0)
+@SourceFileScope (sourceClass=Dependency.class, minCoverage=92.0)
 public class DependencyTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("boxing")
@@ -327,18 +327,19 @@ public class DependencyTrial extends MockitoSourceFileTrial {
     dmJ.setVersion("versionA");
     Dependency depJ = new Dependency(dmJ);
     
+    
     assertEquals(dm, dm);
     assertEquals(dm.hashCode(), dm.hashCode());
     assertEquals("Dependency [artifact=null, extract=false," + System.lineSeparator() +
         "\tfileName=null, group=null," + System.lineSeparator() +
-        "\tplatform=null, type=null,"  + System.lineSeparator() +
+        "\tplatform=null, type=jar,"  + System.lineSeparator() +
         "\tversion=null, ideChidren=0]", dm.toString());
     
     assertNotEquals(dm, depA);
     assertNotEquals(dm.hashCode(), depA.hashCode());
     assertEquals("Dependency [artifact=artifact, extract=false," + System.lineSeparator() +
         "\tfileName=null, group=null," + System.lineSeparator() +
-        "\tplatform=null, type=null,"  + System.lineSeparator() +
+        "\tplatform=null, type=jar,"  + System.lineSeparator() +
         "\tversion=null, ideChidren=0]", depA.toString());
     
     assertNotEquals(dm, depA);
@@ -347,14 +348,14 @@ public class DependencyTrial extends MockitoSourceFileTrial {
     assertNotEquals(dm.hashCode(), depB.hashCode());
     assertEquals("Dependency [artifact=artifact, extract=false," + System.lineSeparator() +
         "\tfileName=fileName, group=null," + System.lineSeparator() +
-        "\tplatform=null, type=null,"  + System.lineSeparator() +
+        "\tplatform=null, type=jar,"  + System.lineSeparator() +
         "\tversion=null, ideChidren=0]", depB.toString());
     
     assertNotEquals(dm, depC);
     assertNotEquals(dm.hashCode(), depC.hashCode());
     assertEquals("Dependency [artifact=artifact, extract=false," + System.lineSeparator() +
         "\tfileName=fileName, group=group," + System.lineSeparator() +
-        "\tplatform=null, type=null,"  + System.lineSeparator() +
+        "\tplatform=null, type=jar,"  + System.lineSeparator() +
         "\tversion=null, ideChidren=0]", depC.toString());
     
     assertNotEquals(dm, depD);
@@ -391,5 +392,6 @@ public class DependencyTrial extends MockitoSourceFileTrial {
     
     assertNotEquals(depE, depJ);
     assertNotEquals(depE.hashCode(), depJ.hashCode());
+    
   }
 }

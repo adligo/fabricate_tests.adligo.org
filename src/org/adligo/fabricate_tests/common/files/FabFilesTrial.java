@@ -88,8 +88,17 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
     String download = FileUtils.getRunDir() + "test_data" + File.separator +
         "file_trials" + File.separator + "index.html";
     deleteFile(download);
+    
+    String copiedFile = FileUtils.getRunDir() + "test_data" + File.separator +
+        "file_trials" + File.separator + "copiedFile.txt";
+    deleteFile(copiedFile);
   }
 
+  /**
+   * deletes a file if it exists, for afterTrials();
+   * @param pathFubar
+   * @throws IOException
+   */
   public static void deleteFile(String pathFubar) throws IOException {
     try {
       File file = new File(pathFubar);
@@ -345,6 +354,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
     
     content = fabFiles.readFile(to);
     assertUniform("This is just a file for testing reading files;\n", content);
+    
   }
   
   @Test
