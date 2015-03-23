@@ -286,10 +286,24 @@ public class ProjectTrial extends MockitoSourceFileTrial {
     assertTwoFromMemoryAttributes(attributeA, attributeB1, attribs);
     assertEquals("java.util.Collections$UnmodifiableRandomAccessList", attribs.getClass().getName());
     assertEquals(2, attribs.size());
-
+    
+    attribs = copy3.getAttributes("keyA");
+    assertEquals(attributeA, attribs.get(0));
+    assertNotSame(attributeA, attribs.get(0));
+    assertEquals(Parameter.class.getName(), attribs.get(0).getClass().getName());
+    assertEquals("java.util.ArrayList", attribs.getClass().getName());
+    assertEquals(1, attribs.size());
+    attribs.clear();
+    attribs = copy3.getAttributes("keyA");
+    assertEquals(attributeA, attribs.get(0));
+    assertNotSame(attributeA, attribs.get(0));
+    assertEquals(Parameter.class.getName(), attribs.get(0).getClass().getName());
+    assertEquals("java.util.ArrayList", attribs.getClass().getName());
+    assertEquals(1, attribs.size());
+    
     Map<String,I_RoutineBrief> commands = copy3.getCommands();
     assertTwoFromMemoryCommands(commands, cmdA, cmdB1, copy3);
-    assertEquals("java.util.Collections$UnmodifiableRandomAccessList", attribs.getClass().getName());
+    assertEquals("java.util.Collections$UnmodifiableMap", commands.getClass().getName());
     assertEquals(2, copy3.getCommands().size());
     
     List<I_Dependency> dependencies = copy3.getDependencies();

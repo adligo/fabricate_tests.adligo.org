@@ -16,12 +16,11 @@ import org.adligo.fabricate.models.common.RoutineBriefOrigin;
 import org.adligo.fabricate.routines.I_GenericTypeAware;
 import org.adligo.fabricate.routines.I_InputAware;
 import org.adligo.fabricate.routines.I_ProjectBriefsAware;
-import org.adligo.fabricate.routines.I_TaskProcessor;
 import org.adligo.fabricate.routines.RoutineFactory;
 import org.adligo.fabricate.routines.implicit.DecryptTrait;
 import org.adligo.fabricate.routines.implicit.EncryptTrait;
 import org.adligo.fabricate_tests.routines.implicit.mocks.BadInputRoutineMock;
-import org.adligo.fabricate_tests.routines.implicit.mocks.TaskProcessorRoutineMock;
+import org.adligo.fabricate_tests.routines.implicit.mocks.TaskRoutineMock;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
@@ -35,7 +34,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 
-@SourceFileScope (sourceClass=RoutineFactory.class, minCoverage=97.0)
+@SourceFileScope (sourceClass=RoutineFactory.class, minCoverage=95.0)
 public class RoutineFactoryTrial extends MockitoSourceFileTrial {
   private I_FabSystem sysMock_;
   private I_FabLog logMock_;
@@ -349,12 +348,12 @@ public class RoutineFactoryTrial extends MockitoSourceFileTrial {
     assertEquals(0, caught.getWhichGenericType());
     assertEquals(EncryptTrait.class.getName(), caught.getRoutine().getName());
     
-    a.setClazz(TaskProcessorRoutineMock.class);
+    a.setClazz(TaskRoutineMock.class);
     factory.add(a);
     
     interfaces = new HashSet<I_ExpectedRoutineInterface>();
     erim = new ExpectedRoutineInterfaceMutant();
-    erim.setInterfaceClass(I_TaskProcessor.class);
+    erim.setInterfaceClass(I_GenericTypeAware.class);
     erim.setGenericTypes(Collections.singletonList(Long.class));
     interfaces.add(erim);
     
@@ -367,7 +366,7 @@ public class RoutineFactoryTrial extends MockitoSourceFileTrial {
     assertNotNull(caught);
     assertEquals(I_GenericTypeAware.class.getName(), caught.getExpectedInterface().getName());
     assertEquals(0, caught.getWhichGenericType());
-    assertEquals(TaskProcessorRoutineMock.class.getName(), caught.getRoutine().getName());
+    assertEquals(TaskRoutineMock.class.getName(), caught.getRoutine().getName());
     
     a.setClazz(BadInputRoutineMock.class);
     factory.add(a);

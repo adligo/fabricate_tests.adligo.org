@@ -11,7 +11,7 @@ import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-@SourceFileScope (sourceClass=ProjectBlock.class,minCoverage=88.0)
+@SourceFileScope (sourceClass=ProjectBlock.class,minCoverage=87.0)
 public class ProjectBlockTrial extends MockitoSourceFileTrial {
 
   @Test

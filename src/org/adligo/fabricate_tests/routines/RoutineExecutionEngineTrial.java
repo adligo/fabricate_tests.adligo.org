@@ -28,7 +28,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-@SourceFileScope (sourceClass=RoutineExecutionEngine.class, minCoverage=83.0)
+@SourceFileScope (sourceClass=RoutineExecutionEngine.class, minCoverage=82.0)
 public class RoutineExecutionEngineTrial extends MockitoSourceFileTrial {
   private I_FabSystem sysMock_;
   private I_FabLog logMock_;

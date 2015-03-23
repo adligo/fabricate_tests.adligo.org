@@ -472,7 +472,7 @@ public class ProjectMutantTrial extends MockitoSourceFileTrial {
     List<I_Parameter> attribsOut = pm.getAttributes();
     assertTwoAttributes(attribsOut);
     attribsOut.clear();
-    attribsOut = pm.getAttributes();
+    attribsOut = pm.getAttributes("aKey");
     assertTwoAttributes(attribsOut);
     
     List<I_RoutineBrief> cmdsIn = new ArrayList<I_RoutineBrief>();

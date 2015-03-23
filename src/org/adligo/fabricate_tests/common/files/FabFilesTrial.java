@@ -36,6 +36,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
+import java.nio.file.StandardCopyOption;
 import java.security.NoSuchAlgorithmException;
 import java.util.Enumeration;
 import java.util.List;
@@ -96,7 +97,7 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
         Files.delete(file.toPath());
       }
     } catch (NoSuchFileException x) {
-      //do nothing
+      throw new IOException(x);
     }
   }
   
@@ -315,6 +316,61 @@ public class FabFilesTrial extends MockitoSourceFileTrial {
     assertEquals(1, tracker.size());
     ex = tracker.get(0);
     assertEquals("close outex.", ex.getMessage());
+  }
+  
+  @Test
+  public void testMethodCopy() throws Exception {
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
+    when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
+    
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    
+    FabFileIO fabFiles = new FabFileIO(sysMock);
+    String from = FileUtils.getRunDir() + "test_data" + File.separator +
+        "file_trials" + File.separator + "alreadyAFile.txt";
+    String to = FileUtils.getRunDir() + "test_data" + File.separator +
+        "file_trials" + File.separator + "copiedFile.txt";
+    
+    fabFiles.copy(from, to, StandardCopyOption.REPLACE_EXISTING);
+    
+    String content = fabFiles.readFile(to);
+    assertUniform("already a file.\n", content);
+    
+    from = FileUtils.getRunDir() + "test_data" + File.separator +
+        "file_trials" + File.separator + "foo.txt";
+    
+    fabFiles.copy(from, to, StandardCopyOption.REPLACE_EXISTING);
+    
+    content = fabFiles.readFile(to);
+    assertUniform("This is just a file for testing reading files;\n", content);
+  }
+  
+  @Test
+  public void testMethodCopyExceptions() throws Exception {
+    I_FabFilesSystem sysMock = mock(I_FabFilesSystem.class);
+    when(sysMock.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    when(sysMock.lineSeparator()).thenReturn(System.lineSeparator());
+    
+    I_FabLog logMock = mock(I_FabLog.class);
+    when(sysMock.getLog()).thenReturn(logMock);
+    
+    FabFileIO fabFiles = new FabFileIO(sysMock);
+    String from = FileUtils.getRunDir() + "test_data" + File.separator +
+        "file_trials" + File.separator + "NotAFile.txt";
+    String to = FileUtils.getRunDir() + "test_data" + File.separator +
+        "file_trials" + File.separator + "ShouldNotBecomeAFile.txt";
+    
+    assertThrown(new ExpectedThrowable(new NoSuchFileException(from)),
+        new I_Thrower() {
+          
+          @Override
+          public void run() throws Throwable {
+            fabFiles.copy(from, to, StandardCopyOption.REPLACE_EXISTING);
+          }
+        });
+    
   }
   
   @Test

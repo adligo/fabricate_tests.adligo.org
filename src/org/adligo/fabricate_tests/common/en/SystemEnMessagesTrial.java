@@ -26,7 +26,9 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getArchiveStageXTaskYIsStillRunningOnProjectZ());
     asserter.assertConstant("Archive stage <X/> is still setting up.", 
         messages.getArchiveStageXIsStillSettingUp());
-
+    asserter.assertConstant("Archive stage <X/>, project <Y/> is waiting on the following projects;", 
+        messages.getArchiveStageXProjectYIsWaitingOnTheFollowingProjects());
+    
     asserter.assertConstant("Build stage <X/> is still running.", 
         messages.getBuildStageXIsStillRunning());
     asserter.assertConstant("Build stage <X/> is still running on project <Z/>.", 
@@ -37,6 +39,9 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getBuildStageXTaskYIsStillRunningOnProjectZ());
     asserter.assertConstant("Build stage <X/> is still setting up.", 
         messages.getBuildStageXIsStillSettingUp());
+    asserter.assertConstant("Build stage <X/>, project <Y/> is waiting on the following projects;", 
+        messages.getBuildStageXProjectYIsWaitingOnTheFollowingProjects());
+    
     
     asserter.assertConstant("Building Fabricate runtime class path.", 
         messages.getBuildingFabricateRuntimeClassPath());
@@ -51,6 +56,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getCommandXTaskYIsStillRunningOnProjectZ());
     asserter.assertConstant("Command <X/> is still setting up.", 
         messages.getCommandXIsStillSettingUp());
+    asserter.assertConstant("Command <X/>, project <Y/> is waiting on the following projects;", 
+        messages.getCommandXProjectYIsWaitingOnTheFollowingProjects());
     
     asserter.assertConstant("Checking Fabricate runtime dependencies.", 
         messages.getCheckingFabricateRuntimeDependencies());
@@ -95,6 +102,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     asserter.assertConstant("Extraction of the following artifact;", 
         messages.getExtractionOfTheFollowingArtifact());
     
+    asserter.assertConstant("Facet <X/>, project <Y/> is waiting on the following projects;", 
+        messages.getFacetXIProjectYIsWaitingOnTheFollowingProjects());
     asserter.assertConstant("Fabricate by Adligo.", 
         messages.getFabricateByAdligo());
     asserter.assertConstant("Fabricating...", 
@@ -148,6 +157,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getNoRemoteRepositoriesCouldBeReached());
     asserter.assertConstant("No routine found with name '<X/>'.", 
         messages.getNoRoutineFoundWithNameX());
+    asserter.assertConstant("No project found with name <X/>.", 
+        messages.getNoProjectFoundWithNameX());
     asserter.assertConstant("passed the extract check.", 
         messages.getPassedTheExtractCheck());
     asserter.assertConstant("passed the md5 check.", 
@@ -185,6 +196,23 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getTheFollowingRemoteRepositoryAppearsToBeDown());
     asserter.assertConstant("The memory key '<X/>' has been locked by the following classes;", 
         messages.getTheMemoryKeyXHasBeenLockedByTheFollowingClasses());
+    
+    asserter.assertConstant("\tRunning archive stage '<X/>'.", 
+        messages.getRunningArchiveStageX());
+    asserter.assertConstant("Running archive stages...", 
+        messages.getRunningArchiveStages());
+    asserter.assertConstant("\tRunning build stage '<X/>'.", 
+        messages.getRunningBuildStageX());
+    asserter.assertConstant("Running build stages...", 
+        messages.getRunningBuildStages());
+    asserter.assertConstant("\tRunning command '<X/>'.", 
+        messages.getRunningCommandX());
+    asserter.assertConstant("Running commands...", 
+        messages.getRunningCommands());
+    asserter.assertConstant("\tRunning facet '<X/>'.", 
+        messages.getRunningFacetX());
+    asserter.assertConstant("Running facets...", 
+        messages.getRunningFacets());
     
     asserter.assertConstant("There was a problem creating the following directory;", 
         messages.getThereWasAProblemCreatingTheFollowingDirectory());

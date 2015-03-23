@@ -26,7 +26,7 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
-@SourceFileScope (sourceClass=Executor.class,minCoverage=84.0)
+@SourceFileScope (sourceClass=Executor.class,minCoverage=80.0)
 public class ExecutorTrial extends MockitoSourceFileTrial {
   private I_ExecutionEnvironment envMock_;
   private MockMethod<Void> addAllToMethod_;

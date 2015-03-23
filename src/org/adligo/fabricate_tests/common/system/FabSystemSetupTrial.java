@@ -10,7 +10,9 @@ import org.adligo.fabricate.common.system.CommandLineArgs;
 import org.adligo.fabricate.common.system.FabSystem;
 import org.adligo.fabricate.common.system.FabSystemSetup;
 import org.adligo.fabricate.common.system.I_FabSystem;
-import org.adligo.fabricate.repository.RepositoryManager;
+import org.adligo.fabricate.managers.CommandManager;
+import org.adligo.fabricate.managers.FabricationManager;
+import org.adligo.fabricate.managers.ProjectsManager;
 import org.adligo.fabricate.routines.implicit.DecryptTrait;
 import org.adligo.fabricate.routines.implicit.EncryptTrait;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateType;
@@ -35,8 +37,10 @@ public class FabSystemSetupTrial extends MockitoSourceFileTrial {
   public void testConstantDefaultLogsOn() {
     Set<String> lo = FabSystemSetup.DEFALUT_ON_LOGS;
     assertContains(lo, FabricateController.class.getName());
-    assertContains(lo, RepositoryManager.class.getName());
-    assertEquals(2, lo.size());
+    assertContains(lo, CommandManager.class.getName());
+    assertContains(lo, FabricationManager.class.getName());
+    assertContains(lo, ProjectsManager.class.getName());
+    assertEquals(4, lo.size());
   }
 
   @SuppressWarnings("boxing")

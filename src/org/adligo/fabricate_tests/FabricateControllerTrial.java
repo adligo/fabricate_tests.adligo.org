@@ -11,7 +11,10 @@ import org.adligo.fabricate.common.log.I_FabFileLog;
 import org.adligo.fabricate.common.log.I_FabLog;
 import org.adligo.fabricate.common.system.CommandLineArgs;
 import org.adligo.fabricate.common.system.FabSystem;
+import org.adligo.fabricate.common.system.FabricateEnvironment;
 import org.adligo.fabricate.common.system.FabricateXmlDiscovery;
+import org.adligo.fabricate.java.JavaFactory;
+import org.adligo.fabricate.java.ManifestParser;
 import org.adligo.fabricate.managers.CommandManager;
 import org.adligo.fabricate.models.common.FabricationMemoryMutant;
 import org.adligo.fabricate.models.fabricate.Fabricate;
@@ -54,6 +57,9 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
   private FabricateFactory factoryMock_;
   private FabricateXmlDiscovery xmlDiscoveryMock_;
   private FabricationMemoryMutant<Object> memory_ = new FabricationMemoryMutant<Object>(SystemEnMessages.INSTANCE);
+  private FabricateEnvironment mockEnv_;
+  private JavaFactory jFactoryMock_;
+  private ManifestParser manfiestParserMock_;
   
   public void afterTests() {
     ThreadLocalPrintStreamMock.revert();
@@ -93,6 +99,28 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     when(factoryMock_.createDiscovery(sysMock_)).thenReturn(xmlDiscoveryMock_);
     
     when(factoryMock_.createMemory(sysMock_)).thenReturn(memory_);
+    
+    mockEnv_ = mock(FabricateEnvironment.class);
+    when(mockEnv_.getJavaHome(sysMock_)).thenReturn("JAVA_HOME_VALUE");
+    FabricateController.setENV(mockEnv_);
+    
+    
+    List<String> fabricateJarList = new ArrayList<String>();
+    fabricateJarList.add("somewhere/fabricate_snapshot.jar");
+    
+    MockMethod<List<String>> listMethod = new MockMethod<List<String>>(fabricateJarList, true);
+    when(fileMock_.exists("somewhere/fabricate_snapshot.jar")).thenReturn(true);
+    try {
+      when(fileMock_.list(any(), any())).then(listMethod);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    
+    jFactoryMock_ = mock(JavaFactory.class);
+    when(factoryMock_.createJavaFactory()).thenReturn(jFactoryMock_);
+    
+    manfiestParserMock_ = mock(ManifestParser.class);
+    when(jFactoryMock_.newManifestParser()).thenReturn(manfiestParserMock_);
   }
   
   @SuppressWarnings({"unused", "boxing"})
@@ -286,6 +314,8 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     when(sysMock_.newDatatypeFactory()).thenThrow(dataTypeX);
     new FabricateController(sysMock_, new String[] {"start=123"}, factoryMock_);
    
+    
+    
     assertEquals("fabricateXmlDir/run.marker", deleteOnExitMethod_.getArg(0));
     assertEquals(1, deleteOnExitMethod_.count());
     assertEquals("\nFabricating...\n", printlnMethod_.getArg(0));

@@ -20,6 +20,7 @@ import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
@@ -67,6 +68,8 @@ public class FabSystemTrial extends MockitoSourceFileTrial {
     assertEquals(Runtime.getRuntime().availableProcessors(), fabSystem.getAvailableProcessors());
     assertEquals(System.getProperty("java.version", "Unknown"), 
         fabSystem.getProperty("java.version", "Unknown"));
+    
+    assertEquals(File.pathSeparator, fabSystem.pathSeparator());
   }
   
   @SuppressWarnings("boxing")
