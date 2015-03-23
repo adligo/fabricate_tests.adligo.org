@@ -1,7 +1,5 @@
 package org.adligo.fabricate_tests.models.common;
 
-import com.sun.org.apache.xpath.internal.operations.String;
-
 import org.adligo.fabricate.models.common.ExpectedRoutineInterface;
 import org.adligo.fabricate.models.common.ExpectedRoutineInterfaceMutant;
 import org.adligo.fabricate.models.common.I_ExpectedRoutineInterface;

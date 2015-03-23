@@ -63,7 +63,7 @@ public class RoutineExecutionEngineTrial extends MockitoSourceFileTrial {
     I_RoutineBuilder builderMock = mock(I_RoutineBuilder.class);
     SimpleRoutineMock srm = new SimpleRoutineMock();
     MockMethod<I_FabricationRoutine> buildMethod = new MockMethod<I_FabricationRoutine>(srm, true);
-    when(builderMock.build(any(), any())).then(buildMethod);
+    when(builderMock.buildInitial(any(), any())).then(buildMethod);
     
     doReturn(new RunMonitor(sysMock_, srm, 1)).when(sysMock_).newRunMonitor(srm, 1);
     
@@ -80,7 +80,7 @@ public class RoutineExecutionEngineTrial extends MockitoSourceFileTrial {
     I_RoutineBuilder builderMock = mock(I_RoutineBuilder.class);
     SimpleConcurrentRoutineMock srm = new SimpleConcurrentRoutineMock();
     MockMethod<I_FabricationRoutine> buildMethod = new MockMethod<I_FabricationRoutine>(srm, true);
-    when(builderMock.build(any(), any())).then(buildMethod);
+    when(builderMock.buildInitial(any(), any())).then(buildMethod);
     
     doReturn(new RunMonitor(sysMock_, srm, 1)).when(sysMock_).newRunMonitor(srm, 1);
     
@@ -98,7 +98,7 @@ public class RoutineExecutionEngineTrial extends MockitoSourceFileTrial {
     I_RoutineBuilder builderMock = mock(I_RoutineBuilder.class);
     SimpleConcurrentRoutineMock srm = mock(SimpleConcurrentRoutineMock.class);
     MockMethod<I_FabricationRoutine> buildMethod = new MockMethod<I_FabricationRoutine>(srm, true);
-    when(builderMock.build(any(), any())).then(buildMethod);
+    when(builderMock.buildInitial(any(), any())).then(buildMethod);
     
     I_RunMonitor runMonitor = mock(I_RunMonitor.class);
     when(runMonitor.hasFailure()).thenReturn(true);
@@ -131,12 +131,12 @@ public class RoutineExecutionEngineTrial extends MockitoSourceFileTrial {
     I_RoutineBuilder builderMock = mock(I_RoutineBuilder.class);
     SimpleConcurrentRoutineMock srm = new SimpleConcurrentRoutineMock();
     MockMethod<I_FabricationRoutine> buildMethod = new MockMethod<I_FabricationRoutine>(srm, true);
-    when(builderMock.build(any(), any())).then(buildMethod);
+    when(builderMock.buildInitial(any(), any())).then(buildMethod);
     when(builderMock.build((I_FabricationMemory) any(), (I_RoutineMemory) any())).then(buildMethod);
     
     ExecutorService exeServ  = mock(ExecutorService.class);
     MockMethod<Future<?>> submitMethod = new MockMethod<Future<?>>();
-    doAnswer(submitMethod).when(exeServ).submit(any());
+    doAnswer(submitMethod).when(exeServ).submit(any(Runnable.class));
     MockMethod<ExecutorService> newFixedThreadPoolMethod = new MockMethod<ExecutorService>(exeServ, true);
     doAnswer(newFixedThreadPoolMethod).when(sysMock_).newFixedThreadPool(anyInt());
     
@@ -207,12 +207,12 @@ public class RoutineExecutionEngineTrial extends MockitoSourceFileTrial {
     I_RoutineBuilder builderMock = mock(I_RoutineBuilder.class);
     SimpleConcurrentRoutineMock srm = new SimpleConcurrentRoutineMock();
     MockMethod<I_FabricationRoutine> buildMethod = new MockMethod<I_FabricationRoutine>(srm, true);
-    when(builderMock.build(any(), any())).then(buildMethod);
+    when(builderMock.buildInitial(any(), any())).then(buildMethod);
     when(builderMock.build((I_FabricationMemory) any(), (I_RoutineMemory) any())).then(buildMethod);
     
     ExecutorService exeServ  = mock(ExecutorService.class);
     MockMethod<Future<?>> submitMethod = new MockMethod<Future<?>>();
-    doAnswer(submitMethod).when(exeServ).submit(any());
+    doAnswer(submitMethod).when(exeServ).submit(any(Runnable.class));
     MockMethod<ExecutorService> newFixedThreadPoolMethod = new MockMethod<ExecutorService>(exeServ, true);
     doAnswer(newFixedThreadPoolMethod).when(sysMock_).newFixedThreadPool(anyInt());
     
