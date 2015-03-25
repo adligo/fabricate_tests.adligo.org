@@ -27,7 +27,7 @@ import java.util.List;
 
 @SourceFileScope (sourceClass=LibraryResolver.class, minCoverage=5.0)
 public class LibraryResolverTrial extends MockitoSourceFileTrial {
-  private static final String FAB_HOME = "${fabricate_home}";
+  private static final String FAB_HOME = "${fabricate_home}/";
   private I_FabSystem sysMock_;
   private I_FabFileIO filesMock_;
   private I_FabXmlFileIO filesXmlMock_;
@@ -60,7 +60,7 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
     
     lt.setDependencies(depsTypeIn);
     
-    String path = FAB_HOME + File.separator + "lib" + 
+    String path = FAB_HOME + "lib" + 
         File.separator + "sleaf.xml";
     when(filesMock_.exists(path)).thenReturn(true);
     when(filesXmlMock_.parseLibrary_v1_0(path)).thenReturn(lt);
@@ -92,13 +92,13 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
     depsTypeInBranch.getLibrary().add(lrt);
     ltBranch.setDependencies(depsTypeInBranch);
     
-    String path = FAB_HOME + File.separator + "lib" + 
+    String path = FAB_HOME +  "lib" + 
         File.separator + "sleaf.xml";
     when(filesMock_.exists(path)).thenReturn(true);
     when(filesMock_.exists(path)).thenReturn(true);
     when(filesXmlMock_.parseLibrary_v1_0(path)).thenReturn(lt);
     
-    String pathBranch = FAB_HOME + File.separator + "lib" + 
+    String pathBranch = FAB_HOME + "lib" + 
         File.separator + "branch.xml";
     when(filesMock_.exists(pathBranch)).thenReturn(true);
     when(filesXmlMock_.parseLibrary_v1_0(pathBranch)).thenReturn(ltBranch);
@@ -127,7 +127,7 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
     
     lt.setDependencies(depsTypeIn);
     
-    String path = FAB_HOME + File.separator + "lib" + 
+    String path = FAB_HOME +  "lib" + 
         File.separator + "sleaf.xml";
     when(filesMock_.exists(path)).thenReturn(false);
     LibraryResolver lr = new LibraryResolver(sysMock_, fabMock_);
@@ -178,18 +178,18 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
     
 
     
-    String path = FAB_HOME + File.separator + "lib" + 
+    String path = FAB_HOME +  "lib" + 
         File.separator + "sleaf.xml";
     when(filesMock_.exists(path)).thenReturn(true);
     when(filesMock_.exists(path)).thenReturn(true);
     when(filesXmlMock_.parseLibrary_v1_0(path)).thenReturn(lt);
     
-    String pathBranch = FAB_HOME + File.separator + "lib" + 
+    String pathBranch = FAB_HOME + "lib" + 
         File.separator + "branch.xml";
     when(filesMock_.exists(pathBranch)).thenReturn(true);
     when(filesXmlMock_.parseLibrary_v1_0(pathBranch)).thenReturn(ltBranch);
     
-    String pathTrunk = FAB_HOME + File.separator + "lib" + 
+    String pathTrunk = FAB_HOME + "lib" + 
         File.separator + "trunk.xml";
     when(filesMock_.exists(pathTrunk)).thenReturn(true);
     when(filesXmlMock_.parseLibrary_v1_0(pathTrunk)).thenReturn(ltTrunk);
@@ -207,6 +207,7 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
         });
   }
   
+  @SuppressWarnings("boxing")
   @Test
   public void testMethodGetDependenciesIoExceptionFromXmlRead() throws Exception {
     LibraryType lt = new LibraryType();
@@ -216,7 +217,7 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
     
     lt.setDependencies(depsTypeIn);
     
-    String path = FAB_HOME + File.separator + "lib" + 
+    String path = FAB_HOME + "lib" + 
         File.separator + "sleaf.xml";
     when(filesMock_.exists(path)).thenReturn(true);
     when(filesXmlMock_.parseLibrary_v1_0(path)).thenThrow(new IOException("iox"));
@@ -262,18 +263,18 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
     depsTypeInTrunk.getLibrary().add(lrtBranch);
     ltTrunk.setDependencies(depsTypeInTrunk);
     
-    String path = FAB_HOME + File.separator + "lib" + 
+    String path = FAB_HOME + "lib" + 
         File.separator + "sleaf.xml";
     when(filesMock_.exists(path)).thenReturn(true);
     when(filesMock_.exists(path)).thenReturn(true);
     when(filesXmlMock_.parseLibrary_v1_0(path)).thenReturn(lt);
     
-    String pathBranch = FAB_HOME + File.separator + "lib" + 
+    String pathBranch = FAB_HOME + "lib" + 
         File.separator + "branch.xml";
     when(filesMock_.exists(pathBranch)).thenReturn(true);
     when(filesXmlMock_.parseLibrary_v1_0(pathBranch)).thenReturn(ltBranch);
     
-    String pathTrunk = FAB_HOME + File.separator + "lib" + 
+    String pathTrunk = FAB_HOME + "lib" + 
         File.separator + "trunk.xml";
     when(filesMock_.exists(pathTrunk)).thenReturn(true);
     when(filesXmlMock_.parseLibrary_v1_0(pathTrunk)).thenReturn(ltTrunk);
@@ -325,18 +326,18 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
     depsTypeInTrunk.getLibrary().add(lrtBranch);
     ltTrunk.setDependencies(depsTypeInTrunk);
     
-    String path = FAB_HOME + File.separator + "lib" + 
+    String path = FAB_HOME + "lib" + 
         File.separator + "sleaf.xml";
     when(filesMock_.exists(path)).thenReturn(true);
     when(filesMock_.exists(path)).thenReturn(true);
     when(filesXmlMock_.parseLibrary_v1_0(path)).thenReturn(lt);
     
-    String pathBranch = FAB_HOME + File.separator + "lib" + 
+    String pathBranch = FAB_HOME +  "lib" + 
         File.separator + "branch.xml";
     when(filesMock_.exists(pathBranch)).thenReturn(true);
     when(filesXmlMock_.parseLibrary_v1_0(pathBranch)).thenReturn(ltBranch);
     
-    String pathTrunk = FAB_HOME + File.separator + "lib" + 
+    String pathTrunk = FAB_HOME + "lib" + 
         File.separator + "trunk.xml";
     when(filesMock_.exists(pathTrunk)).thenReturn(true);
     when(filesXmlMock_.parseLibrary_v1_0(pathTrunk)).thenReturn(ltTrunk);

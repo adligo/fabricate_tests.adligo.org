@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@SourceFileScope (sourceClass=ParameterMutant.class, minCoverage=74.0)
+@SourceFileScope (sourceClass=ParameterMutant.class, minCoverage=70.0)
 public class ParameterMutantTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("unused")
