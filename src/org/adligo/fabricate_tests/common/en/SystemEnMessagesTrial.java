@@ -16,6 +16,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     SystemEnMessages messages = SystemEnMessages.INSTANCE;
     asserter.assertConstant("AntHelper requires a directory argument.", 
         messages.getAntHelperRequiresADirectoryArgument());
+    asserter.assertConstant("Archive stage <X/> completed successfully.", 
+        messages.getArchiveStageXCompletedSuccessfully());
     asserter.assertConstant("Archive stage <X/> is still running.", 
         messages.getArchiveStageXIsStillRunning());
     asserter.assertConstant("Archive stage <X/> is still running on project <Z/>.", 
@@ -29,6 +31,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     asserter.assertConstant("Archive stage <X/>, project <Y/> is waiting on the following projects;", 
         messages.getArchiveStageXProjectYIsWaitingOnTheFollowingProjects());
     
+    asserter.assertConstant("Build stage <X/> completed successfully.", 
+        messages.getBuildStageXCompletedSuccessfully());
     asserter.assertConstant("Build stage <X/> is still running.", 
         messages.getBuildStageXIsStillRunning());
     asserter.assertConstant("Build stage <X/> is still running on project <Z/>.", 
@@ -48,6 +52,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     
     asserter.assertConstant("Command <X/> is still running.", 
         messages.getCommandXIsStillRunning());
+    asserter.assertConstant("Command <X/> completed successfully.", 
+        messages.getCommandXCompletedSuccessfully());
     asserter.assertConstant("Command <X/> is still running on project <Z/>.", 
         messages.getCommandXIsStillRunningOnProjectZ());
     asserter.assertConstant("Command <X/>, task <Y/> is still running.", 
@@ -102,6 +108,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     asserter.assertConstant("Extraction of the following artifact;", 
         messages.getExtractionOfTheFollowingArtifact());
     
+    asserter.assertConstant("Facet <X/> completed successfully.", 
+        messages.getFacetXCompletedSuccessfully());
     asserter.assertConstant("Facet <X/>, project <Y/> is waiting on the following projects;", 
         messages.getFacetXIProjectYIsWaitingOnTheFollowingProjects());
     asserter.assertConstant("Fabricate by Adligo.", 

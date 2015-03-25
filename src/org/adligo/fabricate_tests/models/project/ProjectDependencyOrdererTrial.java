@@ -1,5 +1,7 @@
 package org.adligo.fabricate_tests.models.project;
 
+import org.adligo.fabricate.common.log.I_FabLog;
+import org.adligo.fabricate.common.system.I_FabSystem;
 import org.adligo.fabricate.models.dependencies.I_ProjectDependency;
 import org.adligo.fabricate.models.dependencies.ProjectDependencyMutant;
 import org.adligo.fabricate.models.project.I_Project;
@@ -12,16 +14,25 @@ import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 import java.util.ArrayList;
 import java.util.List;
 
-@SourceFileScope (sourceClass=ProjectDependencyOrderer.class,minCoverage=88.0)
+@SourceFileScope (sourceClass=ProjectDependencyOrderer.class,minCoverage=50.0)
 public class ProjectDependencyOrdererTrial extends MockitoSourceFileTrial {
-
+  private I_FabSystem sysMock_;
+  private I_FabLog logMock_;
+  
+  @Override
+  public void beforeTests() {
+    sysMock_ = mock(I_FabSystem.class);
+    logMock_ = mock(I_FabLog.class);
+    when(sysMock_.getLog()).thenReturn(logMock_);
+  }
+  
   @Test
   public void testConstructorSimpleOrderABC() {
     List<I_Project> projects = new ArrayList<I_Project>();
     projects.add(getProjectC());
     projects.add(getProjectB());
     projects.add(getProjectA());
-    ProjectDependencyOrderer pdo = new ProjectDependencyOrderer(projects);
+    ProjectDependencyOrderer pdo = new ProjectDependencyOrderer(projects, sysMock_);
     
     List<String> names = pdo.getNames();
     assertEquals("projectA", names.get(0));
@@ -47,7 +58,7 @@ public class ProjectDependencyOrdererTrial extends MockitoSourceFileTrial {
     projects.add(getProjectRight2());
     projects.add(getProject("rightLeft"));
     projects.add(getProject("rightRight"));
-    ProjectDependencyOrderer pdo = new ProjectDependencyOrderer(projects);
+    ProjectDependencyOrderer pdo = new ProjectDependencyOrderer(projects, sysMock_);
     
     List<String> names = pdo.getNames();
     assertEquals("leftLeft", names.get(0));
@@ -78,7 +89,8 @@ public class ProjectDependencyOrdererTrial extends MockitoSourceFileTrial {
     projects.add(getProjectRootWithRightLeft());
     projects.add(getProjectLeft());
     projects.add(getProjectRight());
-    ProjectDependencyOrderer pdo = new ProjectDependencyOrderer(projects);
+    
+    ProjectDependencyOrderer pdo = new ProjectDependencyOrderer(projects, sysMock_);
     
     List<String> names = pdo.getNames();
     assertEquals("left", names.get(0));
@@ -222,4 +234,6 @@ public class ProjectDependencyOrdererTrial extends MockitoSourceFileTrial {
     dm.setProjectName("rightRight");
     return dm;
   }
+
+
 }

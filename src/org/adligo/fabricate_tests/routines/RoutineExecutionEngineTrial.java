@@ -28,7 +28,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-@SourceFileScope (sourceClass=RoutineExecutionEngine.class, minCoverage=82.0)
+@SourceFileScope (sourceClass=RoutineExecutionEngine.class, minCoverage=73.0)
 public class RoutineExecutionEngineTrial extends MockitoSourceFileTrial {
   private I_FabSystem sysMock_;
   private I_FabLog logMock_;
@@ -110,6 +110,8 @@ public class RoutineExecutionEngineTrial extends MockitoSourceFileTrial {
     when(sysMock_.newRunMonitor(any(), anyInt())).thenReturn(runMonitor);
     
     RoutineExecutionEngine e = new RoutineExecutionEngine(sysMock_, builderMock, 0);
+    assertFalse(e.hadFailure());
+    
     e.runRoutines(new FabricationMemoryMutant<Object>(SystemEnMessages.INSTANCE));
     assertFalse(srm.isRan());
     assertEquals(1, runMethod.count());
@@ -174,6 +176,7 @@ public class RoutineExecutionEngineTrial extends MockitoSourceFileTrial {
     MockMethod<I_RunMonitor> newRunMonitorMethod = new MockMethod<I_RunMonitor>(
         monitorOne, monitorTwo, monitorThree);
     when(sysMock_.newRunMonitor(any(), anyInt())).then(newRunMonitorMethod);
+    when(logMock_.isLogEnabled(RoutineExecutionEngine.class)).thenReturn(true);
     
     RoutineExecutionEngine e = new RoutineExecutionEngine(sysMock_, builderMock, 3);
     e.runRoutines(new FabricationMemoryMutant<Object>(SystemEnMessages.INSTANCE));
@@ -192,9 +195,17 @@ public class RoutineExecutionEngineTrial extends MockitoSourceFileTrial {
     assertEquals(3, waitMethodOne.count());
     assertEquals(3, waitMethodTwo.count());
     assertEquals(3, waitMethodThree.count());
-    assertEquals("locOne", printlnMethod_.getArg(0));
-    assertEquals("locTwo", printlnMethod_.getArg(1));
-    assertEquals("locThree", printlnMethod_.getArg(2));
+    assertEquals("org.adligo.fabricate.routines.RoutineExecutionEngine runRoutines(FabricationMemoryMutant)", printlnMethod_.getArg(0));
+    assertEquals("created class org.adligo.fabricate_tests.routines.implicit.mocks.SimpleConcurrentRoutineMock", printlnMethod_.getArg(1));
+    for (int i = 0; i < 3; i++) {
+      assertEquals(//"i=" + i , 
+          "submiting class org.adligo.fabricate_tests.routines.implicit.mocks.SimpleConcurrentRoutineMock", 
+          printlnMethod_.getArg(2 + i));
+      
+    }
+    assertEquals("locOne", printlnMethod_.getArg(5));
+    assertEquals("locTwo", printlnMethod_.getArg(6));
+    assertEquals("locThree", printlnMethod_.getArg(7));
     
     assertFalse(e.hadFailure());
     assertNull(e.getFailure());

@@ -1,0 +1,23 @@
+Due to the way Fabricate was written (ad hoc, after tests4j in a hasty manor)
+the tests4j tests must be augmented for a few years with some manual tests;
+
+The list of manual tests (+ means passed, - means failed);
+1) Run the following a few times in project_group.adligo.org;
+	a) fab -p
+		Watch the projects dir it should disappear and reappear.
+		Watch the depot directory, it should delete and recreate the jar files.
+		+ 3/24/2015
+	b) fab
+		Watch the projects dir, it shouldn't disappear.
+		Watch the depot directory, it should delete and recreate the fjar iles.
+		+ 3/24/2015
+	c) fab -du
+		Watch the development dir, it should have projects added or updated.
+		Watch the depot directory, it should delete and recreate the jar files.
+		- 
+2) Run the following a few times from a development directory pick a project (i.e. i_log.adligo.org) 
+	fab 
+	
+		Watch the depot directory, it should delete and recreate only the project jar file.
+	fab -r  
+		Watch the depot directory, it should delete and recreate the dependent jar files.

@@ -1,5 +1,6 @@
 package org.adligo.fabricate_tests.common.system;
 
+import org.adligo.fabricate.common.log.I_FabLog;
 import org.adligo.fabricate.common.system.I_FabSystem;
 import org.adligo.fabricate.common.system.I_LocatableRunnable;
 import org.adligo.fabricate.common.system.RunMonitor;
@@ -14,7 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@SourceFileScope (sourceClass=RunMonitor.class)
+@SourceFileScope (sourceClass=RunMonitor.class, minCoverage=96.0)
 public class RunMonitorTrial extends MockitoSourceFileTrial {
   private static ExecutorService THREAD_POOL_;
   @BeforeTrial
@@ -26,6 +27,9 @@ public class RunMonitorTrial extends MockitoSourceFileTrial {
   @Test
   public void testConstructorAndRun() {
     I_FabSystem system = mock(I_FabSystem.class);
+    Thread thread = mock(Thread.class);
+    when(system.currentThread()).thenReturn(thread);
+    
     when(system.newArrayBlockingQueue(Boolean.class, 1)).thenReturn(
         new ArrayBlockingQueue<Boolean>(1));
     
@@ -54,6 +58,7 @@ public class RunMonitorTrial extends MockitoSourceFileTrial {
       }
     };
     RunMonitor rm = new RunMonitor(system, run, 0);
+    assertNull(rm.getThread());
     assertEquals(0, rm.getSequence());
     assertFalse(rm.isFinished());
     assertNull(rm.getCaught());
@@ -72,6 +77,7 @@ public class RunMonitorTrial extends MockitoSourceFileTrial {
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
     }
+    assertSame(thread, rm.getThread());
     assertTrue(ran.get());
     assertFalse(rm.hasFailure());
     assertTrue(rm.isFinished());
@@ -83,6 +89,9 @@ public class RunMonitorTrial extends MockitoSourceFileTrial {
   @Test
   public void testConstructorAndRunWithThrown() {
     I_FabSystem system = mock(I_FabSystem.class);
+    I_FabLog log = mock(I_FabLog.class);
+    when(system.getLog()).thenReturn(log);
+    
     when(system.newArrayBlockingQueue(Boolean.class, 1)).thenReturn(
         new ArrayBlockingQueue<Boolean>(1));
     I_LocatableRunnable run = new I_LocatableRunnable() {

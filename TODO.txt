@@ -1,9 +1,11 @@
 Add tests to FabricateControllerTrial, for 
   Running the fabrication stages
 Add tests for the following facets, using parent child class ordering
-  Obtain
-  Load
-  ObtainDependencies
+  ImplicitFactes (and their referenced classes)
+  ImplicitStages (and their referenced classes)
+  
+Write use case tests for the manual tests, including a local Git repository clone.
+(not using the full adligo.org list of projects, but some small Git projects checked into this project).
   
   
   
