@@ -132,7 +132,7 @@ public class RunMonitorTrial extends MockitoSourceFileTrial {
     long dur = System.currentTimeMillis() - time;
     assertGreaterThanOrEquals(200, dur);
     try {
-      rm.waitUntilFinished(200);
+      rm.waitUntilFinished(2000);
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
     }

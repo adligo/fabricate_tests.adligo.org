@@ -47,6 +47,25 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
     assertEquals("1g", java.getXmx());
     assertEquals(8, java.getThreads());
     
+    ParamsType attribs = fab.getAttributes();
+    List<ParamType> attribList = attribs.getParam();
+    ParamType attrib = attribList.get(0);
+    assertEquals("gitDefaultBranch", attrib.getKey());
+    assertEquals("trunk", attrib.getValue());
+    
+    ParamType attrib2 = attribList.get(1);
+    assertEquals("k2", attrib2.getKey());
+    assertNull(attrib2.getValue());
+    assertEquals(2, attribList.size());
+    
+    attribList = attrib.getParam();
+    attrib = attribList.get(0);
+    assertEquals("c2eKeyNestedGit", attrib.getKey());
+    assertEquals("c2eValNestedGit", attrib.getValue());
+    assertEquals(1, attribList.size());
+    attribList = attrib.getParam();
+    assertEquals(0, attribList.size());
+    
     FabricateDependencies deps = fab.getDependencies();
     List<String> remotes = deps.getRemoteRepository();
     assertContains(remotes,"http://127.0.0.1/");
@@ -280,6 +299,40 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
   }
   
   @Test
+  public void testMethod_parse_v1_0_attribute_blank_key() {
+    File file = new File("test_data/xml_io_trials/fabricate/fabricateAttributeEmptyKey.xml");
+    assertThrown(new ExpectedThrowable(new IOException(
+          "fabricateAttributeEmptyKey.xml; lineNumber: 8; columnNumber: 27; cvc-minLength-valid: " +
+          "Value '' with length = '0' is not facet-valid with respect to " +
+          "minLength '1' for type '#AnonType_keyparam_type'.]"), 
+          MatchType.CONTAINS), 
+          new I_Thrower() {
+      
+      @Override
+      public void run() throws Throwable {
+        new FabXmlFileIO().parseFabricate_v1_0(file.getAbsolutePath());
+      }
+    });
+  }
+  
+  
+  @Test
+  public void testMethod_parse_v1_0_attribute_no_key() {
+    File file = new File("test_data/xml_io_trials/fabricate/fabricateAttributeNoKey.xml");
+    assertThrown(new ExpectedThrowable(new IOException(
+          "fabricateAttributeNoKey.xml; lineNumber: 7; columnNumber: 19; cvc-complex-type.4: " +
+          "Attribute 'key' must appear on element 'cns:param'.]"), 
+          MatchType.CONTAINS), 
+          new I_Thrower() {
+      
+      @Override
+      public void run() throws Throwable {
+        new FabXmlFileIO().parseFabricate_v1_0(file.getAbsolutePath());
+      }
+    });
+  }
+  
+  @Test
   public void testMethod_parse_v1_0_bad_content() {
     assertThrown(new ExpectedThrowable(IOException.class, MatchType.ANY), new I_Thrower() {
       
@@ -390,6 +443,7 @@ public class FabricateIOTrial extends MockitoSourceFileTrial {
         + "'fns:project_group'. One of '{"
         + "\"http://www.adligo.org/fabricate/xml/io_v1/fabricate_v1_0.xsd\":java, "
         + "\"http://www.adligo.org/fabricate/xml/io_v1/fabricate_v1_0.xsd\":logs, "
+        + "\"http://www.adligo.org/fabricate/xml/io_v1/fabricate_v1_0.xsd\":attributes, "
         + "\"http://www.adligo.org/fabricate/xml/io_v1/fabricate_v1_0.xsd\":dependencies}' "
         + "is expected.";
     assertThrown(new ExpectedThrowable(new IOException(message), MatchType.CONTAINS,

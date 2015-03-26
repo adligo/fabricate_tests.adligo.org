@@ -16,7 +16,17 @@ The list of manual tests (+ means passed, - means failed);
 		Watch the development dir, it should have projects added or updated.
 		Watch the depot directory, it should delete and recreate the jar files.
 		+ 3/25/2015
-2) Run the following a few times from a development directory pick a project (i.e. i_log.adligo.org) 
+
+2) Run the following a few times from a project_group projects directory pick a project 
+	(i.e. proejct_group.adligo.org/projects/i_log.adligo.org) 
+	fab 
+		Watch the depot directory, it should delete and recreate only the project jar file.
+		+ 3/25/2015
+	fab -r  
+		Watch the depot directory, it should delete and recreate the dependent jar files.
+		+ 3/25/2015
+		
+3) Run the following a few times from a development directory pick a project (i.e. i_log.adligo.org) 
 	fab 
 		Watch the depot directory, it should delete and recreate only the project jar file.
 		+ 3/25/2015

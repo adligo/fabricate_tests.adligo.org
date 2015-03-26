@@ -476,6 +476,7 @@ public class ProjectMutantTrial extends MockitoSourceFileTrial {
     
     List<I_Parameter> attribsOut = pm.getAttributes();
     assertTwoAttributes(attribsOut);
+    assertTwoAttributes(pm.getAttributes("aKey", "aVal"));
     attribsOut.clear();
     attribsOut = pm.getAttributes("aKey");
     assertTwoAttributes(attribsOut);
@@ -584,6 +585,8 @@ public class ProjectMutantTrial extends MockitoSourceFileTrial {
     traitsOut.clear();
     traitsOut = pm.getTraits();
     assertTwoTraits(traitsOut, pm);
+    
+    
   }
   
   @SuppressWarnings({"boxing"})

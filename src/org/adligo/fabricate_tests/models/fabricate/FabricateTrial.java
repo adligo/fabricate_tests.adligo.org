@@ -1,7 +1,9 @@
 package org.adligo.fabricate_tests.models.fabricate;
 
 import org.adligo.fabricate.common.system.FabricateDefaults;
+import org.adligo.fabricate.models.common.I_Parameter;
 import org.adligo.fabricate.models.common.I_RoutineBrief;
+import org.adligo.fabricate.models.common.ParameterMutant;
 import org.adligo.fabricate.models.common.RoutineBrief;
 import org.adligo.fabricate.models.common.RoutineBriefMutant;
 import org.adligo.fabricate.models.common.RoutineBriefOrigin;
@@ -14,9 +16,10 @@ import org.adligo.fabricate.models.fabricate.I_JavaSettings;
 import org.adligo.fabricate.models.fabricate.JavaSettings;
 import org.adligo.fabricate.models.fabricate.JavaSettingsMutant;
 import org.adligo.fabricate.models.project.I_ProjectBrief;
-import org.adligo.fabricate.models.project.Project;
 import org.adligo.fabricate.models.project.ProjectBrief;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.ProjectType;
+import org.adligo.fabricate_tests.models.common.ParameterMutantTrial;
+import org.adligo.fabricate_tests.models.common.ParameterTrial;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
@@ -49,6 +52,7 @@ public class FabricateTrial extends MockitoSourceFileTrial {
   @Test
   public void testConstructorCopiesFromInterface() {
     FabricateMutant fm = new FabricateMutant();
+    fm.setAttributes(ParameterMutant.convert(ParameterMutantTrial.createParams()));
     fm.setJavaHome("jh");
     fm.setFabricateHome("fh");
     fm.setFabricateRepository("fr");
@@ -56,6 +60,18 @@ public class FabricateTrial extends MockitoSourceFileTrial {
     fm.setProjectsDir("pjDir");
     
     Fabricate copy = new Fabricate(fm);
+    ParameterTrial.assertConvertedParams(copy.getAttributes(), this);
+    assertEquals(2, copy.getAttributes().size());
+    
+    I_Parameter a = fm.getAttribute("a");
+    assertNotNull(a);
+    assertEquals(1, copy.getAttributes("a").size());
+    assertNotNull(copy.getAttributeValue("a"));
+    assertEquals(1, copy.getAttributeValues("a").size());
+    List<I_Parameter> attribs = fm.getAttributes("a", "1");
+    assertContains(attribs, a);
+    assertEquals(1, attribs.size());
+    
     assertEquals(FabricateDefaults.JAVA_THREADS, copy.getThreads());
     assertEquals(FabricateDefaults.JAVA_XMS_DEFAULT, copy.getXms());
     assertEquals(FabricateDefaults.JAVA_XMX_DEFAULT, copy.getXmx());

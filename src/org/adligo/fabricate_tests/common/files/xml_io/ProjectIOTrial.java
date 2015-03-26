@@ -31,6 +31,38 @@ import javax.xml.bind.UnmarshalException;
 @SourceFileScope (sourceClass=ProjectIO.class, minCoverage=90.0)
 public class ProjectIOTrial extends MockitoSourceFileTrial {
 
+  @Test
+  public void testMethod_parse_v1_0_attribute_no_key() {
+    File file = new File("test_data/xml_io_trials/malformed_projects/projectAttributeNoKey.xml");
+    assertThrown(new ExpectedThrowable(new IOException(file.getAbsolutePath()), 
+        new ExpectedThrowable(UnmarshalException.class, new ExpectedThrowable(new SAXParseException(
+            "cvc-complex-type.4: Attribute 'key' must appear on element 'cns:param'.", mock(Locator.class)), MatchType.CONTAINS))), 
+          new I_Thrower() {
+      
+      @Override
+      public void run() throws Throwable {
+        new FabXmlFileIO().parseProject_v1_0(file.getAbsolutePath());
+      }
+    });
+  }
+
+  @Test
+  public void testMethod_parse_v1_0_attribute_blank_key() {
+    File file = new File("test_data/xml_io_trials/malformed_projects/projectAttributeEmptyKey.xml");
+    assertThrown(new ExpectedThrowable(new IOException(file.getAbsolutePath()), 
+        new ExpectedThrowable(UnmarshalException.class, new ExpectedThrowable(new SAXParseException(
+            "cvc-minLength-valid: Value '' with length = '0' is not facet-valid with "
+            + "respect to minLength '1' for type '#AnonType_keyparam_type'.", 
+            mock(Locator.class)), MatchType.CONTAINS))), 
+          new I_Thrower() {
+      
+      @Override
+      public void run() throws Throwable {
+        new FabXmlFileIO().parseProject_v1_0(file.getAbsolutePath());
+      }
+    });
+  }
+  
   @SuppressWarnings("boxing")
   @Test
   public void testMethod_parse_v1_0() throws Exception {
@@ -42,7 +74,11 @@ public class ProjectIOTrial extends MockitoSourceFileTrial {
     ParamType attribute = attributesList.get(0);
     assertEquals("srcDirs",attribute.getKey());
     assertEquals("src,src2", attribute.getValue());
-    assertEquals(1, attributesList.size());
+    
+    ParamType attrib2 = attributesList.get(1);
+    assertEquals("k2", attrib2.getKey());
+    assertNull(attrib2.getValue());
+    assertEquals(2, attributesList.size());
     
     attributesList = attribute.getParam();
     attribute = attributesList.get(0);

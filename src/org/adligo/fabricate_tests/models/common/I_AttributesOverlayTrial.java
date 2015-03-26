@@ -1,0 +1,10 @@
+package org.adligo.fabricate_tests.models.common;
+
+import org.adligo.fabricate.models.common.I_AttributesOverlay;
+import org.adligo.tests4j.system.shared.trials.SourceFileScope;
+import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
+
+@SourceFileScope (sourceClass=I_AttributesOverlay.class)
+public class I_AttributesOverlayTrial extends MockitoSourceFileTrial {
+
+}

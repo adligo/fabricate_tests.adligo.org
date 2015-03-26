@@ -4,6 +4,7 @@ package org.adligo.fabricate_tests.models.fabricate;
 import org.adligo.fabricate.common.system.FabricateDefaults;
 import org.adligo.fabricate.models.common.I_Parameter;
 import org.adligo.fabricate.models.common.I_RoutineBrief;
+import org.adligo.fabricate.models.common.ParameterMutant;
 import org.adligo.fabricate.models.common.RoutineBrief;
 import org.adligo.fabricate.models.common.RoutineBriefMutant;
 import org.adligo.fabricate.models.common.RoutineBriefOrigin;
@@ -32,6 +33,7 @@ import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.StageType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.StagesAndProjectsType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.StagesType;
 import org.adligo.fabricate.xml.io_v1.library_v1_0.DependencyType;
+import org.adligo.fabricate_tests.models.common.ParameterMutantTrial;
 import org.adligo.fabricate_tests.models.dependencies.DependencyMutantTrial;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
@@ -44,7 +46,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@SourceFileScope (sourceClass=FabricateMutant.class, minCoverage=80.0)
+@SourceFileScope (sourceClass=FabricateMutant.class, minCoverage=82.0)
 public class FabricateMutantTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("boxing")
@@ -93,7 +95,12 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     fm.setProjectsDir("pjDir");
     fm.setFabricateXmlRunDir("fabXmlDir");
     
+    fm.setAttributes(ParameterMutant.convert(ParameterMutantTrial.createParams()));
+    
+    
     FabricateMutant copy = new FabricateMutant(fm);
+    ParameterMutantTrial.assertConvertedParams(copy.getAttributes(), this);
+    
     assertEquals("jh", copy.getJavaHome());
     assertEquals("fh", copy.getFabricateHome());
     assertEquals("fr", copy.getFabricateRepository());
@@ -204,6 +211,8 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     jt.setXmx("13m");
     ft.setJava(jt);
     
+    ft.setAttributes(ParameterMutantTrial.createParams());
+    
     I_FabricateXmlDiscovery fxml = mock(I_FabricateXmlDiscovery.class);
     
     RoutineParentType rtp = new RoutineParentType();
@@ -244,8 +253,19 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     trait.setParams(traitParams);
     ft.getTrait().add(trait);
     
-    
     FabricateMutant fm = new FabricateMutant(ft, fxml);
+    ParameterMutantTrial.assertConvertedParams(fm.getAttributes(), this);
+    assertEquals(2, fm.getAttributes().size());
+    
+    I_Parameter a = fm.getAttribute("a");
+    assertNotNull(a);
+    assertEquals(1, fm.getAttributes("a").size());
+    assertEquals("1", fm.getAttributeValue("a"));
+    assertEquals(1, fm.getAttributeValues("a").size());
+    List<I_Parameter> attribs = fm.getAttributes("a", "1");
+    assertContains(attribs, a);
+    assertEquals(1, attribs.size());
+    
     assertEquals(3, fm.getThreads());
     I_JavaSettings js = fm.getJavaSettings();
     assertEquals(3, js.getThreads());

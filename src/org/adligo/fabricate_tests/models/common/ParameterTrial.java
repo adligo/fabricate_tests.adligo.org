@@ -36,6 +36,30 @@ public class ParameterTrial extends MockitoSourceFileTrial {
         new Parameter((ParamType) null);
       }
     });
+    
+    assertThrown(new ExpectedThrowable(new IllegalArgumentException("key")), new I_Thrower() {
+      
+      @Override
+      public void run() throws Throwable {
+        new Parameter(null, null, null);
+      }
+    });
+    assertThrown(new ExpectedThrowable(new IllegalArgumentException("key")), new I_Thrower() {
+      
+      @Override
+      public void run() throws Throwable {
+        ParameterMutant pm = new ParameterMutant();
+        new Parameter(pm);
+      }
+    });
+    assertThrown(new ExpectedThrowable(new IllegalArgumentException("key")), new I_Thrower() {
+      
+      @Override
+      public void run() throws Throwable {
+        ParamType pm = new ParamType();
+        new Parameter(pm);
+      }
+    });
   }
 
   @SuppressWarnings("boxing")
@@ -125,18 +149,7 @@ public class ParameterTrial extends MockitoSourceFileTrial {
     assertEquals(3, vals.length);
   }
   
-  @Test
-  public void testMethodsCovertAndCreateParamsTypeAndParamType() {
-    
-    List<I_Parameter> out = Parameter.convert(ParameterMutantTrial.createParams());
-    assertConvertedParams(out, this);
-    
-    out = ParameterMutant.convert((List<ParamType>) null);
-    assertNotNull(out);
-    
-    out = ParameterMutant.convert((ParamsType) null);
-    assertNotNull(out);
-  }
+  
 
   @SuppressWarnings("boxing")
   public static void assertConvertedParams(List<I_Parameter> out, I_Asserts asserts) {
@@ -164,6 +177,7 @@ public class ParameterTrial extends MockitoSourceFileTrial {
   @Test
   public void testMethodsEqualsHashCodeAndToString() {
     ParameterMutant a1 = new ParameterMutant();
+    a1.setKey("k");
     ParameterMutant b1 = new ParameterMutant();
     b1.setKey("key");
     ParameterMutant c1 = new ParameterMutant();
@@ -208,7 +222,7 @@ public class ParameterTrial extends MockitoSourceFileTrial {
     assertNotEquals(a, f);
     assertNotEquals(a, g);
     assertNotEquals(a, h);
-    assertEquals("Parameter [key=null, value=null]", a.toString());
+    assertEquals("Parameter [key=k, value=null]", a.toString());
     
     assertEquals(b.hashCode(), b.hashCode());
     assertNotEquals(b.hashCode(), a.hashCode());
@@ -339,5 +353,57 @@ public class ParameterTrial extends MockitoSourceFileTrial {
         "\t\tParameter [key=keyF, value=null]" + System.lineSeparator() +
         "\t]" + System.lineSeparator() +
         "]", h.toString());
+  }
+  
+  @Test
+  public void testStaticMethodsCovertAndCreateParamsTypeAndParamType() {
+    
+    List<I_Parameter> out = Parameter.convert(ParameterMutantTrial.createParams());
+    assertConvertedParams(out, this);
+    
+    out = Parameter.convert((List<ParamType>) null);
+    assertNotNull(out);
+    
+    out = Parameter.convert((ParamsType) null);
+    assertNotNull(out);
+  }
+  
+  @Test
+  public void testStaticMethodsToImmutables() {
+    
+    List<I_Parameter> attribs = Parameter.toImmutables(null);
+    assertEquals("java.util.Collections$EmptyList", attribs.getClass().getName());
+    
+    attribs = Parameter.toImmutables(new ArrayList<I_Parameter>());
+    assertEquals("java.util.Collections$EmptyList", attribs.getClass().getName());
+    
+    ParameterMutant attributeA = new ParameterMutant();
+    attributeA.setKey("keyA");
+    attributeA.setValue("valueA");
+    
+    ParameterMutant attributeB = new ParameterMutant();
+    attributeB.setKey("keyB");
+    attributeB.setValue("valueB");
+    
+    Parameter attributeB1 = new Parameter(attributeB);
+    List<I_Parameter> params = new ArrayList<I_Parameter>();
+    params.add(attributeA);
+    params.add(attributeB1);
+    
+    attribs = Parameter.toImmutables(params);
+    assertTwoFromMemoryAttributes(attributeA, attributeB1, attribs);
+    
+    
+  }
+  
+  private void assertTwoFromMemoryAttributes(I_Parameter attributeA,
+      I_Parameter attributeB, List<I_Parameter> attribs) {
+    assertEquals(attributeA, attribs.get(0));
+    assertNotSame(attributeA, attribs.get(0));
+    assertEquals(Parameter.class.getName(), attribs.get(0).getClass().getName());
+    
+    assertEquals(attributeB, attribs.get(1));
+    assertSame(attributeB, attribs.get(1));
+    assertEquals(Parameter.class.getName(), attribs.get(1).getClass().getName());
   }
 }

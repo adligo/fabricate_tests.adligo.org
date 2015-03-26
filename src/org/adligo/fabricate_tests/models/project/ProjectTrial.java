@@ -287,6 +287,10 @@ public class ProjectTrial extends MockitoSourceFileTrial {
     assertEquals("java.util.Collections$UnmodifiableRandomAccessList", attribs.getClass().getName());
     assertEquals(2, attribs.size());
     
+    attribs = copy3.getAttributes("keyA","valueA");
+    assertContains(attribs, attributeA);
+    assertEquals(1, attribs.size());
+    
     attribs = copy3.getAttributes("keyA");
     assertEquals(attributeA, attribs.get(0));
     assertNotSame(attributeA, attribs.get(0));

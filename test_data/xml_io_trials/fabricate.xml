@@ -7,6 +7,13 @@
     <fns:logs>
         <fns:log class="org.adligo.fabricate.external.RepositoryDownloader" setting="true"/>
     </fns:logs>
+    <fns:attributes>
+    	<cns:param key="gitDefaultBranch" value="trunk">
+    		<cns:param key="c2eKeyNestedGit" value="c2eValNestedGit"/>
+    	</cns:param>
+    	<!--  allow null value -->
+    	<cns:param key="k2" />
+    </fns:attributes>
     <fns:dependencies>
         <fns:remote_repository>http://127.0.0.1/</fns:remote_repository>
         <!--  platform would always be ignored in this context -->

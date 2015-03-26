@@ -7,6 +7,8 @@
     	<cns:param key="srcDirs" value="src,src2">
     		<cns:param key="c2eKeyNested" value="c2eValNested"/>
     	</cns:param>
+    	<!--  allow null value -->
+    	<cns:param key="k2" />
     </pns:attributes>
     <pns:dependencies>
     	<lns:library platform="bar">foo</lns:library>

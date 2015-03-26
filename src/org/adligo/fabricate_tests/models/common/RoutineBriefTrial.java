@@ -380,6 +380,7 @@ public class RoutineBriefTrial extends MockitoSourceFileTrial {
     i1.setName("i");
     i1.setOrigin(RoutineBriefOrigin.ARCHIVE_STAGE);
     ParameterMutant pmI1 = new ParameterMutant();
+    pmI1.setKey("k");
     i1.addParameter(pmI1);
     RoutineBriefMutant j1 = new RoutineBriefMutant();
     j1.setName("j");
@@ -650,7 +651,7 @@ public class RoutineBriefTrial extends MockitoSourceFileTrial {
     assertNotEquals(i, k);
     assertNotEquals(i, l);
     assertEquals("RoutineBrief [name=i, class=null," + System.lineSeparator() +
-        "\tParameter [key=null, value=null]" + System.lineSeparator() +
+        "\tParameter [key=k, value=null]" + System.lineSeparator() +
         "]", i.toString());
   
     assertEquals(j.hashCode(), j.hashCode());

@@ -44,6 +44,23 @@ import java.util.List;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
+/**
+ * The FabricateController is the main Fabricate class
+ * which delegates input from the command line
+ * to facets and commands or build and archive stages.
+ * The following managers manage the following respective routines;
+ *    ProjectsManager: Facet routines.
+ *    CommandManager: Command routines.
+ *    FabricationManager: Build and archive stage routines.
+ *    
+ * This source file trial is organized into the following three groups;
+ * testConstructorCommand (any command code, and command output errors or success)
+ * testConstructorBuild (any stage code, and command output errors or success)
+ * testConstructorCommon (any common code, facets, run marker, Exceptions etc)
+ * 
+ * @author scott
+ *
+ */
 
 @SourceFileScope (sourceClass=FabricateController.class, minCoverage=55.0)
 public class FabricateControllerTrial extends MockitoSourceFileTrial {
@@ -122,28 +139,8 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     manfiestParserMock_ = mock(ManifestParser.class);
     when(jFactoryMock_.newManifestParser()).thenReturn(manfiestParserMock_);
   }
+
   
-  @SuppressWarnings({"unused", "boxing"})
-  @Test
-  public void testConstructorCommandNoFabricateXmlOrProjectXml() throws Exception {
-    when(xmlDiscoveryMock_.hasFabricateXml()).thenReturn(false);
-    
-    new FabricateController(sysMock_, new String[] {}, factoryMock_);
-    
-    assertEquals("Exception: No fabricate.xml or project.xml found.", printlnMethod_.getArg(0));
-  }
-  
-  @SuppressWarnings({"unused", "boxing"})
-  @Test
-  public void testConstructorCommandFabricateAlreadyRunning() throws Exception {
-    when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(true);
-    
-    new FabricateController(sysMock_, new String[] {}, factoryMock_);
-    
-    assertEquals("Fabricate appears to already be running \n" + 
-        "(run.marker is in the same directory as fabricate.xml).\n" +
-        "fabricateXmlDir/", printlnMethod_.getArg(0));
-  }
   
   @SuppressWarnings({"boxing", "unused"})
   @Test
@@ -188,85 +185,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     
   }
   
-  @SuppressWarnings({"boxing", "unused"})
-  @Test
-  public void testConstructorCommandClassNotFoundFromAddStages() throws Exception {
-    when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
-    when(xmlDiscoveryMock_.getFabricateXmlPath()).thenReturn("fabricateDir/fabricate.xml");
-    FabricateType ftMock = new FabricateType();
-    when(xmlIoMock_.parseFabricate_v1_0("fabricateDir/fabricate.xml")).thenReturn(ftMock);
-    
-    OutputStream outMock = mock(OutputStream.class);
-    MockMethod<Void> writeMethod = new MockMethod<Void>();
-    doAnswer(writeMethod).when(outMock).write("123".getBytes("UTF-8"));
-    
-    MockMethod<Void> closeMethod = new MockMethod<Void>();
-    doAnswer(closeMethod).when(outMock).close();
-    
-    when(fileMock_.newFileOutputStream("fabricateXmlDir/run.marker")).thenReturn(outMock);
-    when(fileMock_.exists("fabricateXmlDir/output")).thenReturn(false);
-    when(fileMock_.mkdirs("fabricateXmlDir/output")).thenReturn(true);
-    
-    Fabricate fabMock = mock(Fabricate.class);
-    when(factoryMock_.create(sysMock_, ftMock, xmlDiscoveryMock_)).thenReturn(fabMock);
-    FabricateMutant fmMock = mock(FabricateMutant.class);
-    
-    ClassNotFoundException x = new ClassNotFoundException("foo");
-    doThrow(x).when(fmMock).addStages(ftMock);
-    when(factoryMock_.createMutant(fabMock)).thenReturn(fmMock);
-    
-    new FabricateController(sysMock_, new String[] {"start=123"}, factoryMock_);
-   
-    assertEquals("fabricateXmlDir/run.marker", deleteOnExitMethod_.getArg(0));
-    assertEquals(1, deleteOnExitMethod_.count());
-    assertEquals("\nFabricating...\n", printlnMethod_.getArg(0));
-    assertEquals("Unable to load the following class;\n" +
-        "foo", printlnMethod_.getArg(1));
-    assertEquals(2, printlnMethod_.count());
-    assertSame(x, printTraceMethod_.getArg(0));
-    assertEquals(1, printTraceMethod_.count());
-  }
   
-  @SuppressWarnings({"boxing", "unused"})
-  @Test
-  public void testConstructorCommandClassNotFoundFromAddTraits() throws Exception {
-    when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
-    when(xmlDiscoveryMock_.getFabricateXmlPath()).thenReturn("fabricateDir/fabricate.xml");
-    FabricateType ftMock = mock(FabricateType.class);
-    List<RoutineParentType> traits = new ArrayList<RoutineParentType>();
-    when(ftMock.getTrait()).thenReturn(traits);
-    when(xmlIoMock_.parseFabricate_v1_0("fabricateDir/fabricate.xml")).thenReturn(ftMock);
-    
-    OutputStream outMock = mock(OutputStream.class);
-    MockMethod<Void> writeMethod = new MockMethod<Void>();
-    doAnswer(writeMethod).when(outMock).write("123".getBytes("UTF-8"));
-    
-    MockMethod<Void> closeMethod = new MockMethod<Void>();
-    doAnswer(closeMethod).when(outMock).close();
-    
-    when(fileMock_.newFileOutputStream("fabricateXmlDir/run.marker")).thenReturn(outMock);
-    when(fileMock_.exists("fabricateXmlDir/output")).thenReturn(false);
-    when(fileMock_.mkdirs("fabricateXmlDir/output")).thenReturn(true);
-    
-    Fabricate fabMock = mock(Fabricate.class);
-    when(factoryMock_.create(sysMock_, ftMock, xmlDiscoveryMock_)).thenReturn(fabMock);
-    FabricateMutant fmMock = mock(FabricateMutant.class);
-    
-    ClassNotFoundException x = new ClassNotFoundException("foo2");
-    doThrow(x).when(fmMock).addTraits(traits);
-    when(factoryMock_.createMutant(fabMock)).thenReturn(fmMock);
-    
-    new FabricateController(sysMock_, new String[] {"start=123","cmd=encrypt"}, factoryMock_);
-   
-    assertEquals("fabricateXmlDir/run.marker", deleteOnExitMethod_.getArg(0));
-    assertEquals(1, deleteOnExitMethod_.count());
-    assertEquals("\nFabricating...\n", printlnMethod_.getArg(0));
-    assertEquals("Unable to load the following class;\n" +
-        "foo2", printlnMethod_.getArg(1));
-    assertEquals(2, printlnMethod_.count());
-    assertSame(x, printTraceMethod_.getArg(0));
-    assertEquals(1, printTraceMethod_.count());
-  }
   
   @SuppressWarnings({"boxing", "unused"})
   @Test
@@ -326,7 +245,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings({"boxing", "unused"})
   @Test
-  public void testConstructorCommandIOExceptionFromCreateRunMarker() throws Exception {
+  public void testConstructorCommonIOExceptionFromCreateRunMarker() throws Exception {
     when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
     IOException x = new IOException("ipe");
     when(fileMock_.create("fabricateXmlDir/run.marker")).thenThrow(x);
@@ -341,7 +260,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings({"boxing", "unused"})
   @Test
-  public void testConstructorCommandIOExceptionFromCreateRunMarkerOutputStream() throws Exception {
+  public void testConstructorCommonIOExceptionFromCreateRunMarkerOutputStream() throws Exception {
     when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
     IOException x = new IOException("ipe");
     when(fileMock_.newFileOutputStream("fabricateXmlDir/run.marker")).thenThrow(x);
@@ -354,169 +273,17 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     assertEquals(1, printlnMethod_.count());
   }
   
-  @SuppressWarnings({"boxing", "unused"})
-  @Test
-  public void testConstructorCommandIOExceptionFromCreateFabLogFile() throws Exception {
-    when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
-    when(xmlDiscoveryMock_.getFabricateXmlPath()).thenReturn("fabricateDir/fabricate.xml");
-    FabricateType ftMock = new FabricateType();
-    when(xmlIoMock_.parseFabricate_v1_0("fabricateDir/fabricate.xml")).thenReturn(ftMock);
-    
-    OutputStream outMock = mock(OutputStream.class);
-    MockMethod<Void> writeMethod = new MockMethod<Void>();
-    doAnswer(writeMethod).when(outMock).write("123".getBytes("UTF-8"));
-    
-    MockMethod<Void> closeMethod = new MockMethod<Void>();
-    doAnswer(closeMethod).when(outMock).close();
-    
-    when(fileMock_.newFileOutputStream("fabricateXmlDir/run.marker")).thenReturn(outMock);
-    when(fileMock_.exists("fabricateXmlDir/output")).thenReturn(false);
-    when(fileMock_.mkdirs("fabricateXmlDir/output")).thenReturn(true);
-    
-    Fabricate fabMock = mock(Fabricate.class);
-    when(factoryMock_.create(sysMock_, ftMock, xmlDiscoveryMock_)).thenReturn(fabMock);
-    FabricateMutant fmMock = mock(FabricateMutant.class);
-    
-    List<String> commands = Collections.singletonList("hey");
-    when(factoryMock_.createMutant(fabMock)).thenReturn(fmMock);
-    RoutineFabricateFactory routineFactoryMock = mock(RoutineFabricateFactory.class);
-    when(factoryMock_.createRoutineFabricateFactory(sysMock_, fabMock, true)).thenReturn(routineFactoryMock);
-    CommandManager cmMock = mock(CommandManager.class);
-    when(factoryMock_.createCommandManager(commands, sysMock_, routineFactoryMock)).thenReturn(cmMock);
-    
-    when(sysMock_.getArgValues(CommandLineEnConstants.INSTANCE.getCommand())).thenReturn(
-        commands);
-    when(factoryMock_.create(fmMock)).thenReturn(fabMock);
-    when(sysMock_.getArgValue(CommandLineArgs.PASSABLE_ARGS_)).thenReturn("[1,[11,cmd=encrypt]]");
-    File fabricateFileMock = mock(File.class);
-    when(fabricateFileMock.getName()).thenReturn("fabProject");
-    when(fileMock_.instance("fabricateXmlDir/")).thenReturn(fabricateFileMock);
-    when(sysMock_.getOperatingSystem()).thenReturn("other");
-    when(sysMock_.getCpuInfo("other")).thenReturn(new String[] {"cpuInfo1", "cpuInfo2"});
-    when(sysMock_.getArgValue("start")).thenReturn("123");
-    when(sysMock_.hasArg("-w")).thenReturn(true);
-    when(sysMock_.getCurrentTime()).thenReturn(456L);
-    
-    IOException x = new IOException("ioe");
-    when(sysMock_.newFabFileLog("fabricateXmlDir/output/fab.log")).thenThrow(x);
-    assertThrown(new ExpectedThrowable(x), new I_Thrower() {
-      
-      @Override
-      public void run() throws Throwable {
-        new FabricateController(sysMock_, new String[] {"start=123"}, factoryMock_);
-      }
-    });
-    
-    assertEquals("fabricateXmlDir/run.marker", deleteOnExitMethod_.getArg(0));
-    assertEquals(1, deleteOnExitMethod_.count());
-    assertEquals(0, printlnMethod_.count());
-    assertEquals(0, printTraceMethod_.count());
-  }
   
-  @SuppressWarnings({"unused", "boxing"})
-  @Test
-  public void testConstructorCommandIOExceptionFromDeleteOutputDirRecursive() throws Exception {
-    when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
-    OutputStream outMock = mock(OutputStream.class);
-    MockMethod<Void> writeMethod = new MockMethod<Void>();
-    doAnswer(writeMethod).when(outMock).write("123".getBytes("UTF-8"));
-    
-    MockMethod<Void> closeMethod = new MockMethod<Void>();
-    doAnswer(closeMethod).when(outMock).close();
-    
-    when(fileMock_.newFileOutputStream("fabricateXmlDir/run.marker")).thenReturn(outMock);
-    when(fileMock_.exists("fabricateXmlDir/output")).thenReturn(true);
-    IOException x = new IOException("ioe");
-    doThrow(x).when(fileMock_).deleteRecursive("fabricateXmlDir/output");
-    
-    assertThrown(new ExpectedThrowable(new IOException("ioe")), new I_Thrower() {
-      
-      @Override
-      public void run() throws Throwable {
-        new FabricateController(sysMock_, new String[] {"start=123"}, factoryMock_);
-      }
-    });
-   
-    
-    assertEquals("fabricateXmlDir/run.marker", deleteOnExitMethod_.getArg(0));
-    assertEquals(0, printlnMethod_.count());
-    assertEquals(0, printTraceMethod_.count());
-    
-  }
+ 
   
-  @Test
-  public void testConstructorCommandIOExceptionFromCreateResultXmlFile() {
-    
-  }
+
   
   @Test
   public void testConstructorCommandIOExceptionFromWriteResultXmlFile() {
     
   }
 
-  @SuppressWarnings({"unused", "boxing"})
-  @Test
-  public void testConstructorCommandIOExceptionFromWriteToRunMarker() throws Exception {
-    when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
-    OutputStream outMock = mock(OutputStream.class);
-    IOException x = new IOException("ipe");
-    doThrow(x).when(outMock).write("123".getBytes("UTF-8"));
-    
-    MockMethod<Void> closeMethod = new MockMethod<Void>();
-    doAnswer(closeMethod).when(outMock).close();
-    
-    when(fileMock_.newFileOutputStream("fabricateXmlDir/run.marker")).thenReturn(outMock);
-    new FabricateController(sysMock_, new String[] {"start=123"}, factoryMock_);
-    
-    assertEquals("fabricateXmlDir/run.marker", deleteOnExitMethod_.getArg(0));
-    assertSame(x, printTraceMethod_.getArg(0));
-    assertEquals(1, printTraceMethod_.count());
-    assertEquals("There was a problem creating run.marker in the following directory;\n" +
-        "fabricateXmlDir/", printlnMethod_.getArg(0));
-    assertEquals(1, printlnMethod_.count());
-  }
-  
-  @SuppressWarnings({"unused", "boxing"})
-  @Test
-  public void testConstructorCommandFailureToCreateOutputDir() throws Exception {
-    when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
-    OutputStream outMock = mock(OutputStream.class);
-    MockMethod<Void> writeMethod = new MockMethod<Void>();
-    doAnswer(writeMethod).when(outMock).write("123".getBytes("UTF-8"));
-    
-    MockMethod<Void> closeMethod = new MockMethod<Void>();
-    doAnswer(closeMethod).when(outMock).close();
-    
-    when(fileMock_.newFileOutputStream("fabricateXmlDir/run.marker")).thenReturn(outMock);
-    when(fileMock_.exists("fabricateXmlDir/output")).thenReturn(false);
-    when(fileMock_.mkdirs("fabricateXmlDir/output")).thenReturn(false);
-    File fileMock = mock(File.class);
-    when(fileMock.getAbsolutePath()).thenReturn("absFile");
-    when(fileMock_.instance("fabricateXmlDir/output")).thenReturn(fileMock);
-    new FabricateController(sysMock_, new String[] {"start=123"}, factoryMock_);
-   
-    assertEquals("fabricateXmlDir/run.marker", deleteOnExitMethod_.getArg(0));
-    assertEquals(1, deleteOnExitMethod_.count());
-    assertEquals("There was a problem creating the following directory;\n" +
-          "absFile", printlnMethod_.getArg(0));
-    assertEquals(1, printlnMethod_.count());
-    assertEquals(0, printTraceMethod_.count());
-  }
-  
-  @SuppressWarnings({"boxing", "unused"})
-  @Test
-  public void testConstructorCommandFileNotFoundExceptionFromCreateRunMarkerOutputStream() throws Exception {
-    when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
-    FileNotFoundException x = new FileNotFoundException("ipe");
-    when(fileMock_.newFileOutputStream("fabricateXmlDir/run.marker")).thenThrow(x);
-    new FabricateController(sysMock_, new String[] {}, factoryMock_);
-    
-    assertSame(x, printTraceMethod_.getArg(0));
-    assertEquals(1, printTraceMethod_.count());
-    assertEquals("There was a problem creating run.marker in the following directory;\n" +
-        "fabricateXmlDir/", printlnMethod_.getArg(0));
-    assertEquals(1, printlnMethod_.count());
-  }
+
   
   @SuppressWarnings({"boxing", "unused"})
   @Test
@@ -739,7 +506,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     FailureType ft = new FailureType();
     ft.setCommand("encrypt");
     ft.setDetail("detail");
-    FabricationMemoryMutant memory = new FabricationMemoryMutant(SystemEnMessages.INSTANCE);
+    FabricationMemoryMutant<Object> memory = new FabricationMemoryMutant<Object>(SystemEnMessages.INSTANCE);
     when(factoryMock_.createMemory(sysMock_)).thenReturn(memory);
     when(cmMock.processCommands(memory)).thenReturn(ft);
     when(factoryMock_.createCommandManager(commands, sysMock_, routineFactoryMock)).thenReturn(cmMock);
@@ -796,5 +563,270 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     assertNull(rt.getTests());
   }
   
+
+  @SuppressWarnings({"boxing", "unused"})
+  @Test
+  public void testConstructorCommonIOExceptionFromCreateFabLogFile() throws Exception {
+    when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
+    when(xmlDiscoveryMock_.getFabricateXmlPath()).thenReturn("fabricateDir/fabricate.xml");
+    FabricateType ftMock = new FabricateType();
+    when(xmlIoMock_.parseFabricate_v1_0("fabricateDir/fabricate.xml")).thenReturn(ftMock);
+    
+    OutputStream outMock = mock(OutputStream.class);
+    MockMethod<Void> writeMethod = new MockMethod<Void>();
+    doAnswer(writeMethod).when(outMock).write("123".getBytes("UTF-8"));
+    
+    MockMethod<Void> closeMethod = new MockMethod<Void>();
+    doAnswer(closeMethod).when(outMock).close();
+    
+    when(fileMock_.newFileOutputStream("fabricateXmlDir/run.marker")).thenReturn(outMock);
+    when(fileMock_.exists("fabricateXmlDir/output")).thenReturn(false);
+    when(fileMock_.mkdirs("fabricateXmlDir/output")).thenReturn(true);
+    
+    Fabricate fabMock = mock(Fabricate.class);
+    when(factoryMock_.create(sysMock_, ftMock, xmlDiscoveryMock_)).thenReturn(fabMock);
+    FabricateMutant fmMock = mock(FabricateMutant.class);
+    
+    List<String> commands = Collections.singletonList("hey");
+    when(factoryMock_.createMutant(fabMock)).thenReturn(fmMock);
+    RoutineFabricateFactory routineFactoryMock = mock(RoutineFabricateFactory.class);
+    when(factoryMock_.createRoutineFabricateFactory(sysMock_, fabMock, true)).thenReturn(routineFactoryMock);
+    CommandManager cmMock = mock(CommandManager.class);
+    when(factoryMock_.createCommandManager(commands, sysMock_, routineFactoryMock)).thenReturn(cmMock);
+    
+    when(sysMock_.getArgValues(CommandLineEnConstants.INSTANCE.getCommand())).thenReturn(
+        commands);
+    when(factoryMock_.create(fmMock)).thenReturn(fabMock);
+    when(sysMock_.getArgValue(CommandLineArgs.PASSABLE_ARGS_)).thenReturn("[1,[11,cmd=encrypt]]");
+    File fabricateFileMock = mock(File.class);
+    when(fabricateFileMock.getName()).thenReturn("fabProject");
+    when(fileMock_.instance("fabricateXmlDir/")).thenReturn(fabricateFileMock);
+    when(sysMock_.getOperatingSystem()).thenReturn("other");
+    when(sysMock_.getCpuInfo("other")).thenReturn(new String[] {"cpuInfo1", "cpuInfo2"});
+    when(sysMock_.getArgValue("start")).thenReturn("123");
+    when(sysMock_.hasArg("-w")).thenReturn(true);
+    when(sysMock_.getCurrentTime()).thenReturn(456L);
+    
+    IOException x = new IOException("ioe");
+    when(sysMock_.newFabFileLog("fabricateXmlDir/output/fab.log")).thenThrow(x);
+    assertThrown(new ExpectedThrowable(x), new I_Thrower() {
+      
+      @Override
+      public void run() throws Throwable {
+        new FabricateController(sysMock_, new String[] {"start=123"}, factoryMock_);
+      }
+    });
+    
+    assertEquals("fabricateXmlDir/run.marker", deleteOnExitMethod_.getArg(0));
+    assertEquals(1, deleteOnExitMethod_.count());
+    assertEquals(0, printlnMethod_.count());
+    assertEquals(0, printTraceMethod_.count());
+  }
   
+  @Test
+  public void testConstructorCommonIOExceptionFromCreateResultXmlFile() {
+    
+  }
+  
+
+  @SuppressWarnings({"boxing", "unused"})
+  @Test
+  public void testConstructorCommonClassNotFoundFromAddTraits() throws Exception {
+    when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
+    when(xmlDiscoveryMock_.getFabricateXmlPath()).thenReturn("fabricateDir/fabricate.xml");
+    FabricateType ftMock = mock(FabricateType.class);
+    List<RoutineParentType> traits = new ArrayList<RoutineParentType>();
+    when(ftMock.getTrait()).thenReturn(traits);
+    when(xmlIoMock_.parseFabricate_v1_0("fabricateDir/fabricate.xml")).thenReturn(ftMock);
+    
+    OutputStream outMock = mock(OutputStream.class);
+    MockMethod<Void> writeMethod = new MockMethod<Void>();
+    doAnswer(writeMethod).when(outMock).write("123".getBytes("UTF-8"));
+    
+    MockMethod<Void> closeMethod = new MockMethod<Void>();
+    doAnswer(closeMethod).when(outMock).close();
+    
+    when(fileMock_.newFileOutputStream("fabricateXmlDir/run.marker")).thenReturn(outMock);
+    when(fileMock_.exists("fabricateXmlDir/output")).thenReturn(false);
+    when(fileMock_.mkdirs("fabricateXmlDir/output")).thenReturn(true);
+    
+    Fabricate fabMock = mock(Fabricate.class);
+    when(factoryMock_.create(sysMock_, ftMock, xmlDiscoveryMock_)).thenReturn(fabMock);
+    FabricateMutant fmMock = mock(FabricateMutant.class);
+    
+    ClassNotFoundException x = new ClassNotFoundException("foo2");
+    doThrow(x).when(fmMock).addTraits(traits);
+    when(factoryMock_.createMutant(fabMock)).thenReturn(fmMock);
+    
+    new FabricateController(sysMock_, new String[] {"start=123","cmd=encrypt"}, factoryMock_);
+   
+    assertEquals("fabricateXmlDir/run.marker", deleteOnExitMethod_.getArg(0));
+    assertEquals(1, deleteOnExitMethod_.count());
+    assertEquals("\nFabricating...\n", printlnMethod_.getArg(0));
+    assertEquals("Unable to load the following class;\n" +
+        "foo2", printlnMethod_.getArg(1));
+    assertEquals(2, printlnMethod_.count());
+    assertSame(x, printTraceMethod_.getArg(0));
+    assertEquals(1, printTraceMethod_.count());
+  }
+  
+
+  @SuppressWarnings({"unused", "boxing"})
+  @Test
+  public void testConstructorCommonFabricateAlreadyRunning() throws Exception {
+    when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(true);
+    
+    new FabricateController(sysMock_, new String[] {}, factoryMock_);
+    
+    assertEquals("Fabricate appears to already be running \n" + 
+        "(run.marker is in the same directory as fabricate.xml).\n" +
+        "fabricateXmlDir/", printlnMethod_.getArg(0));
+  }
+  
+  @SuppressWarnings({"unused", "boxing"})
+  @Test
+  public void testConstructorCommonFailureToCreateOutputDir() throws Exception {
+    when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
+    OutputStream outMock = mock(OutputStream.class);
+    MockMethod<Void> writeMethod = new MockMethod<Void>();
+    doAnswer(writeMethod).when(outMock).write("123".getBytes("UTF-8"));
+    
+    MockMethod<Void> closeMethod = new MockMethod<Void>();
+    doAnswer(closeMethod).when(outMock).close();
+    
+    when(fileMock_.newFileOutputStream("fabricateXmlDir/run.marker")).thenReturn(outMock);
+    when(fileMock_.exists("fabricateXmlDir/output")).thenReturn(false);
+    when(fileMock_.mkdirs("fabricateXmlDir/output")).thenReturn(false);
+    File fileMock = mock(File.class);
+    when(fileMock.getAbsolutePath()).thenReturn("absFile");
+    when(fileMock_.instance("fabricateXmlDir/output")).thenReturn(fileMock);
+    new FabricateController(sysMock_, new String[] {"start=123"}, factoryMock_);
+   
+    assertEquals("fabricateXmlDir/run.marker", deleteOnExitMethod_.getArg(0));
+    assertEquals(1, deleteOnExitMethod_.count());
+    assertEquals("There was a problem creating the following directory;\n" +
+          "absFile", printlnMethod_.getArg(0));
+    assertEquals(1, printlnMethod_.count());
+    assertEquals(0, printTraceMethod_.count());
+  }
+  
+  @SuppressWarnings({"boxing", "unused"})
+  @Test
+  public void testConstructorCommonFileNotFoundExceptionFromCreateRunMarkerOutputStream() throws Exception {
+    when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
+    FileNotFoundException x = new FileNotFoundException("ipe");
+    when(fileMock_.newFileOutputStream("fabricateXmlDir/run.marker")).thenThrow(x);
+    new FabricateController(sysMock_, new String[] {}, factoryMock_);
+    
+    assertSame(x, printTraceMethod_.getArg(0));
+    assertEquals(1, printTraceMethod_.count());
+    assertEquals("There was a problem creating run.marker in the following directory;\n" +
+        "fabricateXmlDir/", printlnMethod_.getArg(0));
+    assertEquals(1, printlnMethod_.count());
+  }
+  
+  
+  @SuppressWarnings({"unused", "boxing"})
+  @Test
+  public void testConstructorCommonIOExceptionFromDeleteOutputDirRecursive() throws Exception {
+    when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
+    OutputStream outMock = mock(OutputStream.class);
+    MockMethod<Void> writeMethod = new MockMethod<Void>();
+    doAnswer(writeMethod).when(outMock).write("123".getBytes("UTF-8"));
+    
+    MockMethod<Void> closeMethod = new MockMethod<Void>();
+    doAnswer(closeMethod).when(outMock).close();
+    
+    when(fileMock_.newFileOutputStream("fabricateXmlDir/run.marker")).thenReturn(outMock);
+    when(fileMock_.exists("fabricateXmlDir/output")).thenReturn(true);
+    IOException x = new IOException("ioe");
+    doThrow(x).when(fileMock_).deleteRecursive("fabricateXmlDir/output");
+    
+    assertThrown(new ExpectedThrowable(new IOException("ioe")), new I_Thrower() {
+      
+      @Override
+      public void run() throws Throwable {
+        new FabricateController(sysMock_, new String[] {"start=123"}, factoryMock_);
+      }
+    });
+   
+    
+    assertEquals("fabricateXmlDir/run.marker", deleteOnExitMethod_.getArg(0));
+    assertEquals(0, printlnMethod_.count());
+    assertEquals(0, printTraceMethod_.count());
+    
+  }
+  
+  @SuppressWarnings({"unused", "boxing"})
+  @Test
+  public void testConstructorCommonIOExceptionFromWriteToRunMarker() throws Exception {
+    when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
+    OutputStream outMock = mock(OutputStream.class);
+    IOException x = new IOException("ipe");
+    doThrow(x).when(outMock).write("123".getBytes("UTF-8"));
+    
+    MockMethod<Void> closeMethod = new MockMethod<Void>();
+    doAnswer(closeMethod).when(outMock).close();
+    
+    when(fileMock_.newFileOutputStream("fabricateXmlDir/run.marker")).thenReturn(outMock);
+    new FabricateController(sysMock_, new String[] {"start=123"}, factoryMock_);
+    
+    assertEquals("fabricateXmlDir/run.marker", deleteOnExitMethod_.getArg(0));
+    assertSame(x, printTraceMethod_.getArg(0));
+    assertEquals(1, printTraceMethod_.count());
+    assertEquals("There was a problem creating run.marker in the following directory;\n" +
+        "fabricateXmlDir/", printlnMethod_.getArg(0));
+    assertEquals(1, printlnMethod_.count());
+  }
+  
+  
+  @SuppressWarnings({"unused", "boxing"})
+  @Test
+  public void testConstructorCommonNoFabricateXmlOrProjectXml() throws Exception {
+    when(xmlDiscoveryMock_.hasFabricateXml()).thenReturn(false);
+    
+    new FabricateController(sysMock_, new String[] {}, factoryMock_);
+    
+    assertEquals("Exception: No fabricate.xml or project.xml found.", printlnMethod_.getArg(0));
+  }
+  
+
+  @SuppressWarnings({"boxing", "unused"})
+  @Test
+  public void testConstructorStageClassNotFoundFromAddStages() throws Exception {
+    when(fileMock_.exists("fabricateXmlDir/run.marker")).thenReturn(false);
+    when(xmlDiscoveryMock_.getFabricateXmlPath()).thenReturn("fabricateDir/fabricate.xml");
+    FabricateType ftMock = new FabricateType();
+    when(xmlIoMock_.parseFabricate_v1_0("fabricateDir/fabricate.xml")).thenReturn(ftMock);
+    
+    OutputStream outMock = mock(OutputStream.class);
+    MockMethod<Void> writeMethod = new MockMethod<Void>();
+    doAnswer(writeMethod).when(outMock).write("123".getBytes("UTF-8"));
+    
+    MockMethod<Void> closeMethod = new MockMethod<Void>();
+    doAnswer(closeMethod).when(outMock).close();
+    
+    when(fileMock_.newFileOutputStream("fabricateXmlDir/run.marker")).thenReturn(outMock);
+    when(fileMock_.exists("fabricateXmlDir/output")).thenReturn(false);
+    when(fileMock_.mkdirs("fabricateXmlDir/output")).thenReturn(true);
+    
+    Fabricate fabMock = mock(Fabricate.class);
+    when(factoryMock_.create(sysMock_, ftMock, xmlDiscoveryMock_)).thenReturn(fabMock);
+    FabricateMutant fmMock = mock(FabricateMutant.class);
+    
+    ClassNotFoundException x = new ClassNotFoundException("foo");
+    doThrow(x).when(fmMock).addStages(ftMock);
+    when(factoryMock_.createMutant(fabMock)).thenReturn(fmMock);
+    
+    new FabricateController(sysMock_, new String[] {"start=123"}, factoryMock_);
+   
+    assertEquals("fabricateXmlDir/run.marker", deleteOnExitMethod_.getArg(0));
+    assertEquals(1, deleteOnExitMethod_.count());
+    assertEquals("\nFabricating...\n", printlnMethod_.getArg(0));
+    assertEquals("Unable to load the following class;\n" +
+        "foo", printlnMethod_.getArg(1));
+    assertEquals(2, printlnMethod_.count());
+    assertSame(x, printTraceMethod_.getArg(0));
+    assertEquals(1, printTraceMethod_.count());
+  }
 }
