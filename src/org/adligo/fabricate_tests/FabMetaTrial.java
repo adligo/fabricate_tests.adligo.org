@@ -77,7 +77,7 @@ public class FabMetaTrial  extends AbstractTrial implements I_MetaTrial {
 		assertCoverageMatrix("org.adligo.fabricate.common.files.xml_io",
         100.0, 56.0);
 		assertCoverageMatrix("org.adligo.fabricate.common.files",
-        100.0, 73.0);
+        100.0, 72.0);
 		assertCoverageMatrix("org.adligo.fabricate.common.log",
         100.0, 76.0);
 		assertCoverageMatrix("org.adligo.fabricate.common.system",

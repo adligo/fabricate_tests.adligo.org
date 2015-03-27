@@ -46,7 +46,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 @SourceFileScope (sourceClass=FabFileIO.class,
-  minCoverage=75.0,allowedCircularDependencies=CircularDependencies.AllowInnerOuterClasses)
+  minCoverage=73.0,allowedCircularDependencies=CircularDependencies.AllowInnerOuterClasses)
 public class FabFilesTrial extends MockitoSourceFileTrial {
 
   @AfterTrial

@@ -20,9 +20,9 @@ public class SimpleConcurrentRoutineMock extends AbstractRoutine implements I_Co
   }
 
   @Override
-  public boolean setup(I_FabricationMemoryMutant memory, I_RoutineMemoryMutant routineMemory) throws FabricationRoutineCreationException {
+  public boolean setupInitial(I_FabricationMemoryMutant memory, I_RoutineMemoryMutant routineMemory) throws FabricationRoutineCreationException {
     lastMemoryMutant_ = memory;
-    return super.setup(memory, routineMemory);
+    return super.setupInitial(memory, routineMemory);
   }
 
   @Override

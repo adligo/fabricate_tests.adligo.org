@@ -1,5 +1,6 @@
 package org.adligo.fabricate_tests.models.dependencies;
 
+import org.adligo.fabricate.models.dependencies.I_ProjectDependency;
 import org.adligo.fabricate.models.dependencies.ProjectDependency;
 import org.adligo.fabricate.models.dependencies.ProjectDependencyMutant;
 import org.adligo.fabricate.xml.io_v1.project_v1_0.ProjectDependencyType;
@@ -22,7 +23,7 @@ public class ProjectDependencyTrial extends MockitoSourceFileTrial {
       @SuppressWarnings("unused")
       @Override
       public void run() throws Throwable {
-        new ProjectDependencyMutant(null);
+        new ProjectDependencyMutant((I_ProjectDependency) null);
       }
     });
   }

@@ -57,7 +57,7 @@ public class ProjectDependencyMutantTrial extends MockitoSourceFileTrial {
       @SuppressWarnings("unused")
       @Override
       public void run() throws Throwable {
-        new ProjectDependencyMutant(null);
+        new ProjectDependencyMutant((I_ProjectDependency) null);
       }
     });
   }

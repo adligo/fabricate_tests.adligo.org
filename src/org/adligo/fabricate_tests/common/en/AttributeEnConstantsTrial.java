@@ -23,6 +23,14 @@ public class AttributeEnConstantsTrial extends MockitoSourceFileTrial {
         messages.getGitDefaultBranch());
     asserter.assertConstant("include", 
         messages.getInclude());
+    asserter.assertConstant("ide", 
+        messages.getIde());
+    asserter.assertConstant("platforms", 
+        messages.getPlatforms());
+    asserter.assertConstant("srcDirs", 
+        messages.getSrcDirs());
+    asserter.assertConstant("jdkSrcDir", 
+        messages.getJdkSrcDir());
     
     asserter.assertConstantsMatchMethods(AttributeEnConstants.class);
   }

@@ -25,7 +25,7 @@ import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockMethod;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
-@SourceFileScope (sourceClass=AbstractRoutine.class, minCoverage=90.0)
+@SourceFileScope (sourceClass=AbstractRoutine.class, minCoverage=87.0)
 public class AbstractRoutineTrial extends MockitoSourceFileTrial {
   private I_FabSystem sysMock_;
   private I_FabLog logMock_;
@@ -104,7 +104,7 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     addAndAssertBrief(ar, RoutineBriefOrigin.ARCHIVE_STAGE);
     I_FabricationMemoryMutant<Object> memoryMutant = mock(I_FabricationMemoryMutant.class);
     I_RoutineMemoryMutant<Object> routineMemoryMutant = mock(I_RoutineMemoryMutant.class);
-    ar.setup(memoryMutant, routineMemoryMutant);
+    ar.setupInitial(memoryMutant, routineMemoryMutant);
     assertEquals("Archive stage routineName is still setting up.", ar.getCurrentLocation());
     
     ar.run();
@@ -130,7 +130,7 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     addAndAssertBrief(ar, RoutineBriefOrigin.COMMAND);
     I_FabricationMemoryMutant<Object> memoryMutant = mock(I_FabricationMemoryMutant.class);
     I_RoutineMemoryMutant<Object> routineMemoryMutant = mock(I_RoutineMemoryMutant.class);
-    ar.setup(memoryMutant, routineMemoryMutant);
+    ar.setupInitial(memoryMutant, routineMemoryMutant);
     assertEquals("Command routineName is still setting up.", ar.getCurrentLocation());
     
     ar.run();
@@ -156,13 +156,13 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     addAndAssertBrief(ar, RoutineBriefOrigin.FABRICATE_FACET);
     I_FabricationMemoryMutant<Object> memoryMutant = mock(I_FabricationMemoryMutant.class);
     I_RoutineMemoryMutant<Object> routineMemoryMutant = mock(I_RoutineMemoryMutant.class);
-    ar.setup(memoryMutant, routineMemoryMutant);
+    ar.setupInitial(memoryMutant, routineMemoryMutant);
     assertEquals("Facet routineName is still setting up.", ar.getCurrentLocation());
     
     addAndAssertBrief(ar, RoutineBriefOrigin.IMPLICIT_FACET);
     memoryMutant = mock(I_FabricationMemoryMutant.class);
     routineMemoryMutant = mock(I_RoutineMemoryMutant.class);
-    ar.setup(memoryMutant, routineMemoryMutant);
+    ar.setupInitial(memoryMutant, routineMemoryMutant);
     assertEquals("Facet routineName is still setting up.", ar.getCurrentLocation());
     
     ar.run();
@@ -188,7 +188,7 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     addAndAssertBrief(ar, RoutineBriefOrigin.FABRICATE_STAGE);
     I_FabricationMemoryMutant<Object> memoryMutant = mock(I_FabricationMemoryMutant.class);
     I_RoutineMemoryMutant<Object> routineMemoryMutant = mock(I_RoutineMemoryMutant.class);
-    ar.setup(memoryMutant, routineMemoryMutant);
+    ar.setupInitial(memoryMutant, routineMemoryMutant);
     assertEquals("Build stage routineName is still setting up.", ar.getCurrentLocation());
     
     ar.run();
@@ -214,7 +214,7 @@ public class AbstractRoutineTrial extends MockitoSourceFileTrial {
     addAndAssertBrief(ar, RoutineBriefOrigin.FABRICATE_TRAIT);
     I_FabricationMemoryMutant<Object> memoryMutant = mock(I_FabricationMemoryMutant.class);
     I_RoutineMemoryMutant<Object> routineMemoryMutant = mock(I_RoutineMemoryMutant.class);
-    ar.setup(memoryMutant, routineMemoryMutant);
+    ar.setupInitial(memoryMutant, routineMemoryMutant);
     assertEquals("Trait routineName is still setting up.", ar.getCurrentLocation());
     
     ar.run();
