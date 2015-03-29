@@ -9,8 +9,10 @@ import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
-@SourceFileScope (sourceClass=FabLog.class, minCoverage=68.0)
+@SourceFileScope (sourceClass=FabLog.class, minCoverage=66.0)
 public class FabLogTrial extends MockitoSourceFileTrial {
   private ByteArrayOutputStream baos_;
   @Override
@@ -71,6 +73,23 @@ public class FabLogTrial extends MockitoSourceFileTrial {
     assertEquals("java.lang.Exception: xtc\n" +
         "Caused by: java.lang.Exception: exc\n" + 
         "java.lang.Exception: exc\n", baos_.toString());
+    
+  }
+  
+  @Test
+  public void testMethodPrintTraceFabLogOn() {
+    Map<String,Boolean> logsOn = new HashMap<String,Boolean>();
+    logsOn.put(FabLog.class.getName(), true);
+    FabLog log = new FabLog(logsOn, false);
+    Exception e = new Exception("exc");
+    e.setStackTrace(new StackTraceElement[] {});
+    
+    log.printTrace(e);
+    
+    String result = baos_.toString();
+    assertTrue(result.indexOf("java.lang.RuntimeException: logging trace from;") == 0);
+    assertTrue(result.indexOf("\tat org.adligo.fabricate.common.log.FabLog.printTrace(FabLog.java:92)") >= 1);
+    assertTrue(result.indexOf("java.lang.Exception: exc") >= 2);
     
   }
 }

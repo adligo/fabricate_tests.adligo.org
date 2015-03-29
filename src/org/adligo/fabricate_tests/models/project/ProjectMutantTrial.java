@@ -315,16 +315,16 @@ public class ProjectMutantTrial extends MockitoSourceFileTrial {
   @Test
   public void testConstructorCopyFromXml() throws Exception {
     I_Project pt = mock(I_Project.class);
-    when(pt.getName()).thenReturn("name");
-    when(pt.getVersion()).thenReturn("version");
+    when(pt.getName()).thenReturn("projectName");
+    when(pt.getVersion()).thenReturn("projectVersion");
     
     FabricateProjectType fpt = new FabricateProjectType();
     fpt.setDependencies(null);
     ProjectMutant copy = new ProjectMutant("dir2", pt, fpt);
     
     assertEquals("dir2", copy.getDir());
-    assertEquals("name", copy.getName());
-    assertEquals("version", copy.getVersion());
+    assertEquals("projectName", copy.getName());
+    assertEquals("projectVersion", copy.getVersion());
     
     assertEquals(0, copy.getAttributes().size());
     assertEquals(0, copy.getCommands().size());
@@ -344,12 +344,12 @@ public class ProjectMutantTrial extends MockitoSourceFileTrial {
     ProjectMutant copy2 = new ProjectMutant("dir2", pt, fpt);
     
     assertEquals("dir2", copy2.getDir());
-    assertEquals("name", copy2.getName());
-    assertEquals("version", copy2.getVersion());
+    assertEquals("projectName", copy2.getName());
+    assertEquals("projectVersion", copy2.getVersion());
     
     assertEquals(0, copy.getAttributes().size());
     assertEquals(0, copy.getCommands().size());
-    DependencyMutantTrial.assertDependencyConversion(this, copy2.getDependencies());
+    DependencyMutantTrial.assertDependencyConversion(this, copy2.getDependencies(), "projectName");
     LibraryDependencyMutantTrial.assertAB(this, copy2.getLibraryDependencies());
     assertEquals(0, copy.getNormalizedDependencies().size());
     ProjectDependencyMutantTrial.assertAB(this, copy2.getProjectDependencies());
@@ -366,8 +366,8 @@ public class ProjectMutantTrial extends MockitoSourceFileTrial {
     copy2 = new ProjectMutant("dir2", pt, fpt);
     
     assertEquals("dir2", copy2.getDir());
-    assertEquals("name", copy2.getName());
-    assertEquals("version", copy2.getVersion());
+    assertEquals("projectName", copy2.getName());
+    assertEquals("projectVersion", copy2.getVersion());
     
     List<I_Parameter> attributes = copy2.getAttributes();
     I_Parameter paramA = attributes.get(0);
@@ -381,7 +381,7 @@ public class ProjectMutantTrial extends MockitoSourceFileTrial {
     
     assertEquals(0, copy2.getCommands().size());
     
-    DependencyMutantTrial.assertDependencyConversion(this, copy2.getDependencies());
+    DependencyMutantTrial.assertDependencyConversion(this, copy2.getDependencies(), "projectName");
     LibraryDependencyMutantTrial.assertAB(this, copy2.getLibraryDependencies());
     assertEquals(0, copy.getNormalizedDependencies().size());
     ProjectDependencyMutantTrial.assertAB(this, copy2.getProjectDependencies());
@@ -405,8 +405,8 @@ public class ProjectMutantTrial extends MockitoSourceFileTrial {
     copy2 = new ProjectMutant("dir2", pt, fpt);
     
     assertEquals("dir2", copy2.getDir());
-    assertEquals("name", copy2.getName());
-    assertEquals("version", copy2.getVersion());
+    assertEquals("projectName", copy2.getName());
+    assertEquals("projectVersion", copy2.getVersion());
     
     attributes = copy2.getAttributes();
     paramA = attributes.get(0);
@@ -418,7 +418,7 @@ public class ProjectMutantTrial extends MockitoSourceFileTrial {
     assertEquals("command", cmds.get("command").getName());
     assertEquals(1, cmds.size());
     
-    DependencyMutantTrial.assertDependencyConversion(this, copy2.getDependencies());
+    DependencyMutantTrial.assertDependencyConversion(this, copy2.getDependencies(), "projectName");
     LibraryDependencyMutantTrial.assertAB(this, copy2.getLibraryDependencies());
     assertEquals(0, copy.getNormalizedDependencies().size());
     ProjectDependencyMutantTrial.assertAB(this, copy2.getProjectDependencies());

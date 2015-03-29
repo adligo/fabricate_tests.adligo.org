@@ -27,13 +27,18 @@ import java.util.List;
 public class DependencyTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("boxing")
-  public static void assertDependencyConversion(I_Asserts asserts, List<I_Dependency> result) {
+  public static void assertDependencyConversion(I_Asserts asserts, List<I_Dependency> result, String project) {
     I_Dependency depA = result.get(0);
     asserts.assertEquals("artifactA", depA.getArtifact());
     asserts.assertFalse(depA.isExtract());
     asserts.assertEquals("fileNameA", depA.getFileName());
     asserts.assertEquals("groupA", depA.getGroup());
     asserts.assertEquals("platformA", depA.getPlatform());
+    if (project == null) {
+      asserts.assertNull(depA.getProject());
+    } else {
+      asserts.assertEquals(project, depA.getProject());
+    }
     asserts.assertEquals("typeA", depA.getType());
     asserts.assertEquals("versionA", depA.getVersion());
     asserts.assertEquals(Dependency.class.getName(), depA.getClass().getName());
@@ -44,6 +49,11 @@ public class DependencyTrial extends MockitoSourceFileTrial {
     asserts.assertEquals("fileNameB", depB.getFileName());
     asserts.assertEquals("groupB", depB.getGroup());
     asserts.assertEquals("platformB", depB.getPlatform());
+    if (project == null) {
+      asserts.assertNull(depB.getProject());
+    } else {
+      asserts.assertEquals(project, depB.getProject());
+    }
     asserts.assertEquals("typeB", depB.getType());
     asserts.assertEquals("versionB", depB.getVersion());
     asserts.assertEquals(Dependency.class.getName(), depB.getClass().getName());
@@ -62,25 +72,35 @@ public class DependencyTrial extends MockitoSourceFileTrial {
     ParameterTrial.assertConvertedParams(out, asserts);
   }
   
-  public static void assertDependencyConversionC(I_Asserts asserts, List<I_Dependency> result) {
+  public static void assertDependencyConversionC(I_Asserts asserts, List<I_Dependency> result, String project) {
     I_Dependency dep = result.get(0);
     asserts.assertEquals("artifactC", dep.getArtifact());
     asserts.assertFalse(dep.isExtract());
     asserts.assertEquals("fileNameC", dep.getFileName());
     asserts.assertEquals("groupC", dep.getGroup());
     asserts.assertEquals("platformC", dep.getPlatform());
+    if (project == null) {
+      asserts.assertNull(dep.getProject());
+    } else {
+      asserts.assertEquals(project, dep.getProject());
+    }
     asserts.assertEquals("typeC", dep.getType());
     asserts.assertEquals("versionC", dep.getVersion());
     asserts.assertEquals(Dependency.class.getName(), dep.getClass().getName());
   }
   
-  public static void assertDependencyConversionD(I_Asserts asserts, List<I_Dependency> result) {
+  public static void assertDependencyConversionD(I_Asserts asserts, List<I_Dependency> result, String project) {
     I_Dependency dep = result.get(0);
     asserts.assertEquals("artifactD", dep.getArtifact());
     asserts.assertFalse(dep.isExtract());
     asserts.assertEquals("fileNameD", dep.getFileName());
     asserts.assertEquals("groupD", dep.getGroup());
     asserts.assertEquals("platformD", dep.getPlatform());
+    if (project == null) {
+      asserts.assertNull(dep.getProject());
+    } else {
+      asserts.assertEquals(project, dep.getProject());
+    }
     asserts.assertEquals("typeD", dep.getType());
     asserts.assertEquals("versionD", dep.getVersion());
     asserts.assertEquals(Dependency.class.getName(), dep.getClass().getName());
@@ -166,12 +186,13 @@ public class DependencyTrial extends MockitoSourceFileTrial {
     itA.setArgs(ParameterMutantTrial.createParams());
     dm.getIde().add(itA);
     
-    Dependency inst = new Dependency(dm);
+    Dependency inst = new Dependency(dm,"projectA");
     assertEquals("artifact",inst.getArtifact());
     assertFalse(inst.isExtract());
     assertEquals("fileName",inst.getFileName());
     assertEquals("group",inst.getGroup());
     assertEquals("platform",inst.getPlatform());
+    assertEquals("projectA", inst.getProject());
     assertEquals("type",inst.getType());
     assertEquals("version",inst.getVersion());
     
@@ -182,12 +203,14 @@ public class DependencyTrial extends MockitoSourceFileTrial {
     ParameterTrial.assertConvertedParams(ide.getChildren(), this);
     
     dm.setExtract(true);
-    inst = new Dependency(dm);
+    inst = new Dependency(dm, null);
     assertTrue(inst.isExtract());
+    assertNull(inst.getProject());
     
     dm.setExtract(false);
-    inst = new Dependency(dm);
+    inst = new Dependency(dm, null);
     assertFalse(inst.isExtract());
+    assertNull(inst.getProject());
   }
   
   @SuppressWarnings("unused")
@@ -214,13 +237,14 @@ public class DependencyTrial extends MockitoSourceFileTrial {
   public void testMethodCovertAndCreateDepTypeListAndDepType() {
     List<DependencyType> types = DependencyMutantTrial.getDependencies();
     
-    List<I_Dependency> result = Dependency.convert(types);
+    List<I_Dependency> result = Dependency.convert(types, "projectAbc");
     I_Dependency depA = result.get(0);
     assertEquals("artifactA", depA.getArtifact());
     assertFalse(depA.isExtract());
     assertEquals("fileNameA", depA.getFileName());
     assertEquals("groupA", depA.getGroup());
     assertEquals("platformA", depA.getPlatform());
+    assertEquals("projectAbc", depA.getProject());
     assertEquals("typeA", depA.getType());
     assertEquals("versionA", depA.getVersion());
     assertEquals(Dependency.class.getName(), depA.getClass().getName());
@@ -231,6 +255,7 @@ public class DependencyTrial extends MockitoSourceFileTrial {
     assertEquals("fileNameB", depB.getFileName());
     assertEquals("groupB", depB.getGroup());
     assertEquals("platformB", depB.getPlatform());
+    assertEquals("projectAbc", depB.getProject());
     assertEquals("typeB", depB.getType());
     assertEquals("versionB", depB.getVersion());
     assertEquals(Dependency.class.getName(), depB.getClass().getName());

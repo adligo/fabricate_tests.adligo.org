@@ -106,6 +106,7 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
     
     when(sysMock_.getenv(FabricateEnvironment.JAVA_HOME)).thenReturn("javaHome");
     when(sysMock_.getenv(FabricateEnvironment.FABRICATE_HOME)).thenReturn("fabricateHome");
+    when(xmlDiscMock.getProjectsDir()).thenReturn("someDirWithProjects");
     
    
     Fabricate fab = factory.create(sysMock_, fabType, xmlDiscMock);
@@ -136,7 +137,10 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
   @Test
   public void testMethodCreateSimple() throws Exception {
     FabricateFactory factory = new FabricateFactory();
-    Fabricate fab = factory.create(new FabricateMutant());
+    
+    FabricateMutant fm = new FabricateMutant();
+    fm.setProjectsDir("someDirWithProjects");
+    Fabricate fab = factory.create(fm);
     assertNotNull(fab);
   }
   
@@ -201,6 +205,7 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
     when(xmlDiscMock.getDevXmlDir()).thenReturn("someDevXmlDir");
     when(xmlDiscMock.getFabricateXmlDir()).thenReturn("someFabricateXmlDir");
     when(xmlDiscMock.getProjectXmlDir()).thenReturn("someProjectXmlDir");
+    when(xmlDiscMock.getProjectsDir()).thenReturn("someDirWithProjects");
     
     when(sysMock_.getenv(FabricateEnvironment.JAVA_HOME)).thenReturn("javaHome");
     when(sysMock_.getenv(FabricateEnvironment.FABRICATE_HOME)).thenReturn("fabricateHome");
@@ -294,6 +299,7 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
     fabType.setDependencies(fdeps);
     
     I_FabricateXmlDiscovery xmlDiscMock = mock(I_FabricateXmlDiscovery.class);
+    when(xmlDiscMock.getProjectsDir()).thenReturn("someDirWithProjects");
     
     when(sysMock_.getenv(FabricateEnvironment.JAVA_HOME)).thenReturn("javaHome");
     when(sysMock_.getenv(FabricateEnvironment.FABRICATE_HOME)).thenReturn("fabricateHome");
@@ -307,7 +313,7 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
     assertEquals(FabricateDefaults.LOCAL_REPOSITORY, fab.getFabricateRepository());
     
     List<I_Dependency> deps = fab.getDependencies();
-    DependencyTrial.assertDependencyConversion(this, deps);
+    DependencyTrial.assertDependencyConversion(this, deps, null);
   }
   
   @SuppressWarnings("boxing")

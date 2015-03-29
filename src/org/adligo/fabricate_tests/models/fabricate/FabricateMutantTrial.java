@@ -317,7 +317,7 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     
 
     
-    DependencyMutantTrial.assertDependencyConversion(this, fm.getDependencies());
+    DependencyMutantTrial.assertDependencyConversion(this, fm.getDependencies(), null);
   }
   
   @SuppressWarnings("boxing")

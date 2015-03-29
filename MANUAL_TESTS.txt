@@ -33,3 +33,26 @@ The list of manual tests (+ means passed, - means failed);
 	fab -r  
 		Watch the depot directory, it should delete and recreate the dependent jar files.
 		+ 3/25/2015
+				
+4) Change the project_group.adligo.org fabricate.xml to contain a bad_version and file name
+   for fabricate4eclipse.adligo.org
+   fab 
+      Watch the output of fab, it should contain a error like;
+      	did not pass the md5 check.
+		7e4225aeabd0f49dc687e37e6433bf1e
+		2e4225aeabd0f49dc687e37e6433bf1e
+		...
+		Version:'bad_version'
+		for;
+		/Volumes/C_HD/test_src/project_group.adligo.org/fabricate.xml
+		
+5) Change the project_group.adligo.org fabricate.xml to contain a bad group and file name
+   for fabricate4eclipse.adligo.org, i.e. "org.adligo1" instead of "org.adligo"
+   fab
+    Watch the output of fab, it should contain a error like;
+      java.io.IOException: Submitting a Http GET to the following url returned a invalid status code 404;
+	  http://repo1.maven.org/maven2/org/adligo1/fabricate4eclipse/bad_version/fabricate4eclipse_bad_version.jar.md5
+	  
+6) Repeat the same steps for (4,5) modifying a project dependency and a library dependency.
+
+ 

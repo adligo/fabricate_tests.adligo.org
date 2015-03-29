@@ -14,6 +14,9 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     I18N_Asserter asserter = new I18N_Asserter(this);
     
     SystemEnMessages messages = SystemEnMessages.INSTANCE;
+    asserter.assertConstant("Artifact:", 
+        messages.getArtifactColon());
+    
     asserter.assertConstant("AntHelper requires a directory argument.", 
         messages.getAntHelperRequiresADirectoryArgument());
     asserter.assertConstant("Archive stage <X/> completed successfully.", 
@@ -138,14 +141,22 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     
     asserter.assertConstant("failed!", 
         messages.getFailed());
+    asserter.assertConstant("File Name:", 
+        messages.getFileNameColon());
+    
     asserter.assertConstant("finished.", 
         messages.getFinished());
     asserter.assertConstant("Finished git clone on project <X/>.", 
         messages.getFinishedGetCloneOnProjectX());
     asserter.assertConstant("Finished git pull on project <X/>.", 
         messages.getFinishedGetPullOnProjectX());
+    asserter.assertConstant("for;", 
+        messages.getForSemicolon());
+    
     asserter.assertConstant("Git does not appear to be installed please install it.", 
         messages.getGitDoesNotAppearToBeInstalledPleaseInstallIt());
+    asserter.assertConstant("Group:", 
+        messages.getGroupColon());
     
     asserter.assertConstant("Instead of the following actual generic type;", 
         messages.getInsteadOfTheFollowingActualGenericType());
@@ -174,14 +185,22 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     asserter.assertConstant("Projects are located in the following directory;", 
         messages.getProjectsAreLocatedInTheFollowingDirectory());
     
-    asserter.assertConstant("Sending opts to script.", 
-        messages.getSendingOptsToScript());
-    asserter.assertConstant("Starting download from the following url;", 
-        messages.getStartingDownloadFromTheFollowingUrl());
-    asserter.assertConstant("Starting git clone on project <X/>.", 
-        messages.getStartingGetCloneOnProjectX());
-    asserter.assertConstant("Starting git pull on project <X/>.", 
-        messages.getStartingGetPullOnProjectX());
+    asserter.assertConstant("\tRunning archive stage '<X/>'.", 
+        messages.getRunningArchiveStageX());
+    asserter.assertConstant("Running archive stages...", 
+        messages.getRunningArchiveStages());
+    asserter.assertConstant("\tRunning build stage '<X/>'.", 
+        messages.getRunningBuildStageX());
+    asserter.assertConstant("Running build stages...", 
+        messages.getRunningBuildStages());
+    asserter.assertConstant("\tRunning command '<X/>'.", 
+        messages.getRunningCommandX());
+    asserter.assertConstant("Running commands...", 
+        messages.getRunningCommands());
+    asserter.assertConstant("\tRunning facet '<X/>'.", 
+        messages.getRunningFacetX());
+    asserter.assertConstant("Running facets...", 
+        messages.getRunningFacets());
     
     asserter.assertConstant("The download from the following url;", 
         messages.getTheDownloadFromTheFollowingUrl());
@@ -205,23 +224,6 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     asserter.assertConstant("The memory key '<X/>' has been locked by the following classes;", 
         messages.getTheMemoryKeyXHasBeenLockedByTheFollowingClasses());
     
-    asserter.assertConstant("\tRunning archive stage '<X/>'.", 
-        messages.getRunningArchiveStageX());
-    asserter.assertConstant("Running archive stages...", 
-        messages.getRunningArchiveStages());
-    asserter.assertConstant("\tRunning build stage '<X/>'.", 
-        messages.getRunningBuildStageX());
-    asserter.assertConstant("Running build stages...", 
-        messages.getRunningBuildStages());
-    asserter.assertConstant("\tRunning command '<X/>'.", 
-        messages.getRunningCommandX());
-    asserter.assertConstant("Running commands...", 
-        messages.getRunningCommands());
-    asserter.assertConstant("\tRunning facet '<X/>'.", 
-        messages.getRunningFacetX());
-    asserter.assertConstant("Running facets...", 
-        messages.getRunningFacets());
-    
     asserter.assertConstant("There was a problem creating the following directory;", 
         messages.getThereWasAProblemCreatingTheFollowingDirectory());
     asserter.assertConstant("There was a problem creating the following routine;", 
@@ -230,6 +232,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getThereWasAProblemCreatingRunMarkerInTheFollowingDirectory());
     asserter.assertConstant("There was a problem deleting the following directory;", 
         messages.getThereWasAProblemDeletingTheFollowingDirectory());
+    asserter.assertConstant("There was a problem verifying or downloading the following dependency;", 
+        messages.getThereWasAProblemVerifyingOrDownloadingTheFollowingDependency());
     asserter.assertConstant("This method must be called from the main thread (try moving the call to setup?).", 
         messages.getThisMethodMustBeCalledFromTheMainThread());
     asserter.assertConstant("This version of Fabricate requires Git <X/> or greater, and 'git --version' "
@@ -248,6 +252,17 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getTraitXTaskYIsStillRunningOnProjectZ());
     asserter.assertConstant("Trait <X/> is still setting up.", 
         messages.getTraitXIsStillSettingUp());
+    asserter.assertConstant("Type:", 
+        messages.getTypeColon());
+    
+    asserter.assertConstant("Sending opts to script.", 
+        messages.getSendingOptsToScript());
+    asserter.assertConstant("Starting download from the following url;", 
+        messages.getStartingDownloadFromTheFollowingUrl());
+    asserter.assertConstant("Starting git clone on project <X/>.", 
+        messages.getStartingGetCloneOnProjectX());
+    asserter.assertConstant("Starting git pull on project <X/>.", 
+        messages.getStartingGetPullOnProjectX());
     
     asserter.assertConstant("Unable to load the following class;", 
         messages.getUnableToLoadTheFollowingClass());
@@ -260,6 +275,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getVersionX());
     asserter.assertConstant("With the following generic type <X/>;", 
         messages.getWithTheFollowingGenericTypeX());
+    asserter.assertConstant("Version:", 
+        messages.getVersionColon());
     asserter.assertConstantsMatchMethods(SystemEnMessages.class);
   }
   

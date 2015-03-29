@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-@SourceFileScope (sourceClass=DependencyManager.class, minCoverage=31.0)
+@SourceFileScope (sourceClass=DependencyManager.class, minCoverage=30.0)
 public class DependencyManagerTrial extends MockitoSourceFileTrial {
   DefaultRepositoryPathBuilder builder_ = new DefaultRepositoryPathBuilder("repo/","/");
   private I_FabSystem sysMock_;
@@ -63,7 +63,7 @@ public class DependencyManagerTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("boxing")
   @Test
-  public void testMethodManageSimple()  throws IOException {
+  public void testMethodManageSimple()  throws Exception {
    
     
     I_DependencyManager dm = new DependencyManager(sysMock_, 
@@ -106,7 +106,7 @@ public class DependencyManagerTrial extends MockitoSourceFileTrial {
           }
         }, false);
     when(filesMock_.exists(any())).then(existsMethod);
-    assertTrue(dm.manange(dep));
+    dm.manange(dep);
     
     assertEquals("http://example.com/group/artifact/321/artifact-321.jar.md5", downloadFileMethod.getArgs(0)[0]);
     assertEquals("C:\\foo\\group\\artifact-321.jar.md5", 
@@ -141,9 +141,13 @@ public class DependencyManagerTrial extends MockitoSourceFileTrial {
     assertEquals("C:\\foo\\group\\artifact-321.jar.md5", readFileMethod.getArg(0));
     assertEquals(1, readFileMethod.count());
     
+    assertEquals("trying to obtain dependency " + System.lineSeparator() +
+        dep.toString() + System.lineSeparator() +
+        "from" + System.lineSeparator() +
+        "http://example.com/", printlnMethod_.getArg(0));
     assertEquals("The following artifact;" + System.lineSeparator() +
         "C:\\foo\\group\\artifact-321.jar" + System.lineSeparator() + 
-        "passed the md5 check." + System.lineSeparator(), printlnMethod_.getArg(0) );
+        "passed the md5 check." + System.lineSeparator(), printlnMethod_.getArg(1) );
     
   }
   

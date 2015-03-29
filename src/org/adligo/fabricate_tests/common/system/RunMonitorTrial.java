@@ -1,12 +1,14 @@
 package org.adligo.fabricate_tests.common.system;
 
 import org.adligo.fabricate.common.log.I_FabLog;
+import org.adligo.fabricate.common.system.AlreadyLoggedException;
 import org.adligo.fabricate.common.system.I_FabSystem;
 import org.adligo.fabricate.common.system.I_LocatableRunnable;
 import org.adligo.fabricate.common.system.RunMonitor;
 import org.adligo.tests4j.system.shared.trials.BeforeTrial;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
+import org.adligo.tests4j_4mockito.MockMethod;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
 import java.util.Map;
@@ -90,10 +92,14 @@ public class RunMonitorTrial extends MockitoSourceFileTrial {
   public void testConstructorAndRunWithThrown() {
     I_FabSystem system = mock(I_FabSystem.class);
     I_FabLog log = mock(I_FabLog.class);
+    MockMethod<Void> printTraceMethod = new MockMethod<Void>();
+    doAnswer(printTraceMethod).when(log).printTrace(any());
+    
     when(system.getLog()).thenReturn(log);
     
     when(system.newArrayBlockingQueue(Boolean.class, 1)).thenReturn(
         new ArrayBlockingQueue<Boolean>(1));
+    RuntimeException toThrow = new RuntimeException("x");
     I_LocatableRunnable run = new I_LocatableRunnable() {
 
       @Override
@@ -108,7 +114,7 @@ public class RunMonitorTrial extends MockitoSourceFileTrial {
         } catch (InterruptedException e) {
           Thread.currentThread().interrupt();
         }
-        throw new RuntimeException("x");
+        throw toThrow;
       }
 
       @Override
@@ -138,10 +144,71 @@ public class RunMonitorTrial extends MockitoSourceFileTrial {
     }
     assertTrue(rm.isFinished());
     assertTrue(rm.hasFailure());
+    assertSame(toThrow, printTraceMethod.getArg(0));
+    assertEquals(1, printTraceMethod.count());
     Throwable caught = rm.getCaught();
-    assertEquals(RuntimeException.class.getName(), caught.getClass().getName());
+    assertSame(toThrow, caught);
     assertEquals("x", caught.getMessage());
   }
   
- 
+  @SuppressWarnings("boxing")
+  @Test
+  public void testConstructorAndRunWithThrownAlreadLoggedException() {
+    I_FabSystem system = mock(I_FabSystem.class);
+    I_FabLog log = mock(I_FabLog.class);
+    when(system.getLog()).thenReturn(log);
+    MockMethod<Void> printTraceMethod = new MockMethod<Void>();
+    doAnswer(printTraceMethod).when(log).printTrace(any());
+    
+    when(system.newArrayBlockingQueue(Boolean.class, 1)).thenReturn(
+        new ArrayBlockingQueue<Boolean>(1));
+    AlreadyLoggedException toThrow = new AlreadyLoggedException(new IllegalStateException("x"));
+    I_LocatableRunnable run = new I_LocatableRunnable() {
+
+      @Override
+      public String getCurrentLocation() {
+        return "cl";
+      }
+      
+      @Override
+      public void run() {
+        try {
+          Thread.sleep(201);
+        } catch (InterruptedException e) {
+          Thread.currentThread().interrupt();
+        }
+        throw toThrow;
+      }
+
+      @Override
+      public String getAdditionalDetail() {
+        // TODO Auto-generated method stub
+        return null;
+      }
+    };
+    RunMonitor rm = new RunMonitor(system, run, 1);
+    assertEquals(1, rm.getSequence());
+    assertFalse(rm.isFinished());
+    assertNull(rm.getCaught());
+    
+    THREAD_POOL_.submit(rm);
+    long time = System.currentTimeMillis();
+    try {
+      rm.waitUntilFinished(200);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+    }
+    long dur = System.currentTimeMillis() - time;
+    assertGreaterThanOrEquals(200, dur);
+    try {
+      rm.waitUntilFinished(2000);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+    }
+    assertTrue(rm.isFinished());
+    assertTrue(rm.hasFailure());
+    assertEquals(0, printTraceMethod.count());
+    Throwable caught = rm.getCaught();
+    assertSame(toThrow, caught);
+  }
 }

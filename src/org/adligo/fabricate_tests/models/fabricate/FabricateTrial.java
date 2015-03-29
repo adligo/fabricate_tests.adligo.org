@@ -46,6 +46,13 @@ public class FabricateTrial extends MockitoSourceFileTrial {
             new Fabricate( null);
           }
         }); 
+    assertThrown(new ExpectedThrowable(new IllegalArgumentException("projectsDir")),
+        new I_Thrower() {
+          @Override
+          public void run() throws Throwable {
+            new Fabricate( new FabricateMutant());
+          }
+        }); 
   }
   
   @SuppressWarnings("boxing")
@@ -133,6 +140,7 @@ public class FabricateTrial extends MockitoSourceFileTrial {
     
     FabricateMutant mock = mock(FabricateMutant.class);
     when(mock.getJavaSettings()).thenReturn(js);
+    when(mock.getProjectsDir()).thenReturn("someDirWithProjects");
     copy = new Fabricate(mock);
     List<I_Dependency> deps = copy.getDependencies();
     assertEquals(0, deps.size());

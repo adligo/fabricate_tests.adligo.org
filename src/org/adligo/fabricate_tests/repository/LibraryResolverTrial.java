@@ -65,9 +65,9 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
     when(filesMock_.exists(path)).thenReturn(true);
     when(filesXmlMock_.parseLibrary_v1_0(path)).thenReturn(lt);
     LibraryResolver lr = new LibraryResolver(sysMock_, fabMock_);
-    List<I_Dependency> deps = lr.getDependencies("sleaf");
+    List<I_Dependency> deps = lr.getDependencies("sleaf", null);
     
-    DependencyTrial.assertDependencyConversion(this, deps);
+    DependencyTrial.assertDependencyConversion(this, deps, null);
     assertEquals(2, deps.size());
   }
   
@@ -104,13 +104,13 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
     when(filesXmlMock_.parseLibrary_v1_0(pathBranch)).thenReturn(ltBranch);
     
     LibraryResolver lr = new LibraryResolver(sysMock_, fabMock_);
-    List<I_Dependency> deps = lr.getDependencies("branch");
+    List<I_Dependency> deps = lr.getDependencies("branch", "projectA");
     
     I_Dependency depZero = deps.get(0);
     DependencyTrial.assertDependencyConversionC(
-        this, Collections.singletonList(depZero));
+        this, Collections.singletonList(depZero), "projectA");
     deps.remove(0);
-    DependencyTrial.assertDependencyConversion(this, deps);
+    DependencyTrial.assertDependencyConversion(this, deps, "projectA");
     assertEquals(2, deps.size());
     
   }
@@ -137,7 +137,7 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
           
           @Override
           public void run() throws Throwable {
-            lr.getDependencies("sleaf");
+            lr.getDependencies("sleaf", "projectA");
           }
         });
   }
@@ -202,7 +202,7 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
           
           @Override
           public void run() throws Throwable {
-            lr.getDependencies("sleaf");
+            lr.getDependencies("sleaf", "projectA");
           }
         });
   }
@@ -228,7 +228,7 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
           
           @Override
           public void run() throws Throwable {
-            lr.getDependencies("sleaf");
+            lr.getDependencies("sleaf", "projectA");
           }
         });
   }
@@ -280,19 +280,19 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
     when(filesXmlMock_.parseLibrary_v1_0(pathTrunk)).thenReturn(ltTrunk);
     
     LibraryResolver lr = new LibraryResolver(sysMock_, fabMock_);
-    List<I_Dependency> deps = lr.getDependencies("trunk");
+    List<I_Dependency> deps = lr.getDependencies("trunk", "projectA");
     
     I_Dependency depZero = deps.get(0);
     DependencyTrial.assertDependencyConversionD(
-        this, Collections.singletonList(depZero));
+        this, Collections.singletonList(depZero), "projectA");
     deps.remove(0);
     
     I_Dependency depOne = deps.get(0);
     DependencyTrial.assertDependencyConversionC(
-        this, Collections.singletonList(depOne));
+        this, Collections.singletonList(depOne), "projectA");
     deps.remove(0);
     
-    DependencyTrial.assertDependencyConversion(this, deps);
+    DependencyTrial.assertDependencyConversion(this, deps, "projectA");
     assertEquals(2, deps.size());
   }
   
@@ -356,38 +356,38 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
     libRefLeaf.setValue("sleaf");
     lrts.add(libRefLeaf);
     
-    List<I_Dependency> deps = lr.getDependencies(lrts);
+    List<I_Dependency> deps = lr.getDependencies(lrts, null);
     
     I_Dependency depZero = deps.get(0);
     DependencyTrial.assertDependencyConversionD(
-        this, Collections.singletonList(depZero));
+        this, Collections.singletonList(depZero), null);
     deps.remove(0);
     
     I_Dependency depOne = deps.get(0);
     DependencyTrial.assertDependencyConversionC(
-        this, Collections.singletonList(depOne));
+        this, Collections.singletonList(depOne), null);
     deps.remove(0);
     
     List<I_Dependency> depsTwo = new ArrayList<I_Dependency>();
     depsTwo.add(deps.get(0));
     depsTwo.add(deps.get(1));
-    DependencyTrial.assertDependencyConversion(this, depsTwo);
+    DependencyTrial.assertDependencyConversion(this, depsTwo, null);
     deps.remove(0);
     deps.remove(0);
     
     I_Dependency depFive = deps.get(0);
     DependencyTrial.assertDependencyConversionC(
-        this, Collections.singletonList(depFive));
+        this, Collections.singletonList(depFive), null);
     deps.remove(0);
     
     List<I_Dependency> depsSixSeven = new ArrayList<I_Dependency>();
     depsSixSeven.add(deps.get(0));
     depsSixSeven.add(deps.get(1));
-    DependencyTrial.assertDependencyConversion(this, depsSixSeven);
+    DependencyTrial.assertDependencyConversion(this, depsSixSeven, null);
     deps.remove(0);
     deps.remove(0);
     
-    DependencyTrial.assertDependencyConversion(this, deps);
+    DependencyTrial.assertDependencyConversion(this, deps, null);
     assertEquals(2, deps.size());
   }
 }

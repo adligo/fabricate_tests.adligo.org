@@ -1,5 +1,6 @@
 package org.adligo.fabricate_tests.common.system;
 
+import org.adligo.fabricate.common.en.FabricateEnConstants;
 import org.adligo.fabricate.common.en.FileEnMessages;
 import org.adligo.fabricate.common.files.I_FabFileIO;
 import org.adligo.fabricate.common.files.xml_io.I_FabXmlFileIO;
@@ -20,6 +21,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @SourceFileScope (sourceClass=FabricateXmlDiscovery.class,minCoverage=90.0)
 public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
@@ -72,6 +75,7 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     when(sysMock_.getXmlFileIO()).thenReturn(xmlFilesMock_);
     FabLog log = new FabLog(Collections.emptyMap(), false);
     when(sysMock_.getLog()).thenReturn(log);
+    when(sysMock_.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
   }
 
   public void setupPaths(String nameSeparator) {
@@ -117,6 +121,7 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     doReturn(fileMock).when(filesMock_).instance(path);
     
     when(filesMock_.exists("fabricate.xml")).thenReturn(true);
+    
     File mockFabFile = filesMock_.instance("fabricate.xml");
     when(mockFabFile.exists()).thenReturn(true);
     
@@ -126,6 +131,12 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     assertFalse(disc.hasProjectXml());
     
     assertEquals("/somewhere/projects/projectName.example.com/", disc.getFabricateXmlDir());
+    
+    assertEquals("/somewhere/projects/projectName.example.com/projects/", disc.getProjectsDir());
+    when(sysMock_.hasArg("-d")).thenReturn(true);
+    when(filesMock_.getParentDir("/somewhere/projects/projectName.example.com/")).thenReturn("/somewhere/projects/");
+    disc = new FabricateXmlDiscovery(sysMock_);
+    assertEquals("/somewhere/projects/", disc.getProjectsDir());
   }
 
   @SuppressWarnings("boxing")
@@ -136,11 +147,20 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     when(filesMock_.exists("fabricate.xml")).thenReturn(true);
     File mockFabFile = filesMock_.instance("fabricate.xml");
     when(mockFabFile.exists()).thenReturn(true);
+    when(filesMock_.getParentDir("C:\\somewhere\\projects\\projectName.example.com\\fabricate.xml")).thenReturn(
+        "C:\\somewhere\\projects\\projectName.example.com\\");
     
     FabricateXmlDiscovery disc = new FabricateXmlDiscovery(sysMock_);
     assertTrue(disc.hasFabricateXml());
     assertEquals("C:\\somewhere\\projects\\projectName.example.com\\fabricate.xml", disc.getFabricateXmlPath());
     assertFalse(disc.hasProjectXml());
+    
+    assertEquals("C:\\somewhere\\projects\\projectName.example.com\\projects\\", disc.getProjectsDir());
+    when(sysMock_.hasArg("-d")).thenReturn(true);
+    when(filesMock_.getParentDir("C:\\somewhere\\projects\\projectName.example.com\\")).thenReturn(
+        "C:\\somewhere\\projects\\");
+    disc = new FabricateXmlDiscovery(sysMock_);
+    assertEquals("C:\\somewhere\\projects\\", disc.getProjectsDir());
   }
   
   @SuppressWarnings("boxing")
@@ -248,12 +268,16 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     
     File projectFileMock = filesMock_.instance("/somewhere/projects/projectName.example.com/project.xml");
     when(projectFileMock.getParentFile()).thenReturn(dirMock);
+    when(filesMock_.getParentDir("/somewhere/projects/projectName.example.com/project.xml")).thenReturn(
+        "/somewhere/projects/projectName.example.com/");
+    when(filesMock_.getParentDir("/somewhere/projects/projectName.example.com/")).thenReturn("/somewhere/projects/");
     
     FabricateXmlDiscovery disc = new FabricateXmlDiscovery(sysMock_);
     assertFalse(disc.hasFabricateXml());
     assertEquals("/somewhere/fabricate.xml", disc.getFabricateXmlPath());
     assertFalse(disc.hasProjectXml());
     assertEquals("/somewhere/projects/projectName.example.com/project.xml", disc.getProjectXml());
+    assertEquals("/somewhere/projects/", disc.getProjectsDir());
     
     when(projectFileMock.exists()).thenReturn(true);
     disc = new FabricateXmlDiscovery(sysMock_);
@@ -269,7 +293,7 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     assertEquals("/somewhere/fabricate.xml", disc.getFabricateXmlPath());
     assertTrue(disc.hasProjectXml());
     assertEquals("/somewhere/projects/projectName.example.com/project.xml", disc.getProjectXml());
-    
+    assertEquals("/somewhere/projects/", disc.getProjectsDir());
   }
   
   @SuppressWarnings("boxing")
@@ -298,6 +322,11 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     assertEquals("C:\\somewhere\\fabricate.xml", disc.getFabricateXmlPath());
     assertFalse(disc.hasProjectXml());
     assertEquals("C:\\somewhere\\projects\\projectName.example.com\\project.xml", disc.getProjectXml());
+    when(filesMock_.getParentDir("C:\\somewhere\\projects\\projectName.example.com\\project.xml")).thenReturn(
+        "C:\\somewhere\\projects\\projectName.example.com\\");
+    when(filesMock_.getParentDir("C:\\somewhere\\projects\\projectName.example.com\\")).thenReturn(
+        "C:\\somewhere\\projects\\");
+    
     
     when(projectFileMock.exists()).thenReturn(true);
     disc = new FabricateXmlDiscovery(sysMock_);
@@ -305,6 +334,7 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     assertEquals("C:\\somewhere\\fabricate.xml", disc.getFabricateXmlPath());
     assertTrue(disc.hasProjectXml());
     assertEquals("C:\\somewhere\\projects\\projectName.example.com\\project.xml", disc.getProjectXml());
+    assertEquals("C:\\somewhere\\projects\\", disc.getProjectsDir());
     
     File fabFile = filesMock_.instance("C:\\somewhere\\fabricate.xml");
     when(fabFile.exists()).thenReturn(true);
@@ -313,7 +343,7 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     assertEquals("C:\\somewhere\\fabricate.xml", disc.getFabricateXmlPath());
     assertTrue(disc.hasProjectXml());
     assertEquals("C:\\somewhere\\projects\\projectName.example.com\\project.xml", disc.getProjectXml());
-    
+    assertEquals("C:\\somewhere\\projects\\", disc.getProjectsDir());
   }
   @SuppressWarnings("boxing")
   @Test
@@ -355,7 +385,8 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     dev.setProjectGroup("projectGroupName.example.com");
     when(xmlFilesMock_.parseDev_v1_0("/somewhere/projects/dev.xml")).thenReturn(dev);
     
-
+    when(filesMock_.getParentDir("/somewhere/projects/dev.xml")).thenReturn(
+        "/somewhere/projects/");
     
     when(projectFileMock.exists()).thenReturn(true);
     //run
@@ -365,6 +396,7 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     assertEquals("/somewhere/projects/projectGroupName.example.com/fabricate.xml", disc.getFabricateXmlPath());
     assertTrue(disc.hasProjectXml());
     assertEquals("/somewhere/projects/projectName.example.com/project.xml", disc.getProjectXml());
+    assertEquals("/somewhere/projects/", disc.getProjectsDir());
     
     //setup
     File fabFile = filesMock_.instance("/somewhere/projects/projectGroup.example.com/fabricate.xml");
@@ -387,6 +419,7 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     assertEquals("/somewhere/projects/projectGroupName.example.com/", disc.getFabricateXmlDir());
     assertEquals("/somewhere/projects/projectName.example.com/", disc.getProjectXmlDir());
     assertEquals("/somewhere/projects/", disc.getDevXmlDir());
+    assertEquals("/somewhere/projects/", disc.getProjectsDir());
   }
   
   @SuppressWarnings("boxing")
@@ -414,7 +447,8 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     FabricateDevType dev = new FabricateDevType();
     dev.setProjectGroup("projectGroup.example.com");
     when(xmlFilesMock_.parseDev_v1_0("C:\\somewhere\\projects\\dev.xml")).thenReturn(dev);
-    
+    when(filesMock_.getParentDir("C:\\somewhere\\projects\\dev.xml")).thenReturn(
+        "C:\\somewhere\\projects\\");
     
     when(projectFileMock.exists()).thenReturn(true);
     //run
@@ -424,6 +458,7 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     assertEquals("C:\\somewhere\\projects\\projectGroup.example.com\\fabricate.xml", disc.getFabricateXmlPath());
     assertTrue(disc.hasProjectXml());
     assertEquals("C:\\somewhere\\projects\\projectName.example.com\\project.xml", disc.getProjectXml());
+    assertEquals("C:\\somewhere\\projects\\", disc.getProjectsDir());
     
     //setup
     File fabFile = filesMock_.instance("C:\\somewhere\\projects\\projectGroup.example.com\\fabricate.xml");
@@ -435,6 +470,7 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     assertEquals("C:\\somewhere\\projects\\projectGroup.example.com\\fabricate.xml", disc.getFabricateXmlPath());
     assertTrue(disc.hasProjectXml());
     assertEquals("C:\\somewhere\\projects\\projectName.example.com\\project.xml", disc.getProjectXml());
+    assertEquals("C:\\somewhere\\projects\\", disc.getProjectsDir());
   }
   @SuppressWarnings({"boxing"})
   @Test
@@ -465,7 +501,9 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     assertTrue(disc.isDevParseException());
     assertEquals("",baos_.toString());
     
-    FabLog log = new FabLog(Collections.emptyMap(), true);
+    Map<String,Boolean> logsOn = new HashMap<String,Boolean>();
+    logsOn.put(FabricateXmlDiscovery.class.getName(), true);
+    FabLog log = new FabLog(logsOn, false);
     when(sysMock_.getLog()).thenReturn(log);
     disc = new FabricateXmlDiscovery(sysMock_);
     assertTrue(disc.isDevParseException());
@@ -505,7 +543,9 @@ public class FabricateXmlDiscoveryTrial extends MockitoSourceFileTrial {
     assertTrue(disc.isDevParseException());
     assertEquals("",baos_.toString());
     
-    FabLog log = new FabLog(Collections.emptyMap(), true);
+    Map<String,Boolean> logsOn = new HashMap<String,Boolean>();
+    logsOn.put(FabricateXmlDiscovery.class.getName(), true);
+    FabLog log = new FabLog(logsOn, false);
     when(sysMock_.getLog()).thenReturn(log);
     disc = new FabricateXmlDiscovery(sysMock_);
     assertTrue(disc.isDevParseException());

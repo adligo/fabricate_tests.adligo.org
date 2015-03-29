@@ -13,6 +13,7 @@ import org.adligo.fabricate.common.system.CommandLineArgs;
 import org.adligo.fabricate.common.system.FabSystem;
 import org.adligo.fabricate.common.system.FabricateEnvironment;
 import org.adligo.fabricate.common.system.FabricateXmlDiscovery;
+import org.adligo.fabricate.common.system.FailureTransport;
 import org.adligo.fabricate.java.JavaFactory;
 import org.adligo.fabricate.java.ManifestParser;
 import org.adligo.fabricate.managers.CommandManager;
@@ -508,7 +509,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     ft.setDetail("detail");
     FabricationMemoryMutant<Object> memory = new FabricationMemoryMutant<Object>(SystemEnMessages.INSTANCE);
     when(factoryMock_.createMemory(sysMock_)).thenReturn(memory);
-    when(cmMock.processCommands(memory)).thenReturn(ft);
+    when(cmMock.processCommands(memory)).thenReturn(new FailureTransport(false, ft));
     when(factoryMock_.createCommandManager(commands, sysMock_, routineFactoryMock)).thenReturn(cmMock);
     
     when(sysMock_.getArgValues(CommandLineEnConstants.INSTANCE.getCommand())).thenReturn(
