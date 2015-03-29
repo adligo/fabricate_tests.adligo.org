@@ -364,7 +364,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     assertEquals("fabProject", rt.getName());
     assertEquals("other", rt.getOs());
     assertEquals("3.1", rt.getOsVersion());
-    assertEquals("P0Y0M0DT0H0M0.333S", rt.getDuration().toString());
+    assertEquals("PT0.333S", rt.getDuration().toString());
     assertNull(rt.getFailure());
     MachineInfoType mit = rt.getMachine();
     assertNotNull(mit);
@@ -458,7 +458,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     assertEquals("fabProject", rt.getName());
     assertEquals("other", rt.getOs());
     assertEquals("3.1", rt.getOsVersion());
-    assertEquals("P0Y0M0DT0H0M0.333S", rt.getDuration().toString());
+    assertEquals("PT0.333S", rt.getDuration().toString());
     assertNull(rt.getFailure());
     MachineInfoType mit = rt.getMachine();
     assertNotNull(mit);
@@ -554,7 +554,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     assertEquals("fabProject", rt.getName());
     assertEquals("other", rt.getOs());
     assertEquals("3.1", rt.getOsVersion());
-    assertEquals("P0Y0M0DT0H0M0.333S", rt.getDuration().toString());
+    assertEquals("PT0.333S", rt.getDuration().toString());
     FailureType resultFailure = rt.getFailure();
     assertSame(ft, resultFailure);
     MachineInfoType mit = rt.getMachine();

@@ -15,6 +15,7 @@ import org.adligo.fabricate.managers.FabricationManager;
 import org.adligo.fabricate.managers.ProjectsManager;
 import org.adligo.fabricate.routines.implicit.DecryptTrait;
 import org.adligo.fabricate.routines.implicit.EncryptTrait;
+import org.adligo.fabricate.routines.implicit.JarRoutine;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.LogSettingType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.LogSettingsType;
@@ -40,7 +41,8 @@ public class FabSystemSetupTrial extends MockitoSourceFileTrial {
     assertContains(lo, CommandManager.class.getName());
     assertContains(lo, FabricationManager.class.getName());
     assertContains(lo, ProjectsManager.class.getName());
-    assertEquals(4, lo.size());
+    assertContains(lo, JarRoutine.class.getName());
+    assertEquals(5, lo.size());
   }
 
   @SuppressWarnings("boxing")

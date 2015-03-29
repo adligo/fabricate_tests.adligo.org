@@ -65,7 +65,7 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
     when(filesMock_.exists(path)).thenReturn(true);
     when(filesXmlMock_.parseLibrary_v1_0(path)).thenReturn(lt);
     LibraryResolver lr = new LibraryResolver(sysMock_, fabMock_);
-    List<I_Dependency> deps = lr.getDependencies("sleaf", null);
+    List<I_Dependency> deps = lr.getDependencies("sleaf", null, null);
     
     DependencyTrial.assertDependencyConversion(this, deps, null);
     assertEquals(2, deps.size());
@@ -104,13 +104,13 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
     when(filesXmlMock_.parseLibrary_v1_0(pathBranch)).thenReturn(ltBranch);
     
     LibraryResolver lr = new LibraryResolver(sysMock_, fabMock_);
-    List<I_Dependency> deps = lr.getDependencies("branch", "projectA");
+    List<I_Dependency> deps = lr.getDependencies("branch", "projectA", "gwt");
     
     I_Dependency depZero = deps.get(0);
     DependencyTrial.assertDependencyConversionC(
-        this, Collections.singletonList(depZero), "projectA");
+        this, Collections.singletonList(depZero), "projectA", "gwt");
     deps.remove(0);
-    DependencyTrial.assertDependencyConversion(this, deps, "projectA");
+    DependencyTrial.assertDependencyConversion(this, deps, "projectA", "gwt");
     assertEquals(2, deps.size());
     
   }
@@ -137,7 +137,7 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
           
           @Override
           public void run() throws Throwable {
-            lr.getDependencies("sleaf", "projectA");
+            lr.getDependencies("sleaf", "projectA", "gwt");
           }
         });
   }
@@ -202,7 +202,7 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
           
           @Override
           public void run() throws Throwable {
-            lr.getDependencies("sleaf", "projectA");
+            lr.getDependencies("sleaf", "projectA", "gwt");
           }
         });
   }
@@ -228,7 +228,7 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
           
           @Override
           public void run() throws Throwable {
-            lr.getDependencies("sleaf", "projectA");
+            lr.getDependencies("sleaf", "projectA", "gwt");
           }
         });
   }
@@ -280,7 +280,7 @@ public class LibraryResolverTrial extends MockitoSourceFileTrial {
     when(filesXmlMock_.parseLibrary_v1_0(pathTrunk)).thenReturn(ltTrunk);
     
     LibraryResolver lr = new LibraryResolver(sysMock_, fabMock_);
-    List<I_Dependency> deps = lr.getDependencies("trunk", "projectA");
+    List<I_Dependency> deps = lr.getDependencies("trunk", "projectA", null);
     
     I_Dependency depZero = deps.get(0);
     DependencyTrial.assertDependencyConversionD(

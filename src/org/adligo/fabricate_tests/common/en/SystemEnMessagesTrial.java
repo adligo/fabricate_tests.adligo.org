@@ -152,6 +152,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getFinishedGetPullOnProjectX());
     asserter.assertConstant("for;", 
         messages.getForSemicolon());
+    asserter.assertConstant("Finished <X/> on project <Y/>.", 
+        messages.getFinishedXOnProjectY());
     
     asserter.assertConstant("Git does not appear to be installed please install it.", 
         messages.getGitDoesNotAppearToBeInstalledPleaseInstallIt());
@@ -263,6 +265,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getStartingGetCloneOnProjectX());
     asserter.assertConstant("Starting git pull on project <X/>.", 
         messages.getStartingGetPullOnProjectX());
+    asserter.assertConstant("Starting <X/> on project <Y/>.", 
+        messages.getStartingXOnProjectY());
     
     asserter.assertConstant("Unable to load the following class;", 
         messages.getUnableToLoadTheFollowingClass());
