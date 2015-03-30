@@ -169,14 +169,17 @@ public class FabricateTrial extends MockitoSourceFileTrial {
     dms.add(dB);
     dms.add(null);
     
+    fm.setArchiveStages(Collections.singletonList("aStage"), getRoutines("aStage", RoutineBriefOrigin.ARCHIVE_STAGE));
     fm.setDependencies(dms);
     fm.setCommands(getRoutines("command", RoutineBriefOrigin.COMMAND));
     fm.setFacets(getRoutines("facet", RoutineBriefOrigin.FACET));
-    fm.setStages(getRoutines("stage", RoutineBriefOrigin.STAGE));
+    fm.setStages(Collections.singletonList("stage"), getRoutines("stage", RoutineBriefOrigin.STAGE));
     fm.setTraits(getRoutines("trait", RoutineBriefOrigin.TRAIT));
     
     copy = new Fabricate(fm);
     assertDependencies(copy); 
+    I_RoutineBrief aStage = assertRoutines(copy.getArchiveStages(), "aStage", RoutineBriefOrigin.ARCHIVE_STAGE);
+    assertSame(aStage, copy.getArchiveStage("aStage"));
     I_RoutineBrief cmd = assertRoutines(copy.getCommands(), "command", RoutineBriefOrigin.COMMAND);
     assertSame(cmd, copy.getCommand("command"));
     I_RoutineBrief facet = assertRoutines(copy.getFacets(), "facet", RoutineBriefOrigin.FACET);

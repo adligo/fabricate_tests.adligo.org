@@ -1,6 +1,7 @@
 package org.adligo.fabricate_tests.common.system;
 
 import org.adligo.fabricate.common.system.FailureTransport;
+import org.adligo.fabricate.common.system.I_FailureTransport;
 import org.adligo.fabricate.xml.io_v1.result_v1_0.FailureType;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
@@ -14,7 +15,7 @@ public class FailureTransportTrial extends MockitoSourceFileTrial {
   @Test
   public void testConstructor() {
     FailureType ft = new FailureType();
-    FailureTransport trans = new FailureTransport(true, ft);
+    I_FailureTransport trans = new FailureTransport(true, ft);
     assertTrue(trans.isLogged());
     assertSame(ft, trans.getFailure());
     

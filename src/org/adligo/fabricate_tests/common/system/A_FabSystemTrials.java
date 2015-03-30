@@ -35,6 +35,9 @@ public class A_FabSystemTrials implements I_Tests4J_TrialList {
     trials.add(I_ExecutionResultTrial.class);
     trials.add(I_ExecutorTrial.class);
     trials.add(I_ExecutingProcessTrial.class);
+    
+    trials.add(I_FailureTransportTrial.class);
+    
     trials.add(I_LocatableRunableTrial.class);
     trials.add(I_FabSystemTrial.class);
     trials.add(I_GitCallsTrial.class);

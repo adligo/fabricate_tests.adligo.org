@@ -1,7 +1,7 @@
 package org.adligo.fabricate_tests.routines.implicit;
 
 import org.adligo.fabricate.common.en.SystemEnMessages;
-import org.adligo.fabricate.routines.SshAgentHelper;
+import org.adligo.fabricate.routines.implicit.SshAgentHelper;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
 import org.adligo.tests4j.shared.asserts.common.I_Thrower;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;

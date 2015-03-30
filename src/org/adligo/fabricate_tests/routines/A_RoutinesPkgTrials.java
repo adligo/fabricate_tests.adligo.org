@@ -32,6 +32,40 @@ public class A_RoutinesPkgTrials implements I_Tests4J_TrialList {
     trials.addAll(new A_RoutinesImplicitPkgTrials().getTrials());
     
     trials.add(AbstractRoutineTrial.class);
+    
+    trials.add(I_CommandAwareTrial.class);
+    trials.add(I_ConcurrencyAwareTrial.class);
+    trials.add(I_CoverageAwareTrial.class);
+    trials.add(I_FabricateAwareTrial.class);
+    trials.add(I_GenericTypeAwareTrial.class);
+    
+    trials.add(I_InputAwareTrial.class);
+    
+    trials.add(I_OutputProducerTrial.class);
+    
+    trials.add(I_PlatformAwareTrial.class);
+    trials.add(I_ParticipationAwareTrial.class);
+    trials.add(I_PresentationAwareTrial.class);
+    trials.add(I_PresenterFactoryTrial.class);
+    trials.add(I_ProjectAwareTrial.class);
+    trials.add(I_ProjectBriefAwareTrial.class);
+    trials.add(I_ProjectProcessorTrial.class);
+    trials.add(I_ProjectBriefsAwareTrial.class);
+    trials.add(I_ProjectsAwareTrial.class);
+    
+    trials.add(I_RepositoryFactoryAwareTrial.class);
+    trials.add(I_RepositoryManagerAwareTrial.class);
+    trials.add(I_RoutineBuilderTrial.class);
+    trials.add(I_RoutineFabricateFactoryAwareTrial.class);
+    trials.add(I_RoutineFabricateFactoryTrial.class);
+    
+    trials.add(I_TaskProcessorTrial.class);
+    trials.add(I_TestsAwareTrial.class);
+    
+    trials.add(I_ViewAwareTrial.class);
+    trials.add(I_ViewFactoryTrial.class);
+    
+    trials.add(RoutineBuilderTrial.class);
     trials.add(RoutineExecutionEngineTrial.class);
     trials.add(RoutineFactoryTrial.class);
     trials.add(RoutineLocationInfoTrial.class);

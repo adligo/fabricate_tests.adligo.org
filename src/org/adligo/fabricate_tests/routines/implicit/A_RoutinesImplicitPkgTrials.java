@@ -28,10 +28,56 @@ public class A_RoutinesImplicitPkgTrials implements I_Tests4J_TrialList {
   @Override
   public List<Class<? extends I_Trial>> getTrials() {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
-    trials.add(DecryptTrial.class);
-    trials.add(EncryptTrial.class);
+    
+    trials.add(AddFilesTaskTrial.class);
+    
+    trials.add(CommonBuildDirTrial.class);
+    trials.add(CompileSourceTaskTrial.class);
+    trials.add(CopyRoutineTrial.class);
+    trials.add(CreateJarTaskTrial.class);
+    
+    trials.add(DecryptCommandTrial.class);
+    trials.add(DecryptTraitTrial.class);
+    trials.add(DependenciesFilterTrial.class);
+    trials.add(DepositJarTaskTrial.class);
+    trials.add(DoNothingRoutineTrial.class);
+    trials.add(DownloadDependenciesRoutineTrial.class);
+    
+    trials.add(EncryptCommandTrial.class);
+    trials.add(EncryptTraitTrial.class);
+    
+    trials.add(FabricateAwareRoutineTrial.class);
+    trials.add(FindSrcTraitTrial.class);
+    
+    trials.add(GenerateSourceTaskTrial.class);
+    trials.add(GitCheckoutRoutineTrial.class);
+    trials.add(GitCloneRoutineTrial.class);
+    trials.add(GitCommitRoutineTrial.class);
+    trials.add(GitPushRoutineTrial.class);
+    trials.add(GitUpdateRoutineTrial.class);
+    
+    trials.add(I_JarFileNameAwareTrial.class);
+    trials.add(I_ScmContextAwareTrial.class);
+    
+    trials.add(ImplicitFacetsTrial.class);
+    trials.add(ImplicitRoutineFactoryTrial.class);
+    trials.add(ImplicitStagesTrial.class);
+    
+    trials.add(JarRoutineTrial.class);
+    
+    trials.add(LoadProjectTaskTrial.class);
+    
+    trials.add(NameJarTraitTrial.class);
+    
+    trials.add(ProjectAwareRoutineTrial.class);
+    trials.add(ProjectBriefAwareRoutineTrial.class);
+    trials.add(PublishCommandTrial.class);
     
     trials.add(ScmContextTrial.class);
+    trials.add(ScmContextInputAwareRoutineTrial.class);
+    trials.add(ScmRoutineTrial.class);
+    trials.add(SetupProjectsRoutineTrial.class);
+    
     trials.add(SshAgentHelperTrial.class);
     
     trials.add(RoutineFabricateFactoryTrial.class);

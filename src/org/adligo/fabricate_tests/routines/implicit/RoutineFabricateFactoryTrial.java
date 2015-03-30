@@ -11,7 +11,7 @@ import org.adligo.fabricate.models.common.I_FabricationRoutine;
 import org.adligo.fabricate.routines.I_RoutineBuilder;
 import org.adligo.fabricate.routines.RoutineExecutionEngine;
 import org.adligo.fabricate.routines.implicit.DecryptTrait;
-import org.adligo.fabricate.routines.implicit.RoutineFabricateFactory;
+import org.adligo.fabricate.routines.implicit.ImplicitRoutineFactory;
 import org.adligo.fabricate_tests.routines.implicit.mocks.SimpleConcurrentRoutineMock;
 import org.adligo.fabricate_tests.routines.implicit.mocks.SimpleRoutineMock;
 import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
@@ -26,7 +26,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-@SourceFileScope (sourceClass=RoutineFabricateFactory.class, minCoverage=0.0)
+@SourceFileScope (sourceClass=ImplicitRoutineFactory.class, minCoverage=0.0)
 public class RoutineFabricateFactoryTrial extends MockitoSourceFileTrial {
   private I_FabSystem sysMock_;
   private I_FabLog logMock_;

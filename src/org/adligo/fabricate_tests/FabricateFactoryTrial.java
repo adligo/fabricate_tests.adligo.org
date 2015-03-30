@@ -12,6 +12,7 @@ import org.adligo.fabricate.common.system.FabricateXmlDiscovery;
 import org.adligo.fabricate.managers.CommandManager;
 import org.adligo.fabricate.managers.FabricationManager;
 import org.adligo.fabricate.managers.ProjectsManager;
+import org.adligo.fabricate.models.common.RoutineBriefOrigin;
 import org.adligo.fabricate.models.dependencies.I_Dependency;
 import org.adligo.fabricate.models.fabricate.Fabricate;
 import org.adligo.fabricate.models.fabricate.FabricateMutant;
@@ -28,8 +29,10 @@ import org.adligo.fabricate.repository.I_LibraryResolver;
 import org.adligo.fabricate.repository.I_RepositoryManager;
 import org.adligo.fabricate.repository.I_RepositoryPathBuilder;
 import org.adligo.fabricate.repository.LibraryResolver;
+import org.adligo.fabricate.routines.I_RoutineFabricateFactory;
+import org.adligo.fabricate.routines.RoutineBuilder;
 import org.adligo.fabricate.routines.RoutineExecutionEngine;
-import org.adligo.fabricate.routines.implicit.RoutineFabricateFactory;
+import org.adligo.fabricate.routines.implicit.ImplicitRoutineFactory;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateDependencies;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.FabricateType;
 import org.adligo.fabricate.xml.io_v1.fabricate_v1_0.LogSettingType;
@@ -147,11 +150,12 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
   @Test
   public void testMethodCreateCommandManager() throws Exception {
     FabricateFactory factory = new FabricateFactory();
-    RoutineFabricateFactory routineFactory = new RoutineFabricateFactory(
+    ImplicitRoutineFactory routineFactory = new ImplicitRoutineFactory(
         sysMock_, new FabricateMutant(), true);
     
+    RoutineBuilder builder = mock(RoutineBuilder.class);
     CommandManager cm = factory.createCommandManager(
-        Collections.singleton("hey"), sysMock_, routineFactory);
+        Collections.singleton("hey"), sysMock_, routineFactory, builder);
     assertNotNull(cm);
   }
   
@@ -217,6 +221,17 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
   }
   
   @Test
+  public void testMethodCreateRoutineBuilder() throws Exception {
+    FabricateFactory factory = new FabricateFactory();
+    ImplicitRoutineFactory routineFactory = new ImplicitRoutineFactory(
+        sysMock_, new FabricateMutant(), true);
+    
+    RoutineBuilder cm = factory.createRoutineBuilder(sysMock_, 
+        RoutineBriefOrigin.COMMAND, routineFactory);
+    assertNotNull(cm);
+  }
+  
+  @Test
   public void testMethodCreateRepositoryManager() {
     FabricateFactory factory = new FabricateFactory();
     ConcurrentLinkedQueue<I_Dependency> clq = new ConcurrentLinkedQueue<I_Dependency>();
@@ -259,7 +274,7 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
   public void testMethodCreateRoutineFabricateFactory() {
     FabricateFactory factory = new FabricateFactory();
     I_Fabricate fab = mock(I_Fabricate.class);
-    RoutineFabricateFactory routineFactory =  factory.createRoutineFabricateFactory(
+    I_RoutineFabricateFactory routineFactory =  factory.createRoutineFabricateFactory(
         sysMock_, fab, true);
    assertNotNull(routineFactory);
   }
@@ -268,7 +283,7 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
   public void testMethodCreateProjectsManager() {
     FabricateFactory factory = new FabricateFactory();
     I_Fabricate fab = mock(I_Fabricate.class);
-    RoutineFabricateFactory routineFabFactory = mock(RoutineFabricateFactory.class);
+    ImplicitRoutineFactory routineFabFactory = mock(ImplicitRoutineFactory.class);
     I_RepositoryManager rm = mock(I_RepositoryManager.class);
     
     ProjectsManager pm =  factory.createProjectsManager(
@@ -280,7 +295,7 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
   public void testMethodCreateFabriationManager() {
     FabricateFactory factory = new FabricateFactory();
     I_Fabricate fab = mock(I_Fabricate.class);
-    RoutineFabricateFactory routineFabFactory = mock(RoutineFabricateFactory.class);
+    ImplicitRoutineFactory routineFabFactory = mock(ImplicitRoutineFactory.class);
     I_RepositoryManager rm = mock(I_RepositoryManager.class);
     
     FabricationManager pm =  factory.createFabricationManager(

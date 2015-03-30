@@ -9,7 +9,7 @@ import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
 @SourceFileScope (sourceClass=EncryptTrait.class, minCoverage=80.0)
-public class EncryptTrial extends MockitoSourceFileTrial {
+public class EncryptTraitTrial extends MockitoSourceFileTrial {
   private I_FabSystem sysMock_;
   private EncryptTrait encrypt_ = new EncryptTrait();
   

@@ -16,6 +16,12 @@ public class GitEnMessagesTrial extends MockitoSourceFileTrial {
     
     GitEnMessages messages = GitEnMessages.INSTANCE;
     
+    
+    asserter.assertConstant("Cancel", 
+        messages.getCancel());
+    asserter.assertConstant("Default", 
+        messages.getDefault());
+    
     asserter.assertConstant("Discovered <X/> projects.", 
         messages.getDiscoveredXProjects());
     asserter.assertConstant("Finished git checkout for the following project;", 
@@ -30,16 +36,26 @@ public class GitEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getFinishedGitPushForTheFollowingProject());
     asserter.assertConstant("Finished git stage.", 
         messages.getFinishedGitStage());
-    asserter.assertConstant("Please enter the password for your ssh key (Enter for empty password):", 
-        messages.getPleaseEnterThePasswordForYourSshKey());
-    asserter.assertConstant("Please enter your commit message (Enter twice to finish);", 
-        messages.getPleaseEnterYourCommitMessage());
+    
+    
+    asserter.assertConstant("Ok", 
+        messages.getOk());
+    
+    asserter.assertConstant("Please enter your commit message for project <X/>.", 
+        messages.getPleaseEnterYourCommitMessageForProjectX());
+    asserter.assertConstant("Please enter your default commit message.", 
+        messages.getPleaseEnterYourDefaultCommitMessage());
     
     asserter.assertConstant("The following project has the version '<X/>' in fabricate.xml but "
         + "is not checked out to that version aborting fabrication;", 
         messages.getTheFollowingProjectHasAVersionXInFabricatXmlButIsNotCheckedOutToThatVersionAborting());
     asserter.assertConstant("The project directory is as follows;", 
         messages.getTheProjectDirectoryIs());
+    
+    asserter.assertConstant("Select All", 
+        messages.getSelectAll());
+    asserter.assertConstant("Select None", 
+        messages.getSelectNone());
     
     asserter.assertConstant("Started git checkout for the following project;", 
         messages.getStartedGitCheckoutForTheFollowingProject());

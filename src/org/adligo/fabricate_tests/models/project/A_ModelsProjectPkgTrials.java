@@ -30,6 +30,7 @@ public class A_ModelsProjectPkgTrials implements I_Tests4J_TrialList {
     List<Class<? extends I_Trial>> trials = new ArrayList<Class<? extends I_Trial>>();
 
     trials.add(I_ProjectBriefTrial.class);
+    trials.add(I_ProjectModificationsTrial.class);
     trials.add(I_ProjectTrial.class);
     
     trials.add(ProjectBriefTrial.class);
@@ -37,6 +38,7 @@ public class A_ModelsProjectPkgTrials implements I_Tests4J_TrialList {
     trials.add(ProjectBlockTrial.class);
     
     trials.add(ProjectDependencyOrdererTrial.class);
+    trials.add(ProjectModificationsMutantTrial.class);
     trials.add(ProjectMutantTrial.class);
     trials.add(ProjectTrial.class);
     
