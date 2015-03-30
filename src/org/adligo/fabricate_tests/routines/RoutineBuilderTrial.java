@@ -11,9 +11,12 @@ import org.adligo.fabricate.models.common.I_RoutineMemoryMutant;
 import org.adligo.fabricate.models.common.RoutineBriefMutant;
 import org.adligo.fabricate.models.common.RoutineBriefOrigin;
 import org.adligo.fabricate.models.fabricate.FabricateMutant;
+import org.adligo.fabricate.models.project.I_Project;
+import org.adligo.fabricate.models.project.ProjectMutant;
 import org.adligo.fabricate.repository.I_RepositoryFactory;
 import org.adligo.fabricate.repository.I_RepositoryManager;
 import org.adligo.fabricate.routines.I_CommandAware;
+import org.adligo.fabricate.routines.I_ProjectsAware;
 import org.adligo.fabricate.routines.I_RepositoryFactoryAware;
 import org.adligo.fabricate.routines.I_RepositoryManagerAware;
 import org.adligo.fabricate.routines.I_RoutineFabricateFactory;
@@ -33,7 +36,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@SourceFileScope (sourceClass=RoutineBuilder.class,minCoverage=93.0)
+@SourceFileScope (sourceClass=RoutineBuilder.class,minCoverage=92.0)
 public class RoutineBuilderTrial extends MockitoSourceFileTrial {
   private FabSystem sysMock_;
   private I_FabLog logMock_;
@@ -165,6 +168,41 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     assertSame(1, setRepositoryFactory.count());
   }
   
+  @SuppressWarnings({"boxing", "unchecked"})
+  @Test
+  public void testMethodAddOptionalI_ProjectsAware() throws Exception {
+    I_ProjectsAware routine = mock(I_ProjectsAware.class);
+    RoutineFactory cmdFactory = mock(RoutineFactory.class);
+    when(routineFactory_.getCommands()).thenReturn(cmdFactory);
+    MockMethod<Void> setProjects = new MockMethod<Void>();
+    doAnswer(setProjects).when(routine).setProjects(any());
+    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.ARCHIVE_STAGE, routineFactory_);
+    
+    assertThrown(new ExpectedThrowable(new IllegalStateException(
+        "The following routine implements org.adligo.fabricate.routines.I_ProjectsAware "
+        + "but the RoutineBuilder's value is null.\n" +
+            "org.adligo.fabricate.routines.I_ProjectsAware"), MatchType.CONTAINS),
+        new I_Thrower() {
+          
+          @Override
+          public void run() throws Throwable {
+            builder.addOptional(routine);
+          }
+        });
+    List<I_Project> projects = new ArrayList<I_Project>();
+    ProjectMutant pm = new ProjectMutant();
+    projects.add(pm);
+    builder.setProjects(projects);
+    List<I_Project> pOut = builder.getProjects();
+    assertSame(pm, pOut.get(0));
+    assertSame(1, pOut.size());
+    builder.addOptional(routine);
+    
+    pOut = (List<I_Project>) setProjects.getArg(0);
+    assertSame(pm, pOut.get(0));
+    assertSame(1, pOut.size());
+    assertSame(1, setProjects.count());
+  }
   @SuppressWarnings("boxing")
   @Test
   public void testMethodBuildInitialSimpleArchiveStage() throws Exception {

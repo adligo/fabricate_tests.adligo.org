@@ -59,9 +59,12 @@ public class A_RoutinesImplicitPkgTrials implements I_Tests4J_TrialList {
     trials.add(I_JarFileNameAwareTrial.class);
     trials.add(I_ScmContextAwareTrial.class);
     
+    trials.add(ImplicitArchiveStagesTrial.class);
+    trials.add(ImplicitCommandsTrial.class);
     trials.add(ImplicitFacetsTrial.class);
     trials.add(ImplicitRoutineFactoryTrial.class);
     trials.add(ImplicitStagesTrial.class);
+    trials.add(ImplicitTraitsTrial.class);
     
     trials.add(JarRoutineTrial.class);
     

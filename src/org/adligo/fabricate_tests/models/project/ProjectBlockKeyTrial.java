@@ -7,7 +7,7 @@ import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
-@SourceFileScope (sourceClass=ProjectBlockKey.class,minCoverage=91.0)
+@SourceFileScope (sourceClass=ProjectBlockKey.class,minCoverage=89.0)
 public class ProjectBlockKeyTrial extends MockitoSourceFileTrial {
 
   @SuppressWarnings("unused")
