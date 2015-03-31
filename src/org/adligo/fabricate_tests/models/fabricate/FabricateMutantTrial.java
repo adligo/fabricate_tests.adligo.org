@@ -719,7 +719,8 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     projects.getProject().add(projB);
     spt.setProjects(projects);
     
-    fm.addScmAndProjects(ft);
+    fm = new FabricateMutant();
+    fm.addStagesAndProjects(ft);
     
     I_RoutineBrief rb =  fm.getScm();
     assertNotNull(rb);

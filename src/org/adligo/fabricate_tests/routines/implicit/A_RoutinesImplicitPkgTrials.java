@@ -52,8 +52,9 @@ public class A_RoutinesImplicitPkgTrials implements I_Tests4J_TrialList {
     trials.add(GenerateSourceTaskTrial.class);
     trials.add(GitCheckoutRoutineTrial.class);
     trials.add(GitCloneRoutineTrial.class);
-    trials.add(GitCommitRoutineTrial.class);
+    trials.add(GitCommitCommandTrial.class);
     trials.add(GitPushRoutineTrial.class);
+    trials.add(GitStageTaskTrial.class);
     trials.add(GitUpdateRoutineTrial.class);
     
     trials.add(I_JarFileNameAwareTrial.class);

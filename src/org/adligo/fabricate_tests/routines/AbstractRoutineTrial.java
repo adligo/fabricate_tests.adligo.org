@@ -25,7 +25,7 @@ import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockMethod;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
-@SourceFileScope (sourceClass=AbstractRoutine.class, minCoverage=87.0)
+@SourceFileScope (sourceClass=AbstractRoutine.class, minCoverage=86.0)
 public class AbstractRoutineTrial extends MockitoSourceFileTrial {
   private I_FabSystem sysMock_;
   private I_FabLog logMock_;

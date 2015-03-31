@@ -69,6 +69,7 @@ public class A_RoutinesPkgTrials implements I_Tests4J_TrialList {
     trials.add(RoutineExecutionEngineTrial.class);
     trials.add(RoutineFactoryTrial.class);
     trials.add(RoutineLocationInfoTrial.class);
+    trials.add(RoutinePopulatorMutantTrial.class);
     return trials;
   }
 

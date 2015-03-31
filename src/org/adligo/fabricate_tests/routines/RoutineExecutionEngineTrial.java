@@ -12,6 +12,7 @@ import org.adligo.fabricate.models.common.I_FabricationMemory;
 import org.adligo.fabricate.models.common.I_FabricationRoutine;
 import org.adligo.fabricate.models.common.I_RoutineMemory;
 import org.adligo.fabricate.routines.I_RoutineBuilder;
+import org.adligo.fabricate.routines.I_RoutineExecutionEngine;
 import org.adligo.fabricate.routines.RoutineExecutionEngine;
 import org.adligo.fabricate.routines.implicit.DecryptTrait;
 import org.adligo.fabricate_tests.routines.implicit.mocks.SimpleConcurrentRoutineMock;
@@ -53,7 +54,7 @@ public class RoutineExecutionEngineTrial extends MockitoSourceFileTrial {
   public void testMethodRunRoutinesNullRoutine() throws Exception {
     I_RoutineBuilder builderMock = mock(I_RoutineBuilder.class);
     
-    RoutineExecutionEngine e = new RoutineExecutionEngine(sysMock_, builderMock, 0);
+    I_RoutineExecutionEngine e = new RoutineExecutionEngine(sysMock_, builderMock, 0);
     e.runRoutines(new FabricationMemoryMutant<Object>(SystemEnMessages.INSTANCE));
     //test no exception
   }
@@ -67,7 +68,7 @@ public class RoutineExecutionEngineTrial extends MockitoSourceFileTrial {
     
     doReturn(new RunMonitor(sysMock_, srm, 1)).when(sysMock_).newRunMonitor(srm, 1);
     
-    RoutineExecutionEngine e = new RoutineExecutionEngine(sysMock_, builderMock, 0);
+    I_RoutineExecutionEngine e = new RoutineExecutionEngine(sysMock_, builderMock, 0);
     e.runRoutines(new FabricationMemoryMutant<Object>(SystemEnMessages.INSTANCE));
     assertTrue(srm.isRan());
     assertNull(srm.getLastMemoryMutant());
@@ -84,7 +85,7 @@ public class RoutineExecutionEngineTrial extends MockitoSourceFileTrial {
     
     doReturn(new RunMonitor(sysMock_, srm, 1)).when(sysMock_).newRunMonitor(srm, 1);
     
-    RoutineExecutionEngine e = new RoutineExecutionEngine(sysMock_, builderMock, 0);
+    I_RoutineExecutionEngine e = new RoutineExecutionEngine(sysMock_, builderMock, 0);
     e.runRoutines(new FabricationMemoryMutant<Object>(SystemEnMessages.INSTANCE));
     assertTrue(srm.isRan());
     assertNull(srm.getLastMemoryMutant());
@@ -109,7 +110,7 @@ public class RoutineExecutionEngineTrial extends MockitoSourceFileTrial {
     
     when(sysMock_.newRunMonitor(any(), anyInt())).thenReturn(runMonitor);
     
-    RoutineExecutionEngine e = new RoutineExecutionEngine(sysMock_, builderMock, 0);
+    I_RoutineExecutionEngine e = new RoutineExecutionEngine(sysMock_, builderMock, 0);
     assertFalse(e.hadFailure());
     
     e.runRoutines(new FabricationMemoryMutant<Object>(SystemEnMessages.INSTANCE));
@@ -178,7 +179,7 @@ public class RoutineExecutionEngineTrial extends MockitoSourceFileTrial {
     when(sysMock_.newRunMonitor(any(), anyInt())).then(newRunMonitorMethod);
     when(logMock_.isLogEnabled(RoutineExecutionEngine.class)).thenReturn(true);
     
-    RoutineExecutionEngine e = new RoutineExecutionEngine(sysMock_, builderMock, 3);
+    I_RoutineExecutionEngine e = new RoutineExecutionEngine(sysMock_, builderMock, 3);
     e.runRoutines(new FabricationMemoryMutant<Object>(SystemEnMessages.INSTANCE));
     assertFalse(srm.isRan());
     assertEquals(3, newFixedThreadPoolMethod.getArg(0));
@@ -273,7 +274,7 @@ public class RoutineExecutionEngineTrial extends MockitoSourceFileTrial {
     doAnswer(interruptMethod).when(threadMock).interrupt();
     
     when(sysMock_.currentThread()).thenReturn(threadMock);
-    RoutineExecutionEngine e = new RoutineExecutionEngine(sysMock_, builderMock, 3);
+    I_RoutineExecutionEngine e = new RoutineExecutionEngine(sysMock_, builderMock, 3);
     assertThrown(new ExpectedThrowable(new IllegalStateException("ise")),
         new I_Thrower() {
           

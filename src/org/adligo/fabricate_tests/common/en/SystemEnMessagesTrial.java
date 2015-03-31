@@ -219,8 +219,14 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getTheFollowingLocalRepositoryIsLockedByAnotherProcess());
     asserter.assertConstant("The following command line program exited abnormally with exit code <X/>;", 
         messages.getTheFollowingCommandLineProgramExitedAbnormallyWithExitCodeX());
-    asserter.assertConstant("The following routine implements <X/> but the RoutineBuilder's value is null.", 
-        messages.getTheFollowingRoutineImplementsXButTheRoutinesBuilderValueIsNull());
+    asserter.assertConstant("The following routine implements <X/> but the RoutinePopulator's value is null.", 
+        messages.getTheFollowingRoutineImplementsXButTheRoutinesPopulatorValueIsNull());
+    asserter.assertConstant("The following routine implements <X/>, however it's getClassType method returned"
+        + " <Y/> class types instead of one.", 
+        messages.getTheFollowingRoutineImplementsXHoweverItsGetClassTypeMethodReturnedYClassTypesInsteadOfOne());
+    asserter.assertConstant("The following routine implements <X/> however it's class type is null.", 
+        messages.getTheFollowingRoutineImplementsXHoweverItsClassTypeIsNull());
+    
     asserter.assertConstant("The following required file is missing;", 
         messages.getTheFollowingRequiredFileIsMissing());
     asserter.assertConstant("The following remote repository appears to be down;", 

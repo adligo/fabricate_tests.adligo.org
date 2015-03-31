@@ -11,6 +11,7 @@ public class CommandLineEnConstantsTrial extends MockitoSourceFileTrial {
   @Test
   public void testConstants() {
     CommandLineEnConstants messages = CommandLineEnConstants.INSTANCE;
+    assertEquals("archiveStages", messages.getArchiveStages());
     assertEquals("-a", messages.getArchive(true));
     assertEquals("--archive", messages.getArchive(false));
     assertEquals("cmd", messages.getCommand());
@@ -33,6 +34,8 @@ public class CommandLineEnConstantsTrial extends MockitoSourceFileTrial {
     assertEquals("--rebuild-dependents", messages.getRebuildDependents(false));
 
     assertEquals("skip", messages.getSkip());
+    assertEquals("skipArchives", messages.getSkipArchives());
+    
     assertEquals("stages", messages.getStages());
     assertEquals("-t", messages.getTest(true));
     assertEquals("--test", messages.getTest(false));

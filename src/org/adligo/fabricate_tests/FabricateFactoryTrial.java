@@ -30,7 +30,7 @@ import org.adligo.fabricate.repository.I_RepositoryManager;
 import org.adligo.fabricate.repository.I_RepositoryPathBuilder;
 import org.adligo.fabricate.repository.LibraryResolver;
 import org.adligo.fabricate.routines.I_RoutineBuilder;
-import org.adligo.fabricate.routines.I_RoutineFabricateFactory;
+import org.adligo.fabricate.routines.I_RoutineProcessorFactory;
 import org.adligo.fabricate.routines.RoutineBuilder;
 import org.adligo.fabricate.routines.RoutineExecutionEngine;
 import org.adligo.fabricate.routines.implicit.ImplicitRoutineFactory;
@@ -221,16 +221,7 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
     assertNotNull(mut);
   }
   
-  @Test
-  public void testMethodCreateRoutineBuilder() throws Exception {
-    FabricateFactory factory = new FabricateFactory();
-    ImplicitRoutineFactory routineFactory = new ImplicitRoutineFactory(
-        sysMock_, new FabricateMutant(), true);
-    
-    RoutineBuilder cm = factory.createRoutineBuilder(sysMock_, 
-        RoutineBriefOrigin.COMMAND, routineFactory);
-    assertNotNull(cm);
-  }
+
   
   @Test
   public void testMethodCreateRepositoryManager() {
@@ -275,7 +266,7 @@ public class FabricateFactoryTrial extends MockitoSourceFileTrial {
   public void testMethodCreateRoutineFabricateFactory() {
     FabricateFactory factory = new FabricateFactory();
     I_Fabricate fab = mock(I_Fabricate.class);
-    I_RoutineFabricateFactory routineFactory =  factory.createRoutineFabricateFactory(
+    I_RoutineProcessorFactory routineFactory =  factory.createRoutineFabricateFactory(
         sysMock_, fab, true);
    assertNotNull(routineFactory);
   }

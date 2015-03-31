@@ -11,22 +11,11 @@ import org.adligo.fabricate.models.common.I_RoutineMemoryMutant;
 import org.adligo.fabricate.models.common.RoutineBriefMutant;
 import org.adligo.fabricate.models.common.RoutineBriefOrigin;
 import org.adligo.fabricate.models.fabricate.FabricateMutant;
-import org.adligo.fabricate.models.project.I_Project;
-import org.adligo.fabricate.models.project.ProjectMutant;
-import org.adligo.fabricate.repository.I_RepositoryFactory;
-import org.adligo.fabricate.repository.I_RepositoryManager;
-import org.adligo.fabricate.routines.I_CommandAware;
-import org.adligo.fabricate.routines.I_ProjectsAware;
-import org.adligo.fabricate.routines.I_RepositoryFactoryAware;
-import org.adligo.fabricate.routines.I_RepositoryManagerAware;
-import org.adligo.fabricate.routines.I_RoutineFabricateFactory;
+import org.adligo.fabricate.routines.I_RoutineFabricateProcessorFactory;
+import org.adligo.fabricate.routines.I_RoutinePopulator;
 import org.adligo.fabricate.routines.RoutineBuilder;
 import org.adligo.fabricate.routines.RoutineFactory;
-import org.adligo.fabricate.routines.implicit.FabricateAwareRoutine;
 import org.adligo.fabricate_tests.common.log.ThreadLocalPrintStreamMock;
-import org.adligo.tests4j.shared.asserts.common.ExpectedThrowable;
-import org.adligo.tests4j.shared.asserts.common.I_Thrower;
-import org.adligo.tests4j.shared.asserts.common.MatchType;
 import org.adligo.tests4j.system.shared.trials.SourceFileScope;
 import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockMethod;
@@ -36,19 +25,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@SourceFileScope (sourceClass=RoutineBuilder.class,minCoverage=92.0)
+@SourceFileScope (sourceClass=RoutineBuilder.class,minCoverage=70.0)
 public class RoutineBuilderTrial extends MockitoSourceFileTrial {
   private FabSystem sysMock_;
   private I_FabLog logMock_;
   private MockMethod<Void> printlnMethod_;
   private MockMethod<Void> printTraceMethod_;
-  private I_RoutineFabricateFactory routineFactory_;
+  private I_RoutineFabricateProcessorFactory routineFactory_;
   private I_FabricationMemory<Object> memory_;
   private I_RoutineMemory<Object> routineMemory_;
   private I_FabricationMemoryMutant<Object> memoryMutant_;
   private I_RoutineMemoryMutant<Object> routineMemoryMutant_;
-  private I_RepositoryFactory repositoryFactory_;
-  private I_RepositoryManager repositoryManager_;
+  
+  private I_RoutinePopulator populatorMock_;
+  private MockMethod<Void> populateMethod_;
   
   private FabricateMutant fabricate_;
   
@@ -76,7 +66,7 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     
     when(sysMock_.getLog()).thenReturn(logMock_);
     
-    routineFactory_ = mock(I_RoutineFabricateFactory.class);
+    routineFactory_ = mock(I_RoutineFabricateProcessorFactory.class);
     
     List<String> fabricateJarList = new ArrayList<String>();
     fabricateJarList.add("somewhere/fabricate_snapshot.jar");
@@ -89,120 +79,16 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     
     memoryMutant_ = mock(I_FabricationMemoryMutant.class);
     routineMemoryMutant_ = mock(I_RoutineMemoryMutant.class);
+   
     
-    repositoryFactory_ = mock(I_RepositoryFactory.class);
-    repositoryManager_ = mock(I_RepositoryManager.class);
+    populatorMock_ = mock(I_RoutinePopulator.class);
+
+    populateMethod_ = new MockMethod<Void>();
+    doAnswer(populateMethod_).when(populatorMock_).populate(any());
+    
+    
   }
   
-  @SuppressWarnings("boxing")
-  @Test
-  public void testMethodAddOptionalI_CommandAware() throws Exception {
-    I_CommandAware routine = mock(I_CommandAware.class);
-    RoutineFactory cmdFactory = mock(RoutineFactory.class);
-    when(routineFactory_.getCommands()).thenReturn(cmdFactory);
-    MockMethod<Void> setCommand = new MockMethod<Void>();
-    doAnswer(setCommand).when(routine).setCommandFactory(any());
-    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.ARCHIVE_STAGE, routineFactory_);
-    
-    builder.addOptional(routine);
-    
-    assertSame(cmdFactory, setCommand.getArg(0));
-    assertSame(1, setCommand.count());
-  }
-  
-  @SuppressWarnings("boxing")
-  @Test
-  public void testMethodAddOptionalI_RepositoryFactoryAware() throws Exception {
-    I_RepositoryFactoryAware routine = mock(I_RepositoryFactoryAware.class);
-    RoutineFactory cmdFactory = mock(RoutineFactory.class);
-    when(routineFactory_.getCommands()).thenReturn(cmdFactory);
-    MockMethod<Void> setRepositoryFactory = new MockMethod<Void>();
-    doAnswer(setRepositoryFactory).when(routine).setRepositoryFactory(any());
-    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.ARCHIVE_STAGE, routineFactory_);
-    
-    assertThrown(new ExpectedThrowable(new IllegalStateException(
-        "The following routine implements org.adligo.fabricate.routines.I_RepositoryFactoryAware "
-        + "but the RoutineBuilder's value is null.\n" +
-            "org.adligo.fabricate.routines.I_RepositoryFactoryAware"), MatchType.CONTAINS),
-        new I_Thrower() {
-          
-          @Override
-          public void run() throws Throwable {
-            builder.addOptional(routine);
-          }
-        });
-    builder.setRepositoryFactory(repositoryFactory_);
-    assertSame(repositoryFactory_, builder.getRepositoryFactory());
-    builder.addOptional(routine);
-    
-    assertSame(repositoryFactory_, setRepositoryFactory.getArg(0));
-    assertSame(1, setRepositoryFactory.count());
-  }
-  
-  @SuppressWarnings("boxing")
-  @Test
-  public void testMethodAddOptionalI_RepositoryManagerAware() throws Exception {
-    I_RepositoryManagerAware routine = mock(I_RepositoryManagerAware.class);
-    RoutineFactory cmdFactory = mock(RoutineFactory.class);
-    when(routineFactory_.getCommands()).thenReturn(cmdFactory);
-    MockMethod<Void> setRepositoryFactory = new MockMethod<Void>();
-    doAnswer(setRepositoryFactory).when(routine).setRepositoryManager(any());
-    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.ARCHIVE_STAGE, routineFactory_);
-    
-    assertThrown(new ExpectedThrowable(new IllegalStateException(
-        "The following routine implements org.adligo.fabricate.routines.I_RepositoryManagerAware "
-        + "but the RoutineBuilder's value is null.\n" +
-            "org.adligo.fabricate.routines.I_RepositoryManagerAware"), MatchType.CONTAINS),
-        new I_Thrower() {
-          
-          @Override
-          public void run() throws Throwable {
-            builder.addOptional(routine);
-          }
-        });
-    builder.setRepositoryManager(repositoryManager_);
-    assertSame(repositoryManager_, builder.getRepositoryManager());
-    builder.addOptional(routine);
-    
-    assertSame(repositoryManager_, setRepositoryFactory.getArg(0));
-    assertSame(1, setRepositoryFactory.count());
-  }
-  
-  @SuppressWarnings({"boxing", "unchecked"})
-  @Test
-  public void testMethodAddOptionalI_ProjectsAware() throws Exception {
-    I_ProjectsAware routine = mock(I_ProjectsAware.class);
-    RoutineFactory cmdFactory = mock(RoutineFactory.class);
-    when(routineFactory_.getCommands()).thenReturn(cmdFactory);
-    MockMethod<Void> setProjects = new MockMethod<Void>();
-    doAnswer(setProjects).when(routine).setProjects(any());
-    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.ARCHIVE_STAGE, routineFactory_);
-    
-    assertThrown(new ExpectedThrowable(new IllegalStateException(
-        "The following routine implements org.adligo.fabricate.routines.I_ProjectsAware "
-        + "but the RoutineBuilder's value is null.\n" +
-            "org.adligo.fabricate.routines.I_ProjectsAware"), MatchType.CONTAINS),
-        new I_Thrower() {
-          
-          @Override
-          public void run() throws Throwable {
-            builder.addOptional(routine);
-          }
-        });
-    List<I_Project> projects = new ArrayList<I_Project>();
-    ProjectMutant pm = new ProjectMutant();
-    projects.add(pm);
-    builder.setProjects(projects);
-    List<I_Project> pOut = builder.getProjects();
-    assertSame(pm, pOut.get(0));
-    assertSame(1, pOut.size());
-    builder.addOptional(routine);
-    
-    pOut = (List<I_Project>) setProjects.getArg(0);
-    assertSame(pm, pOut.get(0));
-    assertSame(1, pOut.size());
-    assertSame(1, setProjects.count());
-  }
   @SuppressWarnings("boxing")
   @Test
   public void testMethodBuildInitialSimpleArchiveStage() throws Exception {
@@ -214,12 +100,6 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     RoutineBriefMutant brief = new RoutineBriefMutant();
     brief.setName(name);
     fabricate_.addArchiveStage(brief);
-    
-    MockMethod<Void> routineSetBrief = new MockMethod<Void>();
-    doAnswer(routineSetBrief).when(routine).setBrief(any());
-    
-    MockMethod<Void> routineSetSystem = new MockMethod<Void>();
-    doAnswer(routineSetSystem).when(routine).setSystem(any());
     
     MockMethod<Void> routineSetTraitFactory = new MockMethod<Void>();
     doAnswer(routineSetTraitFactory).when(routine).setTraitFactory(any());
@@ -238,7 +118,8 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     MockMethod<I_FabricationRoutine> routineFactoryCreateArchive = new MockMethod<I_FabricationRoutine>(routine, true);
     doAnswer(routineFactoryCreateArchive).when(routineFactory_).createArchiveStage(any(), any());
     
-    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.ARCHIVE_STAGE, routineFactory_);
+    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.ARCHIVE_STAGE, 
+          routineFactory_, populatorMock_);
     
     builder.setNextRoutineName(name);
     assertSame(name, builder.getNextRoutineName());
@@ -248,18 +129,15 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     assertSame(name, routineFactoryCreateArchive.getArgs(0)[0]);
     assertSame(0, ((Collection<?>) routineFactoryCreateArchive.getArgs(0)[1]).size());
     assertEquals(1, routineFactoryCreateArchive.count());
-
-    assertSame(brief, routineSetBrief.getArg(0));
-    assertEquals(1, routineSetBrief.count());
-    
-    assertSame(sysMock_, routineSetSystem.getArg(0));
-    assertEquals(1, routineSetSystem.count());
     
     assertSame(taskFactory, routineSetTasks.getArg(0));
     assertEquals(1, routineSetTasks.count());
     
     assertSame(traitFacory, routineSetTraitFactory.getArg(0));
     assertEquals(1, routineSetTraitFactory.count());
+    
+    assertSame(result, populateMethod_.getArg(0));
+    assertEquals(1, populateMethod_.count());
     
     assertSame(memoryMutant_, routineSetup.getArgs(0)[0]);
     assertSame(routineMemoryMutant_, routineSetup.getArgs(0)[1]);
@@ -278,12 +156,6 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     brief.setName(name);
     fabricate_.addCommand(brief);
     
-    MockMethod<Void> routineSetBrief = new MockMethod<Void>();
-    doAnswer(routineSetBrief).when(routine).setBrief(any());
-    
-    MockMethod<Void> routineSetSystem = new MockMethod<Void>();
-    doAnswer(routineSetSystem).when(routine).setSystem(any());
-    
     MockMethod<Void> routineSetTraitFactory = new MockMethod<Void>();
     doAnswer(routineSetTraitFactory).when(routine).setTraitFactory(any());
     
@@ -301,7 +173,8 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     MockMethod<I_FabricationRoutine> routineFactoryCreateCommand = new MockMethod<I_FabricationRoutine>(routine, true);
     doAnswer(routineFactoryCreateCommand).when(routineFactory_).createCommand(any(), any());
     
-    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.COMMAND, routineFactory_);
+    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.COMMAND, 
+        routineFactory_, populatorMock_);
     
     builder.setNextRoutineName(name);
     assertSame(name, builder.getNextRoutineName());
@@ -311,18 +184,15 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     assertSame(name, routineFactoryCreateCommand.getArgs(0)[0]);
     assertSame(0, ((Collection<?>) routineFactoryCreateCommand.getArgs(0)[1]).size());
     assertEquals(1, routineFactoryCreateCommand.count());
-
-    assertSame(brief, routineSetBrief.getArg(0));
-    assertEquals(1, routineSetBrief.count());
-    
-    assertSame(sysMock_, routineSetSystem.getArg(0));
-    assertEquals(1, routineSetSystem.count());
     
     assertSame(taskFactory, routineSetTasks.getArg(0));
     assertEquals(1, routineSetTasks.count());
     
     assertSame(traitFacory, routineSetTraitFactory.getArg(0));
     assertEquals(1, routineSetTraitFactory.count());
+    
+    assertSame(result, populateMethod_.getArg(0));
+    assertEquals(1, populateMethod_.count());
     
     assertSame(memoryMutant_, routineSetup.getArgs(0)[0]);
     assertSame(routineMemoryMutant_, routineSetup.getArgs(0)[1]);
@@ -341,12 +211,6 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     brief.setName(name);
     fabricate_.addFacet(brief);
     
-    MockMethod<Void> routineSetBrief = new MockMethod<Void>();
-    doAnswer(routineSetBrief).when(routine).setBrief(any());
-    
-    MockMethod<Void> routineSetSystem = new MockMethod<Void>();
-    doAnswer(routineSetSystem).when(routine).setSystem(any());
-    
     MockMethod<Void> routineSetTraitFactory = new MockMethod<Void>();
     doAnswer(routineSetTraitFactory).when(routine).setTraitFactory(any());
     
@@ -364,7 +228,8 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     MockMethod<I_FabricationRoutine> routineFactoryCreateFacet = new MockMethod<I_FabricationRoutine>(routine, true);
     doAnswer(routineFactoryCreateFacet).when(routineFactory_).createFacet(any(), any());
     
-    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.FACET, routineFactory_);
+    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.FACET, 
+        routineFactory_, populatorMock_);
     
     builder.setNextRoutineName(name);
     assertSame(name, builder.getNextRoutineName());
@@ -375,12 +240,6 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     assertSame(name, routineFactoryCreateFacet.getArgs(0)[0]);
     assertSame(0, ((Collection<?>) routineFactoryCreateFacet.getArgs(0)[1]).size());
     assertEquals(1, routineFactoryCreateFacet.count());
-
-    assertSame(brief, routineSetBrief.getArg(0));
-    assertEquals(1, routineSetBrief.count());
-    
-    assertSame(sysMock_, routineSetSystem.getArg(0));
-    assertEquals(1, routineSetSystem.count());
     
     assertSame(taskFactory, routineSetTasks.getArg(0));
     assertEquals(1, routineSetTasks.count());
@@ -388,86 +247,14 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     assertSame(traitFacory, routineSetTraitFactory.getArg(0));
     assertEquals(1, routineSetTraitFactory.count());
     
-    assertSame(memoryMutant_, routineSetup.getArgs(0)[0]);
-    assertSame(routineMemoryMutant_, routineSetup.getArgs(0)[1]);
-    assertEquals(1, routineSetup.count());
-  }
-  
-  @SuppressWarnings("boxing")
-  @Test
-  public void testMethodBuildInitialSimplePassThroughToAddOptional() throws Exception {
-    FabricateAwareRoutine routine = mock(FabricateAwareRoutine.class);
-    MockMethod<Void> routineSetTasks = new MockMethod<Void>();
-    doAnswer(routineSetTasks).when(routine).setTaskFactory(any());
-    String name = "archiveStage";
-    
-    RoutineBriefMutant brief = new RoutineBriefMutant();
-    brief.setName(name);
-    fabricate_.addArchiveStage(brief);
-    
-    MockMethod<Void> routineSetBrief = new MockMethod<Void>();
-    doAnswer(routineSetBrief).when(routine).setBrief(any());
-    
-    MockMethod<Void> routineSetFabricate = new MockMethod<Void>();
-    doAnswer(routineSetFabricate).when(routine).setFabricate(any());
-    
-    MockMethod<Void> routineSetRepositoryFactory = new MockMethod<Void>();
-    doAnswer(routineSetRepositoryFactory).when(routine).setRepositoryFactory(any());
-    
-    MockMethod<Void> routineSetSystem = new MockMethod<Void>();
-    doAnswer(routineSetSystem).when(routine).setSystem(any());
-    
-    MockMethod<Boolean> routineSetup = new MockMethod<Boolean>(true, true);
-    doAnswer(routineSetup).when(routine).setupInitial(any(), any());
-    
-    MockMethod<Void> routineSetTraitFactory = new MockMethod<Void>();
-    doAnswer(routineSetTraitFactory).when(routine).setTraitFactory(any());
-    
-    RoutineFactory traitFacory = mock(RoutineFactory.class);
-    when(routineFactory_.getTraits()).thenReturn(traitFacory);
-    
-    RoutineFactory routineFactory = mock(RoutineFactory.class);
-    when(routineFactory_.getArchiveStages()).thenReturn(routineFactory);
-    RoutineFactory taskFactory = mock(RoutineFactory.class);
-    when(routineFactory.createTaskFactory(name)).thenReturn(taskFactory);
-    
-    MockMethod<I_FabricationRoutine> routineFactoryCreateArchive = new MockMethod<I_FabricationRoutine>(routine, true);
-    doAnswer(routineFactoryCreateArchive).when(routineFactory_).createArchiveStage(any(), any());
-    
-    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.ARCHIVE_STAGE, routineFactory_);
-    
-    builder.setNextRoutineName(name);
-    assertSame(name, builder.getNextRoutineName());
-    builder.setRepositoryFactory(repositoryFactory_);
-    I_FabricationRoutine result = builder.buildInitial(memoryMutant_, routineMemoryMutant_);
-    assertSame(routine, result);
-    
-    assertSame(name, routineFactoryCreateArchive.getArgs(0)[0]);
-    assertSame(0, ((Collection<?>) routineFactoryCreateArchive.getArgs(0)[1]).size());
-    assertEquals(1, routineFactoryCreateArchive.count());
-
-    assertSame(brief, routineSetBrief.getArg(0));
-    assertEquals(1, routineSetBrief.count());
-    
-    assertSame(fabricate_, routineSetFabricate.getArg(0));
-    assertEquals(1, routineSetFabricate.count());
-    
-    assertSame(repositoryFactory_, routineSetRepositoryFactory.getArg(0));
-    assertEquals(1, routineSetRepositoryFactory.count());
-    
-    assertSame(sysMock_, routineSetSystem.getArg(0));
-    assertEquals(1, routineSetSystem.count());
-    
-    assertSame(taskFactory, routineSetTasks.getArg(0));
-    assertEquals(1, routineSetTasks.count());
-    
-    assertSame(traitFacory, routineSetTraitFactory.getArg(0));
-    assertEquals(1, routineSetTraitFactory.count());
+    assertSame(result, populateMethod_.getArg(0));
+    assertEquals(1, populateMethod_.count());
     
     assertSame(memoryMutant_, routineSetup.getArgs(0)[0]);
     assertSame(routineMemoryMutant_, routineSetup.getArgs(0)[1]);
     assertEquals(1, routineSetup.count());
   }
+ 
   
   @SuppressWarnings("boxing")
   @Test
@@ -480,12 +267,6 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     RoutineBriefMutant brief = new RoutineBriefMutant();
     brief.setName(name);
     fabricate_.addStage(brief);
-    
-    MockMethod<Void> routineSetBrief = new MockMethod<Void>();
-    doAnswer(routineSetBrief).when(routine).setBrief(any());
-    
-    MockMethod<Void> routineSetSystem = new MockMethod<Void>();
-    doAnswer(routineSetSystem).when(routine).setSystem(any());
     
     MockMethod<Void> routineSetTraitFactory = new MockMethod<Void>();
     doAnswer(routineSetTraitFactory).when(routine).setTraitFactory(any());
@@ -504,7 +285,8 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     MockMethod<I_FabricationRoutine> routineFactoryCreateStage = new MockMethod<I_FabricationRoutine>(routine, true);
     doAnswer(routineFactoryCreateStage).when(routineFactory_).createStage(any(), any());
     
-    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.STAGE, routineFactory_);
+    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.STAGE, 
+        routineFactory_, populatorMock_);
     
     builder.setNextRoutineName(name);
     assertSame(name, builder.getNextRoutineName());
@@ -514,18 +296,15 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     assertSame(name, routineFactoryCreateStage.getArgs(0)[0]);
     assertSame(0, ((Collection<?>) routineFactoryCreateStage.getArgs(0)[1]).size());
     assertEquals(1, routineFactoryCreateStage.count());
-
-    assertSame(brief, routineSetBrief.getArg(0));
-    assertEquals(1, routineSetBrief.count());
-    
-    assertSame(sysMock_, routineSetSystem.getArg(0));
-    assertEquals(1, routineSetSystem.count());
     
     assertSame(taskFactory, routineSetTasks.getArg(0));
     assertEquals(1, routineSetTasks.count());
     
     assertSame(traitFacory, routineSetTraitFactory.getArg(0));
     assertEquals(1, routineSetTraitFactory.count());
+    
+    assertSame(result, populateMethod_.getArg(0));
+    assertEquals(1, populateMethod_.count());
     
     assertSame(memoryMutant_, routineSetup.getArgs(0)[0]);
     assertSame(routineMemoryMutant_, routineSetup.getArgs(0)[1]);
@@ -544,12 +323,6 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     brief.setName(name);
     fabricate_.addTrait(brief);
     
-    MockMethod<Void> routineSetBrief = new MockMethod<Void>();
-    doAnswer(routineSetBrief).when(routine).setBrief(any());
-    
-    MockMethod<Void> routineSetSystem = new MockMethod<Void>();
-    doAnswer(routineSetSystem).when(routine).setSystem(any());
-    
     MockMethod<Void> routineSetTraitFactory = new MockMethod<Void>();
     doAnswer(routineSetTraitFactory).when(routine).setTraitFactory(any());
     
@@ -565,7 +338,8 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     MockMethod<I_FabricationRoutine> routineFactoryCreateStage = new MockMethod<I_FabricationRoutine>(routine, true);
     doAnswer(routineFactoryCreateStage).when(routineFactory_).createTrait(any(), any());
     
-    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.TRAIT, routineFactory_);
+    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.TRAIT,
+        routineFactory_, populatorMock_);
     
     builder.setNextRoutineName(name);
     assertSame(name, builder.getNextRoutineName());
@@ -575,18 +349,15 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     assertSame(name, routineFactoryCreateStage.getArgs(0)[0]);
     assertSame(0, ((Collection<?>) routineFactoryCreateStage.getArgs(0)[1]).size());
     assertEquals(1, routineFactoryCreateStage.count());
-
-    assertSame(brief, routineSetBrief.getArg(0));
-    assertEquals(1, routineSetBrief.count());
-    
-    assertSame(sysMock_, routineSetSystem.getArg(0));
-    assertEquals(1, routineSetSystem.count());
     
     assertSame(taskFactory, routineSetTasks.getArg(0));
     assertEquals(1, routineSetTasks.count());
     
     assertSame(traitFacory, routineSetTraitFactory.getArg(0));
     assertEquals(1, routineSetTraitFactory.count());
+    
+    assertSame(result, populateMethod_.getArg(0));
+    assertEquals(1, populateMethod_.count());
     
     assertSame(memoryMutant_, routineSetup.getArgs(0)[0]);
     assertSame(routineMemoryMutant_, routineSetup.getArgs(0)[1]);
@@ -607,12 +378,6 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     brief.setName(name);
     fabricate_.addArchiveStage(brief);
     
-    MockMethod<Void> routineSetBrief = new MockMethod<Void>();
-    doAnswer(routineSetBrief).when(routine).setBrief(any());
-    
-    MockMethod<Void> routineSetSystem = new MockMethod<Void>();
-    doAnswer(routineSetSystem).when(routine).setSystem(any());
-    
     MockMethod<Void> routineSetTraitFactory = new MockMethod<Void>();
     doAnswer(routineSetTraitFactory).when(routine).setTraitFactory(any());
     
@@ -630,7 +395,8 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     MockMethod<I_FabricationRoutine> routineFactoryCreateArchive = new MockMethod<I_FabricationRoutine>(routine, true);
     doAnswer(routineFactoryCreateArchive).when(routineFactory_).createArchiveStage(any(), any());
     
-    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.ARCHIVE_STAGE, routineFactory_);
+    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.ARCHIVE_STAGE, 
+        routineFactory_, populatorMock_);
     
     builder.setNextRoutineName(name);
     assertSame(name, builder.getNextRoutineName());
@@ -640,18 +406,15 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     assertSame(name, routineFactoryCreateArchive.getArgs(0)[0]);
     assertSame(0, ((Collection<?>) routineFactoryCreateArchive.getArgs(0)[1]).size());
     assertEquals(1, routineFactoryCreateArchive.count());
-
-    assertSame(brief, routineSetBrief.getArg(0));
-    assertEquals(1, routineSetBrief.count());
-    
-    assertSame(sysMock_, routineSetSystem.getArg(0));
-    assertEquals(1, routineSetSystem.count());
     
     assertSame(taskFactory, routineSetTasks.getArg(0));
     assertEquals(1, routineSetTasks.count());
     
     assertSame(traitFacory, routineSetTraitFactory.getArg(0));
     assertEquals(1, routineSetTraitFactory.count());
+    
+    assertSame(result, populateMethod_.getArg(0));
+    assertEquals(1, populateMethod_.count());
     
     assertSame(memory_, routineSetup.getArgs(0)[0]);
     assertSame(routineMemory_, routineSetup.getArgs(0)[1]);
@@ -670,12 +433,6 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     brief.setName(name);
     fabricate_.addCommand(brief);
     
-    MockMethod<Void> routineSetBrief = new MockMethod<Void>();
-    doAnswer(routineSetBrief).when(routine).setBrief(any());
-    
-    MockMethod<Void> routineSetSystem = new MockMethod<Void>();
-    doAnswer(routineSetSystem).when(routine).setSystem(any());
-    
     MockMethod<Void> routineSetTraitFactory = new MockMethod<Void>();
     doAnswer(routineSetTraitFactory).when(routine).setTraitFactory(any());
     
@@ -693,7 +450,8 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     MockMethod<I_FabricationRoutine> routineFactoryCreateCommand = new MockMethod<I_FabricationRoutine>(routine, true);
     doAnswer(routineFactoryCreateCommand).when(routineFactory_).createCommand(any(), any());
     
-    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.COMMAND, routineFactory_);
+    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.COMMAND, 
+        routineFactory_, populatorMock_);
     
     builder.setNextRoutineName(name);
     assertSame(name, builder.getNextRoutineName());
@@ -703,18 +461,15 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     assertSame(name, routineFactoryCreateCommand.getArgs(0)[0]);
     assertSame(0, ((Collection<?>) routineFactoryCreateCommand.getArgs(0)[1]).size());
     assertEquals(1, routineFactoryCreateCommand.count());
-
-    assertSame(brief, routineSetBrief.getArg(0));
-    assertEquals(1, routineSetBrief.count());
-    
-    assertSame(sysMock_, routineSetSystem.getArg(0));
-    assertEquals(1, routineSetSystem.count());
     
     assertSame(taskFactory, routineSetTasks.getArg(0));
     assertEquals(1, routineSetTasks.count());
     
     assertSame(traitFacory, routineSetTraitFactory.getArg(0));
     assertEquals(1, routineSetTraitFactory.count());
+    
+    assertSame(result, populateMethod_.getArg(0));
+    assertEquals(1, populateMethod_.count());
     
     assertSame(memory_, routineSetup.getArgs(0)[0]);
     assertSame(routineMemory_, routineSetup.getArgs(0)[1]);
@@ -733,12 +488,6 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     brief.setName(name);
     fabricate_.addFacet(brief);
     
-    MockMethod<Void> routineSetBrief = new MockMethod<Void>();
-    doAnswer(routineSetBrief).when(routine).setBrief(any());
-    
-    MockMethod<Void> routineSetSystem = new MockMethod<Void>();
-    doAnswer(routineSetSystem).when(routine).setSystem(any());
-    
     MockMethod<Void> routineSetTraitFactory = new MockMethod<Void>();
     doAnswer(routineSetTraitFactory).when(routine).setTraitFactory(any());
     
@@ -756,7 +505,8 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     MockMethod<I_FabricationRoutine> routineFactoryCreateFacet = new MockMethod<I_FabricationRoutine>(routine, true);
     doAnswer(routineFactoryCreateFacet).when(routineFactory_).createFacet(any(), any());
     
-    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.FACET, routineFactory_);
+    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.FACET, 
+        routineFactory_, populatorMock_);
     
     builder.setNextRoutineName(name);
     assertSame(name, builder.getNextRoutineName());
@@ -766,12 +516,6 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     assertSame(name, routineFactoryCreateFacet.getArgs(0)[0]);
     assertSame(0, ((Collection<?>) routineFactoryCreateFacet.getArgs(0)[1]).size());
     assertEquals(1, routineFactoryCreateFacet.count());
-
-    assertSame(brief, routineSetBrief.getArg(0));
-    assertEquals(1, routineSetBrief.count());
-    
-    assertSame(sysMock_, routineSetSystem.getArg(0));
-    assertEquals(1, routineSetSystem.count());
     
     assertSame(taskFactory, routineSetTasks.getArg(0));
     assertEquals(1, routineSetTasks.count());
@@ -779,86 +523,14 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     assertSame(traitFacory, routineSetTraitFactory.getArg(0));
     assertEquals(1, routineSetTraitFactory.count());
     
+    assertSame(result, populateMethod_.getArg(0));
+    assertEquals(1, populateMethod_.count());
+    
     assertSame(memory_, routineSetup.getArgs(0)[0]);
     assertSame(routineMemory_, routineSetup.getArgs(0)[1]);
     assertEquals(1, routineSetup.count());
   }
-  
-  @SuppressWarnings("boxing")
-  @Test
-  public void testMethodBuildSimplePassThroughToAddOptional() throws Exception {
-    FabricateAwareRoutine routine = mock(FabricateAwareRoutine.class);
-    MockMethod<Void> routineSetTasks = new MockMethod<Void>();
-    doAnswer(routineSetTasks).when(routine).setTaskFactory(any());
-    String name = "archiveStage";
-    
-    RoutineBriefMutant brief = new RoutineBriefMutant();
-    brief.setName(name);
-    fabricate_.addArchiveStage(brief);
-    
-    MockMethod<Void> routineSetBrief = new MockMethod<Void>();
-    doAnswer(routineSetBrief).when(routine).setBrief(any());
-    
-    MockMethod<Void> routineSetFabricate = new MockMethod<Void>();
-    doAnswer(routineSetFabricate).when(routine).setFabricate(any());
-    
-    MockMethod<Void> routineSetRepositoryFactory = new MockMethod<Void>();
-    doAnswer(routineSetRepositoryFactory).when(routine).setRepositoryFactory(any());
-    
-    MockMethod<Void> routineSetSystem = new MockMethod<Void>();
-    doAnswer(routineSetSystem).when(routine).setSystem(any());
-    
-    MockMethod<Boolean> routineSetup = new MockMethod<Boolean>(true, true);
-    doAnswer(routineSetup).when(routine).setup(any(), any());
-    
-    MockMethod<Void> routineSetTraitFactory = new MockMethod<Void>();
-    doAnswer(routineSetTraitFactory).when(routine).setTraitFactory(any());
-    
-    RoutineFactory traitFacory = mock(RoutineFactory.class);
-    when(routineFactory_.getTraits()).thenReturn(traitFacory);
-    
-    RoutineFactory routineFactory = mock(RoutineFactory.class);
-    when(routineFactory_.getArchiveStages()).thenReturn(routineFactory);
-    RoutineFactory taskFactory = mock(RoutineFactory.class);
-    when(routineFactory.createTaskFactory(name)).thenReturn(taskFactory);
-    
-    MockMethod<I_FabricationRoutine> routineFactoryCreateArchive = new MockMethod<I_FabricationRoutine>(routine, true);
-    doAnswer(routineFactoryCreateArchive).when(routineFactory_).createArchiveStage(any(), any());
-    
-    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.ARCHIVE_STAGE, routineFactory_);
-    
-    builder.setNextRoutineName(name);
-    assertSame(name, builder.getNextRoutineName());
-    builder.setRepositoryFactory(repositoryFactory_);
-    I_FabricationRoutine result = builder.build(memory_, routineMemory_);
-    assertSame(routine, result);
-    
-    assertSame(name, routineFactoryCreateArchive.getArgs(0)[0]);
-    assertSame(0, ((Collection<?>) routineFactoryCreateArchive.getArgs(0)[1]).size());
-    assertEquals(1, routineFactoryCreateArchive.count());
 
-    assertSame(brief, routineSetBrief.getArg(0));
-    assertEquals(1, routineSetBrief.count());
-    
-    assertSame(fabricate_, routineSetFabricate.getArg(0));
-    assertEquals(1, routineSetFabricate.count());
-    
-    assertSame(repositoryFactory_, routineSetRepositoryFactory.getArg(0));
-    assertEquals(1, routineSetRepositoryFactory.count());
-    
-    assertSame(sysMock_, routineSetSystem.getArg(0));
-    assertEquals(1, routineSetSystem.count());
-    
-    assertSame(taskFactory, routineSetTasks.getArg(0));
-    assertEquals(1, routineSetTasks.count());
-    
-    assertSame(traitFacory, routineSetTraitFactory.getArg(0));
-    assertEquals(1, routineSetTraitFactory.count());
-    
-    assertSame(memory_, routineSetup.getArgs(0)[0]);
-    assertSame(routineMemory_, routineSetup.getArgs(0)[1]);
-    assertEquals(1, routineSetup.count());
-  }
   
   @SuppressWarnings("boxing")
   @Test
@@ -871,12 +543,6 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     RoutineBriefMutant brief = new RoutineBriefMutant();
     brief.setName(name);
     fabricate_.addStage(brief);
-    
-    MockMethod<Void> routineSetBrief = new MockMethod<Void>();
-    doAnswer(routineSetBrief).when(routine).setBrief(any());
-    
-    MockMethod<Void> routineSetSystem = new MockMethod<Void>();
-    doAnswer(routineSetSystem).when(routine).setSystem(any());
     
     MockMethod<Void> routineSetTraitFactory = new MockMethod<Void>();
     doAnswer(routineSetTraitFactory).when(routine).setTraitFactory(any());
@@ -895,7 +561,8 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     MockMethod<I_FabricationRoutine> routineFactoryCreateStage = new MockMethod<I_FabricationRoutine>(routine, true);
     doAnswer(routineFactoryCreateStage).when(routineFactory_).createStage(any(), any());
     
-    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.STAGE, routineFactory_);
+    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.STAGE, 
+        routineFactory_, populatorMock_);
     
     builder.setNextRoutineName(name);
     assertSame(name, builder.getNextRoutineName());
@@ -905,18 +572,15 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     assertSame(name, routineFactoryCreateStage.getArgs(0)[0]);
     assertSame(0, ((Collection<?>) routineFactoryCreateStage.getArgs(0)[1]).size());
     assertEquals(1, routineFactoryCreateStage.count());
-
-    assertSame(brief, routineSetBrief.getArg(0));
-    assertEquals(1, routineSetBrief.count());
-    
-    assertSame(sysMock_, routineSetSystem.getArg(0));
-    assertEquals(1, routineSetSystem.count());
     
     assertSame(taskFactory, routineSetTasks.getArg(0));
     assertEquals(1, routineSetTasks.count());
     
     assertSame(traitFacory, routineSetTraitFactory.getArg(0));
     assertEquals(1, routineSetTraitFactory.count());
+    
+    assertSame(result, populateMethod_.getArg(0));
+    assertEquals(1, populateMethod_.count());
     
     assertSame(memory_, routineSetup.getArgs(0)[0]);
     assertSame(routineMemory_, routineSetup.getArgs(0)[1]);
@@ -935,12 +599,6 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     brief.setName(name);
     fabricate_.addTrait(brief);
     
-    MockMethod<Void> routineSetBrief = new MockMethod<Void>();
-    doAnswer(routineSetBrief).when(routine).setBrief(any());
-    
-    MockMethod<Void> routineSetSystem = new MockMethod<Void>();
-    doAnswer(routineSetSystem).when(routine).setSystem(any());
-    
     MockMethod<Void> routineSetTraitFactory = new MockMethod<Void>();
     doAnswer(routineSetTraitFactory).when(routine).setTraitFactory(any());
     
@@ -956,7 +614,8 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     MockMethod<I_FabricationRoutine> routineFactoryCreateStage = new MockMethod<I_FabricationRoutine>(routine, true);
     doAnswer(routineFactoryCreateStage).when(routineFactory_).createTrait(any(), any());
     
-    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.TRAIT, routineFactory_);
+    RoutineBuilder builder = new RoutineBuilder(sysMock_, RoutineBriefOrigin.TRAIT, 
+        routineFactory_, populatorMock_);
     
     builder.setNextRoutineName(name);
     assertSame(name, builder.getNextRoutineName());
@@ -967,17 +626,15 @@ public class RoutineBuilderTrial extends MockitoSourceFileTrial {
     assertSame(0, ((Collection<?>) routineFactoryCreateStage.getArgs(0)[1]).size());
     assertEquals(1, routineFactoryCreateStage.count());
 
-    assertSame(brief, routineSetBrief.getArg(0));
-    assertEquals(1, routineSetBrief.count());
-    
-    assertSame(sysMock_, routineSetSystem.getArg(0));
-    assertEquals(1, routineSetSystem.count());
     
     assertSame(taskFactory, routineSetTasks.getArg(0));
     assertEquals(1, routineSetTasks.count());
     
     assertSame(traitFacory, routineSetTraitFactory.getArg(0));
     assertEquals(1, routineSetTraitFactory.count());
+    
+    assertSame(result, populateMethod_.getArg(0));
+    assertEquals(1, populateMethod_.count());
     
     assertSame(memory_, routineSetup.getArgs(0)[0]);
     assertSame(routineMemory_, routineSetup.getArgs(0)[1]);

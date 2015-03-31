@@ -38,6 +38,7 @@ public class A_ModelsProjectPkgTrials implements I_Tests4J_TrialList {
     trials.add(ProjectBlockTrial.class);
     
     trials.add(ProjectDependencyOrdererTrial.class);
+    trials.add(ProjectModificationsTrial.class);
     trials.add(ProjectModificationsMutantTrial.class);
     trials.add(ProjectMutantTrial.class);
     trials.add(ProjectTrial.class);

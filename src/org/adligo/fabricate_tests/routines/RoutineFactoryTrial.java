@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 
-@SourceFileScope (sourceClass=RoutineFactory.class, minCoverage=95.0)
+@SourceFileScope (sourceClass=RoutineFactory.class, minCoverage=94.0)
 public class RoutineFactoryTrial extends MockitoSourceFileTrial {
   private I_FabSystem sysMock_;
   private I_FabLog logMock_;

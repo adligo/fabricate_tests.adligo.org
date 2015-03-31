@@ -21,6 +21,7 @@ import org.adligo.fabricate.models.common.FabricationMemoryMutant;
 import org.adligo.fabricate.models.common.RoutineBriefOrigin;
 import org.adligo.fabricate.models.fabricate.Fabricate;
 import org.adligo.fabricate.models.fabricate.FabricateMutant;
+import org.adligo.fabricate.routines.I_RoutinePopulatorMutant;
 import org.adligo.fabricate.routines.RoutineBuilder;
 import org.adligo.fabricate.routines.implicit.ImplicitRoutineFactory;
 import org.adligo.fabricate.xml.io_v1.common_v1_0.RoutineParentType;
@@ -65,7 +66,7 @@ import javax.xml.datatype.DatatypeFactory;
  *
  */
 
-@SourceFileScope (sourceClass=FabricateController.class, minCoverage=55.0)
+@SourceFileScope (sourceClass=FabricateController.class, minCoverage=52.0)
 public class FabricateControllerTrial extends MockitoSourceFileTrial {
   private FabSystem sysMock_;
   private I_FabFileIO fileMock_;
@@ -218,11 +219,13 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     ImplicitRoutineFactory routineFactoryMock = mock(ImplicitRoutineFactory.class);
     when(factoryMock_.createRoutineFabricateFactory(sysMock_, fabMock, true)).thenReturn(routineFactoryMock);
     CommandManager cmMock = mock(CommandManager.class);
+    I_RoutinePopulatorMutant populator = mock(I_RoutinePopulatorMutant.class);
+    when(routineFactoryMock.createRoutinePopulator()).thenReturn(populator);
     RoutineBuilder builder = mock(RoutineBuilder.class);
-    when(factoryMock_.createRoutineBuilder(sysMock_, RoutineBriefOrigin.COMMAND, routineFactoryMock)).thenReturn(builder);
+    when(routineFactoryMock.createRoutineBuilder(RoutineBriefOrigin.COMMAND, populator)).thenReturn(builder);
     
-    MockMethod<Void> builderSetReositoryFactory = new MockMethod<Void>();
-    doAnswer(builderSetReositoryFactory).when(builder).setRepositoryFactory(any());
+    MockMethod<Void> populatorSetReositoryFactory = new MockMethod<Void>();
+    doAnswer(populatorSetReositoryFactory).when(populator).setRepositoryFactory(any());
     
     when(factoryMock_.createCommandManager(commands, sysMock_, routineFactoryMock, builder)).thenReturn(cmMock);
     
@@ -247,8 +250,8 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     assertEquals("\nFabricating...\n", printlnMethod_.getArg(0));
     assertEquals(1, printlnMethod_.count());
     
-    assertEquals(factoryMock_, builderSetReositoryFactory.getArg(0));
-    assertEquals(1, builderSetReositoryFactory.count());
+    assertEquals(factoryMock_, populatorSetReositoryFactory.getArg(0));
+    assertEquals(1, populatorSetReositoryFactory.count());
     
     assertSame(dataTypeX, printTraceMethod_.getArg(0));
     assertEquals(1, printTraceMethod_.count());
@@ -331,9 +334,12 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     when(factoryMock_.createRoutineFabricateFactory(sysMock_, fabMock, true)).thenReturn(routineFactoryMock);
     CommandManager cmMock = mock(CommandManager.class);
     RoutineBuilder builder = mock(RoutineBuilder.class);
-    MockMethod<Void> builderSetReositoryFactory = new MockMethod<Void>();
-    doAnswer(builderSetReositoryFactory).when(builder).setRepositoryFactory(any());
-    when(factoryMock_.createRoutineBuilder(sysMock_, RoutineBriefOrigin.COMMAND, routineFactoryMock)).thenReturn(builder);
+    MockMethod<Void> populatorSetReositoryFactory = new MockMethod<Void>();
+    I_RoutinePopulatorMutant populator = mock(I_RoutinePopulatorMutant.class);
+    when(routineFactoryMock.createRoutinePopulator()).thenReturn(populator);
+    
+    doAnswer(populatorSetReositoryFactory).when(populator).setRepositoryFactory(any());
+    when(routineFactoryMock.createRoutineBuilder(RoutineBriefOrigin.COMMAND,populator)).thenReturn(builder);
     
     when(factoryMock_.createCommandManager(commands, sysMock_, routineFactoryMock, builder)).thenReturn(cmMock);
     
@@ -369,8 +375,8 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     assertEquals(1, deleteOnExitMethod_.count());
     assertEquals("\nFabricating...\n", printlnMethod_.getArg(0));
     
-    assertEquals(factoryMock_, builderSetReositoryFactory.getArg(0));
-    assertEquals(1, builderSetReositoryFactory.count());
+    assertEquals(factoryMock_, populatorSetReositoryFactory.getArg(0));
+    assertEquals(1, populatorSetReositoryFactory.count());
     
     assertEquals("Fabrication successful!", printlnMethod_.getArg(1));
     assertEquals(2, printlnMethod_.count());
@@ -428,9 +434,12 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     when(factoryMock_.createRoutineFabricateFactory(sysMock_, fabMock, true)).thenReturn(routineFactoryMock);
     CommandManager cmMock = mock(CommandManager.class);
     RoutineBuilder builder = mock(RoutineBuilder.class);
-    MockMethod<Void> builderSetReositoryFactory = new MockMethod<Void>();
-    doAnswer(builderSetReositoryFactory).when(builder).setRepositoryFactory(any());
-    when(factoryMock_.createRoutineBuilder(sysMock_, RoutineBriefOrigin.COMMAND, routineFactoryMock)).thenReturn(builder);
+    MockMethod<Void> populatorSetReositoryFactory = new MockMethod<Void>();
+    I_RoutinePopulatorMutant populator = mock(I_RoutinePopulatorMutant.class);
+    when(routineFactoryMock.createRoutinePopulator()).thenReturn(populator);
+    
+    doAnswer(populatorSetReositoryFactory).when(populator).setRepositoryFactory(any());
+    when(routineFactoryMock.createRoutineBuilder(RoutineBriefOrigin.COMMAND, populator)).thenReturn(builder);
     
     when(factoryMock_.createCommandManager(commands, sysMock_, routineFactoryMock, builder)).thenReturn(cmMock);
     
@@ -472,8 +481,8 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     assertEquals(1, deleteOnExitMethod_.count());
     assertEquals("\nFabricating...\n", printlnMethod_.getArg(0));
     
-    assertEquals(factoryMock_, builderSetReositoryFactory.getArg(0));
-    assertEquals(1, builderSetReositoryFactory.count());
+    assertEquals(factoryMock_, populatorSetReositoryFactory.getArg(0));
+    assertEquals(1, populatorSetReositoryFactory.count());
     
     assertEquals("Fabrication successful!", printlnMethod_.getArg(1));
     assertEquals(2, printlnMethod_.count());
@@ -540,9 +549,12 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     when(factoryMock_.createMemory(sysMock_)).thenReturn(memory);
     when(cmMock.processCommands(memory)).thenReturn(new FailureTransport(false, ft));
     RoutineBuilder builder = mock(RoutineBuilder.class);
-    MockMethod<Void> builderSetReositoryFactory = new MockMethod<Void>();
-    doAnswer(builderSetReositoryFactory).when(builder).setRepositoryFactory(any());
-    when(factoryMock_.createRoutineBuilder(sysMock_, RoutineBriefOrigin.COMMAND, routineFactoryMock)).thenReturn(builder);
+    MockMethod<Void> populatorSetReositoryFactory = new MockMethod<Void>();
+    I_RoutinePopulatorMutant populator = mock(I_RoutinePopulatorMutant.class);
+    when(routineFactoryMock.createRoutinePopulator()).thenReturn(populator);
+    
+    doAnswer(populatorSetReositoryFactory).when(populator).setRepositoryFactory(any());
+    when(routineFactoryMock.createRoutineBuilder(RoutineBriefOrigin.COMMAND,populator)).thenReturn(builder);
     
     when(factoryMock_.createCommandManager(commands, sysMock_, routineFactoryMock, builder)).thenReturn(cmMock);
     
@@ -577,8 +589,8 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     assertEquals("\nFabricating...\n", printlnMethod_.getArg(0));
     assertEquals("detail", printlnMethod_.getArg(1));
     
-    assertEquals(factoryMock_, builderSetReositoryFactory.getArg(0));
-    assertEquals(1, builderSetReositoryFactory.count());
+    assertEquals(factoryMock_, populatorSetReositoryFactory.getArg(0));
+    assertEquals(1, populatorSetReositoryFactory.count());
     
     assertEquals("Fabrication failed!", printlnMethod_.getArg(2));
     assertEquals(3, printlnMethod_.count());
@@ -632,9 +644,12 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
     when(factoryMock_.createRoutineFabricateFactory(sysMock_, fabMock, true)).thenReturn(routineFactoryMock);
     CommandManager cmMock = mock(CommandManager.class);
     RoutineBuilder builder = mock(RoutineBuilder.class);
-    MockMethod<Void> builderSetReositoryFactory = new MockMethod<Void>();
-    doAnswer(builderSetReositoryFactory).when(builder).setRepositoryFactory(any());
-    when(factoryMock_.createRoutineBuilder(sysMock_, RoutineBriefOrigin.COMMAND, routineFactoryMock)).thenReturn(builder);
+    I_RoutinePopulatorMutant populator = mock(I_RoutinePopulatorMutant.class);
+    when(routineFactoryMock.createRoutinePopulator()).thenReturn(populator);
+    
+    MockMethod<Void> populatorSetReositoryFactory = new MockMethod<Void>();
+    doAnswer(populatorSetReositoryFactory).when(populator).setRepositoryFactory(any());
+    when(routineFactoryMock.createRoutineBuilder(RoutineBriefOrigin.COMMAND, populator)).thenReturn(builder);
     
     when(factoryMock_.createCommandManager(commands, sysMock_, routineFactoryMock, builder)).thenReturn(cmMock);
     
@@ -661,7 +676,7 @@ public class FabricateControllerTrial extends MockitoSourceFileTrial {
       }
     });
     
-    assertEquals(0, builderSetReositoryFactory.count());
+    assertEquals(0, populatorSetReositoryFactory.count());
     
     assertEquals("fabricateXmlDir/run.marker", deleteOnExitMethod_.getArg(0));
     assertEquals(1, deleteOnExitMethod_.count());
