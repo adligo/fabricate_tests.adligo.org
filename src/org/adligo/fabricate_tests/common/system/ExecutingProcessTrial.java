@@ -15,7 +15,7 @@ import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-@SourceFileScope (sourceClass=ExecutingProcess.class, minCoverage=86.00, 
+@SourceFileScope (sourceClass=ExecutingProcess.class, minCoverage=54.00, 
     allowedCircularDependencies=CircularDependencies.AllowInPackage)
 public class ExecutingProcessTrial extends MockitoSourceFileTrial {
   private I_FabSystem sysMock_;

@@ -295,7 +295,7 @@ public class GitCallsTrial extends MockitoSourceFileTrial {
   @Test
   public void testMethodIsSuccess() {
     GitCalls gc = new GitCalls(sysMock_);
-    assertFalse(gc.isSuccess(null));
+    assertFalse(gc.isSuccess((String) null));
     assertFalse(gc.isSuccess("\t"));
     assertFalse(gc.isSuccess("error:"));
     assertFalse(gc.isSuccess("fatal:"));
