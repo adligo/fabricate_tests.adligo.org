@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-@SourceFileScope (sourceClass=DependencyManager.class, minCoverage=30.0)
+@SourceFileScope (sourceClass=DependencyManager.class, minCoverage=29.0)
 public class DependencyManagerTrial extends MockitoSourceFileTrial {
   DefaultRepositoryPathBuilder builder_ = new DefaultRepositoryPathBuilder("repo/","/");
   private I_FabSystem sysMock_;

@@ -164,7 +164,7 @@ public class DependencyMutantTrial extends MockitoSourceFileTrial {
     I_Dependency depA = result.get(0);
     asserts.assertEquals("artifactA", depA.getArtifact());
     asserts.assertFalse(depA.isExtract());
-    asserts.assertEquals("fileNameA", depA.getFileName());
+    asserts.assertEquals("fileName_vA", depA.getFileName());
     asserts.assertEquals("groupA", depA.getGroup());
     asserts.assertEquals("platformA", depA.getPlatform());
     if (projectName == null) {
@@ -173,13 +173,13 @@ public class DependencyMutantTrial extends MockitoSourceFileTrial {
       asserts.assertEquals(projectName, depA.getProject());
     }
     asserts.assertEquals("typeA", depA.getType());
-    asserts.assertEquals("versionA", depA.getVersion());
+    asserts.assertEquals("vA", depA.getVersion());
     asserts.assertEquals(DependencyMutant.class.getName(), depA.getClass().getName());
     
     I_Dependency depB = result.get(1);
     asserts.assertEquals("artifactB", depB.getArtifact());
     asserts.assertTrue(depB.isExtract());
-    asserts.assertEquals("fileNameB", depB.getFileName());
+    asserts.assertEquals("fileName_vB", depB.getFileName());
     asserts.assertEquals("groupB", depB.getGroup());
     asserts.assertEquals("platformB", depB.getPlatform());
     if (projectName == null) {
@@ -188,7 +188,7 @@ public class DependencyMutantTrial extends MockitoSourceFileTrial {
       asserts.assertEquals(projectName, depB.getProject());
     }
     asserts.assertEquals("typeB", depB.getType());
-    asserts.assertEquals("versionB", depB.getVersion());
+    asserts.assertEquals("vB", depB.getVersion());
     asserts.assertEquals(DependencyMutant.class.getName(), depB.getClass().getName());
     
     List<I_Ide> ides =  depA.getChildren();
@@ -209,11 +209,11 @@ public class DependencyMutantTrial extends MockitoSourceFileTrial {
     I_Dependency depA = result.get(0);
     asserts.assertEquals("artifactC", depA.getArtifact());
     asserts.assertFalse(depA.isExtract());
-    asserts.assertEquals("fileNameC", depA.getFileName());
+    asserts.assertEquals("fileName_vC", depA.getFileName());
     asserts.assertEquals("groupC", depA.getGroup());
     asserts.assertEquals("platformC", depA.getPlatform());
     asserts.assertEquals("typeC", depA.getType());
-    asserts.assertEquals("versionC", depA.getVersion());
+    asserts.assertEquals("vC", depA.getVersion());
     asserts.assertEquals(DependencyMutant.class.getName(), depA.getClass().getName());
 
   }
@@ -222,11 +222,11 @@ public class DependencyMutantTrial extends MockitoSourceFileTrial {
     I_Dependency depA = result.get(0);
     asserts.assertEquals("artifactD", depA.getArtifact());
     asserts.assertFalse(depA.isExtract());
-    asserts.assertEquals("fileNameD", depA.getFileName());
+    asserts.assertEquals("fileName_vD", depA.getFileName());
     asserts.assertEquals("groupD", depA.getGroup());
     asserts.assertEquals("platformD", depA.getPlatform());
     asserts.assertEquals("typeD", depA.getType());
-    asserts.assertEquals("versionD", depA.getVersion());
+    asserts.assertEquals("vD", depA.getVersion());
     asserts.assertEquals(DependencyMutant.class.getName(), depA.getClass().getName());
 
   }
@@ -236,20 +236,20 @@ public class DependencyMutantTrial extends MockitoSourceFileTrial {
     DependencyType type = new DependencyType();
     type.setArtifact("artifactA");
     type.setExtract(false);
-    type.setFileName("fileNameA");
+    type.setFileName("fileName_vA");
     type.setGroup("groupA");
     type.setPlatform("platformA");
     type.setType("typeA");
-    type.setVersion("versionA");
+    type.setVersion("vA");
     
     DependencyType typeB = new DependencyType();
     typeB.setArtifact("artifactB");
     typeB.setExtract(true);
-    typeB.setFileName("fileNameB");
+    typeB.setFileName("fileName_vB");
     typeB.setGroup("groupB");
     typeB.setPlatform("platformB");
     typeB.setType("typeB");
-    typeB.setVersion("versionB");
+    typeB.setVersion("vB");
     
     IdeType itA = new IdeType();
     itA.setName("ideA");
@@ -274,11 +274,11 @@ public class DependencyMutantTrial extends MockitoSourceFileTrial {
   public static List<DependencyType> getDependenciesC() {
     DependencyType type = new DependencyType();
     type.setArtifact("artifactC");
-    type.setFileName("fileNameC");
+    type.setFileName("fileName_vC");
     type.setGroup("groupC");
     type.setPlatform("platformC");
     type.setType("typeC");
-    type.setVersion("versionC");
+    type.setVersion("vC");
     
     List<DependencyType> types = new ArrayList<DependencyType>();
     types.add(type);
@@ -288,11 +288,11 @@ public class DependencyMutantTrial extends MockitoSourceFileTrial {
   public static List<DependencyType> getDependenciesD() {
     DependencyType type = new DependencyType();
     type.setArtifact("artifactD");
-    type.setFileName("fileNameD");
+    type.setFileName("fileName_vD");
     type.setGroup("groupD");
     type.setPlatform("platformD");
     type.setType("typeD");
-    type.setVersion("versionD");
+    type.setVersion("vD");
     
     List<DependencyType> types = new ArrayList<DependencyType>();
     types.add(type);
@@ -301,7 +301,7 @@ public class DependencyMutantTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("boxing")
   @Test
-  public void testMethodsEqualsHashCodeAndToString() {
+  public void testMethodsEqualsHashCodeAndToString() throws Exception  {
     DependencyMutant dm = new DependencyMutant();
     
     
@@ -325,45 +325,45 @@ public class DependencyMutantTrial extends MockitoSourceFileTrial {
     
     DependencyMutant dmE = new DependencyMutant();
     dmE.setArtifact("artifact");
-    dmE.setFileName("fileName");
+    dmE.setFileName("fileName_v1_0E");
     dmE.setGroup("group");
     dmE.setType("type");
-    dmE.setVersion("version");
+    dmE.setVersion("v1_0E");
     
     DependencyMutant dmF = new DependencyMutant();
     dmF.setArtifact("artifactA");
-    dmF.setFileName("fileName");
+    dmF.setFileName("fileName_v1_0F");
     dmF.setGroup("group");
     dmF.setType("type");
-    dmF.setVersion("version");
+    dmF.setVersion("v1_0F");
     
     DependencyMutant dmG = new DependencyMutant();
     dmG.setArtifact("artifactA");
-    dmG.setFileName("fileNameA");
+    dmG.setFileName("fileName_v1_0G");
     dmG.setGroup("group");
     dmG.setType("type");
-    dmG.setVersion("version");
+    dmG.setVersion("v1_0G");
     
     DependencyMutant dmH = new DependencyMutant();
     dmH.setArtifact("artifactA");
-    dmH.setFileName("fileNameA");
+    dmH.setFileName("fileName_v1_0A");
     dmH.setGroup("groupA");
     dmH.setType("type");
-    dmH.setVersion("version");
+    dmH.setVersion("v1_0A");
     
     DependencyMutant dmI = new DependencyMutant();
     dmI.setArtifact("artifactA");
-    dmI.setFileName("fileNameA");
+    dmI.setFileName("fileName_v1_0A");
     dmI.setGroup("groupA");
     dmI.setType("typeA");
-    dmI.setVersion("version");
+    dmI.setVersion("v1_0A");
     
     DependencyMutant dmJ = new DependencyMutant();
     dmJ.setArtifact("artifactA");
-    dmJ.setFileName("fileNameA");
+    dmJ.setFileName("fileName_v1_0A");
     dmJ.setGroup("groupA");
     dmJ.setType("typeA");
-    dmJ.setVersion("versionA");
+    dmJ.setVersion("v1_0A");
     
     
     assertEquals(dm, dm);
@@ -407,9 +407,9 @@ public class DependencyMutantTrial extends MockitoSourceFileTrial {
     assertNotEquals(dm, dmE);
     assertNotEquals(dm.hashCode(), dmE.hashCode());
     assertEquals("DependencyMutant [artifact=artifact, extract=false," + System.lineSeparator() +
-        "\tfileName=fileName, group=group," + System.lineSeparator() +
+        "\tfileName=fileName_v1_0E, group=group," + System.lineSeparator() +
         "\tplatform=null, type=type,"  + System.lineSeparator() +
-        "\tversion=version, ideChidren=0]", dmE.toString());
+        "\tversion=v1_0E, ideChidren=0]", dmE.toString());
     
     //done with null compares
     assertEquals(dmE, new DependencyMutant(dmE));

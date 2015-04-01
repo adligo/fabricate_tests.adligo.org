@@ -36,11 +36,11 @@ public class ProjectTrial extends MockitoSourceFileTrial {
     DependencyMutant dm = new DependencyMutant();
     dm.setArtifact("artifactA");
     dm.setExtract(true);
-    dm.setFileName("fileNameA");
+    dm.setFileName("fileName_vA");
     dm.setGroup("groupA");
     dm.setPlatform("platformA");
     dm.setType("typeA");
-    dm.setVersion("versionA");
+    dm.setVersion("vA");
     return dm;
   }
   
@@ -48,11 +48,11 @@ public class ProjectTrial extends MockitoSourceFileTrial {
     DependencyMutant dm = new DependencyMutant();
     dm.setArtifact("artifactB");
     dm.setExtract(true);
-    dm.setFileName("fileNameB");
+    dm.setFileName("fileName_vB");
     dm.setGroup("groupB");
     dm.setPlatform("platformB");
     dm.setType("typeB");
-    dm.setVersion("versionB");
+    dm.setVersion("vB");
     return dm;
   }
   
@@ -87,7 +87,7 @@ public class ProjectTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("boxing")
   @Test
-  public void testConstructorCopy() {
+  public void testConstructorCopy() throws Exception {
     ProjectMutant pm = new ProjectMutant();
     pm.setDir("dir");
     pm.setName("name");
@@ -179,7 +179,7 @@ public class ProjectTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("boxing")
   @Test
-  public void testConstructorCopyMutableImmutableChildParams() {
+  public void testConstructorCopyMutableImmutableChildParams()  throws Exception {
     I_Project project = mock(I_Project.class);
     
     ParameterMutant attributeA = new ParameterMutant();
@@ -355,7 +355,7 @@ public class ProjectTrial extends MockitoSourceFileTrial {
   }
   
   @Test
-  public void testConstructorCopyNullLists() {
+  public void testConstructorCopyNullLists()  throws Exception {
     I_Project pm = mock(I_Project.class);
     
     when(pm.getAttributes()).thenReturn(null);
@@ -380,7 +380,7 @@ public class ProjectTrial extends MockitoSourceFileTrial {
   }
   
   @Test
-  public void testConstructorCopyDupelicateRoutineExcepions() {
+  public void testConstructorCopyDupelicateRoutineExcepions()  throws Exception {
     ProjectMutant pm = new ProjectMutant();
     pm.setDir("dir");
     pm.setName("name");
@@ -396,11 +396,11 @@ public class ProjectTrial extends MockitoSourceFileTrial {
   
   private void assertDependencyLetterPrime(String letter, I_Dependency dep) {
     assertEquals("artifact" + letter + "1", dep.getArtifact());
-    assertEquals("fileName" + letter + "1", dep.getFileName());
+    assertEquals("fileName_v" + letter + "1", dep.getFileName());
     assertEquals("group" + letter + "1",  dep.getGroup());
     assertEquals("platform" + letter + "1", dep.getPlatform());
     assertEquals("type" + letter + "1", dep.getType());
-    assertEquals("version" + letter + "1", dep.getVersion());
+    assertEquals("v" + letter + "1", dep.getVersion());
   }
   
   private void assertTwoFromMemoryAttributes(I_Parameter attributeA,

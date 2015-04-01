@@ -231,6 +231,9 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
     asserter.assertConstant("The following routine implements <X/> however it's class type is null.", 
         messages.getTheFollowingRoutineImplementsXHoweverItsClassTypeIsNull());
     
+    asserter.assertConstant("The following dependencies version does NOT match the file name;", 
+        messages.getTheFollowingDependenciesVersionDoesNotMatchTheFileName());
+    
     asserter.assertConstant("The following required file is missing;", 
         messages.getTheFollowingRequiredFileIsMissing());
     asserter.assertConstant("The following remote repository appears to be down;", 

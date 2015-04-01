@@ -45,11 +45,11 @@ public class ProjectMutantTrial extends MockitoSourceFileTrial {
   public static DependencyMutant getDependencyLetterPrime(String letter) {
     DependencyMutant depB = new DependencyMutant();
     depB.setArtifact("artifact" + letter + "1");
-    depB.setFileName("fileName" + letter + "1");
+    depB.setFileName("fileName_v" + letter + "1");
     depB.setGroup("group" + letter + "1");
     depB.setPlatform("platform" + letter + "1");
     depB.setType("type" + letter + "1");
-    depB.setVersion("version" + letter + "1");
+    depB.setVersion("v" + letter + "1");
     return depB;
   }
   
@@ -57,11 +57,11 @@ public class ProjectMutantTrial extends MockitoSourceFileTrial {
     DependencyMutant dm = new DependencyMutant();
     dm.setArtifact("artifactA");
     dm.setExtract(true);
-    dm.setFileName("fileNameA");
+    dm.setFileName("fileName_vA");
     dm.setGroup("groupA");
     dm.setPlatform("platformA");
     dm.setType("typeA");
-    dm.setVersion("versionA");
+    dm.setVersion("vA");
     return dm;
   }
   
@@ -69,11 +69,11 @@ public class ProjectMutantTrial extends MockitoSourceFileTrial {
     DependencyMutant dm = new DependencyMutant();
     dm.setArtifact("artifactB");
     dm.setExtract(true);
-    dm.setFileName("fileNameB");
+    dm.setFileName("fileName_vB");
     dm.setGroup("groupB");
     dm.setPlatform("platformB");
     dm.setType("typeB");
-    dm.setVersion("versionB");
+    dm.setVersion("vB");
     return dm;
   }
   
@@ -108,7 +108,7 @@ public class ProjectMutantTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("boxing")
   @Test
-  public void testConstructorCopy() {
+  public void testConstructorCopy() throws Exception {
     ProjectMutant pm = new ProjectMutant();
     pm.setDir("dir");
     pm.setName("name");
@@ -591,7 +591,7 @@ public class ProjectMutantTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings({"boxing"})
   @Test
-  public void testMethodsAddAndSetImmutables() {
+  public void testMethodsAddAndSetImmutables() throws Exception  {
     ProjectMutant pm = new ProjectMutant();
     
     Dependency dmA = new Dependency(getDependencyA());
@@ -722,11 +722,11 @@ public class ProjectMutantTrial extends MockitoSourceFileTrial {
   
   private void assertDependencyLetterPrime(String letter, I_Dependency dep) {
     assertEquals("artifact" + letter + "1", dep.getArtifact());
-    assertEquals("fileName" + letter + "1", dep.getFileName());
+    assertEquals("fileName_v" + letter + "1", dep.getFileName());
     assertEquals("group" + letter + "1",  dep.getGroup());
     assertEquals("platform" + letter + "1", dep.getPlatform());
     assertEquals("type" + letter + "1", dep.getType());
-    assertEquals("version" + letter + "1", dep.getVersion());
+    assertEquals("v" + letter + "1", dep.getVersion());
   }
   
   @SuppressWarnings("boxing")

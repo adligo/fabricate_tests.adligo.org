@@ -33,7 +33,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-@SourceFileScope (sourceClass=FabricateOptsSetup.class, minCoverage=83.0)
+@SourceFileScope (sourceClass=FabricateOptsSetup.class, minCoverage=80.0)
 public class FabricateOptsSetupTrial extends MockitoSourceFileTrial {
   private FabSystem sysMock_;
   private I_FabFileIO fileMock_;
@@ -283,7 +283,7 @@ public class FabricateOptsSetupTrial extends MockitoSourceFileTrial {
     
     assertEquals("LASTLINE -Xmx64m -Xms16m -cp /somewhere/fabHome/lib/commons-logging-1.2.jar;"
         + "/somewhere/fabHome/lib/httpclient-4.3.5.jar;/somewhere/fabHome/lib/httpcore-4.3.2.jar;"
-        + "/somewhere/repogroupA/fileNameA;/somewhere/repogroupB/fileNameB", 
+        + "/somewhere/repogroupB/fileName_vB;/somewhere/repogroupA/fileName_vA", 
         printlnMethod.getArg(0));
   }
   

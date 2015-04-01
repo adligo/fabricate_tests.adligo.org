@@ -57,7 +57,7 @@ public class FabricateTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("boxing")
   @Test
-  public void testConstructorCopiesFromInterface() {
+  public void testConstructorCopiesFromInterface() throws Exception {
     FabricateMutant fm = new FabricateMutant();
     fm.setAttributes(ParameterMutant.convert(ParameterMutantTrial.createParams()));
     fm.setJavaHome("jh");
@@ -148,20 +148,20 @@ public class FabricateTrial extends MockitoSourceFileTrial {
     DependencyMutant dmA = new DependencyMutant();
     dmA.setArtifact("artifactA");
     dmA.setExtract(false);
-    dmA.setFileName("fileNameA");
+    dmA.setFileName("fileName_v1_0A");
     dmA.setGroup("groupA");
     dmA.setPlatform("platformA");
     dmA.setType("typeA");
-    dmA.setVersion("versionA");
+    dmA.setVersion("v1_0A");
     
     DependencyMutant dmB = new DependencyMutant();
     dmB.setArtifact("artifactB");
     dmB.setExtract(true);
-    dmB.setFileName("fileNameB");
+    dmB.setFileName("fileName_v1_0B");
     dmB.setGroup("groupB");
     dmB.setPlatform("platformB");
     dmB.setType("typeB");
-    dmB.setVersion("versionB");  
+    dmB.setVersion("v1_0B");  
     
     List<I_Dependency> dms = new ArrayList<I_Dependency>();
     dms.add(dmA);
@@ -250,21 +250,21 @@ public class FabricateTrial extends MockitoSourceFileTrial {
     assertEquals(Dependency.class.getName(), dtCopy.getClass().getName());
     assertEquals("artifactA",dtCopy.getArtifact());
     assertFalse(dtCopy.isExtract());
-    assertEquals("fileNameA" ,dtCopy.getFileName());
+    assertEquals("fileName_v1_0A" ,dtCopy.getFileName());
     assertEquals("groupA" ,dtCopy.getGroup());
     assertEquals("platformA" ,dtCopy.getPlatform());
     assertEquals("typeA" ,dtCopy.getType());
-    assertEquals("versionA" ,dtCopy.getVersion()); 
+    assertEquals("v1_0A" ,dtCopy.getVersion()); 
     
     dtCopy = copy.getDependencies().get(1);
     assertEquals(Dependency.class.getName(), dtCopy.getClass().getName());
     assertEquals("artifactB",dtCopy.getArtifact());
     assertTrue(dtCopy.isExtract());
-    assertEquals("fileNameB" ,dtCopy.getFileName());
+    assertEquals("fileName_v1_0B" ,dtCopy.getFileName());
     assertEquals("groupB" ,dtCopy.getGroup());
     assertEquals("platformB" ,dtCopy.getPlatform());
     assertEquals("typeB" ,dtCopy.getType());
-    assertEquals("versionB" ,dtCopy.getVersion());
+    assertEquals("v1_0B" ,dtCopy.getVersion());
   }
   
   private I_RoutineBrief assertRoutines(Map<String,I_RoutineBrief> routines, String name, 

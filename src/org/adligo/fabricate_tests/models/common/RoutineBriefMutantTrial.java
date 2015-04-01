@@ -30,7 +30,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-@SourceFileScope (sourceClass=RoutineBriefMutant.class, minCoverage=74.0)
+@SourceFileScope (sourceClass=RoutineBriefMutant.class, minCoverage=71.0)
 public class RoutineBriefMutantTrial extends MockitoSourceFileTrial {
 
   @Test

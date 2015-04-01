@@ -89,7 +89,7 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("boxing")
   @Test
-  public void testConstructorCopyFromInterface() {
+  public void testConstructorCopyFromInterface()  throws Exception  {
     FabricateMutant fm = new FabricateMutant();
     fm.setJavaHome("jh");
     fm.setFabricateHome("fh");
@@ -159,11 +159,11 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     DependencyMutant dmB = new DependencyMutant();
     dmB.setArtifact("artifactB");
     dmB.setExtract(true);
-    dmB.setFileName("fileNameB");
+    dmB.setFileName("fileName_v1_0B");
     dmB.setGroup("groupB");
     dmB.setPlatform("platformB");
     dmB.setType("typeB");
-    dmB.setVersion("versionB");  
+    dmB.setVersion("v1_0B");  
     
     List<I_Dependency> dms = new ArrayList<I_Dependency>();
     dms.add(dmA);
@@ -188,11 +188,11 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     assertEquals(DependencyMutant.class.getName(), dtCopy.getClass().getName());
     assertEquals("artifactB",dtCopy.getArtifact());
     assertTrue(dtCopy.isExtract());
-    assertEquals("fileNameB" ,dtCopy.getFileName());
+    assertEquals("fileName_v1_0B" ,dtCopy.getFileName());
     assertEquals("groupB" ,dtCopy.getGroup());
     assertEquals("platformB" ,dtCopy.getPlatform());
     assertEquals("typeB" ,dtCopy.getType());
-    assertEquals("versionB" ,dtCopy.getVersion()); 
+    assertEquals("v1_0B" ,dtCopy.getVersion()); 
     
     I_RoutineBrief aStage = assertRoutines(copy.getArchiveStages(), "aStage", RoutineBriefOrigin.ARCHIVE_STAGE);
     assertSame(aStage, copy.getArchiveStage("aStage"));
@@ -424,7 +424,7 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("boxing")
   @Test
-  public void testMethods() {
+  public void testMethods() throws Exception  {
     FabricateMutant fm = new FabricateMutant();
     fm.setJavaHome("jh");
     assertEquals("jh", fm.getJavaHome());
@@ -484,11 +484,11 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     DependencyMutant dmB = new DependencyMutant();
     dmB.setArtifact("artifactB");
     dmB.setExtract(true);
-    dmB.setFileName("fileNameB");
+    dmB.setFileName("fileName_v1_0B");
     dmB.setGroup("groupB");
     dmB.setPlatform("platformB");
     dmB.setType("typeB");
-    dmB.setVersion("versionB");  
+    dmB.setVersion("v1_0B");  
     
     List<DependencyMutant> dms = new ArrayList<DependencyMutant>();
     dms.add(dmA);
@@ -509,11 +509,11 @@ public class FabricateMutantTrial extends MockitoSourceFileTrial {
     assertEquals(DependencyMutant.class.getName(), dtCopy.getClass().getName());
     assertEquals("artifactB",dtCopy.getArtifact());
     assertTrue(dtCopy.isExtract());
-    assertEquals("fileNameB" ,dtCopy.getFileName());
+    assertEquals("fileName_v1_0B" ,dtCopy.getFileName());
     assertEquals("groupB" ,dtCopy.getGroup());
     assertEquals("platformB" ,dtCopy.getPlatform());
     assertEquals("typeB" ,dtCopy.getType());
-    assertEquals("versionB" ,dtCopy.getVersion()); 
+    assertEquals("v1_0B" ,dtCopy.getVersion()); 
     
     fm.setCommands(getRoutines("command", RoutineBriefOrigin.COMMAND));
     I_RoutineBrief cmd = assertRoutines(fm.getCommands(), "command", RoutineBriefOrigin.COMMAND);
