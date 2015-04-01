@@ -63,7 +63,7 @@ public class AntHelperTrial extends MockitoSourceFileTrial {
     doAnswer(checkMethod).when(gitCallsMock).check(executorMock);
     
     MockMethod<String> describeMethod = new MockMethod<String>("gitDesc", true);
-    when(gitCallsMock.describe()).then(describeMethod);
+    when(gitCallsMock.describeVersion()).then(describeMethod);
     
     OutputStream outMock = mock(OutputStream.class);
     MockMethod<Void> writeMethod = new MockMethod<Void>();
@@ -113,7 +113,7 @@ public class AntHelperTrial extends MockitoSourceFileTrial {
     doThrow(checkIo).when(gitCallsMock).check(executorMock);
     
     MockMethod<String> describeMethod = new MockMethod<String>("gitDesc", true);
-    when(gitCallsMock.describe()).then(describeMethod);
+    when(gitCallsMock.describeVersion()).then(describeMethod);
     
     OutputStream outMock = mock(OutputStream.class);
     MockMethod<Void> writeMethod = new MockMethod<Void>();
@@ -145,7 +145,7 @@ public class AntHelperTrial extends MockitoSourceFileTrial {
     MockMethod<String> describeMethod = new MockMethod<String>("gitDesc", true);
 
     IOException descIo = new IOException("descIo");
-    doThrow(descIo).when(gitCallsMock).describe();
+    doThrow(descIo).when(gitCallsMock).describeVersion();
     
     OutputStream outMock = mock(OutputStream.class);
     MockMethod<Void> writeMethod = new MockMethod<Void>();
@@ -177,7 +177,7 @@ public class AntHelperTrial extends MockitoSourceFileTrial {
     
     MockMethod<String> describeMethod = new MockMethod<String>("gitDesc", true);
 
-    doReturn("desc").when(gitCallsMock).describe();
+    doReturn("desc").when(gitCallsMock).describeVersion();
     
     OutputStream outMock = mock(OutputStream.class);
     MockMethod<Void> writeMethod = new MockMethod<Void>();
@@ -209,7 +209,7 @@ public class AntHelperTrial extends MockitoSourceFileTrial {
     doAnswer(checkMethod).when(gitCallsMock).check(executorMock);
     
     MockMethod<String> describeMethod = new MockMethod<String>("gitDesc", true);
-    when(gitCallsMock.describe()).then(describeMethod);
+    when(gitCallsMock.describeVersion()).then(describeMethod);
     
     OutputStream outMock = mock(OutputStream.class);
     IOException writeIo = new IOException("writeIo");

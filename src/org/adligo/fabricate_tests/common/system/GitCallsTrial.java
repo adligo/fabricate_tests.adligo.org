@@ -234,7 +234,7 @@ public class GitCallsTrial extends MockitoSourceFileTrial {
   
   @SuppressWarnings("boxing")
   @Test
-  public void testMethodDescribe() throws Exception {
+  public void testMethodDescribeVersionTag() throws Exception {
     I_Executor executorMock = mock(I_Executor.class);
     I_ExecutionResult result = mock(I_ExecutionResult.class);
     
@@ -244,52 +244,58 @@ public class GitCallsTrial extends MockitoSourceFileTrial {
     when(sysMock_.getExecutor()).thenReturn(executorMock);
     
     GitCalls gc = new GitCalls(sysMock_);
-    String version = gc.describe("localProjectDir/project");
+    
+    when(filesMock_.getAbsolutePath("localProjectDir/project")).thenReturn("/localProjectDir/project/");
+    when(filesMock_.readFile("/localProjectDir/project/.git/HEAD")).thenReturn("124a456b");
+    String version = gc.describeVersion("localProjectDir/project");
     assertEquals("snapshot", version);
     Object [] executeArgs = executeProcessMethod.getArgs(0);
     assertSame(FabricationMemoryConstants.EMPTY_ENV, executeArgs[0]);
     assertEquals("localProjectDir/project", executeArgs[1]);
     assertEquals("git", executeArgs[2]);
     assertEquals("describe", executeArgs[3]);
-    assertEquals(4, executeArgs.length);
+    assertEquals("--exact-match", executeArgs[4]);
+    assertEquals("124a456b", executeArgs[5]);
+    assertEquals(6, executeArgs.length);
     assertEquals(1, executeProcessMethod.count());
     
     when(result.getOutput()).thenReturn("error:");
     executeProcessMethod.clear();
-    version = gc.describe("localProjectDir/project");
+    version = gc.describeVersion("localProjectDir/project");
     assertEquals("snapshot", version);
     executeArgs = executeProcessMethod.getArgs(0);
     assertSame(FabricationMemoryConstants.EMPTY_ENV, executeArgs[0]);
     assertEquals("localProjectDir/project", executeArgs[1]);
     assertEquals("git", executeArgs[2]);
     assertEquals("describe", executeArgs[3]);
-    assertEquals(4, executeArgs.length);
+    assertEquals("--exact-match", executeArgs[4]);
+    assertEquals("124a456b", executeArgs[5]);
+    assertEquals(6, executeArgs.length);
     assertEquals(1, executeProcessMethod.count());
     
     
     when(result.getOutput()).thenReturn("123");
     executeProcessMethod.clear();
-    version = gc.describe("localProjectDir/project");
+    version = gc.describeVersion("localProjectDir/project");
     assertEquals("123", version);
     executeArgs = executeProcessMethod.getArgs(0);
     assertSame(FabricationMemoryConstants.EMPTY_ENV, executeArgs[0]);
     assertEquals("localProjectDir/project", executeArgs[1]);
     assertEquals("git", executeArgs[2]);
     assertEquals("describe", executeArgs[3]);
-    assertEquals(4, executeArgs.length);
+    assertEquals("--exact-match", executeArgs[4]);
+    assertEquals("124a456b", executeArgs[5]);
+    assertEquals(6, executeArgs.length);
     assertEquals(1, executeProcessMethod.count());
     
     when(result.getOutput()).thenReturn("123");
     executeProcessMethod.clear();
-    version = gc.describe(".");
-    assertEquals("123", version);
-    executeArgs = executeProcessMethod.getArgs(0);
-    assertSame(FabricationMemoryConstants.EMPTY_ENV, executeArgs[0]);
-    assertEquals(".", executeArgs[1]);
-    assertEquals("git", executeArgs[2]);
-    assertEquals("describe", executeArgs[3]);
-    assertEquals(4, executeArgs.length);
-    assertEquals(1, executeProcessMethod.count());
+    
+    when(filesMock_.getAbsolutePath(".")).thenReturn("/localProjectDir/");
+    when(filesMock_.readFile("/localProjectDir/")).thenReturn("ref: refs/heads/master");
+    version = gc.describeVersion(".");
+    assertEquals("snapshot", version);
+    assertEquals(0, executeProcessMethod.count());
   }
   
   @Test
