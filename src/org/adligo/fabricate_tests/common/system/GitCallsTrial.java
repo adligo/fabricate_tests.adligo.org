@@ -46,7 +46,9 @@ public class GitCallsTrial extends MockitoSourceFileTrial {
     sysMock_ = mock(I_FabSystem.class);
     when(sysMock_.lineSeparator()).thenReturn("\n");
     when(sysMock_.getConstants()).thenReturn(FabricateEnConstants.INSTANCE);
+    
     logMock_ = mock(I_FabLog.class);
+    when(sysMock_.getLog()).thenReturn(logMock_);
     printlnMethod.clear();
     
     filesMock_ = mock(I_FabFileIO.class);
@@ -194,7 +196,7 @@ public class GitCallsTrial extends MockitoSourceFileTrial {
           
           @Override
           public void run() throws Throwable {
-            gc.checkout("project", "localProjectDir", "version");
+            gc.checkout("project", "localProjectDir/", "version");
           }
         });
     Object [] executeArgs = executeProcessMethod.getArgs(0);

@@ -247,6 +247,8 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getThereWasAProblemCreatingTheFollowingRoutine());
     asserter.assertConstant("There was a problem creating run.marker in the following directory;", 
         messages.getThereWasAProblemCreatingRunMarkerInTheFollowingDirectory());
+    asserter.assertConstant("There was a problem checking out version <X/> on the following project;", 
+        messages.getThereWasAProblemCheckingOutVersionXOnTheFollowingProject());
     asserter.assertConstant("There was a problem deleting the following directory;", 
         messages.getThereWasAProblemDeletingTheFollowingDirectory());
     asserter.assertConstant("There was a problem updating the following project;", 
