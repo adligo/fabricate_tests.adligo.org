@@ -49,6 +49,18 @@ import java.util.zip.ZipFile;
   minCoverage=73.0,allowedCircularDependencies=CircularDependencies.AllowInnerOuterClasses)
 public class FabFilesTrial extends MockitoSourceFileTrial {
 
+  public void beforeTests() {
+    String path = FileUtils.getRunDir() + 
+        "test_data" + File.separator + "file_trials" + File.separator +
+        "fab_files_trial" + File.separator + 
+        "temp";
+    File file = new File(path);
+    if (!file.exists()) {
+      file.mkdirs();
+    }
+     
+  }
+  
   @AfterTrial
   public static void afterTrials() throws IOException {
     String path = FileUtils.getRunDir() + 
