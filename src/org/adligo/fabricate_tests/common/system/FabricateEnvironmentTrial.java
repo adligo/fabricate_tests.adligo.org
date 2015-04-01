@@ -1,6 +1,8 @@
 package org.adligo.fabricate_tests.common.system;
 
+
 import org.adligo.fabricate.common.en.FabricateEnConstants;
+import org.adligo.fabricate.common.files.I_FabFileIO;
 import org.adligo.fabricate.common.log.I_FabLog;
 import org.adligo.fabricate.common.system.FabricateDefaults;
 import org.adligo.fabricate.common.system.FabricateEnvironment;
@@ -13,10 +15,14 @@ import org.adligo.tests4j.system.shared.trials.Test;
 import org.adligo.tests4j_4mockito.MockMethod;
 import org.adligo.tests4j_4mockito.MockitoSourceFileTrial;
 
+import java.io.File;
+
 @SourceFileScope (sourceClass=FabricateEnvironment.class,minCoverage=100.0)
 public class FabricateEnvironmentTrial extends MockitoSourceFileTrial {
   private I_FabSystem sysMock_;
   private I_FabLog logMock_;
+  private I_FabFileIO filesMock_;
+  
   MockMethod<Void> printlnMethod_ = new MockMethod<Void>();
   MockMethod<Void> printtraceMethod_ = new MockMethod<Void>();
   
@@ -32,7 +38,11 @@ public class FabricateEnvironmentTrial extends MockitoSourceFileTrial {
     
     doAnswer(printlnMethod_).when(logMock_).println(any());
     doAnswer(printtraceMethod_).when(logMock_).printTrace(any());
+    
+    filesMock_ = mock(I_FabFileIO.class);
+    when(sysMock_.getFileIO()).thenReturn(filesMock_);
   }
+  
   @SuppressWarnings("boxing")
   @Test
   public void testConstants() {
@@ -146,9 +156,21 @@ public class FabricateEnvironmentTrial extends MockitoSourceFileTrial {
   @SuppressWarnings("boxing")
   @Test
   public void testMethodGetFabricateRepository() {
-    when(sysMock_.getenv(FabricateEnvironment.FABRICATE_REPOSITORY)).thenReturn("fr");
     
-    assertEquals("fr", FabricateEnvironment.INSTANCE.getFabricateRepository(sysMock_));
+    when(filesMock_.getNameSeparator()).thenReturn("/");
+    when(sysMock_.getenv(FabricateEnvironment.FABRICATE_REPOSITORY)).thenReturn("fr");
+    assertEquals("fr/", FabricateEnvironment.INSTANCE.getFabricateRepository(sysMock_));
+    
+    when(sysMock_.getenv(FabricateEnvironment.FABRICATE_REPOSITORY)).thenReturn("fr/");
+    assertEquals("fr/", FabricateEnvironment.INSTANCE.getFabricateRepository(sysMock_));
+    
+    //windows
+    when(filesMock_.getNameSeparator()).thenReturn("\\");
+    when(sysMock_.getenv(FabricateEnvironment.FABRICATE_REPOSITORY)).thenReturn("C:\\fr");
+    assertEquals("C:\\fr\\", FabricateEnvironment.INSTANCE.getFabricateRepository(sysMock_));
+    
+    when(sysMock_.getenv(FabricateEnvironment.FABRICATE_REPOSITORY)).thenReturn("C:\\fr\\");
+    assertEquals("C:\\fr\\", FabricateEnvironment.INSTANCE.getFabricateRepository(sysMock_));
     
     assertEquals(0, printlnMethod_.count());
     assertEquals(0, printtraceMethod_.count());
@@ -158,6 +180,7 @@ public class FabricateEnvironmentTrial extends MockitoSourceFileTrial {
   @Test
   public void testMethodGetFabricateHomeDefaultValue() {
     when(sysMock_.getenv(FabricateEnvironment.FABRICATE_REPOSITORY)).thenReturn(null);
+    when(filesMock_.getNameSeparator()).thenReturn(File.separator);
     
     assertEquals(FabricateDefaults.LOCAL_REPOSITORY, 
         FabricateEnvironment.INSTANCE.getFabricateRepository(sysMock_));

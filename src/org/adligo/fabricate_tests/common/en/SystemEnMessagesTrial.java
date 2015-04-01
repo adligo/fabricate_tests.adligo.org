@@ -217,6 +217,10 @@ public class SystemEnMessagesTrial extends MockitoSourceFileTrial {
         messages.getTheFollowingListOfFabricateLibrariesContainsACircularReference());
     asserter.assertConstant("The following local repository is locked by another process;", 
         messages.getTheFollowingLocalRepositoryIsLockedByAnotherProcess());
+    asserter.assertConstant("The following command line argument is required for command <X/>;", 
+        messages.getTheFollowingCommandLineArgumentIsRequiredForCommandX());
+    asserter.assertConstant("The following command line argument was NOT provided for command <X/> using default '<Y/>';", 
+        messages.getTheFollowingCommandLineArgumentWasNotProvidedForCommandXUsingDefaultY());
     asserter.assertConstant("The following command line program exited abnormally with exit code <X/>;", 
         messages.getTheFollowingCommandLineProgramExitedAbnormallyWithExitCodeX());
     asserter.assertConstant("The following routine implements <X/> but the RoutinePopulator's value is null.", 
